@@ -1,4 +1,5 @@
 **🚀 90 Days DevOps Execution Plan**
+
 👩‍💻 **Current Level:**
 
 Over the next 90 days, I’m focusing on deepening my expertise in Kubernetes, CI/CD, and production-grade cloud deployments.
@@ -51,4 +52,5 @@ Track daily progress publicly (#90DaysOfDevOps)
 💡 **90-Day Mindset:**
 I understand DevOps is a long-term career path.
 For the next 90 days, I commit to discipline, execution, and daily improvement.
+
 **No excuses. Only progress.**
