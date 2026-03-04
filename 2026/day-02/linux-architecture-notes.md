@@ -4,6 +4,13 @@
 
 -->Linux is an open-source, Unix-like operating system kernel created by Linus Torvalds in 1991, It manages hardware resources, processes, memory, and filesystems. It is widely used in servers, cloud computing, and DevOps environments, Linux is powerful because it is Open source, Free, Stable, Secure, Highily Customizable, Lightweight, Server-friendly etc, Linux is important because it uses in the Cloud Servers, Docker containers, Kubernetes clusters, Web servers, CI/CD pipelines etc.
 
+**Linux Architecture:**
+
+-->Applications or users interact with the Shell, Then The Shell communicates with the Kernel by sending commands through system calls, Then The Kernel theninteracts directly with the hardware to execute those commands, This is how Linux operates in a Command Line Interface (CLI) environment.
+Most Linux administration and server management tasks are performed using the CLI.
+
+https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-02/linux.png
+
 **What is kernel?**
 
 -->Kernel is the main core component it is lies between the shell and the hardware. It controls the activity of other hardware components.
@@ -28,11 +35,6 @@ Security: Provides essential system-level security.
 **Following are the Key Features of systemd:**  Parallel service startup — Faster boot times Service dependency management — Ensures correct startup order Integrated logging via journald – Easier troubleshooting Service monitoring & auto-restart — Keeps critical services alive Resource control — Limit CPU/memory usage per service
 
 **How systemd Organizes Services:**  Systemd uses unit files to describe services, targets, devices, sockets, timers, and more. The most common type is the service unit (.service).
-
-**Linux Architecture:**
-
--->Applications or users interact with the Shell, Then The Shell communicates with the Kernel by sending commands through system calls, Then The Kernel theninteracts directly with the hardware to execute those commands, This is how Linux operates in a Command Line Interface (CLI) environment.
-Most Linux administration and server management tasks are performed using the CLI.
 
 **What is Shell and there different types?**
 
