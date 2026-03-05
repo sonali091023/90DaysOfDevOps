@@ -1,5 +1,8 @@
 **Day 06 – Linux Fundamentals: Read and Write Text Files**
 
+<img width="1457" height="381" alt="image" src="https://github.com/user-attachments/assets/e73bb553-8832-4375-8a07-18ea505f45d0" />
+
+
 **1 touch notes.txt**
 
 Creates an empty file named notes.txt if it doesn’t exist.
