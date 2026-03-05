@@ -58,9 +58,11 @@
 
 -->tail -n 50 file.txt - shows the last 50 lines of a file
 
--->chmod - modify file or directory permissions
+-->chmod: modify file or directory permissions
 
--->chown - change ownership of a file or directory
+-->chown: change ownership of a file or directory
+
+-->usermod: To add user to the group we use command usermod
 
 **Networking troubleshooting Commands:**
 
