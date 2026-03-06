@@ -87,6 +87,30 @@
 
 <img width="800" height="505" alt="image" src="https://github.com/user-attachments/assets/eeff0be8-6ada-4330-9eb4-925c09d3b20a" />
 
+**Conclusion:**
+
+--> sudo useradd -m nairobi
+
+--> sudo useradd -m tokyo
+
+--> sudo groupadd project-team
+
+--> sudo usermod -aG project-team nairobi
+
+--> sudo usermod -aG project-team tokyo
+
+--> sudo mkdir /opt/team-workspace
+
+--> sudo chown :project-team /opt/team-workspace
+
+--> sudo chmod 775 /opt/team-workspace
+
+--> su - nairrobi
+
+--> echo "hello nairobi " >> file.txt
+
+--> cat gile.txt
+
 **Users & Groups Created**
 
 Users: tokyo, berlin, professor, nairobi
