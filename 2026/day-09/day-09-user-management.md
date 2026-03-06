@@ -1,4 +1,6 @@
 
+**Day 09 – Linux User & Group Management Challenge**
+
 **Task 1**
 
 **useradd:** --> A system command used to create users, It does not ask questions, You must manually set options like home directory and password, We can check the created user under /home directory
