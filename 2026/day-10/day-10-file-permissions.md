@@ -73,7 +73,7 @@ Answer: What are current permissions? Who can read/write/execute?
 
 Verify: ls -l after each change
  
-Task 5: Test Permissions (10 minutes)
+**Task 5: Test Permissions (10 minutes)**
 
 1.	Try writing to a read-only file - what happens?
 
@@ -82,7 +82,6 @@ Task 5: Test Permissions (10 minutes)
 3.	Document the error messages
 
 <img width="715" height="869" alt="image" src="https://github.com/user-attachments/assets/647b567a-5ae2-4610-b613-4d5bffcf2306" />
-
 
 **Files Created**
 
