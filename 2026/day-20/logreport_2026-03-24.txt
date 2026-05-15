@@ -1,0 +1,33 @@
+===== Log Analysis Report =====
+Date: 2026-03-24
+File: logfile
+Total lines: 594
+Authentication failures: 204
+
+--- Top Errors ---
+
+
+--- Critical Events ---
+247:Jun 22 13:16:30 combo ftpd[17886]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+248:Jun 22 13:16:30 combo ftpd[17889]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+249:Jun 22 13:16:30 combo ftpd[17887]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+250:Jun 22 13:16:30 combo ftpd[17888]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+251:Jun 22 13:16:30 combo ftpd[17890]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+252:Jun 22 13:16:30 combo ftpd[17893]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+253:Jun 22 13:16:30 combo ftpd[17879]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+254:Jun 22 13:16:30 combo ftpd[17892]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+255:Jun 22 13:16:30 combo ftpd[17876]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+256:Jun 22 13:16:30 combo ftpd[17875]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+257:Jun 22 13:16:30 combo ftpd[17877]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+258:Jun 22 13:16:30 combo ftpd[17874]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+259:Jun 22 13:16:30 combo ftpd[17882]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+260:Jun 22 13:16:30 combo ftpd[17872]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+261:Jun 22 13:16:30 combo ftpd[17881]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+262:Jun 22 13:16:30 combo ftpd[17878]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+263:Jun 22 13:16:31 combo ftpd[17873]: connection from 210.245.165.136 () at Wed Jun 22 13:16:30 2005 
+264:Jun 22 13:16:31 combo ftpd[17885]: connection from 210.245.165.136 () at Wed Jun 22 13:16:31 2005 
+265:Jun 22 13:16:31 combo ftpd[17884]: connection from 210.245.165.136 () at Wed Jun 22 13:16:31 2005 
+266:Jun 22 13:16:31 combo ftpd[17880]: connection from 210.245.165.136 () at Wed Jun 22 13:16:31 2005 
+267:Jun 22 13:16:31 combo ftpd[17883]: connection from 210.245.165.136 () at Wed Jun 22 13:16:31 2005 
+268:Jun 22 13:16:31 combo ftpd[17891]: connection from 210.245.165.136 () at Wed Jun 22 13:16:31 2005 
+269:Jun 22 13:16:32 combo ftpd[17894]: connection from 210.245.165.136 () at Wed Jun 22 13:16:32 2005 
