@@ -1,0 +1,4 @@
+node_modules  #skips heavy dependencies
+.git          #avoids copying git history
+*.md          #ignores all markdown files
+.env          #prevents secrets from being copied
