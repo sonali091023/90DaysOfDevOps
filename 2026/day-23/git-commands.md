@@ -1,4 +1,4 @@
-**Git Commands Used:**
+# Git Commands Used:
 
 git init
 
