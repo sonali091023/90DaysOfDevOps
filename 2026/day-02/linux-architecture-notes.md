@@ -1,4 +1,4 @@
-**Day 2 - Linux, Linux Filesystem hierarchy, Linux Architecture, Processes, and systemd**
+# Day 2 - Linux, Linux Filesystem hierarchy, Linux Architecture, Processes, and systemd
 
 **What is Linux?**
 
