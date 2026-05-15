@@ -1,0 +1,372 @@
+# Day 32 – Docker Volumes & Networking
+
+## Task
+Today's goal is to **solve two real problems: data persistence and container communication**.
+
+Containers are ephemeral — they lose data when removed. And by default, containers can't easily talk to each other. Today you fix both.
+
+---
+
+## Expected Output
+- A markdown file: `day-32-volumes-networking.md`
+- Screenshots of your experiments
+
+---
+
+## Challenge Tasks
+
+### Task 1: The Problem
+1. Run a Postgres or MySQL container
+2. Create some data inside it (a table, a few rows — anything)
+3. Stop and remove the container
+4. Run a new one — is your data still there?
+
+Command to create postgres container: **docker run -d --name my-postgres -e POSTGRES_PASSWORD=test@123 -e POSTGRES_USER=admin -e POSTGRES_DB=testdb postgres**
+
+**docker images**
+
+**docker ps**
+
+To go inside container: **docker exec -it my-postgres psql -U admin -d testdb**
+
+**docker ps**
+
+**docker stop a11ffb2e364e**
+
+**docker rm a11ffb2e364e**
+
+**docker ps**
+
+**docker run -d --name my-postgres2 -e POSTGRES_PASSWORD=test@123 -e POSTGRES_USER=admin -e POSTGRES_DB=testdb postgres**
+
+**docker ps**
+
+**docker exec -it my-postgres2 psql -U admin -d testdb**
+
+<img width="1917" height="675" alt="image" src="https://github.com/user-attachments/assets/ace9b349-4b30-4654-9d03-e97a224b7986" />
+
+<img width="1066" height="477" alt="image" src="https://github.com/user-attachments/assets/f076f25f-4c26-4ca7-8b42-ecb8b71c143b" />
+
+<img width="1856" height="577" alt="image" src="https://github.com/user-attachments/assets/9d1185de-929d-47f1-ab36-b7f20d9baed1" />
+
+**Write what happened and why?**
+
+-->So Data is lost when a container is removed because containers are ephemeral and do not persist data by default.
+
+**PV**
+
+-->**Now lest create persistent volume while container creation and check this time is data stays or get lose**
+
+-->Command to create PV container: **docker run -d --name pg-persistent -e POSTGRES_PASSWORD=test@123 -e POSTGRES_USER=admin -e POSTGRES_DB=testdb -v pgdata:/var
+/lib/postgresql/data postgres:16**
+
+-->**docker ps**
+
+-->To go inside container: **docker exec -it pg-persistent psql -U admin -d testdb**
+
+-->Create table inside container: **CREATE TABLE users ( id SERIAL PRIMARY KEY,name TEXT );**
+
+-->**INSERT INTO users (name) VALUES ('Sonali'), ('DevOps');**    #insert multiple values   
+
+-->Now inside container run the command **SELECT * FROM users;**
+
+<img width="1897" height="723" alt="image" src="https://github.com/user-attachments/assets/d3e41c5a-093f-4798-8adf-a40473df009a" />
+
+<img width="1918" height="581" alt="image" src="https://github.com/user-attachments/assets/aa524b46-02e4-4419-b177-c7206d2e38e2" />
+
+<img width="1902" height="427" alt="image" src="https://github.com/user-attachments/assets/cb330af0-59bb-4d61-93cc-c0a77c1dbaa2" />
+
+-->**Note:** So Docker volumes make container data persistent by storing it outside the container lifecycle.
+
+---
+
+### Task 2: Named Volumes
+1. Create a named volume -->**docker volume create my-db-volume**
+2. Run the same database container, but this time **attach the volume** to it
+3. Add some data, stop and remove the container
+4. Run a brand new container with the **same volume**
+5. Is the data still there?
+
+-->Yes, all previous data, Tables and rows are still there, To verify use following commands docker volume ls, docker volume inspect.
+
+**Commands used:**
+
+-->Create named volume: **docker volume create my-db-volume**
+
+-->To check the volume list: **docker volume ls**
+
+-->Run MySQL Container with Volume: **docker run -d --name sql-volume -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql**
+
+-->Check Running Container: **docker ps**
+
+-->Access MySQL by going inside container: **docker exec -it sql-volume mysql -u root -p**  
+
+-->Enter Password and get loggedin to the mysql and then perform following steps:
+
+-->**CREATE DATABASE testdb;**
+
+-->**USE testdb;**
+
+-->**CREATE TABLE test_data (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));**
+
+-->**INSERT INTO test_data (name) VALUES ('Alice'), ('Bob');**
+
+-->**SELECT * FROM test_data;**
+
+-->**show databases;**
+
+-->**exit**
+
+-->Check Running Container: **docker ps**
+
+-->Stop & Remove Container: **docker stop 831da080f31c && docker rm 831da080f31c**
+
+-->Check Running Container: **docker ps**
+
+-->Recreate Container with SAME Volume: **docker run -d --name persistent -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql**
+
+-->Check Running Container: **docker ps**
+
+-->**docker exec -it persistent mysql -u root -p**  
+
+-->Enter Password and get loggedin to the mysql and Verify Data Persistence:
+
+-->**show databases;**
+
+-->**use testdb**
+
+-->**SELECT * FROM test_data;**
+
+-->**exit**
+
+-->**docker volume ls**
+
+-->**Verify:** `docker volume ls`, docker volume inspect: **docker volume inspect mysqldata**
+
+**Note:** Container = Ephemeral (temporary) & Volume = Persistent (data stays even if container is deleted), So As long as you use the same volume name, your data 
+
+is safe.
+
+<img width="1572" height="722" alt="image" src="https://github.com/user-attachments/assets/3ab835c0-e1cc-49ce-bb38-a99c6cf93b19" />
+
+<img width="1493" height="887" alt="image" src="https://github.com/user-attachments/assets/8d476058-ab22-48de-b49c-54886d8d37cd" />
+
+<img width="1890" height="553" alt="image" src="https://github.com/user-attachments/assets/c333c8c5-5379-4450-983e-5341440cdce6" />
+
+<img width="1588" height="912" alt="image" src="https://github.com/user-attachments/assets/f54777fd-5cd1-4ef9-a63e-53d8b43edc5b" />
+
+<img width="952" height="857" alt="image" src="https://github.com/user-attachments/assets/36b6722c-134b-4234-b61d-c4c3b2734def" />
+
+---
+
+### Task 3: Bind Mounts
+1. Create a folder on your host machine with an `index.html` file
+2. Run an Nginx container and **bind mount** your folder to the Nginx web directory
+3. Access the page in your browser
+4. Edit the `index.html` on your host — refresh the browser
+
+**Commands Used:** 
+
+-->Create folder: **mkdir nginx-bind**
+
+--> Go inside folder: **cd nginx-bind/**
+
+--> Create file: **vi index.html**
+
+--> Run Nginx Container with Bind Mount: **docker run -d --name nginx-bind-container -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx:alpine**
+
+--> Verify the created container: **docker ps**
+
+-->Verify the content of the file: **cat index.html**
+
+
+-->Edit the content of the file: **vi index.html**
+
+-->Verify the updated content of the file: **cat index.html**
+
+-->Access in Browser: **http://localhost:8080** 
+
+**Note:** Output will update without restarting container.
+
+-->If in case this doesnt work **-v $(pwd):/usr/share/nginx/html** use full path as follows **-v /home/ubuntu/nginx-bind:/usr/share/nginx/html**
+
+<img width="1810" height="473" alt="image" src="https://github.com/user-attachments/assets/c3afd936-829a-4308-93a4-fd183b526c47" />
+
+<img width="637" height="430" alt="image" src="https://github.com/user-attachments/assets/d6c06b90-c652-48f0-80df-1807361be249" />
+
+Write in your notes: What is the difference between a named volume and a bind mount?
+
+-->**Volumes:** Managed by Docker, Stored in a part of the host filesystem which is managed by Docker, Preferred method for data persistence.
+
+-->**Bind Mounts:** Maps a file or directory on the host to a file or directory in the container, More complex but provides flexibility to interact with the host system.
+
+---
+
+### Task 4: Docker Networking Basics
+1. List all Docker networks on your machine -->**docker network ls**
+
+-->So bdidge is the default docker network.
+
+<img width="520" height="171" alt="image" src="https://github.com/user-attachments/assets/99b4804f-ee17-402f-bc37-ccc5bec41a2d" />
+
+2. Inspect the default `bridge` network -->**docker network inspect bridge**
+
+<img width="828" height="966" alt="image" src="https://github.com/user-attachments/assets/3968efe5-fd80-4c26-ad40-eb5a948f3fbf" />
+
+3. Run two containers on the default bridge — can they ping each other by **name**?
+
+-->No on the default bridge network by using container name, 2 differnt containers cant communicate with eachother.
+
+-->container1: **docker run -it --name container1 busybox sh**
+
+-->**docker exec -it container1 sh**
+
+-->**ping container1**
+
+-->container2: **docker run -it --name container2 busybox sh**
+
+-->**docker exec -it container2 sh**
+
+-->**ping container2**
+
+<img width="992" height="437" alt="image" src="https://github.com/user-attachments/assets/efedab7e-2228-4dd7-a199-77a06a154c35" />
+
+4. Run two containers on the default bridge — can they ping each other by **IP**?
+
+-->Yes on the default bridge network by using ip address, 2 differnt containers can communicate with eachother.
+
+-->Container1: **docker run -it --name container1 busybox sh**
+
+-->**docker exec -it container1 sh**
+
+-->**ip addr**
+
+-->**ping 172.18.0.2**
+
+<img width="1511" height="710" alt="image" src="https://github.com/user-attachments/assets/82f99acb-3690-4b5d-869c-7b989325b185" />
+
+-->container2: **docker run -it --name container2 busybox sh**
+
+-->**docker exec -it container2 sh**
+
+-->**ip addr**
+
+-->**ping 172.18.0.3**
+
+<img width="1250" height="731" alt="image" src="https://github.com/user-attachments/assets/290f1256-d2da-4276-8e2d-a5e16e577170" />
+
+---
+
+### Task 5: Custom Networks
+1. Create a custom bridge network called `my-app-net` -->**docker network create my-app-net**
+
+2. Run two containers on `my-app-net`
+
+-->**docker run -dit --name container1 --network my-app-net alpine sh**
+
+-->**docker run -dit --name container2 --network my-app-net alpine sh**
+
+-->**docker ps**
+
+3. Can they ping each other by **name** now?
+ 
+-->Go inside container1: **docker exec -it e4401baf0b82 sh**
+
+-->**ping container2**
+
+-->Go inside container2: **docker exec -it e4401baf0b82 sh**  
+
+-->**ping container1**
+
+4. Write in your notes: Why does custom networking allow name-based communication but the default bridge doesn't?
+
+-->Default Docker bridge network does not have built-in DNS,so containers cannot resolve each other by name.they need IPs.
+
+-->User-defined networks have embedded DNS, so containers can communicate using their names.
+
+-->**Note:** Custom Docker networks enable name-based communication because they include an internal DNS server, while the default bridge network lacks this 
+
+feature and only supports IP-based communication.
+
+---
+
+### Task 6: Put It Together
+1. Create a custom network  --> **docker network create my-app-net**
+
+2. Run a **database container** (MySQL/Postgres) on that network with a volume for data
+
+-->Run a database container (PostgreSQL + volume): **docker run -d --name my-db --network my-app-net -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=test@123 -e POSTGRES_DB=mydb -v pgdata:/var/lib/postgresql/data postgres:16**
+
+-->Here above command Creates DB container my-db, Attaches to my-app-net this is custom network, Adds persistent volume (pgdata), Sets username/password/db
+
+3. Run an **app container** (use any image) on the same network
+
+-->**docker run -dit --name my-app --network my-app-net alpine sh**
+
+4. Verify the app container can reach the database by container name
+
+-->Yse based on container name they can talk with each other due to DNS Resolution. 
+
+-->To go inside app container: **docker exec -it my-app sh**
+
+-->ping db container from app container: **ping my-db**
+
+-->Check DB port: **nc -zv my-db 5432**  
+
+-->PostgreSQL server listens on port 5432 inside the container, Check if service is running on port 5432 of my-db, So no IP needed, No port mapping needed 
+
+(internal communication will happen)
+
+-->**Note:** This proves app can reach DB service, So my-db is resolved via Docker DNS, No need to use IP address, Both containers communicate over my-app-net 
+
+which is custom network it has DNS resolution which default network dont have which is bridge network.
+
+<img width="1862" height="971" alt="image" src="https://github.com/user-attachments/assets/766aed7c-b891-4f03-8d72-15e0fbc5f356" />
+
+-->**Note:** Containers on the same custom Docker network can communicate using container names because Docker provides an internal DNS service. This allows 
+
+application containers to connect to database containers using service names instead of IP addresses, which is more reliable.
+
+-->Common default ports (VERY IMPORTANT/Default port = where the service “lives” by default)
+
+-->PostgreSQL=5432
+
+-->MySQL=3306
+
+-->MongoDB=27017
+
+-->Nginx(HTTP)=80
+
+-->HTTPS=443
+
+-->Redis=6379
+
+-->A default port is the standard port on which a service listens (e.g., PostgreSQL uses 5432), allowing applications to connect without additional configuration.
+
+-->[**Internal port** → where app runs/listens[Used for container to container communicaton], **EXPOSE** → just info [Used in Dockerfile], **-p [runtime defined]** → actual access from outside]
+
+-->Internal ports are where applications run inside containers, EXPOSE documents those ports, and -p maps them to the host to allow external access.
+
+---
+
+## Hints
+- Volumes: `docker volume create`, `-v volume_name:/path`
+- Bind mount: `-v /host/path:/container/path`
+- Networking: `docker network create`, `--network`
+- Ping: `docker exec container1 ping container2`
+
+---
+
+## Submission
+1. Add your `day-32-volumes-networking.md` to `2026/day-32/`
+2. Commit and push to your fork
+
+---
+
+## Learn in Public
+Share what happened when you deleted a container without a volume on LinkedIn. The "aha moment" is real.
+
+`#90DaysOfDevOps` `#DevOpsKaJosh` `#TrainWithShubham`
+
+Happy Learning!
+**TrainWithShubham**
