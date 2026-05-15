@@ -1,0 +1,45 @@
+Task2:
+
+services:
+  web:
+    image: nginx:latest
+    container_name: nginx-container
+    ports:
+      - "8080:80"                         #Mapping host port 8080 with containers 80 port
+    volumes:
+      - ./html:/usr/share/nginx/html      #./html dir created in current dir and that is getting mapped with /usr/share/nginx/htm
+    restart: always
+#============================================================================================================================================================
+Task3: We can create multiple containers in single docker-compose.yml file
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: test@123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: test@123
+    volumes:
+      - mysql_data:/var/lib/mysql         #named volume
+    restart: always
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-container
+    ports:
+      - "8085:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: test@123
+    volumes:
+      - wordpress_data:/var/www/html     #named volume
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  mysql_data:
+  wordpress_data:
