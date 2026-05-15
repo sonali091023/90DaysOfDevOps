@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit Counter App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            width: 350px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .count {
+            font-size: 48px;
+            margin: 20px 0;
+            color: #38bdf8;
+        }
+
+        button {
+            margin: 8px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #38bdf8;
+            color: black;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .healthy {
+            color: #22c55e;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 Visit Counter</h1>
+
+        <!-- Flask value -->
+        <div class="count" id="count">{{ total_visits }}</div>
+
+        <button onclick="getCached()">Get Cached</button>
+        <button onclick="checkHealth()">Check Health</button>
+
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        async function getCached() {
+            const res = await fetch("/cached");
+            const data = await res.json();
+
+            document.getElementById("count").innerText = data.visit_count;
+            document.getElementById("status").innerHTML =
+                "Cache Hit: " + data.cache_hit;
+        }
+
+        async function checkHealth() {
+            const res = await fetch("/health");
+            const data = await res.json();
+
+            if (data.status === "healthy") {
+                document.getElementById("status").innerHTML =
+                    "<span class='healthy'>✅ All services healthy</span>";
+            } else {
+                document.getElementById("status").innerHTML =
+                    "<span class='error'>❌ Service issue</span>";
+            }
+        }
+    </script>
+</body>
+</html>
+
