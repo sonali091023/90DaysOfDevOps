@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My App</title>
+</head>
+<body>
+  <h1>Frontend is running</h1>
+
+  <button onclick="callAPI()">Call API</button>
+
+  <p id="output"></p>
+
+  <script>
+    async function callAPI() {
+      const res = await fetch('/api');
+      const data = await res.json();
+      document.getElementById('output').innerText = data.message;
+    }
+  </script>
+</body>
+</html>
