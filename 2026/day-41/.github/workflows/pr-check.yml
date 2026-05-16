@@ -1,0 +1,21 @@
+name: PR Check
+
+on:
+  pull_request:             #triggers on PR events
+    branches:               #only PRs targeting main
+      - main
+    types:
+      - opened              #when PR is created
+      - synchronize         #when new commits are pushed to PR
+
+jobs:
+  pr-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print PR branch
+        run: |
+          echo "PR check running for branch: ${{ github.head_ref }}"          #gives your branch name (source branch)
