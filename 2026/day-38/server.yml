@@ -1,0 +1,22 @@
+---
+server:
+  name: my-server
+  ip: 192.168.1.10
+  port: 8080
+
+database:
+  host: localhost
+  name: mydb
+  credentials:
+    user: admin
+    password: secret123
+
+startup_script_literal: |
+  echo "Starting server..."
+  npm install
+  npm start
+
+startup_script_folded: 
+  echo "Starting server..."
+  npm install
+  npm start

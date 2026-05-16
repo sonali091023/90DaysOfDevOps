@@ -1,0 +1,12 @@
+---
+name: sonali
+role: Devops engineer
+experience_years: 2
+learning: true
+tools:
+  - Docker
+  - Kubernetes
+  - Jenkins
+  - Git
+  - Terraform
+hobbies: [reading, coding]
