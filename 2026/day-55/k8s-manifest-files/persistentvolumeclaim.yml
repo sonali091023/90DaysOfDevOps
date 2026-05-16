@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-pvc
+spec:
+  storageClassName: ""    #If we dont dfine it bydefault it shows storageClass=standard, So due to this we cas see PVC status as pending, Due to unmatch criteria with PV
+  accessModes:
+    - ReadWriteOnce       #So pvc will bind with pv coz, pv capacity=1Gi & AccessMode = RWO That is match with pvc Requests = 500Mi & AccessMode = RWO
+  resources: 
+    requests:
+      storage: 500Mi      #So Match conditions are PVC request ≤ PV capacity, It means access modes match, So Kubernetes will bind them.

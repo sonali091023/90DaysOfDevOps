@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: demo-pv
+spec:
+  capacity:
+    storage: 1Gi                                #max storage size
+  accessModes:
+    - ReadWriteOnce                             #can be mounted by one node at a time
+  persistentVolumeReclaimPolicy: Retain         #data is NOT deleted even if PVC is removed
+  hostPath:                                     #uses local node directory (/tmp/k8s-pv-data)
+    path: /tmp/k8s-pv-data
