@@ -1,0 +1,33 @@
+name: Multi OS Runner Demo
+
+on:
+  push:
+
+jobs:
+  ubuntu-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print system info (Ubuntu)
+        run: |
+          echo "OS: Ubuntu"
+          echo "Hostname: $(hostname)"
+          echo "User: $(whoami)"
+
+  windows-job:
+    runs-on: windows-latest
+    steps:
+      - name: Print system info (Windows)
+        run: |
+          echo "OS: Windows"
+          echo "Hostname: %COMPUTERNAME%"
+          echo "User: %USERNAME%"
+        shell: cmd
+
+  macos-job:
+    runs-on: macos-latest
+    steps:
+      - name: Print system info (macOS)
+        run: |
+          echo "OS: macOS"
+          echo "Hostname: $(hostname)"
+          echo "User: $(whoami)"

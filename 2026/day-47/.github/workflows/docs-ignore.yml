@@ -1,0 +1,18 @@
+name: Ignore Docs Changes
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+    paths-ignore:                 #workflow runs unless ALL changes match ignored paths means Only .md / docs/ changes → skipped & .md + src/app.js → runs
+      - '*.md'
+      - 'docs/**'
+
+jobs:
+  run-unless-docs-only:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: echo "Workflow triggered (not just docs changes)"

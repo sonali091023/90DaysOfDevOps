@@ -1,0 +1,39 @@
+name: Scheduled Checks
+
+on:
+  schedule:
+    - cron: '30 2 * * 1'
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  scheduled-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print trigger type
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "Schedule used: ${{ github.event.schedule }}"
+          else
+            echo "No schedule (manual or other trigger)"
+          fi
+
+      - name: Health Check
+        run: |
+          URL="https://example.com"
+
+          echo "Checking health of $URL"
+
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
+
+          echo "Response code: $STATUS"
+
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Health check failed"
+            exit 1
+          else
+            echo "Service is healthy"
+          fi

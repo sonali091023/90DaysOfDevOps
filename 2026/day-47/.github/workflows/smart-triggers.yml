@@ -1,0 +1,18 @@
+name: Smart Trigger (App Changes Only)
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'                            #restrict
+    paths:                                     #workflow runs ONLY IF these files change
+      - 'src/**'                               #If you change anything outside src/ or app/ → workflow will NOT run
+      - 'app/**'
+
+jobs:
+  run-on-app-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: echo "Workflow triggered because src/ or app/ changed"

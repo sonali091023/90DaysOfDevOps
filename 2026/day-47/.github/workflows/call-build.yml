@@ -1,0 +1,23 @@
+name: Call Reusable Build Workflow
+
+on:
+  push:
+    branches:
+      - main            #Correct trigger (push → main)
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable-build.yml   #Run that entire workflow as a job      #Correct reusable workflow call using uses:
+    with:
+      app_name: "my-web-app"       #we are passing inputs
+      environment: "production"
+    secrets:                                                        #Correct passing of inputs and secrets
+      docker_token: ${{ secrets.DOCKER_TOKEN }}
+
+  print-version:
+    runs-on: ubuntu-latest
+    needs: build                                                    #Used needs: build properly (this is critical)
+
+    steps:
+      - name: Print build version
+        run: echo "Build version is ${{ needs.build.outputs.build_version }}"

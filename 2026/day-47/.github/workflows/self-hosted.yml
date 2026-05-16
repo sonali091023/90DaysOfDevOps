@@ -1,0 +1,30 @@
+name: Self Hosted Runner Demo
+
+on: push
+
+jobs:
+  run-on-my-machine:
+    runs-on: [self-hosted, my-linux-runner]
+
+    steps:
+      - name: Print hostname
+        run: |
+          echo "Hostname: $(hostname)"
+
+      - name: Print working directory
+        run: |
+          echo "Current directory:"
+          pwd
+
+      - name: Create a test file
+        run: |
+          echo "Hello from self-hosted runner" > my-test-file.txt
+
+      - name: Verify file exists
+        run: |
+          ls -l my-test-file.txt
+
+      - name: Show runner info
+        run: |
+          echo "Runner Name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"

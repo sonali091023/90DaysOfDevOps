@@ -1,0 +1,34 @@
+name: Env File Demo
+
+on:
+  push:
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Load .env into GitHub environment
+        run: |
+          grep -v '^#' .env >> $GITHUB_ENV  
+
+          #Method 1: grep -v '^#' .env >> $GITHUB_ENV  If you want variables available across multiple steps
+          #grep -v '^#' → removes comments
+          #$GITHUB_ENV → makes variables available to all next steps
+
+          #method2: export $(grep -v '^#' .env | xargs)
+          #grep -v '^#' → removes comments
+          #xargs → converts lines into variables
+          #export → makes them available to the step
+
+      - name: Print variables
+        run: |
+          echo "App Name: $APP_NAME"
+          echo "Environment: $ENVIRONMENT"
+          echo "Version: $VERSION"
+
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
