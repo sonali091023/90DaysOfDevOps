@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-nodeport            #Name of the Service Used for DNS
+spec:
+  type: NodePort                    #Exposes your app outside the cluster, Opens a port on every Node
+  selector:
+    app: web-app                    #Targets Pods with label, Service will send traffic only to these Pods
+  ports:
+  - port: 80                        #Service’s internal port (ClusterIP access)
+    targetPort: 80                  #Port no of the Pod container
+    nodePort: 30080                 #Port exposed on each Node (external access)
