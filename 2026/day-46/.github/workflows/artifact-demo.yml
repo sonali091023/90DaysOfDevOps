@@ -1,0 +1,23 @@
+name: Artifact Demo
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate report file
+        run: |
+          mkdir reports
+          echo "Test Report - $(date)" > reports/report.txt    #Creates a file inside the runner
+          echo "Build successful" >> reports/report.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4      #Uploads file to GitHub storage, Artifact name = test-report
+        with:
+          name: test-report
+          path: reports/report.txt
