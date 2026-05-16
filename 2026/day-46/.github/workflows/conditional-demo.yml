@@ -1,0 +1,40 @@
+name: Conditions Demo
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  conditional-job:
+    runs-on: ubuntu-latest
+
+    #Job runs only on push (not PR)
+    if: github.event_name == 'push'                                #Even though workflow triggers on both, Still This job runs only for push events
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      #Run only on main branch
+      - name: Run only on main
+        if: github.ref == 'refs/heads/main'                          #Ensures step runs only when branch is main
+        run: echo "This runs only on main branch"
+
+      # Step that will fail intentionally
+      - name: Intentional failure
+        run: exit 1
+
+      #Run only if previous step failed
+      - name: Run if previous step failed
+        if: failure()                                                #true if any previous step failed
+        run: echo "Previous step failed, so this runs"
+
+      #Continue even if error happens
+      - name: Continue on error example
+        continue-on-error: true                                      #If any step fails still Workflow does NOT stop
+        run: |
+          echo "This step will fail but workflow continues"
+          exit 1
+
+      - name: Final step
+        run: echo "Workflow still running after error"

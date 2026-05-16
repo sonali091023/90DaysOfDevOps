@@ -1,0 +1,25 @@
+name: Use Custom Action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run custom action
+        id: greet_step
+        uses: ./.github/actions/setup-and-greet
+        with:
+          name: "Sonali"
+          language: "en"
+
+      - name: Print output
+        run: |
+          echo "Greeted status: ${{ steps.greet_step.outputs.greeted }}"
