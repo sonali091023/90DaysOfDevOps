@@ -1,0 +1,15 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: task5
+  labels:
+    app: nginx
+    app: newapp
+    environment: dev
+    team: QA
+spec:
+  containers:
+  - name: container1
+    image: nginx:latest
+    ports:
+    - containerPort: 8080 
