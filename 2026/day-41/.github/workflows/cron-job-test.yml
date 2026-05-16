@@ -1,0 +1,31 @@
+#name of the workflow
+name: cron job test workflow
+
+#triggerns job on every push
+on: 
+  push: 
+    branches:
+      - main
+
+  schedule:
+    - cron: "* * * * *"   # runs every day at midnight UTC
+
+#Define the jobs that will run in this workflow
+jobs:
+  greet:
+    #specify the runner environment
+    runs-on: ubuntu-latest
+
+    #Steps represents of tasks executed as a part of the job
+    steps:
+      #Step 1: Checkout the repository 
+      - name: Check repository
+        uses: actions/checkout@v4
+
+      #Step 2: Print greeting
+      - name: Print greeting
+        run: echo "Hello from github-actions"
+
+      #Step 3: current date and time
+      - name: Print the current date and time
+        run: date
