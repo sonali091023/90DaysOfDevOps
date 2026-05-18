@@ -156,6 +156,13 @@ resource "aws_instance" "TerraWeek_Server" {
              sudo dnf install -y nginx
              systemctl start nginx
              systemctl enable nginx
+
+             sudo apt install docker.io -y
+             systemctl start docker
+             systemctl enable docker
+             sudo usermod -aG docker ubuntu     #[(Use ubuntu for Ubuntu AMI, ec2-user for Amazon Linux)]
+             sudo newgrp docker
+
              echo "<h1>Welcome to TerraWeek</h1>" > /usr/share/nginx/html/index.html
              EOF
 
