@@ -8,7 +8,7 @@ Linux Architecture:
 -->Applications or users interact with the Shell, Then The Shell communicates with the Kernel by sending commands through system calls, Then The Kernel theninteracts directly with the hardware to execute those commands, This is how Linux operates in a Command Line Interface (CLI) environment.
 Most Linux administration and server management tasks are performed using the CLI.
 
-<img width="882" height="441" alt="image" src="https://github.com/user-attachments/assets/a3de95a8-2125-4704-8bcc-313704ab0cf2" />
+<img width="897" height="567" alt="image" src="https://github.com/user-attachments/assets/558416b3-e92a-4dc4-a1ca-4d884f0c2793" />
 
 **Hardware:** It is a combination of all peripherals associated with the system. For example: RAM, CPU and Hard disk etc..
 
