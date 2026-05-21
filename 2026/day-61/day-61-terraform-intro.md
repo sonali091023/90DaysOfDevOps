@@ -24,7 +24,8 @@ Before touching the terminal, research and write short notes on:
 
 -->Infrastructure as Code (IaC) is the practice of managing and provisioning infrastructure such as servers, networks, databases, etc. By using code and automation, instead of manually configuring everything through GUIs or scripts run by hand.
 In IaC, you define your infrastructure in configuration files (like Terraform, AWS CloudFormation, or Ansible), and those files can be versioned, reviewed, and reused—just like application code.
-<img width="532" height="307" alt="image" src="https://github.com/user-attachments/assets/60f767e4-d59c-4c6f-b724-6e091d73b6b6" />
+
+<img width="422" height="305" alt="image" src="https://github.com/user-attachments/assets/7098bad5-ea4d-4ab8-98ec-3bfac775a1eb" />
 
 **Why IaC matters in DevOps: ** As IaC is a core pillar of DevOps because it brings software engineering practices to infrastructure.
 
@@ -320,25 +321,25 @@ sudo apt update && sudo apt install terraform
 # Windows
 choco install terraform
 ```
-<img width="1822" height="442" alt="image" src="https://github.com/user-attachments/assets/91f1e979-62e2-42bb-80bb-17d888fc88ec" />
+<img width="1908" height="982" alt="image" src="https://github.com/user-attachments/assets/d73c3dd4-b0ad-473a-ad6c-310bde675ee2" />
 
 2. Verify:
 ```bash
 terraform -version
 ```
-<img width="592" height="103" alt="image" src="https://github.com/user-attachments/assets/179c42ad-fcdc-4ef1-b745-22d4bfedb48e" />
+<img width="636" height="67" alt="image" src="https://github.com/user-attachments/assets/f1f1fa76-e181-4731-8206-e0b8241696b1" />
 
 3. Install and configure the AWS CLI:
 ```bash
 aws configure
 # Enter your Access Key ID, Secret Access Key, default region (e.g., ap-south-1), output format (json)
 ```
-<img width="1083" height="367" alt="image" src="https://github.com/user-attachments/assets/e875f3f7-c193-48e4-b0b9-305980434050" />
 4. Verify AWS access:
 ```bash
 aws sts get-caller-identity
 ```
-<img width="1083" height="367" alt="image" src="https://github.com/user-attachments/assets/296df10b-81c0-4fa1-bbab-6e107d0824c6" />
+<img width="712" height="205" alt="image" src="https://github.com/user-attachments/assets/8d4bdbbb-44e3-45ce-a8b7-d116ca4149e8" />
+
 You should see your AWS account ID and ARN.
 
 **Steps to follow:**
@@ -360,7 +361,7 @@ You should see your AWS account ID and ARN.
 -->sudo apt update && sudo apt install terraform -y
 
 -->terraform -version
-<img width="1802" height="962" alt="image" src="https://github.com/user-attachments/assets/81741159-5dc2-4c10-8f3c-c9f6cf67eddf" />
+<img width="1918" height="966" alt="image" src="https://github.com/user-attachments/assets/b051ad51-06bd-405d-b5c1-9a8c4737a5be" />
 
 -->Install AWS CLI: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 
@@ -369,12 +370,13 @@ You should see your AWS account ID and ARN.
 -->sudo ./aws/install
 
 -->aws --version
-<img width="940" height="82" alt="image" src="https://github.com/user-attachments/assets/82dfec2d-0aa7-4b3d-823e-84877ffd4114" />
+<img width="1177" height="965" alt="image" src="https://github.com/user-attachments/assets/281eb141-0371-4f6d-9db5-940dcebe9344" />
+<img width="875" height="82" alt="image" src="https://github.com/user-attachments/assets/4b7736f9-3afe-4f6a-8989-9885994c6119" />
 
 -->configure the AWS CLI: aws configure  [Enter your Access Key ID, Secret Access Key, default region (e.g., ap-south-1), output format (json)]
 
 -->aws sts get-caller-identity
-<img width="892" height="287" alt="image" src="https://github.com/user-attachments/assets/dc31d61a-004b-4952-b97b-7f47104cb2a6" />
+<img width="712" height="205" alt="image" src="https://github.com/user-attachments/assets/8d4bdbbb-44e3-45ce-a8b7-d116ca4149e8" />
 
 ---
 
