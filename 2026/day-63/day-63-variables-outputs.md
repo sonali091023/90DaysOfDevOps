@@ -172,9 +172,11 @@ Stop hardcoding the AMI ID. Use a data source to fetch it dynamically.
 4. Use the first AZ in your subnet: `data.aws_availability_zones.available.names[0]`
 
 Apply and verify -- your config now works in any region without changing the AMI.
-<img width="1872" height="947" alt="image" src="https://github.com/user-attachments/assets/33d29ba9-5521-4481-9ee1-2c2cdc277eec" />
-<img width="1907" height="970" alt="image" src="https://github.com/user-attachments/assets/dfd3e05d-d000-41ac-84d0-9eb330243063" />
-<img width="1887" height="947" alt="image" src="https://github.com/user-attachments/assets/499fc521-f6f6-4002-a9bf-6e770ec32f7b" />
+<img width="811" height="392" alt="image" src="https://github.com/user-attachments/assets/703674de-7c1c-4c0c-808f-e55cd754351f" />
+<img width="985" height="772" alt="image" src="https://github.com/user-attachments/assets/e7da7e48-119b-4b41-9669-ac8dfa7cfcbe" />
+<img width="1536" height="975" alt="image" src="https://github.com/user-attachments/assets/5860ca0c-21c9-4cda-9258-cf5652975e47" />
+<img width="1731" height="975" alt="image" src="https://github.com/user-attachments/assets/071a5fe4-ca5a-4331-a71d-ff8d96a9c5ab" />
+<img width="1892" height="677" alt="image" src="https://github.com/user-attachments/assets/955c9890-4cde-4c79-9974-a3ccd0100a16" />
 
 **Document:** What is the difference between a `resource` and a `data` source?
 
