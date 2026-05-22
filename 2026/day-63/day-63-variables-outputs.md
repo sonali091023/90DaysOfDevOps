@@ -30,11 +30,11 @@ Take your Day 62 infrastructure config and refactor it:
    - `allowed_ports` (list of numbers, default: `[22, 80, 443]`)
    - `extra_tags` (map of strings, default: `{}`)
 
-<img width="866" height="552" alt="image" src="https://github.com/user-attachments/assets/e8cf29be-e284-4fa9-ac26-f501a68cfba8" />
+<img width="1470" height="971" alt="image" src="https://github.com/user-attachments/assets/b83ef6e9-5040-49cb-921c-11a5bcd8b129" />
 
 2. Replace every hardcoded value in `main.tf` with `var.<name>` references
 3. Run `terraform plan` -- it should prompt you for `project_name` since it has no default
-<img width="1297" height="500" alt="image" src="https://github.com/user-attachments/assets/3742eb6d-4216-4cc3-836f-8f407d2dfcb4" />
+<img width="1550" height="978" alt="image" src="https://github.com/user-attachments/assets/a9d52a73-a614-47b9-afba-150957d9eff5" />
 
 **Document:** What are the five variable types in Terraform? 
 
@@ -71,26 +71,28 @@ subnet_cidr  = "10.1.1.0/24"
 ```bash
 terraform plan                              # Uses terraform.tfvars automatically
 ```
-<img width="1821" height="917" alt="image" src="https://github.com/user-attachments/assets/b6e042de-8db0-4bd0-8728-206eb9972259" />
+<img width="1347" height="967" alt="image" src="https://github.com/user-attachments/assets/e8897169-bbec-4260-9bc3-030fe2706308" />
 
 4. Apply with the prod file:
 ```bash
 terraform plan -var-file="prod.tfvars"      # Uses prod.tfvars
 ```
-<img width="1832" height="935" alt="image" src="https://github.com/user-attachments/assets/0f009514-ee73-40ce-be32-1b7c9b501f31" />
+<img width="1661" height="971" alt="image" src="https://github.com/user-attachments/assets/32fc8bb9-45b6-4fa1-a209-b321fe7aa04c" />
 
 5. Override with CLI:
 ```bash
 terraform plan -var="instance_type=t2.nano"  # CLI overrides everything
 ```
-<img width="1822" height="912" alt="image" src="https://github.com/user-attachments/assets/c443e859-c520-4c97-88bd-f3e5dcecd8b1" />
+<img width="1227" height="207" alt="image" src="https://github.com/user-attachments/assets/02844b8c-0f19-4297-ab8a-726b639b93d7" />
+<img width="1552" height="972" alt="image" src="https://github.com/user-attachments/assets/9275c3dc-d03a-45a7-83da-6f75dd91f7ea" />
+
 
 6. Set an environment variable:
 ```bash
 export TF_VAR_environment="staging"
 terraform plan                              # env var overrides default but not tfvars
 ```
-<img width="1802" height="906" alt="image" src="https://github.com/user-attachments/assets/1f2c2c88-d367-4059-8fcf-6575654c2b50" />
+<img width="1500" height="987" alt="image" src="https://github.com/user-attachments/assets/b245510b-1cfd-41d2-8681-5b8d3c3e473a" />
 
 **Document:** Write the variable precedence order from lowest to highest priority.
 <img width="592" height="242" alt="image" src="https://github.com/user-attachments/assets/1a6f190d-a8cf-47b6-9520-b482ae13f4a5" />
