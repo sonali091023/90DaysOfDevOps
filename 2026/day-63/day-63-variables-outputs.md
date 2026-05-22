@@ -180,19 +180,19 @@ Apply and verify -- your config now works in any region without changing the AMI
 
 **Document:** What is the difference between a `resource` and a `data` source?
 
-**Resource: [Create something like EC2, VPC]** 
+**Resource: [Create something like EC2, VPC, & then update, delete, manage actual infrastructure.]** 
 
-<img width="582" height="192" alt="image" src="https://github.com/user-attachments/assets/7c4cd826-5abf-4847-b579-892f2181f8df" />
+<img width="285" height="165" alt="image" src="https://github.com/user-attachments/assets/e7940363-c15f-45d8-8e21-27fccad5e96c" />
 
 -->Resource is Used when you want Terraform to build infrastructure
 
-<img width="242" height="72" alt="image" src="https://github.com/user-attachments/assets/e0ab7471-5313-45b1-b1ad-bf9e888faa2a" />
+<img width="686" height="823" alt="image" src="https://github.com/user-attachments/assets/00b3a635-472c-49f2-90f5-c2ede28d8a06" />
 
 -->Terraform will: Create EC2 --> Track it in state --> Update / destroy it [Full lifecycle management]
 
-**Data: [Reading something like AMI, AZ]**
+**Data: [Reading something like AMI, AZ]** Fetch Existing Information, A data block is used to: read existing resources, fetch information, lookup dynamic values etc.
 
-<img width="245" height="67" alt="image" src="https://github.com/user-attachments/assets/d97040f9-a849-4bbb-b778-22b1b60ce716" />
+<img width="415" height="365" alt="image" src="https://github.com/user-attachments/assets/82f9193e-77eb-45c8-90c4-70687d68fc63" />
 
 -->Used when you want to get existing info from AWS
 
@@ -200,11 +200,9 @@ Apply and verify -- your config now works in any region without changing the AMI
 
 -->In simple words: resource → Build a new house & data → Find an existing house 
 
-<img width="702" height="302" alt="image" src="https://github.com/user-attachments/assets/7777e591-8a79-4e87-a2ca-8ed69337e97a" />
+<img width="377" height="482" alt="image" src="https://github.com/user-attachments/assets/01750dc4-e6b6-40d4-ba76-0f8f22e57e91" />
 
 **Note:** A resource in Terraform is used to create and manage infrastructure, including its lifecycle, while a data source is used to fetch and reference existing infrastructure or information without managing it.
-
-<img width="517" height="282" alt="image" src="https://github.com/user-attachments/assets/6c2b218d-2e55-4c37-b5c4-f93355e4d24b" />
 
 ---
 
@@ -226,20 +224,30 @@ locals {
    - Subnet: `"${local.name_prefix}-subnet"`
    - Instance: `"${local.name_prefix}-server"`
 
+**Note:** We use locals because without it we have to mention name like this under tag "${var.project_name}-${var.environment}" and with locals local.name_prefix which is Cleaner and reusable.
+<img width="570" height="271" alt="image" src="https://github.com/user-attachments/assets/b69c0dae-5fe0-4b15-a139-d27e42b88008" />
+<img width="501" height="375" alt="image" src="https://github.com/user-attachments/assets/7b8edfae-d485-4f5e-9c46-7c8a8fbbe539" />
+<img width="337" height="848" alt="image" src="https://github.com/user-attachments/assets/888f74c2-7e95-47f2-93df-a0c8d0df3755" />
+<img width="1500" height="971" alt="image" src="https://github.com/user-attachments/assets/73b44d74-ee4c-4efe-a221-9585ee48ad24" />
+<img width="1900" height="855" alt="image" src="https://github.com/user-attachments/assets/3660a376-0d29-4231-b3d3-56b14f9e568a" />
+
 3. Merge common tags with resource-specific tags:
 ```hcl
 tags = merge(local.common_tags, {
   Name = "${local.name_prefix}-server"
 })
 ```
-<img width="1836" height="941" alt="image" src="https://github.com/user-attachments/assets/34cdd8f5-ed6e-429c-a860-686ebac59593" />
-<img width="1887" height="957" alt="image" src="https://github.com/user-attachments/assets/5cbfb4ae-a436-471b-88ff-61e0e6231cd1" />
-<img width="1877" height="952" alt="image" src="https://github.com/user-attachments/assets/2e3732f8-85c9-4c4a-beae-00fb9c4ce423" />
+<img width="1539" height="976" alt="image" src="https://github.com/user-attachments/assets/b4267f67-9dc6-4dff-b4a3-d5e325dae7a2" />
+<img width="357" height="823" alt="image" src="https://github.com/user-attachments/assets/bce24191-1b42-42a3-a4ef-14820d3db082" />
+
+**Note:** We can repeat the same tags in every resource. & with merge we can define common tags once and reuse everywhere, Cleaner and production-standard.
+
+-->merge() combines multiple maps into a single map. If duplicate keys exist, the last value overrides previous ones.
 
 Apply and check the tags in the AWS console -- every resource should have consistent tagging.
-<img width="1901" height="931" alt="image" src="https://github.com/user-attachments/assets/326d8302-a1cb-4849-9c16-973dcd194503" />
-<img width="832" height="267" alt="image" src="https://github.com/user-attachments/assets/fb7c2970-17cd-4985-bef2-e34f49ae41e1" />
+
 -->Standardized Terraform tagging pattern (used in companies)
+<img width="1858" height="847" alt="image" src="https://github.com/user-attachments/assets/4a0c74d6-eead-470d-92be-f124f27aa574" />
 
 ---
 
