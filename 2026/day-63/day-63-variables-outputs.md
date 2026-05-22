@@ -95,11 +95,15 @@ terraform plan                              # env var overrides default but not 
 <img width="1500" height="987" alt="image" src="https://github.com/user-attachments/assets/b245510b-1cfd-41d2-8681-5b8d3c3e473a" />
 
 **Document:** Write the variable precedence order from lowest to highest priority.
-<img width="592" height="242" alt="image" src="https://github.com/user-attachments/assets/1a6f190d-a8cf-47b6-9520-b482ae13f4a5" />
+
+-->Terraform loads variable values from multiple sources, If the same variable is defined in multiple places, Terraform follows a priority order.
+
+<img width="818" height="376" alt="image" src="https://github.com/user-attachments/assets/a52f66e9-aa96-41dd-b9b3-f90ba8b498bd" />
+<img width="591" height="316" alt="image" src="https://github.com/user-attachments/assets/44fa6292-d58d-4064-a7d1-030bac235fdb" />
 
 -->Default: lowest priority: Used only if nothing else is provided
 
-<img width="127" height="60" alt="image" src="https://github.com/user-attachments/assets/9b0f6140-4135-4575-ac85-e1677d02b25e" />
+<img width="627" height="302" alt="image" src="https://github.com/user-attachments/assets/3baba0f6-7117-47fa-83e2-073f05df09b1" />
 
 -->Environment Variables: Overrides default   Eg: [export TF_VAR_env="staging"]
 
@@ -110,7 +114,7 @@ terraform plan                              # env var overrides default but not 
 -->-var-file: Overrides all above   Eg: [terraform apply -var-file="prod.tfvars"]
 
 -->-var (highest priority): Highest priority — overrides everything   Eg: [terraform apply -var="env=prod"]
-<img width="622" height="291" alt="image" src="https://github.com/user-attachments/assets/30ef8696-1852-48e0-9622-06e9bff938c4" />
+
 **Note:**
 
 -->terraform.tfvars is auto-loaded
@@ -142,13 +146,13 @@ terraform output                          # Show all outputs
 terraform output instance_public_ip       # Show a specific output
 terraform output -json                    # JSON format for scripting
 ```
-
-<img width="1861" height="945" alt="image" src="https://github.com/user-attachments/assets/819c238c-da33-4e59-9d5a-2d86767b53fa" />
-<img width="1005" height="156" alt="image" src="https://github.com/user-attachments/assets/b5398965-88f7-416c-ab81-ae4720361292" />
-<img width="1355" height="795" alt="image" src="https://github.com/user-attachments/assets/c6f358df-1f9a-4652-bedf-1069dd9b07a8" />
+<img width="1642" height="972" alt="image" src="https://github.com/user-attachments/assets/bd5e930f-ac07-4219-85af-c4a4d7b1510c" />
+<img width="1656" height="980" alt="image" src="https://github.com/user-attachments/assets/42f081a9-d5a7-408a-984f-e32ce1ea588f" />
+<img width="1656" height="980" alt="image" src="https://github.com/user-attachments/assets/03ed4667-36e3-4cb3-8c85-887cfef19533" />
+<img width="1447" height="707" alt="image" src="https://github.com/user-attachments/assets/2bf76125-e764-4b9b-9657-090e5f203930" />
 
 **Verify:** Does `terraform output instance_public_ip` return the correct IP?
--->Yes, "13.219.249.6"
+-->Yes, "44.247.114.48"
 
 ---
 
