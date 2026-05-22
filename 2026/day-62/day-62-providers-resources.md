@@ -132,6 +132,7 @@ Eg:     resource "aws_subnet" "public_subnet" {
         vpc_id     = aws_vpc.vpc.id
     
      }
+<img width="1042" height="697" alt="image" src="https://github.com/user-attachments/assets/c3d3c2be-4c40-47e4-a024-5dd2041b1175" />
 
 - What would happen if you tried to create the subnet before the VPC existed?
 
@@ -139,13 +140,13 @@ Eg:     resource "aws_subnet" "public_subnet" {
   
 - Find all implicit dependencies in your config and list them
 
--->So aws_subnet is depends on aws_vpc
+-->So **aws_subnet** is depends on **aws_vpc**
 
--->aws_internet_gateway is dependens on aws_vpc
+-->**aws_internet_gateway** is dependens on **aws_vpc**
 
--->aws_route_table is depends on aws_vpc
+-->**aws_route_table** is depends on **aws_vpc**
 
--->aws_route_table_association is depends on public subnet and public route table
+-->**aws_route_table_association** is depends on **public subnet** and **public route table**
 
 ---
 
@@ -167,11 +168,10 @@ Add to your config:
 
 Apply and verify -- your EC2 instance should have a public IP and be reachable.
 
-<img width="1655" height="252" alt="image" src="https://github.com/user-attachments/assets/c7ce3119-d75b-4d80-84f8-c99ba8f0cc04" />
-
-<img width="933" height="372" alt="image" src="https://github.com/user-attachments/assets/7bda1be2-a2e4-4f27-92be-893d02551a46" />
-
-<img width="1622" height="328" alt="image" src="https://github.com/user-attachments/assets/ea254017-ed4a-4d42-9e23-e44368ded926" />
+<img width="1670" height="978" alt="image" src="https://github.com/user-attachments/assets/68e4e8c6-2902-4bc1-88f8-997fcf30e4e2" />
+<img width="1502" height="977" alt="image" src="https://github.com/user-attachments/assets/178355ff-a28b-4b77-864e-e001648bdeda" />
+<img width="1483" height="982" alt="image" src="https://github.com/user-attachments/assets/4c9892ce-e298-478f-8d9f-92cfd965d188" />
+<img width="1901" height="793" alt="image" src="https://github.com/user-attachments/assets/d3b929b1-f173-4cf0-839a-fc774dec6919" />
 
 Important commands used when we face "This site cant be reached issue"
 
@@ -202,13 +202,19 @@ Add depends_on = [aws_instance.main] to the S3 bucket -- even though there is no
 Run terraform plan and observe the order
 Now visualize the entire dependency tree:
 
-terraform graph | dot -Tpng > graph.png
 If you don't have dot (Graphviz) installed, use:
 
-<img width="1463" height="226" alt="image" src="https://github.com/user-attachments/assets/e7c25784-2c57-4a6d-83b1-d531e0a7d97c" />
+-->sudo apt update
 
-terraform graph
-and paste the output into an online Graphviz viewer.
+-->apt install graphviz -y
+
+-->dot -V
+
+-->To convert it into image: terraform graph | dot -Tpng > graph.png [Here then graph.png will get create]
+
+-->terraform graph   [Fetched output paste into an online Graphviz viewer.]
+
+<img width="1527" height="382" alt="image" src="https://github.com/user-attachments/assets/72a4f6c8-861c-4d77-81d0-cb4acf764666" />
 
 **Document:** When would you use depends_on in real projects? Give two examples.
 
@@ -231,7 +237,9 @@ lifecycle {
 ```
 2. Change the AMI ID to a different one and run `terraform plan` -- observe that Terraform plans to create the new instance before destroying the old one
 
-<img width="1258" height="462" alt="image" src="https://github.com/user-attachments/assets/59832f10-72ba-4e66-bca5-774d43f6bd00" />
+<img width="1570" height="967" alt="image" src="https://github.com/user-attachments/assets/05e086fa-463a-4921-bf5c-5d123065d28d" />
+<img width="1195" height="985" alt="image" src="https://github.com/user-attachments/assets/d54d6e77-6c64-432a-9385-46340107978a" />
+<img width="1526" height="923" alt="image" src="https://github.com/user-attachments/assets/f0f9568e-bfae-4485-a871-50688f2ab27b" />
 
 3. Destroy everything:
 ```bash
@@ -239,9 +247,13 @@ terraform destroy
 ```
 4. Watch the destroy order -- Terraform destroys in reverse dependency order. Verify in the AWS console that everything is cleaned up.
 
-<img width="1675" height="446" alt="image" src="https://github.com/user-attachments/assets/a4dcb5d0-4d11-4425-8bd4-a3d0ab457d77" />
+<img width="1531" height="976" alt="image" src="https://github.com/user-attachments/assets/0c794306-27c5-4acb-b0f3-f47295972aff" />
+<img width="1440" height="987" alt="image" src="https://github.com/user-attachments/assets/a664bd4e-e87c-4184-856b-e48bd8f7e888" />
+<img width="1517" height="982" alt="image" src="https://github.com/user-attachments/assets/70656ffe-67f7-4341-a465-dc20e2d0035f" />
+<img width="1307" height="973" alt="image" src="https://github.com/user-attachments/assets/f6a9ee2c-75c6-47cc-b706-7aa761491782" />
+<img width="1620" height="976" alt="image" src="https://github.com/user-attachments/assets/4dae0f78-42c3-4be2-9937-947c7c351c7d" />
+<img width="1337" height="687" alt="image" src="https://github.com/user-attachments/assets/578c718a-8353-4584-a430-e0d0c19e470a" />
 
-<img width="1643" height="88" alt="image" src="https://github.com/user-attachments/assets/882a1f4e-eb71-4cbf-ba6a-224928d99325" />
 
 **Document:** What are the three lifecycle arguments (`create_before_destroy`, `prevent_destroy`, `ignore_changes`) and when would you use each?
 -->create_before_destroy By default, Terraform destroys a resource before creating a new one; with create_before_destroy = true, Terraform first creates the new resource and then destroys the old one.
@@ -260,12 +272,10 @@ Example Ignore EC2 instance tags or security group rules that are managed manual
 
 -->Best Practice — Always Explicitly Set Region in Terraform
 
-<img width="751" height="432" alt="image" src="https://github.com/user-attachments/assets/6faddd13-e1a1-4ba0-8b35-06c76ad3d04e" />
-
 **How terraform processes the file:** Each file has a specific responsibility but they all work together automatically because they're in the same folder.
-<img width="702" height="392" alt="image" src="https://github.com/user-attachments/assets/db279a3a-b6c6-4e2b-a9ae-2cf84cac77f5" />
+
 **Real World project structure:**
-<img width="607" height="197" alt="image" src="https://github.com/user-attachments/assets/c5a3ad39-e9cd-4485-b70a-f79739cee552" />
+<img width="325" height="393" alt="image" src="https://github.com/user-attachments/assets/2c535fb0-5bf9-44b5-8c9d-db197f4b0b32" />
 
 ---
 
