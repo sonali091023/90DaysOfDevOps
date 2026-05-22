@@ -269,7 +269,7 @@ terraform console
 
 3. **Networking function:**
    - `cidrsubnet("10.0.0.0/16", 8, 1)` -> `"10.0.1.0/24"`
-<img width="1167" height="562" alt="image" src="https://github.com/user-attachments/assets/0470f748-c0f2-4d88-be1f-bc9f7ca5187c" />
+<img width="956" height="337" alt="image" src="https://github.com/user-attachments/assets/6acdab75-8c5f-458e-8b3c-9fd6eceb2862" />
 
 4. **Conditional expression** -- add this to your config:
 ```hcl
@@ -278,6 +278,7 @@ instance_type = var.environment == "prod" ? "t3.small" : "t2.micro"
 
 Apply with `environment = "prod"` and verify the instance type changes.
 <img width="1827" height="952" alt="image" src="https://github.com/user-attachments/assets/30137ed4-9862-499b-8ed0-44d2f24d8d04" />
+<img width="1432" height="985" alt="image" src="https://github.com/user-attachments/assets/83b6b649-8dee-41bc-b548-8f12cf688d4d" />
 
 **Document:** Pick five functions you find most useful and explain what each does.
 
