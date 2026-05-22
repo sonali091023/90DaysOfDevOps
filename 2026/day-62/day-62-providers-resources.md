@@ -24,8 +24,7 @@ Understanding dependencies is what separates a Terraform beginner from someone w
 3. Run `terraform init` and check the output -- what version was installed?
 4. Run 'terraform init -upgrade' This updates .terraform.lock.hcl to match your current provider version. Done! [Due to mismatch of issue we may face issue like The error is clear! Your lock file has AWS provider 6.44.0 but your providers.tf says ~> 5.0.]
 
-
-<img width="1387" height="393" alt="image" src="https://github.com/user-attachments/assets/a95751ae-84f4-4657-b81f-2942a7338136" />
+<img width="1236" height="950" alt="t1i1" src="https://github.com/user-attachments/assets/a9da8497-b2e8-47e8-80d3-1ff66a9b5f1d" />
 
 4. Read the provider lock file `.terraform.lock.hcl` -- what does it do?
 
@@ -40,7 +39,8 @@ satisfies the constraint ~> 5.0. It also stores hashes to verify the provider’
 --> **>= 5.0** = Allows 5.0 and any higher version Eg: 5.0.0, 6.5.0, 8.6.1, 9.0.0, 10.0.0 
 
 --> **= 5.0.0** = Exactly same version will get install Eg: Eg: only 5.0.0 and not 5.0.1, 5.5.5
-**---
+
+---
 
 ### Task 2: Build a VPC from Scratch
 Create a `main.tf` and define these resources one by one:
@@ -52,19 +52,17 @@ Create a `main.tf` and define these resources one by one:
 5. `aws_route_table_association` -- associate the route table with the subnet
 
 Run `terraform plan` -- you should see 5 resources to create.
-
-<img width="1290" height="681" alt="image" src="https://github.com/user-attachments/assets/ff5b1203-f38e-44b3-b08d-88524830de98" />
-
-<img width="1371" height="653" alt="image" src="https://github.com/user-attachments/assets/3c6d544a-b515-4159-8a6b-a3bc3cf79a0e" />
+<img width="1513" height="982" alt="t2i1" src="https://github.com/user-attachments/assets/c6162914-7aaf-4bea-a47b-34a01c078a7c" />
+<img width="1437" height="986" alt="t2i2" src="https://github.com/user-attachments/assets/b7e8d688-a432-4bc0-8379-028f866b44b2" />
+<img width="1577" height="977" alt="t2i3" src="https://github.com/user-attachments/assets/9bb5f2d7-83fe-4d31-996c-8ad2d800d2e5" />
 
 **Verify:** Apply and check the AWS VPC console. Can you see all five resources connected?
-
-<img width="1320" height="337" alt="image" src="https://github.com/user-attachments/assets/049e9b9a-63cf-42a1-8fa1-e3716b1bb35a" />
-
-<img width="1625" height="347" alt="image" src="https://github.com/user-attachments/assets/be74e230-200c-42ea-af6b-800f0199bb1b" />
+<img width="1562" height="981" alt="image" src="https://github.com/user-attachments/assets/df4ac59e-0c43-492a-85f5-718e2e8ecb54" />
+<img width="1162" height="980" alt="image" src="https://github.com/user-attachments/assets/bdc3b4f8-e29f-46d0-9ccb-e2d8d7c55593" />
+<img width="1316" height="982" alt="image" src="https://github.com/user-attachments/assets/3aa7d2d0-5c44-4013-9c2b-271b6ac8d456" />
 
 AWS network architecture diagram:
-<img width="867" height="697" alt="image" src="https://github.com/user-attachments/assets/0ab7cf14-60c3-4090-8a0d-0f940c98bae1" />
+<img width="1037" height="696" alt="image" src="https://github.com/user-attachments/assets/1b40ef3b-49b2-4fbf-8186-bf7d8fcb39eb" />
 
 **Breakdown the diagram:**
 
