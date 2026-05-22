@@ -7,15 +7,15 @@ output "public_subnet"{
 }
 
 output "instance_id" {
-  value = aws_instance.TerraWeek_Server.id
+  value = aws_instance.terraweek_server.id
 }
 
 output "public_ip" {
-  value = aws_instance.TerraWeek_Server.public_ip
+  value = aws_instance.terraweek_server.public_ip
 }
 
-output "public_dns"{
-    value = aws_instance.TerraWeek_Server.public_dns
+output "public_dns" {
+  value = aws_instance.terraweek_server.public_dns
 }
 
 output "aws_security_group" {
