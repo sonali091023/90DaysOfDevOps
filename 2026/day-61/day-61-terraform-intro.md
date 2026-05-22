@@ -371,11 +371,13 @@ You should see your AWS account ID and ARN.
 
 -->aws --version
 <img width="1177" height="965" alt="image" src="https://github.com/user-attachments/assets/281eb141-0371-4f6d-9db5-940dcebe9344" />
+
 <img width="875" height="82" alt="image" src="https://github.com/user-attachments/assets/4b7736f9-3afe-4f6a-8989-9885994c6119" />
 
 -->configure the AWS CLI: aws configure  [Enter your Access Key ID, Secret Access Key, default region (e.g., ap-south-1), output format (json)]
 
 -->aws sts get-caller-identity
+
 <img width="712" height="205" alt="image" src="https://github.com/user-attachments/assets/8d4bdbbb-44e3-45ce-a8b7-d116ca4149e8" />
 
 ---
@@ -398,11 +400,12 @@ terraform init      # Download the AWS provider
 terraform plan      # Preview what will be created
 terraform apply     # Create the bucket (type 'yes' to confirm)
 ```
-<img width="1492" height="961" alt="image" src="https://github.com/user-attachments/assets/59f14513-268a-499a-8add-6b02b1d86ca1" />
-<img width="1501" height="966" alt="image" src="https://github.com/user-attachments/assets/1da166a9-7eaf-4c2c-b43d-4ac2135a3226" />
-<img width="1562" height="672" alt="image" src="https://github.com/user-attachments/assets/6de1ac7f-b9ed-469a-abfe-810a2d0b3a70" />
-Go to the AWS S3 console and verify your bucket exists.
-<img width="1877" height="752" alt="image" src="https://github.com/user-attachments/assets/974ea76c-3fbf-4955-9f32-9890d9975965" />
+<img width="1336" height="980" alt="image" src="https://github.com/user-attachments/assets/79bcacb5-c9ed-49e6-b3f1-73e8980f26c5" />
+<img width="1703" height="973" alt="image" src="https://github.com/user-attachments/assets/2c95e6b6-adf3-4bac-9db3-15d7e6405e46" />
+<img width="837" height="677" alt="image" src="https://github.com/user-attachments/assets/c9dea6fa-2474-4c56-99a3-9e136faa1b9d" />
+
+Go to the AWS S3 console and verify your bucket exists. 
+<img width="1627" height="826" alt="image" src="https://github.com/user-attachments/assets/225dc942-ed19-4000-8a9a-c4343cb4e2d1" />
 
 **Document:** What did `terraform init` download? What does the `.terraform/` directory contain?
 
@@ -415,7 +418,7 @@ Without this, Terraform cannot create resources, Think of it like: “Driver” 
 -->Backend initialization: If you configure remote state (like S3): Terraform sets up connection to that backend
 
 .terraform/ directory is created locally after init
-<img width="587" height="342" alt="image" src="https://github.com/user-attachments/assets/c261f11c-e582-4eb9-b108-488272cc46bf" />
+<img width="946" height="90" alt="image" src="https://github.com/user-attachments/assets/b41aad85-b8e6-40ae-a9fc-cb4afe26a6a2" />
 
 **1. providers/** Contains downloaded provider plugins Example: AWS provider binary
 
@@ -426,12 +429,13 @@ Without this, Terraform cannot create resources, Think of it like: “Driver” 
 **Note:** We dont have to edit .terraform/ file, It’s auto-generated, Terraform manages it. Also dont commit the .terraform/ file to github instead add them into .gitignore file 
 
 -->We can delete .terraform/ file anytime and to recreate we just have to run the terraform init command, So our .tf file is the instructions and .terraform/ file contains downloded tools which used to execute those instructions OR we can say terraform init downloads the tools (providers/modules), and .terraform/ stores them locally so Terraform can run your code.
+
 ---
 
 ### Task 4: Add an EC2 Instance
 In the same `main.tf`, add:
 1. A `resource "aws_instance"` using AMI `ami-0f5ee92e2d63afc18` (Amazon Linux 2 in ap-south-1 -- use the correct AMI for your region)
-2. Set instance type to `t2.micro`
+2. Set instance type to `t3.micro`
 3. Add a tag: `Name = "TerraWeek-Day1"`
 
 Run:
@@ -439,12 +443,13 @@ Run:
 terraform plan      # You should see 1 resource to add (bucket already exists)
 terraform apply
 ```
-<img width="1696" height="977" alt="image" src="https://github.com/user-attachments/assets/6f87e1a6-bb5c-4126-aff5-ec2f9c4827f2" />
-<img width="1762" height="965" alt="image" src="https://github.com/user-attachments/assets/d3875d84-f673-457f-b5a6-70a065e7a46d" />
-<img width="1731" height="957" alt="image" src="https://github.com/user-attachments/assets/6e5d01aa-15a3-45b4-87df-45d98e0f5c9a" />
-<img width="1620" height="991" alt="image" src="https://github.com/user-attachments/assets/bc26a371-5ff1-48e3-8aba-bb8fcd994e10" />
+<img width="1467" height="978" alt="image" src="https://github.com/user-attachments/assets/fd6ea09a-1751-4671-b401-8c8c875cf450" />
+<img width="1527" height="976" alt="image" src="https://github.com/user-attachments/assets/2cfc8b1a-1b1b-4409-a5ce-ea8a331da498" />
+<img width="1307" height="970" alt="t4i3" src="https://github.com/user-attachments/assets/14b48c54-e04f-43f1-8c99-08a3631a5c57" />
+<img width="1401" height="972" alt="image" src="https://github.com/user-attachments/assets/6412e115-4e82-4f6c-87fe-62b39cd926ef" />
+
 Go to the AWS EC2 console and verify your instance is running with the correct name tag.
-<img width="1907" height="862" alt="image" src="https://github.com/user-attachments/assets/a7ee3f22-7790-4513-b9d7-433900612a05" />
+<img width="1900" height="863" alt="image" src="https://github.com/user-attachments/assets/2366afc0-db81-4bc9-8ace-9c917124a037" />
 
 **Document:** How does Terraform know the S3 bucket already exists and only the EC2 instance needs to be created?
 
@@ -472,12 +477,12 @@ terraform state show aws_s3_bucket.<name>   # Detailed view of a specific resour
 terraform state show aws_instance.<name>
 
 ```
-<img width="1297" height="960" alt="image" src="https://github.com/user-attachments/assets/75addd86-56a6-45c6-b787-1bd2c1ff3d88" />
-<img width="1340" height="962" alt="image" src="https://github.com/user-attachments/assets/a06afde0-f54c-4b14-8f26-e0264709ca5c" />
-<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/af60a058-415c-4018-966f-81a60bbca4a5" />
-<img width="1607" height="966" alt="image" src="https://github.com/user-attachments/assets/5238b8c4-867c-44f6-b2d7-edfe996a1de8" />
-<img width="1407" height="972" alt="image" src="https://github.com/user-attachments/assets/f30b02f9-3225-4dc0-8b6a-0faff9a0d8b4" />
-
+<img width="1202" height="973" alt="image" src="https://github.com/user-attachments/assets/a4cb31d0-d1ec-42ec-ac0d-296824d07baf" />
+<img width="1277" height="983" alt="image" src="https://github.com/user-attachments/assets/20d91390-4fd4-427a-b0c0-ef0cefec89d0" />
+<img width="1310" height="807" alt="image" src="https://github.com/user-attachments/assets/7c1368a1-bd15-48da-a681-a9308c77535e" />
+<img width="942" height="50" alt="image" src="https://github.com/user-attachments/assets/182a04fc-4b51-40e7-a3ae-83130a5c0655" />
+<img width="1450" height="977" alt="image" src="https://github.com/user-attachments/assets/38a33a8f-a8b3-44b1-a4d7-8441d42a183b" />
+<img width="1278" height="977" alt="image" src="https://github.com/user-attachments/assets/214c4356-7656-4d74-a2c3-6377ccec48a0" />
 
 3. Answer these questions in your notes:
 
@@ -512,7 +517,6 @@ terraform state show aws_instance.<name>
 -->Terraform builds a dependency graph from this.
 
 **7. Outputs:** Values defined in output blocks, For Example: instance_ip, db_endpoint Stored so you can reuse them across modules or commands.
-<img width="325" height="360" alt="image" src="https://github.com/user-attachments/assets/1e8bd718-6543-4b82-a176-06eaccbd6dcd" />
 
 **Note:** Terraform does NOT query cloud providers every time — it relies on the state file to: Detect changes, Plan updates, Avoid recreating resources  unnecessarily etc.
 
@@ -593,25 +597,28 @@ Or think they exist → skip creation, So This can lead to data loss or duplicat
       --> **-/+** Terraform will destroy the existing resource and then create a new one
 
 **Quick meaning of the Symbols:**
-   <img width="567" height="232" alt="image" src="https://github.com/user-attachments/assets/b5573175-12db-453b-bad1-4712367c2e28" />
+<img width="1891" height="587" alt="image" src="https://github.com/user-attachments/assets/8a8b3995-99ec-40e1-90ad-7d7013db4c4f" />
 
-   - Is this an in-place update or a destroy-and-recreate?
-   -->It’s an in-place update [The ~ symbol means modify existing resource, not replace it]
+**- Is this an in-place update or a destroy-and-recreate?**
+
+-->It’s an in-place update [The ~ symbol means modify existing resource, not replace it]
+
 4. Apply the change
+
 5. Verify the tag changed in the AWS console
-<img width="1287" height="902" alt="image" src="https://github.com/user-attachments/assets/2ed27b2f-ac37-4bd9-9c62-7fcce2389223" />
-<img width="1910" height="755" alt="image" src="https://github.com/user-attachments/assets/bfe0996b-2577-482a-8632-077efb0c48a6" />
+<img width="1731" height="618" alt="image" src="https://github.com/user-attachments/assets/63d8f76d-bf30-4777-85e7-7fc6c61455e4" />
 
 6. Finally, destroy everything:
 ```bash
 terraform destroy
 ```
-<img width="1292" height="972" alt="image" src="https://github.com/user-attachments/assets/147d3d06-f8bf-4e78-976e-bc628e0c59d3" />
-<img width="1081" height="977" alt="image" src="https://github.com/user-attachments/assets/46080cf2-2e45-4b3c-816f-315858c7330f" />
+<img width="1558" height="981" alt="image" src="https://github.com/user-attachments/assets/7c2fc731-98b3-4e66-b60a-953b6ee2fcca" />
+<img width="1351" height="973" alt="image" src="https://github.com/user-attachments/assets/e04240ad-7fce-4fb9-9a15-bab3141e6dfc" />
+<img width="977" height="351" alt="image" src="https://github.com/user-attachments/assets/eedcf4e3-5a49-442f-8d32-993b0008104f" />
 
 6. Verify in the AWS console -- both the S3 bucket and EC2 instance should be gone
-<img width="1917" height="747" alt="image" src="https://github.com/user-attachments/assets/67552525-24da-4904-a644-5cab820fa5b8" />
-<img width="1917" height="812" alt="image" src="https://github.com/user-attachments/assets/b6c110bf-bf10-49cf-b31f-8db82652bd5a" />
+<img width="1887" height="683" alt="image" src="https://github.com/user-attachments/assets/e9db356b-18b0-4b5b-a307-511599b6826a" />
+<img width="1881" height="757" alt="image" src="https://github.com/user-attachments/assets/3407abd6-011f-4767-a328-ae2ff7ef8062" />
 
 ---
 
