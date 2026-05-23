@@ -145,7 +145,7 @@ Terraform will ask: "Do you want to copy existing state to the new backend?" -- 
 
 4. Verify:
   ** - Check the S3 bucket -- you should see `dev/terraform.tfstate`**
-   <img width="1367" height="222" alt="image" src="https://github.com/user-attachments/assets/5e713580-e480-418a-b010-0787ec4bd833" />
+   <img width="1908" height="845" alt="image" src="https://github.com/user-attachments/assets/6c9b0ff0-e397-44b6-a49f-bdd76d70d6aa" />
 
    ** - Your local `terraform.tfstate` should now be empty or gone**
   -->
@@ -170,7 +170,7 @@ Terraform will ask: "Do you want to copy existing state to the new backend?" -- 
    -->In local system terraform.tfstate file is not managing any infrastructure right now, As we have initialized backend before creating resources, But So state got created in S3, but nothing added yet, Also Terraform stops using local state Because after backend setup
      
   ** - Run `terraform plan` -- it should show no changes (state migrated correctly)**
-   <img width="1480" height="686" alt="image" src="https://github.com/user-attachments/assets/07933912-6c34-421c-9883-8adb79dc5afc" />
+   <img width="1836" height="963" alt="image" src="https://github.com/user-attachments/assets/fcef406b-18a7-4619-8e09-68722a21174e" />
 
 **Steps to follow:**
 
@@ -209,12 +209,14 @@ terraform {
 
 -->Check S3 for file terraform.tfstate file: aws s3 ls s3://terraweek-state-file-store-in-s3/dev/ 
 
+**Note:** So here first need to install package **libs3-2** For that run command: sudo apt update && apt install libs3-2 -y, And then run command: aws s3 ls s3://terraweek-state-sonali-dev-tf-state/dev/ 
+
+<img width="1773" height="962" alt="image" src="https://github.com/user-attachments/assets/1d1a844b-619b-491d-a013-f5d8cda23fb1" />
+
 -->To check DynamoDB table state: aws dynamodb describe-table --table-name terraweek-state-lock --region us-east-1
-  
-<img width="1401" height="132" alt="image" src="https://github.com/user-attachments/assets/ec6b5bc4-3f1e-42dc-bf5a-a8914f2eb9b2" />
-<img width="1432" height="891" alt="image" src="https://github.com/user-attachments/assets/3ed3bdf3-adbf-44d9-b402-eb471f73d75e" />
-<img width="1866" height="947" alt="image" src="https://github.com/user-attachments/assets/4feac30f-d7e6-491d-9eca-13a6f363f1db" />
-<img width="1895" height="875" alt="image" src="https://github.com/user-attachments/assets/afc5f58c-e44b-4036-9a90-4314fee9e27b" />
+
+**Note:** To know the DynamoDB table name Go to AWS console --> then search for DynamoDB -->Select table -->Theere we can find the name of the table  
+<img width="1917" height="875" alt="image" src="https://github.com/user-attachments/assets/24b21963-4a3d-4e3c-9579-4c2676000d4b" />
 
 **Note:** Terraform immediately: Connected to S3-->Created state file there-->But no resources existed yet
 
