@@ -280,6 +280,24 @@ terraform import aws_s3_bucket.imported terraweek-import-test-<yourname>
 
 **Document:** What is the difference between `terraform import` and creating a resource from scratch?
 
+-->**Step 1:** Create S3 Bucket Manually: Go to Amazon Web Services Console: S3 → Create Bucket --> name of bucket: terraweek-import-test-sonali
+
+<img width="1892" height="845" alt="image" src="https://github.com/user-attachments/assets/5a4099bd-81b8-4a7f-adf2-dd943274dd72" />
+
+-->**Step 2:** Now in console create one file name as s3_bucket.tf and, Add Terraform Resource Block
+
+<img width="255" height="58" alt="image" src="https://github.com/user-attachments/assets/4342a558-44dd-4adb-b64d-b1b60346f78d" />
+
+**Note:** Your region should be same otherwise may face issue, To get location/region: **aws s3api get-bucket-location --bucket terraweek-import-test-sonali**
+<img width="1877" height="482" alt="image" src="https://github.com/user-attachments/assets/6bc5c681-a349-495d-bab7-cbaa6dc1f0c8" />
+<img width="1828" height="91" alt="image" src="https://github.com/user-attachments/assets/f8fc0454-2a04-492c-91ed-4ba018ba8e28" />
+
+-->**Step 3:** Initialize Terraform: terraform init 
+
+-->**Step 4:** Import Existing Bucket for that use command: terraform import aws_s3_bucket.imported terraweek-import-test-sonali
+<img width="1907" height="897" alt="image" src="https://github.com/user-attachments/assets/026ed749-a291-4fd7-bcd1-ed41d93045e3" />
+-->So here terraform apply Is NOT Needed, Because: Resource already exists in AWS, Terraform import only tells Terraform: "Start managing this existing resource.", No infrastructure creation is required.
+
 ---
 
 ### Task 5: State Surgery -- mv and rm
@@ -292,25 +310,61 @@ terraform state mv aws_s3_bucket.imported aws_s3_bucket.logs_bucket
 ```
 Update your `.tf` file to match the new name. Run `terraform plan` -- it should show no changes.
 
+<img width="1918" height="966" alt="image" src="https://github.com/user-attachments/assets/a406eb5c-b4f9-4b23-8e45-9f41191e69b4" />
+<img width="1652" height="967" alt="image" src="https://github.com/user-attachments/assets/007d35c0-40b6-4135-862a-08531c35c859" />
+<img width="1912" height="982" alt="image" src="https://github.com/user-attachments/assets/81266dd7-99d0-49c6-ae2c-242ae3291e92" />
+
 2. **Remove a resource from state (without destroying it):**
 ```bash
 terraform state rm aws_s3_bucket.logs_bucket
-```
+
 Run `terraform plan` -- Terraform no longer knows about the bucket, but it still exists in AWS.
+```
+<img width="1780" height="968" alt="image" src="https://github.com/user-attachments/assets/e802756b-100c-4c17-ac88-22390754c8de" />
+<img width="1872" height="975" alt="image" src="https://github.com/user-attachments/assets/6229d1a3-0b88-4569-8522-1e86714cac44" />
 
 3. **Re-import it** to bring it back:
 ```bash
 terraform import aws_s3_bucket.logs_bucket terraweek-import-test-<yourname>
 ```
+<img width="1910" height="717" alt="image" src="https://github.com/user-attachments/assets/782581c2-c8b1-4186-8c47-a2f506f90326" />
+-->While importing the previous changes we have faced issue as "resource address "aws_s3_bucket.logs_bucket" does not exist in the configuration." That is because we have made chnages io file too, To solve it if we make chnages in file and rerun the import command then that error will get resolve.
+<img width="581" height="560" alt="image" src="https://github.com/user-attachments/assets/97b0b4fe-ffc0-4f8c-b9d2-9797ec367779" />
 
 **Document:** When would you use `state mv` in a real project? When would you use `state rm`?
+
+-->In Terraform, the Terraform state file tracks infrastructure resources and their mapping to Terraform configuration. Commands like terraform state mv and terraform state rm are used to manipulate the state safely without modifying actual infrastructure.
+
+1. terraform state mv
+-->Purpose: terraform state mv is used to move or rename a resource inside the Terraform state file without recreating the actual infrastructure. It updates Terraform’s tracking information only.
+
+Syntax: terraform state mv SOURCE DESTINATION
+
+<img width="446" height="662" alt="image" src="https://github.com/user-attachments/assets/fbbab9cc-ba48-4e24-8521-5dddf573613f" />
+<img width="472" height="660" alt="image" src="https://github.com/user-attachments/assets/d95b5698-cb4b-4cf8-863d-6ccfc6ca3a01" />
+-->Important Characteristic state mv: DOES NOT destroy infrastructure, DOES NOT create infrastructure, ONLY changes Terraform state mapping etc.
+
+2. terraform state rm
+-->Purpose: terraform state rm removes a resource from Terraform state without deleting the actual AWS resource, Terraform stops managing the resource.
+
+Syntax: terraform state rm RESOURCE_ADDRESS
+
+<img width="435" height="602" alt="image" src="https://github.com/user-attachments/assets/bda5a361-82ff-428e-8da6-e7969188b34f" />
+<img width="823" height="671" alt="image" src="https://github.com/user-attachments/assets/6e17ee84-a8fe-4471-bc80-e2dab3a97996" />
+
+-->Important Characteristic state rm: DOES NOT destroy AWS resource, ONLY removes resource from Terraform state, Terraform no longer manages the resource.
+
+<img width="757" height="745" alt="image" src="https://github.com/user-attachments/assets/a96f6e96-da55-4c5d-981b-d458b4360662" />
 
 ---
 
 ### Task 6: Simulate and Fix State Drift
-State drift happens when someone changes infrastructure outside of Terraform -- through the AWS console, CLI, or another tool.
+State drift happens when someone changes infrastructure outside of Terraform -- through the AWS console, CLI, or another tool. causing actual AWS resources to differ from Terraform configuration/state.
 
 1. Apply your full config so everything is in sync
+<img width="1812" height="980" alt="image" src="https://github.com/user-attachments/assets/83292f09-3ae0-446f-bfd8-0c50dfdb383d" />
+<img width="1697" height="948" alt="image" src="https://github.com/user-attachments/assets/1f314019-288c-48f1-b954-c1e078cd4232" />
+
 2. Go to the **AWS console** and manually:
    - Change the Name tag of your EC2 instance to `"ManuallyChanged"`
    - Change the instance type if it's stopped (or add a new tag)
@@ -319,16 +373,31 @@ State drift happens when someone changes infrastructure outside of Terraform -- 
 terraform plan
 ```
 You should see a **diff** -- Terraform detects that reality no longer matches the desired state.
+<img width="1913" height="878" alt="image" src="https://github.com/user-attachments/assets/a5743312-562b-4fae-8433-059a083956b1" />
+<img width="1873" height="907" alt="image" src="https://github.com/user-attachments/assets/4d091a41-696b-462a-8a0d-3acb0ddd6d11" />
 
 4. You have two choices:
    - **Option A:** Run `terraform apply` to force reality back to match your config (reconcile)
    - **Option B:** Update your `.tf` files to match the manual change (accept the drift)
 
 5. Choose Option A -- apply and verify the tags are restored.
+<img width="1520" height="925" alt="image" src="https://github.com/user-attachments/assets/d6e74327-3159-49e7-8bc0-dbd73c998b22" />
 
 6. Run `terraform plan` again -- it should show "No changes." Drift resolved.
+<img width="1207" height="397" alt="image" src="https://github.com/user-attachments/assets/b3605d7b-bc3f-4f31-aa6f-94899502909c" />
 
 **Document:** How do teams prevent state drift in production? (hint: restrict console access, use CI/CD for all changes)
+-->Preventing Terraform State Drift in Production: State drift occurs when infrastructure changes are made outside Terraform, causing actual cloud resources to differ from Terraform configuration and state. In production environments, unmanaged drift can lead to: inconsistent infrastructure, failed deployments, security risks, outages
+configuration conflicts etc. To prevent drift, engineering teams follow strict Infrastructure as Code (IaC) practices.
+
+<img width="712" height="377" alt="image" src="https://github.com/user-attachments/assets/9427de30-aced-4f0a-af6f-c6c9c0a514a9" />
+<img width="636" height="562" alt="image" src="https://github.com/user-attachments/assets/fc759b07-6e09-4559-92e1-c0999a25f52a" />
+<img width="566" height="280" alt="image" src="https://github.com/user-attachments/assets/8c02ecc5-7d67-489a-b70b-c0b88ab7a614" />
+<img width="551" height="673" alt="image" src="https://github.com/user-attachments/assets/fc7d679b-d340-4bc7-9693-2ca2b4dfc124" />
+<img width="463" height="817" alt="image" src="https://github.com/user-attachments/assets/b2659af0-7764-4634-ab42-7766a4f84722" />
+<img width="622" height="743" alt="image" src="https://github.com/user-attachments/assets/098e8c33-016d-469c-a5f4-739e4eb5c3f5" />
+
+-->These practices ensure infrastructure remains: predictable, secure, consistent, reproducible, easy to manage at scale etc.
 
 ---
 
