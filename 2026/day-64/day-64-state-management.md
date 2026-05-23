@@ -1,4 +1,4 @@
-# Day 64 -- Terraform State Management and Remote Backends
+<img width="1850" height="325" alt="image" src="https://github.com/user-attachments/assets/c5fba989-82fb-4164-b655-e1801481d600" /># Day 64 -- Terraform State Management and Remote Backends
 
 ## Task
 The state file is the single most important thing in Terraform. It is the source of truth -- the map between your `.tf` files and what actually exists in the cloud. Lose it and Terraform forgets everything. Corrupt it and your next apply could destroy production.
@@ -230,18 +230,36 @@ State locking prevents two people from running `terraform apply` at the same tim
 ```bash
 terraform apply
 ```
+<img width="1328" height="128" alt="image" src="https://github.com/user-attachments/assets/be27cc3f-4a06-4a11-b4b7-6ef5b8926352" />
+
 3. While Terminal 1 is waiting for confirmation, in Terminal 2 run:
 ```bash
 terraform plan
 ```
+
 4. Terminal 2 should show a **lock error** with a Lock ID
 
 **Document:** What is the error message? Why is locking critical for team environments?
+<img width="518" height="162" alt="image" src="https://github.com/user-attachments/assets/acbc0273-85c2-4c6d-b92a-22f86b775e89" />
+
+-->Terraform uses a state file (terraform.tfstate) to track infrastructure resources, In team environments, multiple engineers may run: terraform apply command at the same time. Without locking: Two users can modify infrastructure simultaneously, So as a result state file can become corrupted, Resources may be duplicated or deleted accidentally and, Infrastructure drift can occur etc. So Locking Prevents This, **Locking ensures: Only one Terraform operation can modify state at a time.** When one user runs terraform apply: Terraform acquires a lock then Other users must wait until operation completes, This guarantees: Safe state updates, Consistent infrastructure & Reliable team collaboration etc.
+
+<img width="367" height="401" alt="image" src="https://github.com/user-attachments/assets/cc90db2a-daf6-4ef5-bc69-778e99f87703" />
+
+This guarantees:
+
+Safe state updates
+Consistent infrastructure
+Reliable team collaboration
+
+Only one Terraform operation can modify state at a time.
+<img width="1881" height="772" alt="image" src="https://github.com/user-attachments/assets/9f67b0a9-66e5-42db-8ad0-89b3702d4d5a" />
 
 5. After the test, if you get stuck with a stale lock:
 ```bash
 terraform force-unlock <LOCK_ID>
 ```
+<img width="1850" height="325" alt="image" src="https://github.com/user-attachments/assets/5ba95623-01c7-40bd-b358-030b2d78134e" />
 
 ---
 
