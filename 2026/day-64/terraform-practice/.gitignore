@@ -1,0 +1,38 @@
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+dev-key
+dev-key.pub
+terraform.tfvars
+prod.tfvars
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# TFVars
+*.tfvars
+*.tfvars.json
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# Sensitive files
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+
+# OS files
+.DS_Store
+Thumbs.db
