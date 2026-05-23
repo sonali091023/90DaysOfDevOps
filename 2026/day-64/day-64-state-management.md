@@ -1,4 +1,4 @@
-<img width="1850" height="325" alt="image" src="https://github.com/user-attachments/assets/c5fba989-82fb-4164-b655-e1801481d600" /># Day 64 -- Terraform State Management and Remote Backends
+# Day 64 -- Terraform State Management and Remote Backends
 
 ## Task
 The state file is the single most important thing in Terraform. It is the source of truth -- the map between your `.tf` files and what actually exists in the cloud. Lose it and Terraform forgets everything. Corrupt it and your next apply could destroy production.
