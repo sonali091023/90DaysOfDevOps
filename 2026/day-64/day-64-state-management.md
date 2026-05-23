@@ -26,17 +26,16 @@ terraform state list                              # All resources tracked by Ter
 terraform state show aws_instance.<name>          # Every attribute of the instance
 terraform state show aws_vpc.<name>               # Every attribute of the VPC
 ```
-<img width="1901" height="977" alt="image" src="https://github.com/user-attachments/assets/25f13c78-b107-4ee6-9538-2b53615fa7af" />
-<img width="1875" height="956" alt="image" src="https://github.com/user-attachments/assets/c93ec739-f266-4d02-8b9e-60113634c27d" />
-<img width="1912" height="987" alt="image" src="https://github.com/user-attachments/assets/4dc51428-e87d-438a-97a9-cf0e2ae2dce0" />
-<img width="1416" height="187" alt="image" src="https://github.com/user-attachments/assets/263fb823-6494-4c8f-99e9-5e87c726e342" />
-<img width="1832" height="955" alt="image" src="https://github.com/user-attachments/assets/06814fa7-86e0-4ca1-9da6-805d155a0b2b" />
-<img width="1882" height="912" alt="image" src="https://github.com/user-attachments/assets/30a0c761-667c-41a9-ac70-6703ca0e4a9b" />
+<img width="1227" height="975" alt="image" src="https://github.com/user-attachments/assets/43314195-e78a-4233-8ff3-c8801d979205" />
+<img width="1192" height="215" alt="image" src="https://github.com/user-attachments/assets/93fbad40-7192-4855-9a98-e5c50d4acc45" />
+<img width="1503" height="972" alt="image" src="https://github.com/user-attachments/assets/f19f2a90-faf0-4249-8047-15b9442ac694" />
+<img width="1270" height="691" alt="image" src="https://github.com/user-attachments/assets/cd5e8e62-4e5a-4da7-a52e-89e46d7acb36" />
+<img width="1890" height="803" alt="image" src="https://github.com/user-attachments/assets/32275ab3-d08b-4003-8e67-d65e912ddadf" />
 
 Answer:
 **1. How many resources does Terraform track?**
 
---> 7 resources traced by terraform then are as below,
+--> 7 resources traced by terraform they are as below,
 
 1. aws_instance.TerraWeek_Server
 
@@ -85,9 +84,7 @@ placement_group, hypervisor, credit_specification (for burstable instances)
 
 -->The serial number in terraform.tfstate is Terraform’s way of versioning the state file. Serial number increases by 1 everytime when the state file gets update. This terraform uses because to Prevents overwriting newer state, It Works with locking systems such as S3 + DynamoDB locking, Also terraform ensures Only one update at a time &
 Serial increases safely.
-<img width="572" height="161" alt="image" src="https://github.com/user-attachments/assets/4bb97df1-9345-4a1f-b56b-723df482c899" />
-
-<img width="302" height="96" alt="image" src="https://github.com/user-attachments/assets/2f1e62a4-5505-4088-9988-1cd11a7c6347" />
+<img width="1452" height="981" alt="image" src="https://github.com/user-attachments/assets/326498a8-3305-4fd4-a4b8-abc0d90c9cb2" />
 
 ---
 
