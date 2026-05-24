@@ -39,7 +39,7 @@ terraform-modules/
 
 Create all the directories and empty files. This is the standard layout every Terraform project follows.
 
-<img width="1020" height="697" alt="image" src="https://github.com/user-attachments/assets/3c352130-1794-41d9-b76c-1b7f4bf19b7e" />
+  <img width="1112" height="555" alt="image" src="https://github.com/user-attachments/assets/58e5d052-2d34-4b15-bf97-6a3c7ac3a5bb" />
 
 **Document:** What is the difference between a "root module" and a "child module"?
 
@@ -87,6 +87,9 @@ Create `modules/ec2-instance/`:
    - `aws_instance` using all the variables
    - Merge the Name tag with additional tags
 
+<img width="231" height="812" alt="image" src="https://github.com/user-attachments/assets/a544cc94-9d33-4c4f-a7ea-2bfd84f1d10a" />
+<img width="295" height="236" alt="image" src="https://github.com/user-attachments/assets/b5474685-4eea-4e56-bb56-d3383f0c1cb6" />
+
 3. **`outputs.tf`** -- expose:
    - `instance_id`
    - `public_ip`
@@ -104,14 +107,32 @@ Create `modules/security-group/`:
    - `sg_name` (string)
    - `ingress_ports` (list of numbers, default: `[22, 80]`)
    - `tags` (map of strings, default: `{}`)
+  
+<img width="523" height="227" alt="image" src="https://github.com/user-attachments/assets/dba7ad46-d538-4dcc-84dd-7ecb16a78c3e" />
 
 2. **`main.tf`** -- define the resource:
    - `aws_security_group` in the given VPC
    - Use `dynamic "ingress"` block to create rules from the `ingress_ports` list
    - Allow all egress
 
+<img width="358" height="663" alt="image" src="https://github.com/user-attachments/assets/bfce3609-5284-4b29-93c1-2777d5e3b037" />
+
+-->Creates a security group inside the given VPC. Then Uses Dynamic Ingress Rules so here Terraform automatically creates one ingress block per port.
+
+<img width="280" height="805" alt="image" src="https://github.com/user-attachments/assets/8164d26f-6c7e-432b-a6f8-a2aad4cd80ba" />
+
+<img width="256" height="655" alt="image" src="https://github.com/user-attachments/assets/d286eb5c-896d-48fb-a4b8-dc18ff466416" />
+
+<img width="428" height="345" alt="image" src="https://github.com/user-attachments/assets/497d5c54-1955-416e-b4a1-16f04a06c906" />
+
 3. **`outputs.tf`** -- expose:
    - `sg_id`
+
+-->This allows other modules (like EC2) to use the security group ID.
+
+<img width="281" height="72" alt="image" src="https://github.com/user-attachments/assets/94d7b30c-1b51-4aeb-8016-50b4a4224a08" />
+
+**Note:** Outputs allow the root module or other modules to use values created inside a child module.
 
 This is your first time using a `dynamic` block -- it loops over a list to generate repeated nested blocks.
 
