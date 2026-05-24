@@ -195,6 +195,9 @@ terraform apply
 ```
 
 **Verify:** Two EC2 instances running, same security group, different names. Check the AWS console.
+<img width="1897" height="882" alt="image" src="https://github.com/user-attachments/assets/589530fa-07e8-4883-b48c-e8f46c4648b9" />
+<img width="1750" height="977" alt="image" src="https://github.com/user-attachments/assets/9bcfe363-c3ed-4f3e-99da-05686843c869" />
+<img width="1685" height="980" alt="image" src="https://github.com/user-attachments/assets/c11adf59-a093-4e58-bbd0-270de50bfeaf" />
 
 ---
 
@@ -230,9 +233,28 @@ terraform plan
 terraform apply
 ```
 
+<img width="1821" height="980" alt="image" src="https://github.com/user-attachments/assets/cbb7b48f-4de7-417d-ab11-c416a3f04193" />
+<img width="1788" height="973" alt="image" src="https://github.com/user-attachments/assets/b41b74c3-fdac-467d-81bb-20c5c70e7356" />
+<img width="1898" height="988" alt="image" src="https://github.com/user-attachments/assets/d879859c-e0ab-4724-8af3-30752f0771c7" />
+<img width="1787" height="987" alt="image" src="https://github.com/user-attachments/assets/e591dbce-2406-4d3e-a203-ca3d1191ea27" />
+<img width="1856" height="985" alt="image" src="https://github.com/user-attachments/assets/5462dbb7-d1a2-4656-a854-f04134bbf303" />
+
 4. Compare: how many resources did the VPC module create vs your hand-written VPC from Day 62?
 
+-->The Terraform Registry VPC module creates many more resources than a simple hand-written VPC setup.
+
+<img width="467" height="587" alt="image" src="https://github.com/user-attachments/assets/fd1a8f41-568c-4673-931a-bc7d8bd18066" />
+
+<img width="486" height="833" alt="image" src="https://github.com/user-attachments/assets/839aae22-4f31-45c7-b1b3-0d272b7e3da1" />
+
+-->Registory module creates so Many Resources, Because the module handles: networking best practices, multi-AZ architecture, route table management, subnet associations, tagging, optional NAT gateways, DNS support, scalability automatically.
+<img width="373" height="832" alt="image" src="https://github.com/user-attachments/assets/9fdac3f6-9ea1-43e3-874e-8c143b643685" />
+<img width="456" height="192" alt="image" src="https://github.com/user-attachments/assets/e95c0006-93ee-476e-b7af-8360edd504bb" />
+
+
 **Document:** Where does Terraform download registry modules to? Check `.terraform/modules/`.
+<img width="345" height="303" alt="image" src="https://github.com/user-attachments/assets/060d2d94-8fe4-49cc-9a97-1b41178b276a" />
+<img width="1286" height="107" alt="image" src="https://github.com/user-attachments/assets/190169bc-265b-4573-8c11-cc0d0e99a1bd" />
 
 ---
 
@@ -243,6 +265,7 @@ terraform apply
    - `version = ">= 5.0, < 6.0"` -- range
 
 2. Run `terraform init -upgrade` to check for newer versions
+<img width="1301" height="646" alt="image" src="https://github.com/user-attachments/assets/af1fa393-1e2f-46ec-a05e-24f19ebea234" />
 
 3. Check the state to see how modules appear:
 ```bash
@@ -250,10 +273,14 @@ terraform state list
 ```
 Notice the `module.vpc.`, `module.web_server.`, `module.web_sg.` prefixes.
 
+<img width="1262" height="207" alt="image" src="https://github.com/user-attachments/assets/d14af538-5323-4f2e-b870-15114ba2358f" />
+
 4. Destroy everything:
 ```bash
 terraform destroy
 ```
+<img width="1855" height="983" alt="image" src="https://github.com/user-attachments/assets/02ab8157-a60b-4f1d-88fa-97b2a683ea36" />
+
 
 **Document:** Write down five module best practices:
 - Always pin versions for registry modules
