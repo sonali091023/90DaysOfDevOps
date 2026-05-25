@@ -180,15 +180,31 @@ output "cluster_region" {
 ```bash
 aws eks update-kubeconfig --name terraweek-eks --region <your-region>
 ```
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/adda0421-2491-41cd-b7ad-b2ff45af8105" />
+<img width="1702" height="977" alt="image" src="https://github.com/user-attachments/assets/7231a8f5-d796-4303-9f2a-69f6615861d3" />
+<img width="1641" height="982" alt="image" src="https://github.com/user-attachments/assets/0529648b-1b5d-4520-a1c6-0caacb5e41bf" />
+<img width="1918" height="962" alt="image" src="https://github.com/user-attachments/assets/30df0b00-eee9-4909-9c73-2787c7e57d65" />
 
 4. Verify:
 ```bash
 kubectl get nodes
 kubectl get pods -A
 kubectl cluster-info
+
 ```
+Note: After destroying and re-creating the cluster with terraform destroy + terraform apply, kubectl stopped working again with a new error:
+"Unable to connect to the server: dial tcp: lookup 1D86A33DEF483A641CC4CE1E68DF555E.gr7.ap-south-1.eks.amazonaws.com on 10.255.255.254:53: no such host"
+
+-->So the Root Cause is: This is completely different from Issue #1. Every time you destroy and re-create an EKS cluster, AWS assigns it a brand new unique endpoint URL. The local kubeconfig file at ~/.kube/config still pointed to the old. cluster's endpoint, which no longer existed — causing the DNS lookup to fail
+[Think of it like a restaurant that moved to a new address. Your saved address (kubeconfig) still points to the old
+location.]
+
+-->To fix it run command: aws eks update-kubeconfig --region ap-south-1 --name terraweek-eks  [Note: This fetches the new cluster endpoint and updates ~/.kube/config automatically.]
+
+<img width="1762" height="330" alt="image" src="https://github.com/user-attachments/assets/4f00cf76-96f2-4069-a4b8-e7ceb0debd1d" />
 
 **Verify:** Do you see 2 nodes in `Ready` state? Can you see the kube-system pods running?
+-->Yes instances got launch successfully, And i can see cube-system pod running successfully
 
 ---
 
