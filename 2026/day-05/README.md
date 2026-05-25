@@ -60,23 +60,36 @@ Observation: Confirmed Linux kernel version and Ubuntu distribution Ensured OS c
 
   - **Disk / IO (2):** `df -h`, `du -sh /var/log`, `iostat`/`vmstat`/`dstat`
 
--->df = disk filesystem usage: Shows: total disk space, used space, free space & -h = human-readable (GB/MB)
+-->**df -h:** df = disk filesystem usage: Shows: total disk space, used space, free space & -h = human-readable (GB/MB)
 <img width="1343" height="383" alt="image" src="https://github.com/user-attachments/assets/03e2bb7a-2042-4960-8df3-329661d0b8bc" />
 
--->du = disk usage Checks size of a directory, Options: -s = summary only, -h = human-readable, This command shows total size of /var/log.
+-->**du -sh /var/log:** du = disk usage Checks size of a directory, Options: -s = summary only, -h = human-readable, This command shows total size of /var/log.
 <img width="927" height="47" alt="image" src="https://github.com/user-attachments/assets/3d603a87-42d6-4cc9-95d2-d5f906dd37f2" />
 
--->Shows CPU and disk I/O statistics, Useful for checking: disk read/write activity, IO bottlenecks, device utilization etc.
+-->**iostat:** Shows CPU and disk I/O statistics, Useful for checking: disk read/write activity, IO bottlenecks, device utilization etc.
 <img width="1198" height="278" alt="image" src="https://github.com/user-attachments/assets/2687ff65-30f2-419b-ae08-b772c1edce7f" />
 
--->vmstat Displays: memory usage, CPU activity,processes, swap, IO statistics & Useful for overall system performance troubleshooting.
+-->**vmstat Displays:** memory usage, CPU activity,processes, swap, IO statistics & Useful for overall system performance troubleshooting.
 <img width="1052" height="92" alt="image" src="https://github.com/user-attachments/assets/0afae259-8fea-4cca-a33a-4beaefa61f3a" />
 
--->dstat is Combined monitoring tool it Shows: CPU, disk, network, memory, IO, processes etc. & installation is needed here.More user-friendly than using multiple tools separately.
+-->**dstat:** is Combined monitoring tool it Shows: CPU, disk, network, memory, IO, processes etc. & installation is needed here.More user-friendly than using multiple tools separately.
 <img width="867" height="287" alt="image" src="https://github.com/user-attachments/assets/ba631ac0-c911-48e7-9d31-9591a9dcbf1b" />
 
+  - **Network (2):** `ss -tulpn`/`netstat -tulpn`, `curl -I <service-endpoint>`/`ping`
 
-  - **Network (2):** `ss -tulpn`/`netstat -tulpn`, `curl -I <service-endpoint>`/`ping`  
+-->**ss -tulpn:** Shows: open ports, listening services, protocol details, process using the port etc.
+
+-->Options: -t → TCP, -u → UDP, -l → listening ports, -p → process name/PID, -n → numeric output (no DNS resolution) etc.
+<img width="1905" height="447" alt="image" src="https://github.com/user-attachments/assets/6f2af0f2-7d8f-4cb2-a928-7c685bd7cb07" />
+
+-->netstat -tulpn: Older alternative to ssShows:
+
+active connections
+listening ports
+associated processes
+
+May require installation:
+ 
   - **Logs (2):** `journalctl -u <service> -n 50`, `tail -n 50 /var/log/<file>.log`
 - Choose **one target service/process** (e.g., `ssh`, `cron`, `docker`, your web app) and stick to it for the drill.
 - For each command, add a 1–2 line note on what you observed (e.g., “CPU spikes to 80% when restarting”, “No recent errors in last 50 lines”).
