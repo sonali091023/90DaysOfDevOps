@@ -153,7 +153,38 @@ Eg:
 
 Suggested structure for `linux-troubleshooting-runbook.md`:
 - Target service / process
+
+-->Target Service / Process Service: Docker
+
+-->Commands used:
+
+1. systemctl status docker: This command is used to check the docker status
+
+2. ps aux | grep docker: This command is used to find Docker-related running processes. [Here | is used to Takes output from the left command and sends it to the right command. & grep commands Filters lines containing the word docker.]
+<img width="827" height="641" alt="image" src="https://github.com/user-attachments/assets/299e4043-94e6-4381-8c63-4da01e87df3b" />
+
+3. docker ps: To check the running dockers list
+<img width="1891" height="778" alt="image" src="https://github.com/user-attachments/assets/d34bacfc-a0b9-4f8b-b92f-9567683f6f84" />
+
 - Snapshot: CPU & Memory
+
+1. top: It shows CPU utilization, Memory usage, Running processes, Load average etc. Alternetive is htop
+
+2. free -h: It shows Memory usage: used → actively used RAM, free → completely unused RAM, buff/cache → Linux cache, available → actually usable memory etc.
+
+3. ps -o pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head: 
+<img width="1597" height="956" alt="image" src="https://github.com/user-attachments/assets/c949ce3d-0a6f-4398-850c-293906e77a5d" />
+
+-->ps aux --sort=-%cpu | head: Find top CPU-consuming processes
+
+-->ps aux --sort=-%mem | head: Find top Memory-consuming processes
+
+-->mpstat -P ALL 2: Monitor CPU usage continuously [install if missing: sudo apt install sysstat -y]
+
+-->uptime: Check system load average
+
+-->lscpu: Check per-core CPU stats
+
 - Snapshot: Disk & IO
 - Snapshot: Network
 - Logs reviewed
