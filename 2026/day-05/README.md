@@ -152,7 +152,7 @@ Eg:
 - Keep it concise and actionable (aim for ~1 page).
 
 Suggested structure for `linux-troubleshooting-runbook.md`:
-- Target service / process
+**- Target service / process**
 
 -->Target Service / Process Service: Docker
 
@@ -166,7 +166,7 @@ Suggested structure for `linux-troubleshooting-runbook.md`:
 3. docker ps: To check the running dockers list
 <img width="1891" height="778" alt="image" src="https://github.com/user-attachments/assets/d34bacfc-a0b9-4f8b-b92f-9567683f6f84" />
 
-- Snapshot: CPU & Memory
+**- Snapshot: CPU & Memory**
 
 1. top: It shows CPU utilization, Memory usage, Running processes, Load average etc. Alternetive is htop
 
@@ -185,10 +185,91 @@ Suggested structure for `linux-troubleshooting-runbook.md`:
 
 -->lscpu: Check per-core CPU stats
 
-- Snapshot: Disk & IO
-- Snapshot: Network
+**- Snapshot: Disk & IO**
+
+-->Use these commands to quickly check disk space, filesystem usage, and disk I/O performance during troubleshooting.
+
+1. Check filesystem disk usage: df -h [df → disk filesystem usage & -h → human-readable sizes (GB/MB)] Things to notice: High Use% (90%+), Low available space, Full root partition / etc.
+
+2. Check directory-level disk consumption: du -sh /var/log/* [du → disk usage & -s → summary only & -h → human-readable] Useful for finding: Huge log files, Large application directories, Storage leaks etc.
+
+3. Find largest files: sudo find / -type f -size +500M 2>/dev/null [This lists files larger than 500 MB. Useful when: Disk suddenly becomes full, Docker/container logs grow endlessly, Old backups consume space etc.
+
+4. Monitor real-time disk I/O: iostat -xz 1 [You may need install: sudo apt install sysstat] Important columns: %util → disk busy percentage, await → disk wait time, r/s and w/s → reads/writes per second etc. High values may indicate: Heavy database activity, Disk bottlenecks, Too many writes/logs
+
+5. Check mounted disks and block devices: lsblk [Shows: Disks, Partitions, Mount points, Attached volumes]
+
+6. Check inode usage: df -i [Sometimes disk space is free but inodes are exhausted due to millions of tiny files.]
+
+**- Snapshot: Network** Use these commands to inspect network connectivity, listening ports, active connections, and service reachability.
+
+1. Check listening ports and services: ss -tulpn OR netstat -tulpn [-t → TCP, -u → UDP, -l → listening ports, -p → process using the port, -n → numeric output]
+
+**Note:** Useful for verifying: Is your app listening?, Is SSH/Nginx/Docker running on expected ports? 
+
+2. Check active network connections: ss -s [Shows: Total TCP connections, Established connections, Closed/wait states etc.]
+
+-->Useful for: Detecting connection floods, Debugging high traffic
+
+3. Test service response: curl -I http://localhost OR for remote endpoint: curl -I http://<service-endpoint> [-I fetches only headers]
+
+-->Useful for checking: HTTP response status, Whether the service is reachable
+
+4. Test connectivity to another host: ping google.com
+
+-->Useful for: Internet connectivity, DNS/network troubleshooting
+
+5. Check DNS resolution: nslookup google.com OR dig google.com
+
+-->Useful when: Hostnames fail, Internet works by IP but not by domain
+
+6. View network interfaces and IP addresses: ip addr OR shorter: ip a
+
+-->Shows: Interface status, Private/public IPs, Loopback interface
+
+7. Check routing table: ip route
+
+-->Useful for: Gateway issues, Kubernetes/Docker routing problems
+
+8. Trace network path: traceroute google.com [May require installation: sudo apt install traceroute]
+
+-->Useful for: Finding where packets drop, Diagnosing slow routes
+
 - Logs reviewed
-- Quick findings
+
+-->Logs help identify service failures, crashes, authentication issues, startup errors, and resource problems.
+
+1. View system logs using journalctl: journalctl -xe [-x → adds explanations, -e → jump to recent logs]
+
+-->Useful for: Recent system errors, Service failures, Boot problems
+
+2. Check logs for a specific service: Example for Docker: journalctl -u docker & Example for SSH: journalctl -u ssh & Example for Nginx: journalctl -u nginx
+
+-->Useful for: Startup failures, Permission issues, Crashes/restarts etc.
+
+3. View live logs in real time: journalctl -u docker -f [-f → follow logs live]
+
+-->Useful while: Restarting services, Testing requests, Watching failures happen in real time
+
+4. Check traditional log files: System logs: sudo less /var/log/syslog [Authentication logs: sudo less /var/log/auth.log & Kernel logs: sudo less /var/log/kern.log]
+
+-->Useful for: Login issues, sudo failures, Kernel/disk/network problems
+
+5. Search logs for errors: sudo grep -i error /var/log/syslog OR journalctl | grep -i failed
+
+-->Useful for quickly spotting: Errors, Failed services, Crashes, Permission denials
+
+6. Check container logs (Docker): docker logs <container-id> Live logs: docker logs -f <container-id>
+
+-->Useful for: Application crashes, Port binding issues, Runtime exceptions
+
+7. Check Kubernetes pod logs: kubectl logs <pod-name> [For continuous logs: kubectl logs -f <pod-name> & For multi-container pods: kubectl logs <pod-name> -c <container-name>]
+
+-->Useful for: CrashLoopBackOff debugging, App startup failures, API/server errors
+
+- Quick findings: Summarize the most important observations from CPU, memory, disk, network, and logs in short troubleshooting points.
+<img width="462" height="850" alt="image" src="https://github.com/user-attachments/assets/75b4e85b-3e56-4b9e-b9b0-58e5871f4010" />
+
 - If this worsens (next steps)
 
 ---
