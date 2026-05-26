@@ -41,12 +41,34 @@ terraform workspace select dev
 terraform workspace select staging
 terraform workspace select prod
 ```
-<img width="1583" height="987" alt="image" src="https://github.com/user-attachments/assets/f887586a-dd82-4f1c-ac0f-52ec69bb7579" />
+<img width="1583" height="910" alt="image" src="https://github.com/user-attachments/assets/0b1715cd-b120-45fa-8e27-2d20244fd9bf" />
 
 Answer:
 1. What does `terraform.workspace` return inside a config?
+-->terraform.workspace returns the name of the currently selected Terraform workspace, It helps create environment-specific infrastructure. So Default workspace name is: default unless you create new workspace.
 2. Where does each workspace store its state file?
+
+-->In Terraform, each workspace keeps a separate state file so environments do not overwrite each other.
+
+1. **Local Backend:**  If you are using the default local backend: default workspace: terraform.tfstate
+
+2. **other workspaces:** Stored inside: terraform.tfstate.d/<workspace-name>/terraform.tfstate Eg: terraform.tfstate.d/dev/terraform.tfstate
+
+3. **Remote Backend (like S3):** If using an S3 backend, Terraform stores separate state objects per workspace. Terraform automatically prefixes non-default workspaces with:
+env:/<workspace-name>/
+<img width="293" height="611" alt="image" src="https://github.com/user-attachments/assets/33448a9a-2782-43f0-ad53-6209a7888029" />
+
 3. How is this different from using separate directories per environment?
+-->Using Terraform workspaces and using separate directories both isolate environments, but they do it differently.
+
+-->Using Workspaces Example: **terraform workspace new dev**, **terraform workspace new prod**, So same Terraform codebase, different state files.
+
+<img width="311" height="547" alt="image" src="https://github.com/user-attachments/assets/638966b2-88c8-44f6-94ee-bccdd61998d9" />
+
+-->So the benifits to use different workspases aer Strong isolation, Safer for production, Easier CI/CD pipelines, Different configs/backends/IAM per environment, Clear separation of responsibility etc.
+
+-->And some of the non benificial things are More files/directories, Slight duplication, More setup effort etc.
+<img width="717" height="761" alt="image" src="https://github.com/user-attachments/assets/3c74d6c6-655a-4596-8495-65c318c1fb05" />
 
 ---
 
@@ -87,8 +109,19 @@ Create the `.gitignore`:
 *.tfvars
 .terraform.lock.hcl
 ```
+<img width="1222" height="557" alt="image" src="https://github.com/user-attachments/assets/d99d8ec9-94bc-41c8-b774-45d69ab747c4" />
 
 **Document:** Why is this file structure considered best practice?
+-->Using separate environment directories with reusable modules is considered best practice in Terraform because it improves:isolation, safety, maintainability, scalability etc.
+
+<img width="368" height="472" alt="image" src="https://github.com/user-attachments/assets/8e83377d-e9d6-423f-adec-acc12396230c" />
+<img width="363" height="543" alt="image" src="https://github.com/user-attachments/assets/1a6d43e0-86f1-43ca-b904-cb301f0cf17f" />
+<img width="368" height="333" alt="image" src="https://github.com/user-attachments/assets/e1023f0f-ea42-4ab8-aad2-44b2b716da5c" />
+<img width="382" height="390" alt="image" src="https://github.com/user-attachments/assets/9a5ae041-1241-43c7-995d-2d53c25ec482" />
+<img width="525" height="541" alt="image" src="https://github.com/user-attachments/assets/9f0dd87b-ae54-40b0-9877-1add694fdcd6" />
+<img width="617" height="592" alt="image" src="https://github.com/user-attachments/assets/d0fa5ae2-f98a-4148-85b6-d474ce3e5352" />
+
+**Note:** It follows the core Infrastructure-as-Code principle: “Reusable modules + isolated environments = maintainable infrastructure.” 
 
 ---
 
@@ -115,6 +148,7 @@ Write and validate each module:
 ```bash
 terraform validate
 ```
+<img width="1032" height="97" alt="image" src="https://github.com/user-attachments/assets/7fe379d6-ee5b-4d27-b382-e9373dd5ed26" />
 
 ---
 
@@ -189,7 +223,15 @@ instance_type = "t3.small"
 ingress_ports = [80, 443]
 ```
 
-Notice: dev allows SSH, prod does not. Different CIDRs prevent overlap. Instance types scale up per environment.
+**Notice:** dev allows SSH, prod does not. Different CIDRs prevent overlap. Instance types scale up per environment.
+
+-->Exactly — that is the main reason teams use separate environment configurations in Terraform. You can now customize infrastructure per environment safely.
+
+<img width="672" height="322" alt="image" src="https://github.com/user-attachments/assets/d7de3ab7-b9dc-45fe-bd9a-c40825ac754e" />
+
+<img width="387" height="527" alt="image" src="https://github.com/user-attachments/assets/5b5b397c-8bb5-449b-8ca9-ec34895de36a" />
+
+<img width="405" height="491" alt="image" src="https://github.com/user-attachments/assets/ec58b61f-f301-465c-b772-4e27b6d5242d" />
 
 ---
 
@@ -202,6 +244,13 @@ terraform workspace select dev
 terraform plan -var-file="dev.tfvars"
 terraform apply -var-file="dev.tfvars"
 ```
+<img width="1220" height="272" alt="image" src="https://github.com/user-attachments/assets/49f25ee0-3acd-4164-acab-79cea7e51858" />
+<img width="1673" height="982" alt="image" src="https://github.com/user-attachments/assets/38d63c96-a33d-4c75-b817-2687703fb06b" />
+<img width="1577" height="987" alt="image" src="https://github.com/user-attachments/assets/64afacbf-7c6e-4731-bd33-30afb61ec0da" />
+<img width="1571" height="972" alt="image" src="https://github.com/user-attachments/assets/356e5ade-1a24-4752-a53c-d70b0f9c6fd2" />
+<img width="1452" height="977" alt="image" src="https://github.com/user-attachments/assets/5f45dcb2-09c2-41f4-b1d9-9a0be2c27785" />
+<img width="1902" height="877" alt="image" src="https://github.com/user-attachments/assets/c6a9e1e1-caae-4951-9ad0-188641ef8c72" />
+<img width="1430" height="191" alt="image" src="https://github.com/user-attachments/assets/88ed2e9b-ea40-4b1a-890d-5c9205b8129b" />
 
 **Staging:**
 ```bash
@@ -209,6 +258,13 @@ terraform workspace select staging
 terraform plan -var-file="staging.tfvars"
 terraform apply -var-file="staging.tfvars"
 ```
+<img width="1348" height="302" alt="image" src="https://github.com/user-attachments/assets/36f4b6f3-a44f-4d57-b37c-a3e18a714d1c" />
+<img width="1605" height="973" alt="image" src="https://github.com/user-attachments/assets/3c1b708f-71d1-4cae-a820-fe4542a2d710" />
+<img width="1752" height="981" alt="image" src="https://github.com/user-attachments/assets/3382eb50-f108-4c37-bdc4-30c69ac66751" />
+<img width="1702" height="978" alt="image" src="https://github.com/user-attachments/assets/94571028-7ed4-4824-8df0-a26c35fdb840" />
+<img width="1678" height="977" alt="image" src="https://github.com/user-attachments/assets/c876c20f-9fd1-4eeb-87a2-d9841adfba05" />
+<img width="1902" height="877" alt="image" src="https://github.com/user-attachments/assets/9acfbd9a-1f50-4add-9469-24b73a6bb994" />
+<img width="1435" height="187" alt="image" src="https://github.com/user-attachments/assets/2725584c-0a52-4642-b0f7-d6bba96527bf" />
 
 **Prod:**
 ```bash
@@ -216,6 +272,13 @@ terraform workspace select prod
 terraform plan -var-file="prod.tfvars"
 terraform apply -var-file="prod.tfvars"
 ```
+<img width="1337" height="265" alt="image" src="https://github.com/user-attachments/assets/58e615f1-e1a9-4b4d-b8f0-8999063b4ace" />
+<img width="1692" height="980" alt="image" src="https://github.com/user-attachments/assets/ffc86564-7f83-46e6-a4ad-123aa10307cd" />
+<img width="1716" height="973" alt="image" src="https://github.com/user-attachments/assets/d154b5fd-b32b-4d9e-88f0-349ff210bf41" />
+<img width="1696" height="972" alt="image" src="https://github.com/user-attachments/assets/32984417-616d-4d01-b40c-7532a2d4b1db" />
+<img width="1632" height="977" alt="image" src="https://github.com/user-attachments/assets/b4773ac0-5e9f-47bc-8a6b-8a4a526f82d8" />
+<img width="1897" height="858" alt="image" src="https://github.com/user-attachments/assets/430ea2e9-7150-4af9-89d2-fefa45840853" />
+<img width="1597" height="182" alt="image" src="https://github.com/user-attachments/assets/da65c828-51c1-4807-9f48-79b7fb14c99f" />
 
 After all three are deployed, verify:
 ```bash
@@ -224,13 +287,20 @@ terraform workspace select dev && terraform output
 terraform workspace select staging && terraform output
 terraform workspace select prod && terraform output
 ```
+<img width="1542" height="208" alt="image" src="https://github.com/user-attachments/assets/fa9d41b9-825b-44b5-b914-1014b1f0d76e" />
 
 Go to the AWS console and verify:
 - Three separate VPCs with different CIDR ranges
+<img width="1912" height="762" alt="image" src="https://github.com/user-attachments/assets/46f6be29-a2f4-47da-8bd7-5d5a72aab5b3" />
+
 - Three EC2 instances with different instance types
+<img width="1913" height="832" alt="image" src="https://github.com/user-attachments/assets/17d91189-8fbc-4044-aa9d-8dae0ae7c90f" />
+
 - Different Name tags per environment: `terraweek-dev-server`, `terraweek-staging-server`, `terraweek-prod-server`
+<img width="1901" height="842" alt="image" src="https://github.com/user-attachments/assets/f19164d6-a869-4662-8991-4df7661388f1" />
 
 **Verify:** Are all three environments completely isolated from each other?
+-->Yes!!!
 
 ---
 
