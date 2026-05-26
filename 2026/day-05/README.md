@@ -82,16 +82,71 @@ Observation: Confirmed Linux kernel version and Ubuntu distribution Ensured OS c
 -->Options: -t → TCP, -u → UDP, -l → listening ports, -p → process name/PID, -n → numeric output (no DNS resolution) etc.
 <img width="1905" height="447" alt="image" src="https://github.com/user-attachments/assets/6f2af0f2-7d8f-4cb2-a928-7c685bd7cb07" />
 
--->netstat -tulpn: Older alternative to ssShows:
+-->netstat -tulpn: Older alternative to ssShows: netstat is a command-line utility used to display network connections, routing tables, interface statistics, masquerade connections, and listening ports.
 
-active connections
-listening ports
-associated processes
+-->netstat -l [Show listening ports]
 
-May require installation:
- 
-  - **Logs (2):** `journalctl -u <service> -n 50`, `tail -n 50 /var/log/<file>.log`
+-->netstat -t [Show TCP connections]
+
+-->netstat -u [Show UDP connections]
+
+-->netstat -n [Show numeric addresses instead of resolving hostnames]
+
+-->sudo netstat -tulpn [Show processes using ports (Linux)]
+
+-->netstat -r [Show routing table]
+
+-->netstat -c [Continuously monitor connections]
+<img width="1446" height="923" alt="image" src="https://github.com/user-attachments/assets/135625cd-1b19-4e7c-a761-755c22db2642" />
+
+- **Logs (2):** `journalctl -u <service> -n 50`, `tail -n 50 /var/log/<file>.log` [Note: These commands are used to check logs in Linux systems.]
+
+-->journalctl -u nginx -n 50: Used to view logs of a specific systemd service. Meaning of options -u → unit/service name & -n 50 → show last 50 log entries
+
+-->Useful variations:
+
+1. journalctl -u nginx -f: Follow logs live
+
+2. journalctl -u docker --since today: Show logs since boot
+
+3. journalctl -p err: Show errors only
+<img width="1706" height="981" alt="image" src="https://github.com/user-attachments/assets/011834db-1ea3-4416-9241-4abfab00b588" />
+
+-->tail -n 50 /var/log/<file>.log: Used to read the last lines of a normal log file. Meaning: tail → display end of file & -n 50 → show last 50 lines
+
+--> tail -f /var/log/syslog [Follow logs live] 
+
+Eg: 
+
+1. docker logs: journalctl -u docker -n 50
+
+2. SSH logs: tail -n 50 /var/log/auth.log
+
+3. Kubernetes kubelet logs: journalctl -u kubelet -f
+
+4. tail -f /var/log/nginx/access.log : Nginx access logs
+<img width="1777" height="978" alt="image" src="https://github.com/user-attachments/assets/80dbca92-0cc8-462d-ab39-d0539dc6ed2b" />
+
 - Choose **one target service/process** (e.g., `ssh`, `cron`, `docker`, your web app) and stick to it for the drill.
+
+1. systemctl status docker: Check Docker service
+
+2. journalctl -u docker -n 50: View Docker logs
+
+3. journalctl -u docker -f: Follow logs live
+
+4. ps aux | grep docker: Check Docker process
+
+5. sudo netstat -tulpn | grep docker OR ss -tulpn | grep docker: Check Docker listening ports
+
+6. docker ps: Check running containers
+
+7. sudo systemctl restart docker: Restart service
+
+-->Other services are also there: ssh, cron, nginx, apache2, kubelet etc.
+
+<img width="616" height="392" alt="image" src="https://github.com/user-attachments/assets/d9376a45-9d58-40d6-9fe0-8560193a296e" />
+
 - For each command, add a 1–2 line note on what you observed (e.g., “CPU spikes to 80% when restarting”, “No recent errors in last 50 lines”).
 - End with a **“If this worsens”** section listing 3 next steps you would take (ex: restart strategy, increase log verbosity, collect `strace`).
 - Keep it concise and actionable (aim for ~1 page).
