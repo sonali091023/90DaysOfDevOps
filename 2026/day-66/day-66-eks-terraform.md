@@ -252,23 +252,33 @@ spec:
 ```bash
 kubectl apply -f k8s/nginx-deployment.yaml
 ```
+<img width="1747" height="108" alt="image" src="https://github.com/user-attachments/assets/26b2967b-e7a2-4b26-a5ec-1e2c46171435" />
+<img width="1892" height="770" alt="image" src="https://github.com/user-attachments/assets/16f5ab67-7f41-49b6-b630-08d6b4fca19f" />
+<img width="1890" height="860" alt="image" src="https://github.com/user-attachments/assets/6bc8d98c-c1a9-40ef-a08d-60eb1babb8ff" />
+
 
 3. Wait for the LoadBalancer to get an external IP:
 ```bash
 kubectl get svc nginx-service -w
 ```
+<img width="1915" height="117" alt="image" src="https://github.com/user-attachments/assets/387fb178-9843-49f4-b488-e37ad475e4ab" />
 
 4. Access the Nginx page via the LoadBalancer URL
+<img width="1906" height="883" alt="image" src="https://github.com/user-attachments/assets/b15f24b8-68e3-416f-a16e-5c7110370184" />
 
-5. Verify the full picture:
+6. Verify the full picture:
 ```bash
 kubectl get nodes
 kubectl get deployments
 kubectl get pods
 kubectl get svc
 ```
+<img width="1902" height="413" alt="image" src="https://github.com/user-attachments/assets/654788c1-3f79-4c5b-8e1b-e33fca9364de" />
+<img width="1875" height="871" alt="image" src="https://github.com/user-attachments/assets/316a822f-b255-4c3f-9037-39af3ec4c356" />
+<img width="1860" height="855" alt="image" src="https://github.com/user-attachments/assets/81b31551-daaf-4a38-b726-42924158b3dd" />
 
 **Verify:** Can you access the Nginx welcome page through the LoadBalancer URL?
+-->Yes, And that ,means EKS cluster is working, Pods are running, Service is exposing traffic, AWS LoadBalancer is routing traffic correctly etc.
 
 ---
 
@@ -279,6 +289,8 @@ This is the most important step. EKS clusters cost money. Clean up completely.
 ```bash
 kubectl delete -f k8s/nginx-deployment.yaml
 ```
+<img width="1688" height="116" alt="image" src="https://github.com/user-attachments/assets/f7188989-f3e4-4230-b527-44390ca210f0" />
+<img width="1902" height="843" alt="image" src="https://github.com/user-attachments/assets/693766ff-d82f-4885-81c1-9e548b7eeb93" />
 
 2. Wait for the LoadBalancer to be fully removed (check EC2 > Load Balancers in AWS console)
 
@@ -286,6 +298,8 @@ kubectl delete -f k8s/nginx-deployment.yaml
 ```bash
 terraform destroy
 ```
+<img width="1918" height="976" alt="image" src="https://github.com/user-attachments/assets/ab7f9490-2d30-48c5-b24c-7f3a22954240" />
+
 This will take 10-15 minutes.
 
 4. Verify in the AWS console:
@@ -295,7 +309,12 @@ This will take 10-15 minutes.
    - NAT Gateways: deleted
    - Elastic IPs: released
 
+<img width="1907" height="813" alt="image" src="https://github.com/user-attachments/assets/f048dd58-9ebc-48fc-9c25-4d28f0784ba4" />
+<img width="1918" height="852" alt="image" src="https://github.com/user-attachments/assets/d303980b-4e77-4477-a35a-badcc69a27c3" />
+<img width="1905" height="837" alt="image" src="https://github.com/user-attachments/assets/dec7b680-5640-428a-9a16-8778686998a5" />
+
 **Verify:** Is your AWS account completely clean? No leftover resources?
+-->Yes
 
 ---
 
