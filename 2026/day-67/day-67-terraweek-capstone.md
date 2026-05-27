@@ -308,15 +308,66 @@ Go to the AWS console and verify:
 Write down everything you have learned this week as a Terraform best practices guide:
 
 1. **File structure** -- separate files for providers, variables, outputs, main, locals
+
+-->Keep Terraform code organized instead of putting everything in one main.tf file. This we used to Easier maintenance, Better readability, Easier teamwork, Cleaner debugging etc.
+<img width="182" height="327" alt="image" src="https://github.com/user-attachments/assets/f293ddd2-ad10-45d6-8297-dbcb3ac31ee1" />
+
 2. **State management** -- always use remote backend, enable locking, enable versioning
-3. **Variables** -- never hardcode, use tfvars per environment, validate with `validation` blocks
+
+-->Terraform state is critical. Never store important state locally in teams. Use: Remote backend, State locking, Versioning etc.
+
+-->We use s3 bucket because of Team collaboration, Prevent state corruption, Backup history, Secure storage etc.
+
+<img width="347" height="236" alt="image" src="https://github.com/user-attachments/assets/ed91b5bc-9c54-4c94-865a-ea9d16e36887" />
+
+<img width="471" height="213" alt="image" src="https://github.com/user-attachments/assets/1ca37211-2374-4ecc-83b9-3e6f5f2301d0" />
+
+3. **Variables** -- never hardcode the value, use tfvars per environment like dev.tfvars, prod.tfvars , validate with `validation` blocks
+<img width="470" height="253" alt="image" src="https://github.com/user-attachments/assets/98fe808f-9935-4b31-ba6c-352b7dd749e5" />
+
 4. **Modules** -- one concern per module, always define inputs/outputs, pin registry module versions
+
+-->A module should handle ONE responsibility. for example VPC module, EC2 module, EKS module, Security group module etc.
+
+-->Good module design is Inputs defined, Outputs exposed, Reusable, Independent etc.
+<img width="197" height="331" alt="image" src="https://github.com/user-attachments/assets/7aa8e29e-20d4-43e9-a1fa-1587731ff2fe" />
+
 5. **Workspaces** -- use for environment isolation, reference `terraform.workspace` in configs
-6. **Security** -- .gitignore for state and tfvars, encrypt state at rest, restrict backend access
+
+-->Used for environment isolation.
+<img width="282" height="582" alt="image" src="https://github.com/user-attachments/assets/2ab30504-e76b-4aa2-8df7-53fc661728b8" />
+
+6. **Security** -- .gitignore for state, secrets and tfvars, encrypt state at rest, restrict backend access Use IAM policies: Only Terraform users/roles can access state bucket.
+
 7. **Commands** -- always run `plan` before `apply`, use `fmt` and `validate` before committing
+
+-->terraform plan                [Preview changes. It Prevents accidental infrastructure damage.]
+
+-->terraform apply               [terraform apply --auto-approve]
+
+-->terraform fmt                 [Formats code]
+
+-->terraform validate            [Checks syntax.]
+
 8. **Tagging** -- tag every resource with project, environment, and managed-by
+
+-->Always tag resources. Benefits: Cost tracking, Resource filtering, Governance, Automation etc.
+<img width="243" height="93" alt="image" src="https://github.com/user-attachments/assets/e37f24b1-b83f-484a-bdc4-f9ea595f0252" />
+
 9. **Naming** -- consistent prefix pattern: `<project>-<environment>-<resource>`
+
+-->Naming conventation is used for Easier identification, Cleaner AWS console, Better automation etc.
+
+-->Keep resource names predictable. For example: expense-dev-vpc, expense-prod-eks, expense-stage-db
+
 10. **Cleanup** -- always `terraform destroy` non-production environments when not in use
+
+-->Destroy unused non-production environments.
+
+-->Example: terraform destroy -var-file="dev.tfvars"
+
+-->This is used because to Save cloud cost, Avoid forgotten resources, Cleaner infrastructure etc.
+<img width="487" height="200" alt="image" src="https://github.com/user-attachments/assets/c198b617-26f7-497c-a915-40961ad6c6df" />
 
 ---
 
@@ -343,8 +394,10 @@ terraform workspace delete dev
 terraform workspace delete staging
 terraform workspace delete prod
 ```
+<img width="1458" height="538" alt="image" src="https://github.com/user-attachments/assets/bc7a0658-ea70-487e-aed9-106e24c552bd" />
 
 **Verify:** Is your AWS account completely clean?
+-->Yes verified it is totally clean.
 
 ---
 
