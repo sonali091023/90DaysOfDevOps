@@ -87,22 +87,22 @@ Research and write short notes on:
 
 -->It contains: Ansible installation Inventory files, Playbooks, Roles, SSH keys etc. Eg: Laptop, Jenkins Server, Bastion Host
 
-2. Managed Nodes: Managed nodes are the systems Ansible configures. Eg: EC2 instances, Linux VMs, Kubernetes worker nodes, Database servers etc.
+**2. Managed Nodes:** Managed nodes are the systems Ansible configures. Eg: EC2 instances, Linux VMs, Kubernetes worker nodes, Database servers etc.
 
 -->They usually need: SSH access, Python installed Eg: Web servers, App servers, Database servers, Docker hosts
 
-3. Inventory: The Inventory tells Ansible: which servers exist, how to connect to them and how they are grouped.
+**3. Inventory:** The Inventory tells Ansible: which servers exist, how to connect to them and how they are grouped.
 <img width="263" height="545" alt="image" src="https://github.com/user-attachments/assets/2309826c-e9bf-4b4e-ae5f-25f9fcb1d33d" />
 
-4. Modules: Modules are the actual units of work.
+**4. Modules:** Modules are the actual units of work.
 
 -->They perform tasks like: install packages, copy files, create users, start services.
 <img width="487" height="252" alt="image" src="https://github.com/user-attachments/assets/b62a7d81-aabd-45d0-9397-f424c4e7a206" />
 <img width="212" height="262" alt="image" src="https://github.com/user-attachments/assets/b3c84fb2-c272-48ab-aaf0-0daf86d5a90a" />
 
-5. Playbooks: Playbooks are YAML files describing: what to do, on which hosts, in what order.
+**5. Playbooks:** Playbooks are YAML files describing: what to do, on which hosts, in what order.
 <img width="257" height="316" alt="image" src="https://github.com/user-attachments/assets/61a1a1a2-5c4a-4c83-8a76-e616f97a1915" />
-
+<img width="316" height="837" alt="image" src="https://github.com/user-attachments/assets/0469c2cc-efca-4e7d-99aa-f0fffcbe622b" />
 
 ---
 
