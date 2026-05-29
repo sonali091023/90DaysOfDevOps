@@ -104,6 +104,23 @@ Command: tail -f /var/log/syslog: To see the live logs of the syslog, Here -f me
 Common examples: journalctl -u ssh, journalctl -u nginx, journalctl -u docker, journalctl -u kubelet
 
 - Pick **one service on your system** (example: `ssh`, `cron`, `docker`) and inspect it
+
+-->Service inspection commands: for now use service: cron
+
+Command to Check service status: **sudo systemctl status cron**: This shows: whether the service is running, PID, uptime, logs summary etc.
+<img width="1751" height="453" alt="image" src="https://github.com/user-attachments/assets/77b7b70b-665e-46bc-a9a5-80a4331c686a" />
+
+Command to check service is enabled at boot: **sudo systemctl is-enabled cron:** 
+<img width="962" height="82" alt="image" src="https://github.com/user-attachments/assets/26564321-ab6b-4d56-9b90-429f8c60de22" />
+
+Command to check the detail logs of the any service: **journalctl -u cron**: journalctl → system logs viewer & -u docker → logs only for the Docker service unit
+<img width="1431" height="961" alt="image" src="https://github.com/user-attachments/assets/2e9b3bbc-6d46-4145-addf-4a0dd49b810b" />
+
+
+
+
+
+
 - Keep it **simple and actionable**
 
 Suggested structure for `linux-practice.md`:
