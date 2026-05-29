@@ -1,4 +1,4 @@
-# Day 68 -- Introduction to Ansible and Inventory Setup
+<img width="1877" height="308" alt="image" src="https://github.com/user-attachments/assets/249596d9-9a8d-4f00-8ab5-5df5e566f9c4" /># Day 68 -- Introduction to Ansible and Inventory Setup
 
 ## Task
 Terraform provisions infrastructure. But who installs packages, configures services, manages users, and keeps servers in the desired state after they exist? That is the job of a configuration management tool, and Ansible is the industry standard.
@@ -130,6 +130,34 @@ ssh -i ~/your-key.pem ec2-user@<public-ip-1>
 ssh -i ~/your-key.pem ec2-user@<public-ip-2>
 ssh -i ~/your-key.pem ec2-user@<public-ip-3>
 ```
+<img width="1820" height="960" alt="image" src="https://github.com/user-attachments/assets/a228d815-61a2-4e82-b642-c34e9ba5aa87" />
+<img width="1742" height="982" alt="image" src="https://github.com/user-attachments/assets/9449e807-f648-4ef1-bc17-9768721346f1" />
+<img width="1703" height="925" alt="image" src="https://github.com/user-attachments/assets/a438fcce-d0a0-47ae-af2e-8fe2600b0896" />
+<img width="1767" height="976" alt="image" src="https://github.com/user-attachments/assets/d96a858e-f289-471a-97fd-eabf29b6c3aa" />
+<img width="1777" height="947" alt="image" src="https://github.com/user-attachments/assets/3da899be-a66b-4c8a-9979-2ecc58798a3f" />
+<img width="1736" height="956" alt="image" src="https://github.com/user-attachments/assets/c10c11d8-64ea-4766-a5cb-0209e3766214" />
+<img width="671" height="223" alt="image" src="https://github.com/user-attachments/assets/349d28f2-eedd-44e9-8984-c156be0c8240" />
+
+
+**Steps to follow:**
+1. Create main.tf, variables.tf, terraform.tfvars, outputs.tf files to create 3 ec2 instance with mentioned requirements
+2. then terraform validate
+3. terraform plan
+4. terraform apply
+5. then once the ec2 instance got created to connect with them use command ssh -i my-key.pem ubuntu@,your-ip-add> [for amazon linux: ec2-user & for ubuntu: ubuntu user use]
+
+**Some troubleshooting commands:**
+1. If we havent created key-pair via terrafrom script in that case we can create it via aws console as well [Create Key Pair from AWS Console] for that login there and search for "ec2 key-pair" and then we will get option "key-pairs" --> and then click on create key-pair -->select RSA & .pem option & .pem key will get generate.
+
+2. Option 2 is Create Key Pair Using AWS CLI for that use command: aws ec2 create-key-pair --key-name my-key --query 'KeyMaterial' --output text > my-key.pem Here after creating set the permission chmod 400 my-key.pem 
+
+3. Then to access the instance use command: ssh -i my-key.pem ubuntu@,your-ip-address> & you will connect with the instance
+
+4. To see any of the instance details use command: terraform state show 'aws_instance.instance["one"]'
+
+5. To know the ami id use command: terraform state show 'aws_instance.instance["one"]' | grep ami
+
+6. If incase outputs.tf file not created and wanted to know the ip-address of any instance then for that use command: terraform console to go inside it and then run command: aws_instance.instance["one"].public_ip & you will get it. & if outputs.tf file created in that case can use command: terraform output
 
 ---
 
@@ -153,9 +181,27 @@ pip3 install ansible
 ansible --version
 ```
 
+Steps to follow:
+
+1. sudo apt update & sudo apt install ansible -y
+
+2. ansible --version
+
+<img width="1886" height="970" alt="image" src="https://github.com/user-attachments/assets/e99fd52a-504a-4dc5-bb52-4e7404e7fa86" />
+<img width="460" height="662" alt="image" src="https://github.com/user-attachments/assets/533b91f2-e0ac-4147-a60e-3e3cc0eea204" />
+
+
 Confirm the output shows the Ansible version, config file path, and Python version.
+<img width="1552" height="272" alt="image" src="https://github.com/user-attachments/assets/602d09ee-4dd5-4696-aafa-54a5ecb24b25" />
 
 **Document:** On which machine did you install Ansible? Why is it only needed on the control node?
+-->Ansible was installed on the control node machine. The control node is the system from which Ansible commands and playbooks are executed to manage other servers called managed nodes or target nodes. Ansible is only required on the control node because it follows an agentless architecture. This means no Ansible software needs to be installed on the target machines. Instead, Ansible connects to the managed nodes using SSH and executes tasks remotely.
+
+**The control node contains:** Ansible package, Inventory files, Playbooks, Configuration files, SSH keys used for authentication etc.
+
+-->When a playbook is executed, the control node: Connects to the target machines through SSH, Copies temporary modules/scripts, Executes the required tasks, Returns the output back to the control node
+
+-->This approach makes Ansible lightweight, easy to maintain, and simple to scale because there is no need to install or manage agents on every server.
 
 ---
 
@@ -186,13 +232,18 @@ Verify Ansible can reach all hosts:
 ```bash
 ansible all -i inventory.ini -m ping
 ```
-
 You should see green `SUCCESS` with `"ping": "pong"` for each host.
+<img width="1918" height="563" alt="image" src="https://github.com/user-attachments/assets/fa30428d-6cb5-4f47-9399-a6f1c5c801c0" />
 
 **Troubleshoot:** If ping fails:
-- Check the SSH key path and permissions (`chmod 400 your-key.pem`)
+- Check the SSH key path and permissions (`chmod 400 your-key.pem`) --> for that use command: find ~ -name "*.pem"
+<img width="1478" height="83" alt="image" src="https://github.com/user-attachments/assets/e684afb3-34e9-47c3-bea7-e2059fa60e4f" />
+
 - Check the security group allows SSH from your IP
+<img width="1906" height="800" alt="image" src="https://github.com/user-attachments/assets/be3fa44b-9ca2-4632-8cd2-39a9d81431d9" />
+
 - Check the `ansible_user` matches your AMI (ec2-user for Amazon Linux, ubuntu for Ubuntu)
+Checked used ubuntu as using ubuntu ami id
 
 ---
 
@@ -203,35 +254,55 @@ Ad-hoc commands let you run quick one-off tasks without writing a playbook.
 ```bash
 ansible all -i inventory.ini -m command -a "uptime"
 ```
+<img width="1866" height="170" alt="image" src="https://github.com/user-attachments/assets/71589386-244c-4601-bc1b-e8af44bf1c19" />
 
 2. **Check free memory on web servers only:**
 ```bash
 ansible web -i inventory.ini -m command -a "free -h"
 ```
+<img width="1843" height="120" alt="image" src="https://github.com/user-attachments/assets/30b3e647-c549-4872-b489-43b948973c2c" />
+
 
 3. **Check disk space on all servers:**
 ```bash
 ansible all -i inventory.ini -m command -a "df -h"
 ```
+<img width="1877" height="967" alt="image" src="https://github.com/user-attachments/assets/db8a86bb-0b15-491d-845d-911016ebdd77" />
 
 4. **Install a package on the web group:**
 ```bash
 ansible web -i inventory.ini -m yum -a "name=git state=present" --become
 ```
 (Use `apt` instead of `yum` if running Ubuntu)
+<img width="1918" height="237" alt="image" src="https://github.com/user-attachments/assets/2d4be6d0-ec79-4699-a13c-9c23d72a9fe3" />
 
 5. **Copy a file to all servers:**
 ```bash
 echo "Hello from Ansible" > hello.txt
 ansible all -i inventory.ini -m copy -a "src=hello.txt dest=/tmp/hello.txt"
 ```
+<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/14f43169-b236-4b16-a711-0d1ae455f162" />
 
 6. **Verify the file was copied:**
 ```bash
 ansible all -i inventory.ini -m command -a "cat /tmp/hello.txt"
 ```
+<img width="1607" height="158" alt="image" src="https://github.com/user-attachments/assets/f01404b4-6140-44b3-9234-f547cdf97643" />
 
 **Document:** What does `--become` do? When do you need it?
+
+--> The **--become** option in Ansible is used to execute tasks with elevated privileges, usually as the root user. It works similarly to using sudo in Linux.
+
+-->By default, Ansible connects to remote servers using a normal user account such as ubuntu or ec2-user. Some administrative tasks require root privileges, and --become allows Ansible to temporarily switch to a privileged user while executing those tasks.
+
+Why --become Is Needed? because, Many system-level operations cannot be performed by regular users. Examples include: Installing packages, Starting or stopping services, Editing files inside /etc, Managing users and groups, Updating system configurations etc.
+
+-->Without --become, these tasks may fail with “Permission denied” errors.
+
+**Example Without --become:** ansible all -i inventory -a "apt install nginx -y" [This may fail because package installation requires root access.]
+
+**Example With --become:** ansible all -i inventory -a "apt install nginx -y" --become [Here, Ansible uses sudo privileges to run the command successfully.]
+<img width="601" height="487" alt="image" src="https://github.com/user-attachments/assets/441f5acf-5e6e-43f5-bc7f-43f1832d7cf9" />
 
 ---
 
@@ -253,12 +324,14 @@ ansible application -i inventory.ini -m ping     # web + app servers
 ansible db -i inventory.ini -m ping               # only db server
 ansible all_servers -i inventory.ini -m ping      # everything
 ```
+<img width="1663" height="862" alt="image" src="https://github.com/user-attachments/assets/9ec373e6-927b-43be-947f-1e82ae4fa7b0" />
 
 3. **Use patterns:**
 ```bash
 ansible 'web:app' -i inventory.ini -m ping        # OR: web or app
 ansible 'all:!db' -i inventory.ini -m ping        # NOT: all except db
 ```
+<img width="1762" height="608" alt="image" src="https://github.com/user-attachments/assets/3258bff4-f299-4afa-b6e3-d0eef48211bb" />
 
 4. **Create an `ansible.cfg`** to avoid typing `-i inventory.ini` every time:
 ```ini
@@ -273,8 +346,11 @@ Now you can simply run:
 ```bash
 ansible all -m ping
 ```
+<img width="1790" height="475" alt="image" src="https://github.com/user-attachments/assets/d6635897-8ab6-411e-9c86-cd1ca2b982a0" />
 
 **Verify:** Does `ansible all -m ping` work without specifying the inventory file?
+-->Yes as we have created ansible.org file and mention inventary.ini file overthere after that without specifying the inventory file we can ping the instances.
+<img width="1790" height="475" alt="image" src="https://github.com/user-attachments/assets/37c55d83-917a-4b3b-97bd-c0c9b2f4a109" />
 
 ---
 
