@@ -352,6 +352,8 @@ ansible all -m ping
 -->Yes as we have created ansible.org file and mention inventary.ini file overthere after that without specifying the inventory file we can ping the instances.
 <img width="1790" height="475" alt="image" src="https://github.com/user-attachments/assets/37c55d83-917a-4b3b-97bd-c0c9b2f4a109" />
 
+**Note:** So we can keep the ansible-practice dir inside terraform-practice as well and keep separate as well, And we can .pem file from any location it is just we have to give correct path.
+
 ---
 
 ## Hints
