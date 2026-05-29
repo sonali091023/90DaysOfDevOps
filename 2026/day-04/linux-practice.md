@@ -113,13 +113,22 @@ Command to Check service status: **sudo systemctl status cron**: This shows: whe
 Command to check service is enabled at boot: **sudo systemctl is-enabled cron:** 
 <img width="962" height="82" alt="image" src="https://github.com/user-attachments/assets/26564321-ab6b-4d56-9b90-429f8c60de22" />
 
-Command to check the detail logs of the any service: **journalctl -u cron**: journalctl → system logs viewer & -u docker → logs only for the Docker service unit
+Command to check the detail logs of the any service: **journalctl -u cron**: journalctl → system logs viewer & -u docker → logs only for the cron service unit, & id wanred to see live logs just add -f after service name in command
+
+journalctl -u cron
 <img width="1431" height="961" alt="image" src="https://github.com/user-attachments/assets/2e9b3bbc-6d46-4145-addf-4a0dd49b810b" />
+journalctl -u cron -n 50
+<img width="1897" height="921" alt="image" src="https://github.com/user-attachments/assets/2a17e471-7e92-4103-ad4b-57f449706dc2" />
+journalctl -u cron -f
+<img width="1915" height="427" alt="image" src="https://github.com/user-attachments/assets/92c198fe-d8e6-4dc5-b641-d2255c8895f7" />
 
+Command: ps aux | grep cron [pgrep gives only the process ID (PID).]
+<img width="1461" height="112" alt="image" src="https://github.com/user-attachments/assets/ee1faf34-82d3-4de0-ba99-09270f7b00bd" />
 
+Command: ss -tulpn | grep cron & netstat -tulpn | grep docker [This gives output when particualr service is in running state]
 
-
-
+Command: docker ps: To check the docker process & docker info: Both command are uesd to check is docker is responding or not
+<img width="1637" height="972" alt="image" src="https://github.com/user-attachments/assets/5896aa1e-a84b-4774-8991-7dc25fa7dc48" />
 
 - Keep it **simple and actionable**
 
