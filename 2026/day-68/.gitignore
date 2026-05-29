@@ -1,0 +1,26 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Sensitive files
+*.pem
+*.key
+
+# Ansible
+*.retry
+
+# Python cache
+__pycache__/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
