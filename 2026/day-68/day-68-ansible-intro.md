@@ -1,4 +1,4 @@
-<img width="1877" height="308" alt="image" src="https://github.com/user-attachments/assets/249596d9-9a8d-4f00-8ab5-5df5e566f9c4" /># Day 68 -- Introduction to Ansible and Inventory Setup
+ Inventory Setup
 
 ## Task
 Terraform provisions infrastructure. But who installs packages, configures services, manages users, and keeps servers in the desired state after they exist? That is the job of a configuration management tool, and Ansible is the industry standard.
