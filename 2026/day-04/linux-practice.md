@@ -127,7 +127,7 @@ Command: ps aux | grep cron [pgrep gives only the process ID (PID).]
 
 Command: ss -tulpn | grep cron & netstat -tulpn | grep docker [This gives output when particualr service is in running state]
 
-Command: docker ps: To check the docker process & docker info: Both command are uesd to check is docker is responding or not
+Command: docker ps: To check the docker process & docker info: Both command are uesd to check is docker demon is responding or not
 <img width="1637" height="972" alt="image" src="https://github.com/user-attachments/assets/5896aa1e-a84b-4774-8991-7dc25fa7dc48" />
 
 - Keep it **simple and actionable**
