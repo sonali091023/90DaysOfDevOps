@@ -216,6 +216,15 @@ Create a `files/` directory with a sample `app.conf` file for the copy task. Run
 
 **Document:** What is the difference between `command` and `shell`? When should you use each?
 
+-->**command** executes a command directly without a shell, making it more secure and predictable.
+
+-->**shell** executes through /bin/sh, allowing shell features such as pipes(|), redirects(> ,>>), variables($HOME), and wildcards(*), Command chaining (&&)
+
+**Note:** Prefer command by default and use shell only when shell-specific functionality is required.
+
+<img width="513" height="802" alt="image" src="https://github.com/user-attachments/assets/ed79f3ee-5d5c-4919-b024-21feb817bd63" />
+<img width="388" height="806" alt="image" src="https://github.com/user-attachments/assets/e6c59a3f-5579-4348-a452-60b2fed865a3" />
+
 **Steps to follow:**
 
 Step 1: Create a files Directory
