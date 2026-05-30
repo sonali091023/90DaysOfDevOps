@@ -350,11 +350,13 @@ Before running playbooks on production, always preview changes first.
 ```bash
 ansible-playbook install-nginx.yml --check
 ```
+<img width="515" height="596" alt="image" src="https://github.com/user-attachments/assets/6f1c49a1-8bd7-4600-a777-0c3800ff6916" />
 
 2. **Diff mode** -- shows the actual file differences:
 ```bash
 ansible-playbook nginx-config.yml --check --diff
 ```
+<img width="642" height="693" alt="image" src="https://github.com/user-attachments/assets/c68a3aa1-d491-4053-907a-a6e9a91db6f4" />
 
 3. **Verbosity** -- increase output detail for debugging:
 ```bash
@@ -362,19 +364,32 @@ ansible-playbook install-nginx.yml -v       # verbose
 ansible-playbook install-nginx.yml -vv      # more verbose
 ansible-playbook install-nginx.yml -vvv     # connection debugging
 ```
+<img width="377" height="738" alt="image" src="https://github.com/user-attachments/assets/31332137-97db-4ad0-a41a-47230ece9745" />
 
 4. **Limit to specific hosts:**
 ```bash
 ansible-playbook install-nginx.yml --limit web-server
 ```
+<img width="603" height="652" alt="image" src="https://github.com/user-attachments/assets/14b78313-c750-4086-a7d1-d79136d95655" />
 
 5. **List what would be affected without running:**
 ```bash
 ansible-playbook install-nginx.yml --list-hosts
 ansible-playbook install-nginx.yml --list-tasks
 ```
+<img width="537" height="815" alt="image" src="https://github.com/user-attachments/assets/c3d386f8-feb1-49a4-ab67-5c4bd36f3d5e" />
+<img width="671" height="811" alt="image" src="https://github.com/user-attachments/assets/270e0f23-0ea1-45ad-9a0c-2fdfea9f2844" />
 
 **Document:** Why is `--check --diff` the most important flag combination for production use?
+--> **--check** allows you to perform a dry run and see what changes Ansible would make without actually modifying the target systems.
+
+--> **--diff** shows the exact differences in files before and after the proposed changes.
+
+-->When used together: **ansible-playbook playbook.yml --check --diff** you can safely verify: Which tasks would change resources, Which configuration files would be modified, The exact content differences, Potential mistakes before deployment etc. 
+
+-->This greatly reduces the risk of accidental outages, incorrect configurations, and unexpected changes in production environments. 
+
+-->IN short The combination of **--check --diff** provides a safe preview of infrastructure changes. --check simulates execution without making modifications, while --diff displays the exact file changes that would occur. Together they allow engineers to validate changes before deployment, making them one of the most important safeguards for production environments.
 
 ---
 
