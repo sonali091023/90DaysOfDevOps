@@ -59,31 +59,39 @@ ansible-playbook install-nginx.yml
 **aws ec2 create-key-pair --key-name my-key --query 'KeyMaterial' --output text > my-key.pem**
 
 3. Once the my-key.pem file will get create chnage the executable permission of the file for user, group and other for that use command: **sudo chmod 400 my-key.pem** to avoid error,
+
 <img width="1916" height="227" alt="image" src="https://github.com/user-attachments/assets/bae2ebe3-af83-42ad-9e2a-fa0018e507c9" />
+
 <img width="805" height="792" alt="image" src="https://github.com/user-attachments/assets/22a24044-f11f-4061-a783-d8271fd43957" />
 
 Troubleshooting commands: Before running command: **ansible all -i inventory.ini -m ping** Run below commands and try to handle the issue, 
 
 -->Command: **ansible-inventory -i inventory.ini --list**: "Show me exactly how Ansible understands my inventory file.", is used to display the inventory in JSON format after Ansible processes it.
+
 <img width="1832" height="565" alt="image" src="https://github.com/user-attachments/assets/aa561206-7fc2-48cf-91d8-941ac6a10b30" />
 
 -->Command: **ansible-inventory -i inventory.ini --graph**: This is graphicial/visual view which is better than json, This helps catch inventory mistakes before troubleshooting SSH or playbook issues.
+
 <img width="1533" height="152" alt="image" src="https://github.com/user-attachments/assets/773cadc9-28bc-42f7-bda1-08eaccb99eba" />
 
 4. Then create above mentioned file **vi install-nginx.yml** and add above code to install nginx
 
 5. then check the connectivity by running command: **ansible -i inventory.ini web -m ping**
+
 <img width="1657" height="222" alt="image" src="https://github.com/user-attachments/assets/b18c23f2-0b6b-49f3-be52-c9354c2ac4a8" />
 
 6. Then run command to install nginx: **ansible-playbook -i inventory.ini install-nginx.yml** And nginx will get install to the server
 
 7. Read the output carefully -- every task shows `changed`, `ok`, or `failed`.
+
 <img width="1900" height="476" alt="image" src="https://github.com/user-attachments/assets/2114ad2b-f01b-4bdc-aef5-8723b4be0ace" />
 
 Now run it **again**. Notice that tasks show `ok` instead of `changed`. This is **idempotency** -- Ansible only makes changes when needed.
+
 <img width="1917" height="487" alt="image" src="https://github.com/user-attachments/assets/f025826e-59a0-4b74-9f21-7cd005fbcbea" />
 
 **Verify:** Curl the web server's public IP. Do you see your custom page?
+
 <img width="1248" height="592" alt="image" src="https://github.com/user-attachments/assets/75e6a095-ede8-4b43-b241-76e455e34856" />
 
 ---
@@ -107,23 +115,29 @@ Answer:
 1. What is the difference between a play and a task?
 
 -->A play defines: Which hosts to target, Which user to run as, Which tasks to execute OR Defines target hosts and contains tasks.
+
 <img width="460" height="228" alt="image" src="https://github.com/user-attachments/assets/5c7d054c-455e-4e56-a6ed-5e90e5256ac0" />
 
 -->A task is a single action. OR A single unit of work performed using a module
+
 <img width="215" height="270" alt="image" src="https://github.com/user-attachments/assets/e69a203e-ce81-4b8e-99ac-b05f467a6631" />
+
 <img width="188" height="307" alt="image" src="https://github.com/user-attachments/assets/065da4cb-a47e-44b5-a692-74ea8ea7738f" />
 
 2. Can you have multiple plays in one playbook?
 
 -->Yes, One playbook can contain multiple plays targeting different host groups.
+
 <img width="520" height="632" alt="image" src="https://github.com/user-attachments/assets/92a91479-9012-4202-991e-da80bc479b0a" />
 
 3. What does `become: true` do at the play level vs the task level?
 
 -->**Play Level:** All tasks inherit sudo privileges. Whcih are Equivalent to: Task 1: sudo, Task 2: sudo, Task 3: sudo , Even in case You write it once. OR Play level → applies to all tasks.
+
 <img width="152" height="181" alt="image" src="https://github.com/user-attachments/assets/d6c2ca5f-1d11-4f78-a30f-6f381d7cf703" />
 
 -->**Task Level:** Only this task uses sudo. Other tasks run as the normal user OR Task level → applies only to that specific task.
+
 <img width="272" height="393" alt="image" src="https://github.com/user-attachments/assets/9df1566a-851b-4095-be1a-4a9183f3131b" />
 
 4. What happens if a task fails -- do remaining tasks still run?
@@ -131,7 +145,9 @@ Answer:
 -->No. Ansible stops executing further tasks for that host. If Task 1 fails: TASK [Install Nginx] FAILED, Task 2 will not run on that host.
 
 -->By default, Ansible stops executing subsequent tasks for that host unless ignore_errors: true is used.
+
 <img width="257" height="296" alt="image" src="https://github.com/user-attachments/assets/27f40faf-3ce4-4a51-a26d-e3d6bb2dd2b5" />
+
 <img width="455" height="487" alt="image" src="https://github.com/user-attachments/assets/7bf4842e-9ede-47ee-8d10-c52b154275a8" />
 
 ---
@@ -223,22 +239,27 @@ Create a `files/` directory with a sample `app.conf` file for the copy task. Run
 **Note:** Prefer command by default and use shell only when shell-specific functionality is required.
 
 <img width="513" height="802" alt="image" src="https://github.com/user-attachments/assets/ed79f3ee-5d5c-4919-b024-21feb817bd63" />
+
 <img width="388" height="806" alt="image" src="https://github.com/user-attachments/assets/e6c59a3f-5579-4348-a452-60b2fed865a3" />
 
 **Steps to follow:**
 
 Step 1: Create a files Directory
+
 <img width="240" height="472" alt="image" src="https://github.com/user-attachments/assets/aba8ad3b-b08c-4381-8242-edffecaf22ee" />
 
 Step 2: Create app.conf: Create app.conf file under files dir: vi app.conf and add following: APP_NAME=TerraWeek, APP_ENV=Development, APP_PORT=8080 
+
 <img width="1047" height="150" alt="image" src="https://github.com/user-attachments/assets/11883eba-7a93-4ce1-8319-e01086a67e42" />
 
 Step 3: Create essential-modules.yml: vi essential-modules.yml and add above line of code
 
 Step 4: Validate the Playbook: ansible-playbook -i inventory.ini essential-modules.yml --syntax-check
+
 <img width="1652" height="76" alt="image" src="https://github.com/user-attachments/assets/7020d070-4671-4418-a2b5-f94ec616f16c" />
 
 Step 5: Run the Playbook: ansible-playbook -i inventory.ini essential-modules.yml
+
 <img width="1852" height="961" alt="image" src="https://github.com/user-attachments/assets/1c24c0bd-11c7-4653-a9fd-81b0a1f311f6" />
 
 Step 6: Understand the Output: 
@@ -249,12 +270,15 @@ Step 7: Verify on EC2: SSH into the instance: ssh -i terraform-practice/my-key.p
 
 **Steps verify output:**
 1. ssh -i terraform-practice/my-key.pem ubuntu@13.127.63.252
+
 <img width="1317" height="502" alt="image" src="https://github.com/user-attachments/assets/ac27ac99-394b-4b39-a086-d6b4617ada6d" />
 
 2. verify git --version, curl --version & wget --version:
+
 <img width="1915" height="976" alt="image" src="https://github.com/user-attachments/assets/6b34aad1-f49b-43d7-8852-07cc2cbaa7f3" />
 
 3. verify **tree --version**, then check the content: **cat /etc/app.conf** then check the file and that permissions: **ls -ld /opt/myapp** later checked **grep TZ /etc/environment**
+
 <img width="1498" height="353" alt="image" src="https://github.com/user-attachments/assets/4fa41fc8-d4d7-4608-bbef-962b7c6c85ce" />
  
 ---
@@ -315,18 +339,28 @@ Step 2: Create vi nginx.conf under files dir only where previously we have creat
 Step 3: Validate the Playbook: ansible-playbook -i inventory.ini nginx-config.yml --syntax-check
 
 Step 4: Run the Playbook (First Time): ansible-playbook -i inventory.ini nginx-config.yml
+
 <img width="387" height="667" alt="image" src="https://github.com/user-attachments/assets/2ccc2120-c194-4628-933b-7325a3e6ff18" />
 
 Step 5: Verify Website: curl http://13.127.63.252
+
 <img width="530" height="32" alt="image" src="https://github.com/user-attachments/assets/d4600704-b3f1-469c-b714-9754a0c850f6" />
 
 Step 6: Run the Playbook Again: ansible-playbook -i inventory.ini nginx-config.yml
+
 <img width="392" height="327" alt="image" src="https://github.com/user-attachments/assets/89f1b97f-1345-4435-a8f9-594461c685ff" />
 
 Step 7: Observe the Handler: On the second run: You should NOT see: RUNNING HANDLER [Restart Nginx], because nothing changed. Therefore no notification was sent.
+
 <img width="245" height="526" alt="image" src="https://github.com/user-attachments/assets/8fce876b-fc21-4665-b227-850d5ccbda8e" />
+
 <img width="328" height="693" alt="image" src="https://github.com/user-attachments/assets/0a451e0c-6957-41b6-90ba-bb9ad8e09efa" />
+
 <img width="371" height="818" alt="image" src="https://github.com/user-attachments/assets/25d629be-9c63-4ef4-920a-d00d38161d5e" />
+
+<img width="1911" height="742" alt="image" src="https://github.com/user-attachments/assets/90997b8d-dc15-4c80-bd78-28adbebd7e15" />
+
+<img width="1918" height="478" alt="image" src="https://github.com/user-attachments/assets/dcbcaf29-9a7e-4516-bc13-2d535751dcd8" />
 
 **Verify:** Run it twice and compare the output. Does the handler run both times?
 -->No.
@@ -378,6 +412,7 @@ ansible-playbook install-nginx.yml --list-hosts
 ansible-playbook install-nginx.yml --list-tasks
 ```
 <img width="537" height="815" alt="image" src="https://github.com/user-attachments/assets/c3d386f8-feb1-49a4-ab67-5c4bd36f3d5e" />
+
 <img width="671" height="811" alt="image" src="https://github.com/user-attachments/assets/270e0f23-0ea1-45ad-9a0c-2fdfea9f2844" />
 
 **Document:** Why is `--check --diff` the most important flag combination for production use?
@@ -448,9 +483,51 @@ Run it:
 ansible-playbook multi-play.yml
 ```
 
+**Steps to follow:**
+
+<img width="816" height="757" alt="image" src="https://github.com/user-attachments/assets/a2507afe-f475-4c64-84bc-ffc918d0ba95" />
+
+<img width="630" height="495" alt="image" src="https://github.com/user-attachments/assets/c039e886-e999-433b-bd1d-7c5a9da2d71b" />
+
+Step 1: Create the Playbook: Used option1 for now and created one instance and doing ths things in it, Create file **vi multi-play.yml**
+
+Step 2: Validate Syntax: ansible-playbook -i inventory.ini multi-play.yml --syntax-check
+
+Step 3: Preview Hosts: ansible-playbook -i inventory.ini multi-play.yml --list-hosts [This shows which hosts belong to each play.]
+
+Step 4: Run the Playbook: ansible-playbook -i inventory.ini multi-play.yml
+
+<img width="370" height="723" alt="image" src="https://github.com/user-attachments/assets/fc061adf-bfeb-4603-8682-0f190465f39c" />
+
+<img width="472" height="573" alt="image" src="https://github.com/user-attachments/assets/228ade53-6721-4485-bd87-98a900ff0d7f" />
+
+Step 5: Verify the Changes: for that SSH into your server: ssh -i terraform-practice/my-key.pem ubuntu@13.127.63.252
+
+Step 6: Verify Nginx version: nginx -v OR systemctl status nginx
+
+Step 7: Verify App Directory: ls -ld /opt/app
+
+Step 8: Verify MySQL Client: mysql --version
+
+Step 9: Verify Data Directory: ls -ld /var/lib/appdata
+
+<img width="1472" height="547" alt="image" src="https://github.com/user-attachments/assets/c81b9b37-43ce-4518-b1d2-d1ce2503e7a9" />
+
+<img width="1912" height="970" alt="image" src="https://github.com/user-attachments/assets/950ad156-218a-48a4-8843-21a36c4c3f3d" />
+
+<img width="1790" height="567" alt="image" src="https://github.com/user-attachments/assets/0e29ee93-fdff-40ab-86ad-99735047528f" />
+
 Watch the output -- each play targets a different group, and tasks run only on the relevant hosts.
 
 **Verify:** Is Nginx only installed on web servers? Is MySQL only on db servers?
+
+-->Yes. The Nginx tasks are inside: hosts: web, so they run only on hosts in the web inventory group.
+
+Is MySQL only installed on db servers?
+
+-->Yes. The MySQL tasks are inside: hosts: db so they run only on hosts in the db inventory group.
+
+**Note:** Important Note for Your Current Lab: If you place the same EC2 instance in all three groups (web, app, and db), then that one machine will receive all three configurations because it belongs to all three groups. To truly verify separation, you'd need separate servers for each group. This lab is mainly teaching how multiple plays target different inventory groups within a single playbook.
 
 ---
 
