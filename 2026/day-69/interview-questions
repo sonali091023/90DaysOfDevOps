@@ -1,0 +1,298 @@
+Answers to the Questions
+1. What is the difference between a play and a task?
+Play
+
+A play defines:
+
+Which hosts to target
+Which user to run as
+Which tasks to execute
+
+Example:
+
+- name: Configure Web Server
+  hosts: web
+
+Think of a play as:
+
+"Run these instructions on these servers."
+
+Task
+
+A task is a single action.
+
+Example:
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+This does only one thing:
+
+Install Nginx.
+
+Analogy
+
+Imagine cooking dinner.
+
+Play = Complete recipe
+
+Make Pasta
+
+Tasks = Individual steps
+
+Boil water
+Cook pasta
+Prepare sauce
+Serve
+2. Can you have multiple plays in one playbook?
+Yes.
+
+Example:
+
+---
+- name: Configure Web Servers
+  hosts: web
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+- name: Configure Database Servers
+  hosts: db
+
+  tasks:
+    - name: Install MySQL
+      apt:
+        name: mysql-server
+        state: present
+
+Execution order:
+
+Play 1 → Web Servers
+Play 2 → Database Servers
+
+A single playbook can contain many plays.
+
+3. What does become: true do at the play level vs task level?
+Play Level
+- hosts: web
+  become: true
+
+  tasks:
+    ...
+
+All tasks inherit sudo privileges.
+
+Equivalent to:
+
+Task 1 → sudo
+Task 2 → sudo
+Task 3 → sudo
+
+You write it once.
+
+Task Level
+tasks:
+  - name: Install Nginx
+    become: true
+    apt:
+      name: nginx
+      state: present
+
+Only this task uses sudo.
+
+Other tasks run as the normal user.
+
+Example
+tasks:
+  - name: Install Nginx
+    become: true
+    apt:
+      name: nginx
+      state: present
+
+  - name: Show current user
+    command: whoami
+
+Result:
+
+Task 1 runs as root
+Task 2 runs as ubuntu
+Best Practice
+
+If most tasks need root:
+
+become: true
+
+at the play level.
+
+If only one or two tasks need root:
+
+become: true
+
+at the task level.
+
+4. What happens if a task fails? Do remaining tasks still run?
+Default Behavior
+
+No.
+
+Ansible stops executing further tasks for that host.
+
+Example:
+
+tasks:
+  - name: Install Nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: Create Directory
+    file:
+      path: /app
+      state: directory
+
+If Task 1 fails:
+
+TASK [Install Nginx] FAILED
+
+Task 2 will not run on that host.
+
+Example Output
+TASK [Install Nginx] ****************************************
+fatal: [web-server]: FAILED!
+
+PLAY RECAP
+web-server : failed=1
+Can We Ignore Failures?
+
+Yes.
+
+- name: Optional Task
+  command: some_command
+  ignore_errors: true
+
+Then Ansible continues.
+
+Quick Interview Answers
+Q1. Difference between Play and Task?
+
+Play: Defines target hosts and contains tasks.
+
+Task: A single unit of work performed using a module.
+
+Q2. Multiple plays in one playbook?
+
+Yes. One playbook can contain multiple plays targeting different host groups.
+
+Q3. become: true at play level vs task level?
+Play level → applies to all tasks.
+Task level → applies only to that specific task.
+Q4. What happens if a task fails?
+
+By default, Ansible stops executing subsequent tasks for that host unless ignore_errors: true is used.
+
+#==============================================================================================================
+Understanding register
+
+This line:
+
+register: disk_output
+
+stores command output in a variable.
+
+Equivalent concept:
+
+output=$(df -h)
+
+in shell scripting.
+
+You can then access:
+
+disk_output.stdout
+
+or
+
+disk_output.stdout_lines
+command vs shell (Documentation Answer)
+command Module
+
+Runs commands directly without invoking a shell.
+
+Example:
+
+- name: Show disk usage
+  command: df -h
+Advantages
+More secure
+Faster
+Recommended whenever possible
+Does NOT support
+|
+>
+>>
+<
+&&
+||
+*
+$
+
+Example that fails:
+
+command: ps aux | wc -l
+
+because | is a shell feature.
+
+shell Module
+
+Runs commands through a shell (/bin/sh).
+
+Example:
+
+- name: Count processes
+  shell: ps aux | wc -l
+Supports
+|
+>
+>>
+<
+&&
+||
+variables
+wildcards
+
+Examples:
+
+shell: cat file.txt | grep nginx
+shell: echo hello > test.txt
+shell: ls *.log
+Best Practice
+
+Use:
+
+command:
+
+whenever possible.
+
+Use:
+
+shell:
+
+only when you need shell features like:
+
+Pipes (|)
+Redirects (>, >>)
+Wildcards (*)
+Environment variables ($HOME)
+Command chaining (&&)
+Interview Answer
+
+What is the difference between command and shell?
+
+command executes a command directly without a shell, making it more secure and predictable.
+shell executes through /bin/sh, allowing shell features such as pipes, redirects, variables, and wildcards.
+Prefer command by default and use shell only when shell-specific functionality is required.

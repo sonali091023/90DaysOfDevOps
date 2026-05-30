@@ -1,0 +1,23 @@
+---                                                          #Indicates the start of a YAML document.
+
+- name: Install and start Nginx on web servers  #Defines a Play. The name is displayed when the playbook runs, Like Eg o/p: PLAY [Install and start nginx] 
+  hosts: web                              #Specifies which inventory group the play runs on, Ansible checks inventory.ini and finds all hosts under [web].
+  become: true      #Tells Ansible to use privilege escalation (sudo), Required for operation: Installing packages, Starting services, Writing system files
+
+  tasks:            #A list of tasks that will execute in order.
+    - name: Install Nginx    #A task description. Appears in playbook output.
+      apt:                   #This is the module. Modules perform the actual work.
+        name: nginx          #Module arguments. Ensure nginx is installed.
+        state: present
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Create a custom index page
+      copy:
+        content: "<h1>Deployed by Ansible - TerraWeek Server</h1>"
+        dest: /usr/share/nginx/html/index.html
+
