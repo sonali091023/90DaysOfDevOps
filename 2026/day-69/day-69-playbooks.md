@@ -307,7 +307,39 @@ Run the playbook:
 - First run: handler triggers because the config file is new
 - Second run: handler does NOT trigger because nothing changed
 
+**Steps to follow:**
+Step 1: Create vi nginx-config.yml & add above line of code
+
+Step 2: Create vi nginx.conf under files dir only where previously we have created app.conf file
+
+Step 3: Validate the Playbook: ansible-playbook -i inventory.ini nginx-config.yml --syntax-check
+
+Step 4: Run the Playbook (First Time): ansible-playbook -i inventory.ini nginx-config.yml
+<img width="387" height="667" alt="image" src="https://github.com/user-attachments/assets/2ccc2120-c194-4628-933b-7325a3e6ff18" />
+
+Step 5: Verify Website: curl http://13.127.63.252
+<img width="530" height="32" alt="image" src="https://github.com/user-attachments/assets/d4600704-b3f1-469c-b714-9754a0c850f6" />
+
+Step 6: Run the Playbook Again: ansible-playbook -i inventory.ini nginx-config.yml
+<img width="392" height="327" alt="image" src="https://github.com/user-attachments/assets/89f1b97f-1345-4435-a8f9-594461c685ff" />
+
+Step 7: Observe the Handler: On the second run: You should NOT see: RUNNING HANDLER [Restart Nginx], because nothing changed. Therefore no notification was sent.
+<img width="245" height="526" alt="image" src="https://github.com/user-attachments/assets/8fce876b-fc21-4665-b227-850d5ccbda8e" />
+<img width="328" height="693" alt="image" src="https://github.com/user-attachments/assets/0a451e0c-6957-41b6-90ba-bb9ad8e09efa" />
+<img width="371" height="818" alt="image" src="https://github.com/user-attachments/assets/25d629be-9c63-4ef4-920a-d00d38161d5e" />
+
 **Verify:** Run it twice and compare the output. Does the handler run both times?
+-->No.
+
+-->First run: the configuration file is copied, so the task reports changed and triggers the handler.
+
+-->Second run: the configuration file is already identical, so the task reports ok and the handler is not triggered.
+
+**Note:** The handler runs only when a notified task makes a change.
+
+**Why are handlers useful?**
+
+-->Handlers prevent unnecessary service restarts, making playbooks more efficient and reducing downtime or disruption to running services, This behavior is another example of Ansible idempotency—changes are applied only when needed.
 
 ---
 
