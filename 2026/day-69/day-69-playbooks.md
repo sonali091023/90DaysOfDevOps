@@ -216,6 +216,38 @@ Create a `files/` directory with a sample `app.conf` file for the copy task. Run
 
 **Document:** What is the difference between `command` and `shell`? When should you use each?
 
+**Steps to follow:**
+
+Step 1: Create a files Directory
+<img width="240" height="472" alt="image" src="https://github.com/user-attachments/assets/aba8ad3b-b08c-4381-8242-edffecaf22ee" />
+
+Step 2: Create app.conf: Create app.conf file under files dir: vi app.conf and add following: APP_NAME=TerraWeek, APP_ENV=Development, APP_PORT=8080 
+<img width="1047" height="150" alt="image" src="https://github.com/user-attachments/assets/11883eba-7a93-4ce1-8319-e01086a67e42" />
+
+Step 3: Create essential-modules.yml: vi essential-modules.yml and add above line of code
+
+Step 4: Validate the Playbook: ansible-playbook -i inventory.ini essential-modules.yml --syntax-check
+<img width="1652" height="76" alt="image" src="https://github.com/user-attachments/assets/7020d070-4671-4418-a2b5-f94ec616f16c" />
+
+Step 5: Run the Playbook: ansible-playbook -i inventory.ini essential-modules.yml
+<img width="1852" height="961" alt="image" src="https://github.com/user-attachments/assets/1c24c0bd-11c7-4653-a9fd-81b0a1f311f6" />
+
+Step 6: Understand the Output: 
+
+<img width="273" height="303" alt="image" src="https://github.com/user-attachments/assets/7cd365cf-6758-4586-b345-0664dd19cf47" />
+
+Step 7: Verify on EC2: SSH into the instance: ssh -i terraform-practice/my-key.pem ubuntu@13.127.63.252 Once get in run the commands: git --version & curl --version & wget --version & tree --version
+
+**Steps verify output:**
+1. ssh -i terraform-practice/my-key.pem ubuntu@13.127.63.252
+<img width="1317" height="502" alt="image" src="https://github.com/user-attachments/assets/ac27ac99-394b-4b39-a086-d6b4617ada6d" />
+
+2. verify git --version, curl --version & wget --version:
+<img width="1915" height="976" alt="image" src="https://github.com/user-attachments/assets/6b34aad1-f49b-43d7-8852-07cc2cbaa7f3" />
+
+3. verify **tree --version**, then check the content: **cat /etc/app.conf** then check the file and that permissions: **ls -ld /opt/myapp** later checked **grep TZ /etc/environment**
+<img width="1498" height="353" alt="image" src="https://github.com/user-attachments/assets/4fa41fc8-d4d7-4608-bbef-962b7c6c85ce" />
+ 
 ---
 
 ### Task 4: Handlers -- Restart Services Only When Needed
