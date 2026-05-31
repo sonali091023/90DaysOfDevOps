@@ -59,7 +59,44 @@ Now, override a variable from the command line:
 ansible-playbook variables-demo.yml -e "app_name=my-custom-app app_port=9090"
 ```
 
+**Steps to follow:** 
+
+Step 1: Create the Playbook First create dir: **mkdir ansible-practice** & then create file: **vi variables-demo.yml** later add above line of code in to it.
+
+Step 2: Why I Changed yum to package: So here Instead of maintaining different versions, use: package, Ansible automatically chooses the correct package manager.
+
+Step 3: Check Inventory: Create inventory file in same anisble-package, But before that we needed one server that created with the help of terraform, Also crated the my-key.pem file and set the permissions for user only to avoid less secure issue in terraform-practice dir.
+
+<img width="1807" height="447" alt="image" src="https://github.com/user-attachments/assets/8c0051d5-746a-4561-ad97-d24d278d79e3" />
+
+Step 4: Run the Playbook: ansible-playbook -i inventory.ini variables-demo.yml
+
+<img width="1913" height="480" alt="image" src="https://github.com/user-attachments/assets/0d461e8f-ff1b-4d2f-b52c-cf8dfd224464" />
+
+<img width="352" height="347" alt="image" src="https://github.com/user-attachments/assets/add3fae8-7965-49a2-a959-5b417408d472" />
+
+Step 5: Verify Directory Creation: For that first ssh to the server for that use command: ssh -i ../terraform-practice/my-key.pem ubuntu@13.233.20.248
+
+Step 6: ls -ld /opt/terraweek-app
+
+<img width="1918" height="677" alt="image" src="https://github.com/user-attachments/assets/5ced8dae-d8c8-40ea-868f-87cbbe8a7f65" />
+
+Step 7: Verify Packages: check the version of all the following packages: git --version && curl --version && wget --version OR dpkg -l | grep git && dpkg -l | grep curl && dpkg -l | grep wget
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/6ade29a9-57c9-476d-a99f-d16dc6572048" />
+
+Step 8: Override Variables from CLI: ansible-playbook -i inventory.ini variables-demo.yml -e "app_name=my-custom-app app_port=9090" So here we can override the app port number & name.
+
+<img width="1917" height="673" alt="image" src="https://github.com/user-attachments/assets/ec5872d5-83fd-4365-b79b-581a10fe314e" />
+
+<img width="1852" height="711" alt="image" src="https://github.com/user-attachments/assets/0efe3f0f-af12-474e-a9f3-cf014f8395d7" />
+
+<img width="576" height="682" alt="image" src="https://github.com/user-attachments/assets/72a6c665-8126-4803-949d-66eae1079b61" />
+
 **Verify:** Does the CLI variable override the playbook variable?
+
+-->Yes. Variables passed with -e (extra-vars) take precedence over variables defined in the playbook. Running: ansible-playbook -i inventory.ini variables-demo.yml -e "app_name=my-custom-app app_port=9090"
+<img width="510" height="151" alt="image" src="https://github.com/user-attachments/assets/4c7c44cb-f769-4345-b023-5933000359d9" />
 
 ---
 
