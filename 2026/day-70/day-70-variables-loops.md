@@ -60,6 +60,7 @@ ansible-playbook variables-demo.yml -e "app_name=my-custom-app app_port=9090"
 ```
 
 **Steps to follow:** 
+First of all with the help of teraform need to create one ec2 instance, For that need to create main.tf, variables.tf, terraform.tfvars, outputs.tf etc and then execute the main.tf and instance will get creatre.
 
 Step 1: Create the Playbook First create dir: **mkdir ansible-practice** & then create file: **vi variables-demo.yml** later add above line of code in to it.
 
@@ -180,9 +181,97 @@ Write a playbook `site.yml` that uses these variables:
         msg: "{{ custom_message }}"
 ```
 
+**Steps to follow:**
+
+Step 1: Understand What We Are Building
+
+<img width="426" height="457" alt="image" src="https://github.com/user-attachments/assets/b65d9b4f-82bd-48e2-9550-3ecac2c1add9" />
+
+Step 2: Update Inventory
+
+<img width="670" height="790" alt="image" src="https://github.com/user-attachments/assets/a7c6628e-5c44-4bd4-9c7f-045275ce7793" />
+
+Step 3: Create Directories: mkdir group_vars && mkdir host_vars && mkdir playbooks
+
+<img width="1792" height="540" alt="image" src="https://github.com/user-attachments/assets/7ada6d41-d363-49ab-899e-b8fd5919bb26" />
+
+Step 4: Create group_vars/all.yml: vi group_vars/all.yml
+
+<img width="318" height="536" alt="image" src="https://github.com/user-attachments/assets/59b63f70-b781-4884-b083-3a9a6fd6fe6c" />
+
+Step 5: Create group_vars/web.yml: vi group_vars/web.yml
+
+<img width="315" height="477" alt="image" src="https://github.com/user-attachments/assets/cba7fd00-df26-4768-acc4-2671fac10c8a" />
+
+Step 6: Create group_vars/db.yml: vi group_vars/db.yml
+
+<img width="272" height="427" alt="image" src="https://github.com/user-attachments/assets/3f3e6884-d934-4459-9c6f-14cfd6b549c5" />
+
+Step 7: Create host_vars: vi host_vars/web-server.yml
+
+<img width="412" height="581" alt="image" src="https://github.com/user-attachments/assets/c8dc91f0-1c60-446e-9d56-d0549d31c8d1" />
+
+Step 8: Why This Is Interesting: In group_vars/web.yml max_connections: 1000, but in: host_vars/web-server.yml max_connections: 2000 Same variable but Different value. This is how we test variable 
+precedence.
+
+<img width="432" height="561" alt="image" src="https://github.com/user-attachments/assets/bd21be88-13fe-44cc-83d2-72eff6a25ed8" />
+
+Step 9: Create Playbook: vi playbooks/site.yml
+
+Step 10: Verify Inventory: ansible-inventory -i inventory.ini --graph
+
+<img width="1531" height="161" alt="image" src="https://github.com/user-attachments/assets/2cdb7033-4b08-4b8b-a613-d871143c6e18" />
+
+Step 11: Check Variables Before Running: ansible-inventory -i inventory.ini --host web-server
+
+**Note:** max_connections = 2000 not 1000 because host variables override group variables. 
+
+<img width="1842" height="443" alt="image" src="https://github.com/user-attachments/assets/bf559b45-8b25-46d7-a1d7-c991d1c4ca8e" />
+
+Step 12: Run the Playbook: From inside ansible-practice directory: ansible-playbook -i inventory.ini playbooks/site.yml
+
+<img width="642" height="726" alt="image" src="https://github.com/user-attachments/assets/6d07668f-4c9f-4795-b134-69bf91a3ebac" />
+
+Step 13: if we run commmand: ansible-playbook -i inventory.ini playbooks/site.yml -e "max_connections=9999" and run the playbook again then we can see this chnages in the output.
+
+<img width="1747" height="901" alt="image" src="https://github.com/user-attachments/assets/a47f11f2-9257-4f1a-ae8e-acdbda6a6429" />
+
+<img width="1702" height="865" alt="image" src="https://github.com/user-attachments/assets/d09c3266-fa6e-4572-bbff-ebda348f682a" />
+
+issue faced: Most Likely Root Cause When Ansible first ran, the package metadata (apt cache) was stale or unavailable. The generic package module tried to install: common_packages: - vim, - htop, - 
+tree, but the package manager didn't have up-to-date information about tree. That's why Ansible reported: No package matching 'tree' is available even though the package actually exists.
+
+<img width="352" height="545" alt="image" src="https://github.com/user-attachments/assets/1305c259-18ae-4ae6-9eff-ffe06e0ee2d4" />
+
+<img width="1657" height="296" alt="image" src="https://github.com/user-attachments/assets/cd4d18ca-38e5-429d-bdad-6f899a941742" />
+
+<img width="1693" height="958" alt="image" src="https://github.com/user-attachments/assets/31c9b7e1-dca8-4b83-b92e-e637348ed5eb" />
+
+<img width="1918" height="796" alt="image" src="https://github.com/user-attachments/assets/202078f4-43f8-460d-8bf2-dbbc523940af" />
+
+<img width="1852" height="962" alt="image" src="https://github.com/user-attachments/assets/41629f6d-547f-4889-af05-a01459640dd5" />
+
+<img width="1633" height="616" alt="image" src="https://github.com/user-attachments/assets/b41b5de8-61da-4293-8fd4-e56c75cf679d" />
+
+**Note:** What i Learned From This When troubleshooting Ansible package failures: Check variables: **ansible-inventory -i inventory.ini --host web-server** then Verify the variables are loaded.
+Check the OS: **ansible all -i inventory.ini -m setup -a "filter=ansible_distribution*"** Verify which package manager should be used. then Check manually on the server by running command: **sudo apt install tree** If manual installation works but Ansible fails, think about: stale package cache, repository configuration, package manager module (apt, dnf, yum, package) etc.
+
+-->In one sentence The playbook, inventory, group_vars, and host_vars were all working correctly; the failure was that Ansible couldn't find the tree package because the package metadata/cache wasn't up to date when the playbook first ran.
+
 Run it and observe which variables apply to which hosts.
 
+<img width="1870" height="975" alt="image" src="https://github.com/user-attachments/assets/0d57e936-835a-412d-bc6d-e2fa94558654" />
+
+<img width="1845" height="820" alt="image" src="https://github.com/user-attachments/assets/9766a3b9-09d7-4851-8ab6-74ce1bd27cf8" />
+
 **Document:** What is the variable precedence? (hint: host_vars > group_vars > playbook vars, and `-e` overrides everything)
+
+-->When the same variable is defined in multiple places, Ansible follows a precedence order to determine which value to use.
+
+<img width="521" height="842" alt="image" src="https://github.com/user-attachments/assets/f8745415-6dc5-4bb3-bc1e-fed3d6c5d242" />
+
+<img width="736" height="496" alt="image" src="https://github.com/user-attachments/assets/fe9bae23-0c1b-4f08-b140-69e336758ff7" />
+
 
 ---
 
