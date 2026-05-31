@@ -430,9 +430,79 @@ Create `conditional-demo.yml`:
       when: "'web' in group_names or 'app' in group_names"
 ```
 
+**Steps to follow:**
+Step 1: Understand Your Environment
+
+<img width="455" height="395" alt="image" src="https://github.com/user-attachments/assets/3637845c-dbb4-4947-8afc-e98f1898ee12" />
+
+Step 2: Create the Playbook: cd playbooks && vi conditional-demo.yml & add above line of code into it.
+
 Run it and observe which tasks are skipped on which hosts.
 
+Step 3: Run the Playbook: ansible-playbook -i inventory.ini playbooks/conditional-demo.yml
+
+<img width="1916" height="817" alt="image" src="https://github.com/user-attachments/assets/14205f21-b0b3-4dd1-83cb-d24022f6dfa6" />
+<img width="1907" height="775" alt="image" src="https://github.com/user-attachments/assets/e0269bfe-8aca-4360-b55c-04735ddfd1ee" />
+
+Step 4: Observe Group-Based Conditions: 
+
+-->Task: when: "'web' in group_names" in Result For: web-server Ansible runs: TASK [Install Nginx] & changed: [web-server], And For: db-server Ansible skips: skipping: [db-server] 
+
+-->Task when: "'db' in group_names" Result For: db-server Runs: TASK [Install MySQL] & changed: [db-server] For: web-server Skips: skipping: [web-server]
+
+Step 5: Observe Fact-Based Conditions: 
+
+<img width="453" height="666" alt="image" src="https://github.com/user-attachments/assets/c3b276b2-1aa4-4b7e-af5b-f13e3e382160" />
+
+Step 6: Memory-Based Condition: 
+
+<img width="397" height="390" alt="image" src="https://github.com/user-attachments/assets/c1c9b3d1-02b2-4904-9b80-bd7228aaec16" />
+
+Step 7: Production Environment Condition:
+
+<img width="292" height="416" alt="image" src="https://github.com/user-attachments/assets/04ca2ba6-e10d-4a24-b195-370f6b26beda" />
+
+Step 8: Test It:
+
+<img width="441" height="552" alt="image" src="https://github.com/user-attachments/assets/f2fd6bbd-adcb-4e5d-b2b1-fac2e91c0140" />
+
+Step 9: Multiple Conditions (AND): 
+
+<img width="406" height="603" alt="image" src="https://github.com/user-attachments/assets/f8547a75-c492-4595-b98c-130d31e2b79d" />
+
+Step 10: OR Condition:
+
+<img width="397" height="477" alt="image" src="https://github.com/user-attachments/assets/fe1a0feb-2742-4a2e-b2bc-129dec6b39b1" />
+
+Step 11: Useful Debug Command: To see why conditions behave differently:
+
+-->For web: ansible web-server -i inventory.ini -m debug -a "var=group_names"
+
+-->For db: ansible db-server -i inventory.ini -m debug -a "var=group_names"
+
+<img width="490" height="603" alt="image" src="https://github.com/user-attachments/assets/47072142-94a5-4ee2-b0c5-2079600a3e28" />
+
 **Verify:** Are tasks correctly skipping on hosts that don't match the condition?
+
+-->Yes. Tasks with a when statement execute only when the condition evaluates to true.
+
+**Examples observed:**
+
+-->Nginx installation ran only on hosts in the web group.
+
+-->MySQL installation ran only on hosts in the db group.
+
+-->Ubuntu-specific tasks ran because the hosts use Ubuntu.
+
+-->Amazon Linux tasks were skipped because the hosts are not Amazon Linux.
+
+-->Production-only tasks were skipped because app_env was set to development.
+
+-->AND conditions required all conditions to be true.
+
+-->OR conditions ran when at least one condition was true.
+
+**Note:** This demonstrates that Ansible correctly evaluates conditions and skips tasks that do not match the specified criteria.
 
 ---
 
