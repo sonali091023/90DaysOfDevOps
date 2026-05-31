@@ -1,0 +1,32 @@
+# Terraform state
+*.tfstate
+*.tfstate.backup
+
+# Terraform cache
+.terraform/
+.terraform.lock.hcl
+
+# Terraform variable files containing secrets
+*.tfvars
+*.tfvars.json
+
+# Private keys
+*.pem
+
+# Ansible retry files
+*.retry
+
+# Sensitive environment files
+.env
+.env.*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+
+# VS Code (optional)
+.vscode/
+
+# Vim swap files
+*.swp
+*.swo
