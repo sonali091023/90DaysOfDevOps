@@ -1,0 +1,58 @@
+---
+- name: Apply common config
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Show common packages
+      debug:
+        var: common_packages
+
+    - name: Install common packages
+      apt:
+        name: "{{ common_packages }}"
+        state: present
+
+    - name: Show environment
+      debug:
+        msg: "Environment: {{ app_env }}"
+
+    - name: Show NTP server
+      debug:
+        msg: "NTP Server: {{ ntp_server }}"
+
+- name: Configure web servers
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Install web packages
+      apt:
+        name: "{{ web_packages }}"
+        state: present
+
+    - name: Show web configuration
+      debug:
+        msg: "HTTP port: {{ http_port }}, Max connections: {{ max_connections }}"
+
+    - name: Show host-specific message
+      debug:
+        msg: "{{ custom_message }}"
+
+- name: Configure database servers
+  hosts: db
+  become: true
+
+  tasks:
+    - name: Show database configuration
+      debug:
+        msg: "Database port: {{ db_port }}"
+
+    - name: Show database packages
+      debug:
+        var: db_packages

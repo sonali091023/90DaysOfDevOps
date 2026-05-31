@@ -1,0 +1,29 @@
+---
+- name: Variable demo
+  hosts: all
+  become: true
+
+  vars:                                  #These variables can be used anywhere in the playbook.
+    app_name: terraweek-app
+    app_port: 8080
+    app_dir: "/opt/{{ app_name }}"       #Variable Interpolation: So here Ansible replaces: {{ app_name }} with terraweek-app, So app_dir=/opt/terraweek-app
+    packages:                            #Instead of maintaining different versions, use: package, Ansible automatically chooses the correct package manager
+      - git
+      - curl
+      - wget
+
+  tasks:
+    - name: Print app details
+      debug:
+        msg: "Deploying {{ app_name }} on port {{ app_port }} to {{ app_dir }}"
+
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Install required packages
+      apt:
+        name: "{{ packages }}"
+        state: present

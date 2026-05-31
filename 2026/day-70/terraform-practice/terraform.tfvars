@@ -1,0 +1,8 @@
+region = "ap-south-1"
+instance_type = "t3.micro"
+ssh_key = "id_ed25519"
+subnet_id = "subnet-0e776c48db37257b9"
+env = "dev"
+vpc_id = "vpc-0244c00e2f5caf773"
+ami_id ="ami-07a00cf47dbbc844c"
+instance_name = "day-70-server"
