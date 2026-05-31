@@ -506,64 +506,103 @@ Step 11: Useful Debug Command: To see why conditions behave differently:
 
 ---
 
-### Task 5: Loops
-Create `loops-demo.yml`:
+  ### Task 5: Loops
+  Create `loops-demo.yml`:
+  
+  ```yaml
+  ---
+  - name: Loops demo
+    hosts: all
+    become: true
+  
+    vars:
+      users:
+        - name: deploy
+          groups: wheel
+        - name: monitor
+          groups: wheel
+        - name: appuser
+          groups: users
+  
+      directories:
+        - /opt/app/logs
+        - /opt/app/config
+        - /opt/app/data
+        - /opt/app/tmp
+  
+    tasks:
+      - name: Create multiple users
+        user:
+          name: "{{ item.name }}"
+          groups: "{{ item.groups }}"
+          state: present
+        loop: "{{ users }}"
+  
+      - name: Create multiple directories
+        file:
+          path: "{{ item }}"
+          state: directory
+          mode: '0755'
+        loop: "{{ directories }}"
+  
+      - name: Install multiple packages
+        yum:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - git
+          - curl
+          - unzip
+          - jq
+  
+      - name: Print each user created
+        debug:
+          msg: "Created user {{ item.name }} in group {{ item.groups }}"
+        loop: "{{ users }}"
+  ```
+**Steps to follow:**
 
-```yaml
----
-- name: Loops demo
-  hosts: all
-  become: true
+Step 1: Create the Playbook: go inside mkdir playbooks && vi loops-demo.yml an then add above line of code
 
-  vars:
-    users:
-      - name: deploy
-        groups: wheel
-      - name: monitor
-        groups: wheel
-      - name: appuser
-        groups: users
+Step 2: Here we chnage wheel with sudo, because we are using ubuntu os.
 
-    directories:
-      - /opt/app/logs
-      - /opt/app/config
-      - /opt/app/data
-      - /opt/app/tmp
+<img width="342" height="517" alt="image" src="https://github.com/user-attachments/assets/aba033ed-1720-4d11-b962-9bd6b82a7636" />
 
-  tasks:
-    - name: Create multiple users
-      user:
-        name: "{{ item.name }}"
-        groups: "{{ item.groups }}"
-        state: present
-      loop: "{{ users }}"
+Step 3: Validate the Playbook: ansible-playbook -i inventory.ini playbooks/loops-demo.yml --syntax-check
 
-    - name: Create multiple directories
-      file:
-        path: "{{ item }}"
-        state: directory
-        mode: '0755'
-      loop: "{{ directories }}"
+<img width="1845" height="102" alt="image" src="https://github.com/user-attachments/assets/7b1510f4-be59-4613-9870-3536dab3729b" />
 
-    - name: Install multiple packages
-      yum:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - git
-        - curl
-        - unzip
-        - jq
+Step 4: Run the Playbook: ansible-playbook -i inventory.ini playbooks/loops-demo.yml
 
-    - name: Print each user created
-      debug:
-        msg: "Created user {{ item.name }} in group {{ item.groups }}"
-      loop: "{{ users }}"
-```
-
+<img width="1852" height="962" alt="image" src="https://github.com/user-attachments/assets/0c015e8f-9679-4c0c-946e-6d24373976ec" />
+  
 Run it and observe the loop output -- each iteration is shown separately.
 
+Step 5: Observe User Creation Loop: 
+
+<img width="477" height="708" alt="image" src="https://github.com/user-attachments/assets/b2aa3327-838d-4a07-83fa-7b2a101023f1" />
+
+Step 6: Verify Users: SSH into either EC2: id deploy && id monitor && id appuser
+
+<img width="1287" height="557" alt="image" src="https://github.com/user-attachments/assets/6258dd61-15cd-4283-805c-98545181c4d6" />
+
+Step 7: Verify Directories: tree /opt/app OR ls -ld /opt/app/*
+
+<img width="1162" height="142" alt="image" src="https://github.com/user-attachments/assets/bcac30b6-7dac-4acc-bcd8-c76435e7384e" />
+
+Step 8: Verify Packages: git --version && curl --version && unzip -v && jq --version
+
+<img width="1898" height="571" alt="image" src="https://github.com/user-attachments/assets/d6c3829f-193b-42c6-9fa8-39af65eb5be5" />
+
+Step 9: Observe the Debug Loop: The last task: loop: "{{ users }}" prints: Created user deploy in group sudo, Created user monitor in group sudo, Created user appuser in group users
+
+Step 10: Run Again (Idempotency Test): ansible-playbook -i inventory.ini playbooks/loops-demo.yml
+
+<img width="1918" height="971" alt="image" src="https://github.com/user-attachments/assets/183020d2-0fcb-407f-a867-1eccea98d3ba" />
+
 **Document:** What is the difference between `loop` and the older `with_items`? (hint: `loop` is the modern recommended syntax)
+
+<img width="648" height="768" alt="image" src="https://github.com/user-attachments/assets/095baced-3e16-4071-9685-c5d2d24ce87c" />
 
 ---
 
@@ -616,9 +655,71 @@ Build a real-world playbook `server-report.yml` that combines variables, facts, 
       become: true
 ```
 
+**Steps to follow:**
+
+What is register?
+
+<img width="398" height="517" alt="image" src="https://github.com/user-attachments/assets/9e239734-f044-44c3-97f0-09cbb5ea089e" />
+
+Step 1: Create the Playbook: cd playboos && vi server-report.yml and write above code into it
+
+Step 2: Paste the Playbook: 
+
+Step 3: Syntax Check: ansible-playbook -i inventory.ini playbooks/server-report.yml --syntax-check
+
 Run it and verify the report file is created on each server.
 
+Step 4: Run the Playbook: ansible-playbook -i inventory.ini playbooks/server-report.yml
+
+<img width="1412" height="827" alt="image" src="https://github.com/user-attachments/assets/f912551c-1f85-41f3-b1ac-9f6f221e1e48" />
+
+Step 5: Understand What Happens
+
+<img width="455" height="697" alt="image" src="https://github.com/user-attachments/assets/28905916-ede5-4947-9e68-c57b1625cbea" />
+
+<img width="581" height="233" alt="image" src="https://github.com/user-attachments/assets/2cc4aae4-2fd9-4ceb-bae3-7e77e30649a5" />
+
+<img width="581" height="233" alt="image" src="https://github.com/user-attachments/assets/0b8c5dfd-5ccb-4c1b-acb9-08685d39c972" />
+
+Step 6: Understand register:
+
+<img width="336" height="527" alt="image" src="https://github.com/user-attachments/assets/75496f05-cef1-48b5-9faf-417fbd796433" />
+
+Step 7: Observe Report Output: 
+
+<img width="382" height="252" alt="image" src="https://github.com/user-attachments/assets/bab926f1-d484-4cdd-bfd7-a84ee3351b70" />
+
+Step 8: Verify File Creation
+
+-->ssh -i ../terraform-practice/my-key.pem ubuntu@<public-ip>
+
+-->ls -l /tmp/server-report-*
+
+Step 9: Read the Report: cat /tmp/server-report-*
+
+Step 10: Verify Accuracy:
+
+<img width="356" height="517" alt="image" src="https://github.com/user-attachments/assets/bac09a29-e21d-47c7-9cad-be491484b390" />
+
+<img width="1912" height="981" alt="image" src="https://github.com/user-attachments/assets/41823849-adb2-42da-823b-8877fbcc480e" />
+
+<img width="592" height="802" alt="image" src="https://github.com/user-attachments/assets/192762ed-b24f-476d-83e1-78d2c729ac44" />
+
 **Verify:** SSH into a server and read `/tmp/server-report-*.txt`. Does it contain accurate information?
+
+-->Step 1: SSH into the server: ssh -i ../terraform-practice/my-key.pem ubuntu@<server-public-ip>
+
+-->Step 2: List the report files: ls -l /tmp/server-report-*
+
+-->Step 3: View the report: cat /tmp/server-report-*
+
+-->Step 4: Verify the information: Compare the report values with the actual system values:
+
+<img width="412" height="452" alt="image" src="https://github.com/user-attachments/assets/33302d27-eb1e-41aa-a4a3-20f5415164e0" />
+
+<img width="1287" height="741" alt="image" src="https://github.com/user-attachments/assets/114f491f-c8cc-4c07-bc4e-502f97de5032" />
+
+**Note:** Verified the generated report file (/tmp/server-report-<hostname>.txt) on each server. The report correctly contained the hostname, OS version, IP address, RAM information, disk usage details, and timestamp. The values matched the output of cat /etc/os-release, hostname -I, free -m, and df -h /, confirming that the playbook collected and stored accurate system information using Ansible facts and registered command outputs.
 
 ---
 
