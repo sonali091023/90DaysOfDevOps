@@ -272,7 +272,6 @@ Run it and observe which variables apply to which hosts.
 
 <img width="736" height="496" alt="image" src="https://github.com/user-attachments/assets/fe9bae23-0c1b-4f08-b140-69e336758ff7" />
 
-
 ---
 
 ### Task 3: Ansible Facts -- Gathering System Information
@@ -310,9 +309,67 @@ ansible web-server -m setup -a "filter=ansible_default_ipv4"
         var: ansible_interfaces
 ```
 
+**Steps to follow:**
+Step 1: Verify Connectivity: Before working with facts, make sure Ansible can reach your hosts: ansible all -i inventory.ini -m ping
+
+<img width="1622" height="357" alt="image" src="https://github.com/user-attachments/assets/42f7d4e2-019d-434d-876e-c4f84d3a72e5" />
+
+Step 2: View All Facts: The setup module gathers facts. we'll get a huge JSON output containing hundreds of facts: ansible web-server -i inventory.ini -m setup
+
+<img width="1848" height="972" alt="image" src="https://github.com/user-attachments/assets/58329f85-125a-4a14-a0aa-961097de651b" />
+
+Step 3: Filter Specific Facts: Filters the OS family: ansible web-server -i inventory.ini -m setup -a "filter=ansible_os_family"
+
+<img width="1871" height="212" alt="image" src="https://github.com/user-attachments/assets/f45bbf0e-ad70-4e5e-9c14-def6aa035402" />
+
+-->Filters Distribution Information: ansible web-server -i inventory.ini -m setup -a "filter=ansible_distribution*"
+
+<img width="1902" height="362" alt="image" src="https://github.com/user-attachments/assets/ee55dbfd-a3aa-4dd7-9cfc-532c31bcc64a" />
+
+-->Filters RAM details: ansible web-server -i inventory.ini -m setup -a "filter=ansible_memtotal_mb"
+
+<img width="1900" height="218" alt="image" src="https://github.com/user-attachments/assets/906ebbe5-04f0-48fe-b823-0971f5169438" />
+
+-->Filters IP Address details: ansible web-server -i inventory.ini -m setup -a "filter=ansible_default_ipv4"
+
+<img width="1897" height="492" alt="image" src="https://github.com/user-attachments/assets/8403d531-d676-496a-a97b-332502141077" />
+
+Step 4: Create the Playbook: cd playbooks && vi facts-demo.yml
+
+Step 5: Run the Playbook: ansible-playbook -i inventory.ini playbooks/facts-demo.yml
+
+Step 6: Understand the Output: here value are identical because both inventory hosts point to the same EC2 instance 
+
+<img width="1906" height="961" alt="image" src="https://github.com/user-attachments/assets/87778bc4-f7e9-45ed-b300-1e0b9fe21d5d" />
+
+Step 7: View Network Interfaces: 
+
+<img width="516" height="280" alt="image" src="https://github.com/user-attachments/assets/05eaaa3d-c320-49df-bdfe-b72642a551c1" />
+
 Run it and observe the facts printed for each host.
 
+Step 8: Explore More Useful Facts: 
+
+-->CPU Information: ansible web-server -i inventory.ini -m setup -a "filter=ansible_processor*"
+
+-->Kernel Version: ansible web-server -i inventory.ini -m setup -a "filter=ansible_kernel"
+
+-->Hostname: ansible web-server -i inventory.ini -m setup -a "filter=ansible_hostname"
+
+-->Architecture: ansible web-server -i inventory.ini -m setup -a "filter=ansible_architecture"
+
+-->Mount Points: ansible web-server -i inventory.ini -m setup -a "filter=ansible_mounts"
+
+<img width="1881" height="840" alt="image" src="https://github.com/user-attachments/assets/6d8f898b-001b-4c30-b77b-7060a7619696" />
+
+<img width="1906" height="195" alt="image" src="https://github.com/user-attachments/assets/6b7001e2-e959-4572-bee9-8e30c3a30ab3" />
+
+<img width="1915" height="983" alt="image" src="https://github.com/user-attachments/assets/705ae77a-573c-4019-aa34-6262e0983d98" />
+
 **Document:** Name five facts you would use in real playbooks and why.
+-->Ansible Facts provide automatic information about managed hosts. They allow playbooks to make intelligent decisions based on the system's OS, hardware, network configuration, and resources, making automation dynamic and reusable across different environments.
+
+<img width="672" height="285" alt="image" src="https://github.com/user-attachments/assets/618845e2-5271-4368-bce2-e08dbc02dc33" />
 
 ---
 
