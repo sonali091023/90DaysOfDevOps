@@ -396,6 +396,7 @@ Step 13: Curl from the Server: curl localhost
 <img width="1095" height="40" alt="image" src="https://github.com/user-attachments/assets/7d080c58-483e-4c8f-a087-546c2ac93a14" />
 
 **Verify:** Curl the web server. Does the custom page load?
+
 -->Yes, that's the final verification step for the task. After fixing Nginx and rerunning the playbook successfully, verify in this order:
 
 Step 14: Curl from Your Laptop: ansible all -i inventory.ini -m shell -a "curl -s ifconfig.me"
@@ -465,7 +466,76 @@ Install all at once:
 ansible-galaxy install -r requirements.yml
 ```
 
+**Steps to follow:**
+
+Step 1: Move to Your Ansible Project: Go inside ansible-practice directory & run command: ansible-galaxy --version
+
+<img width="1290" height="195" alt="image" src="https://github.com/user-attachments/assets/d706e1d4-22ce-4075-be54-e95ceb18f387" />
+
+Step 2: Search for Roles: Search for Nginx roles: ansible-galaxy search nginx, Search for MySQL roles: ansible-galaxy search mysql
+
+<img width="1705" height="955" alt="image" src="https://github.com/user-attachments/assets/c09710ee-0887-41d6-b5c5-09059129d3b1" />
+
+<img width="1890" height="977" alt="image" src="https://github.com/user-attachments/assets/918599f4-1eb0-4816-a304-a70cd653df89" />
+
+Step 3: Install a Galaxy Role: ansible-galaxy role install geerlingguy.docker
+
+<img width="1628" height="177" alt="image" src="https://github.com/user-attachments/assets/e2cc60a1-dd76-4953-a042-ca515f5742eb" />
+
+Step 4: Verify Installation: List installed roles: ansible-galaxy role list
+
+<img width="1352" height="150" alt="image" src="https://github.com/user-attachments/assets/42dd78db-e587-41ad-a4f5-b9ce3ce6d3f5" />
+
+Step 5: Inspect the Installed Role: Find where it was installed: ls roles/geerlingguy.docker
+
+<img width="1446" height="82" alt="image" src="https://github.com/user-attachments/assets/edaf81f2-dad2-4d8d-999a-3e1d2eee93f4" />
+
+-->vi roles/geerlingguy.docker/README.md This is very important. Before using any Galaxy role, always read: Supported operating systems, Required variables, Example playbook, Dependencies etc.
+
+Step 6: Create a New Inventory Group: add an app group to your inventory: [web] web-server ansible_host=3.110.204.168
+
+Step 7: Create docker-setup.yml: vi playbooks/docker-setup.yml
+
+<img width="400" height="143" alt="image" src="https://github.com/user-attachments/assets/c755dbd8-2e6e-40f2-8d1e-caf33a3735f6" />
+
+Step 8: Syntax Check: ansible-playbook -i inventory.ini playbooks/docker-setup.yml --syntax-check
+
+<img width="1891" height="97" alt="image" src="https://github.com/user-attachments/assets/153d7cc3-eb27-459d-b144-52b6390afe9b" />
+
+Step 9: Run the Playbook: ansible-playbook -i inventory.ini playbooks/docker-setup.yml 
+
+<img width="1918" height="976" alt="image" src="https://github.com/user-attachments/assets/c6ef59af-8653-4d0e-9afb-171e564b86c7" />
+
+<img width="1907" height="977" alt="image" src="https://github.com/user-attachments/assets/897010fe-2a8b-4833-9f98-d581f2c2a0a8" />
+
+<img width="1910" height="347" alt="image" src="https://github.com/user-attachments/assets/80f7b72e-a9e4-44ec-b312-a48efdcb21d7" />
+
+-->The role may: Install Docker packages, Start Docker service, Configure repositories, Enable service All through one role call.
+
+Step 10: Verify Docker: SSH into the server: ssh -i ../terraform-practice/my-key.pem ubuntu@3.110.204.168
+
+-->docker --version
+
+-->sudo systemctl status docker
+
+<img width="1850" height="973" alt="image" src="https://github.com/user-attachments/assets/a708c9fe-6e97-4943-bde1-0cdabb8d6aab" />
+
+Step 11: Use requirements.yml: Ok exit from the ubuntu user and crearte file vi requirements.yml and add below code into it,
+
+<img width="252" height="128" alt="image" src="https://github.com/user-attachments/assets/32e824c1-7e6c-420f-bedb-34ce4d22f49a" />
+
+Step 12: Install All Roles at Once: Here Ansible reads the file and installs every listed role: ansible-galaxy role install -r requirements.yml
+
+<img width="1687" height="218" alt="image" src="https://github.com/user-attachments/assets/9b475711-604c-43c1-83fe-d1bbef6bad1c" />
+
+Step 13: Verify: ansible-galaxy role list
+
+<img width="1522" height="146" alt="image" src="https://github.com/user-attachments/assets/d97bf2d9-ac90-4439-8d97-7930f00cae27" />
+
 **Document:** Why use a `requirements.yml` instead of installing roles manually?
+-->requirements.yml provides a declarative and reproducible way to manage Ansible role dependencies. Instead of manually installing each role, all required roles and versions are stored in a single file. Team members, CI/CD pipelines, and new environments can install the exact same set of roles using one command. This improves consistency, version control, automation, and maintainability.
+
+<img width="578" height="781" alt="image" src="https://github.com/user-attachments/assets/1fc933be-7613-407e-b84c-03cc87c7cf7f" />
 
 ---
 
