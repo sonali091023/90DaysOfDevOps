@@ -165,8 +165,6 @@ private key once means When you run create-key-pair, AWS returns the private key
 command: **sudo cat /etc/nginx/conf.d/terraweek-app.conf**
 <img width="742" height="283" alt="image" src="https://github.com/user-attachments/assets/900854ae-4af9-4a55-bff2-fc35db4075ec" />
 
-
-
 ---
 
 ### Task 2: Understand the Role Structure
@@ -198,9 +196,54 @@ Generate a skeleton with:
 ansible-galaxy init roles/webserver
 ```
 
+**Steps to follow:**
+
+Step 1: Move to Your Ansible Practice Directory
+
+Step 2: Generate the Role Skeleton: ansible-galaxy init roles/webserver
+
+Step 3: Explore the Generated Structure: tree roles/webserver
+
+<img width="1451" height="605" alt="image" src="https://github.com/user-attachments/assets/8343367e-6e02-473f-9a66-91635bd82eec" />
+
+Step 4: Understand Each Directory:
+
+<img width="372" height="795" alt="image" src="https://github.com/user-attachments/assets/e51ad939-76f5-47c7-9a8a-de45ae45a831" />
+
+<img width="362" height="780" alt="image" src="https://github.com/user-attachments/assets/0d12f687-4136-46d6-adeb-d4fe2ad76cd4" />
+
+<img width="322" height="567" alt="image" src="https://github.com/user-attachments/assets/f7c5671f-1035-4143-9ef8-b608dd144f6d" />
+
+<img width="437" height="812" alt="image" src="https://github.com/user-attachments/assets/4bc7bf72-49ce-4489-b75c-4dc7ea8f551f" />
+
 Explore the generated directory. Read the README.md that Galaxy creates.
 
+Step 5: Open Every main.yml: 
+
+-->cat roles/webserver/tasks/main.yml
+
+-->cat roles/webserver/handlers/main.yml
+
+-->cat roles/webserver/defaults/main.yml
+
+-->cat roles/webserver/vars/main.yml
+
+-->cat roles/webserver/meta/main.yml
+
+Note: Notice that most contain comments only. They are placeholders waiting for your configuration.
+
+<img width="1465" height="973" alt="image" src="https://github.com/user-attachments/assets/1dcaff4b-289f-4d7e-8820-d7a2d7b3ce14" />
+
 **Document:** What is the difference between `vars/main.yml` and `defaults/main.yml`?
+
+-->This is one of the most important Ansible interview questions.
+
+<img width="771" height="252" alt="image" src="https://github.com/user-attachments/assets/091f4d31-3cb2-48c7-a74f-836ecdc44145" />
+
+<img width="746" height="763" alt="image" src="https://github.com/user-attachments/assets/116253a8-61d3-418c-a3b2-2e4ad39cc6bb" />
+
+<img width="673" height="646" alt="image" src="https://github.com/user-attachments/assets/16e9a98b-ba9b-4929-a64a-0042ce9ea4f6" />
+
 
 ---
 
