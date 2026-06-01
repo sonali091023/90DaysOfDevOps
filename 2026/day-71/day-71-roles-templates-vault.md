@@ -602,7 +602,65 @@ Or set it in `ansible.cfg`:
 vault_password_file = .vault_pass
 ```
 
+**Steps to follow:**
+
+Step 1: Create the db Directory: Go to ansible-practice dir & then mkdir -p group_vars/db latter run command: tree group_vars
+
+<img width="1295" height="265" alt="image" src="https://github.com/user-attachments/assets/8f5ce82a-5121-4a22-afb7-85bf083de852" />
+
+Step 2: Create an Encrypted Vault File: ansible-vault create group_vars/db/vault.yml So once we run this command we will be prompted to set the valut passowrd
+
+<img width="312" height="76" alt="image" src="https://github.com/user-attachments/assets/f8562f82-141d-49b7-9836-e759a997929e" />
+
+Step 3: Verify Encryption: cat group_vars/db/vault.yml That means the secrets are encrypted.
+
+<img width="1476" height="308" alt="image" src="https://github.com/user-attachments/assets/24e76cfd-93af-4d23-b19c-2e306f6d1016" />
+
+Step 4: View Without Editing: ansible-vault view group_vars/db/vault.yml
+
+<img width="1498" height="186" alt="image" src="https://github.com/user-attachments/assets/30cf98f4-7c0f-4b74-b316-acaa670861c4" />
+
+Step 5: Edit the Vault: ansible-vault edit group_vars/db/vault.yml Edit the valut_api_key and then save the changes
+
+Step 6: Create the Test Playbook: vi playbooks/db-setup.yml
+
+<img width="542" height="192" alt="image" src="https://github.com/user-attachments/assets/dbe819e1-38c4-46ab-8bfd-966f94cee076" />
+
+Step 7: Make Sure You Have a DB Group: cat inventory.ini
+
+Step 8: Run with Vault Password Prompt: ansible-playbook -i inventory.ini playbooks/db-setup.yml --ask-vault-pass
+
+<img width="1918" height="433" alt="image" src="https://github.com/user-attachments/assets/1e1f5429-4692-489e-8640-f447d08588a4" />
+
+-->Notice: The secret is used, The actual password is not displayed.
+
+Step 9: Create a Vault Password File: echo "admin123" > .vault_pass & then run command to set the secure permission: chmod 600 .vault_pass and then to check the permission: ls -l .vault_pass
+
+<img width="1665" height="186" alt="image" src="https://github.com/user-attachments/assets/21a8759f-45ae-4383-aed7-856d2f276aa8" />
+
+Step 10: Prevent Git from Tracking It: vi .gitignore in this file add following file .vault_pass & then runt git status command
+
+<img width="1335" height="243" alt="image" src="https://github.com/user-attachments/assets/3e97db78-ef43-425d-965c-bdeb3170b13c" />
+
+Step 11: Run Without Prompting: ansible-playbook -i inventory.ini playbooks/db-setup.yml --vault-password-file .vault_pass
+
+<img width="1911" height="413" alt="image" src="https://github.com/user-attachments/assets/8cb4f4de-637b-43c2-9466-8ddbe4c61a0b" />
+
+Step 12: Configure ansible.cfg: In this file added the vault password file: vi ansible.cfg
+
+-->Now you can simply run: ansible-playbook playbooks/db-setup.yml
+
+<img width="1918" height="390" alt="image" src="https://github.com/user-attachments/assets/6c6a7359-3cba-4392-853f-8f9f432c95fd" />
+
 **Document:** Why is `--vault-password-file` better than `--ask-vault-pass` for automated pipelines?
+
+--> --vault-password-file enables non-interactive execution, which is required for CI/CD systems such as Jenkins, GitHub Actions, GitLab CI, and Azure DevOps. Automated pipelines cannot manually enter passwords. By storing the vault password in a secured file or secret manager and referencing it through --vault-password-file, playbooks can decrypt secrets automatically while maintaining security and automation.
+
+<img width="702" height="183" alt="image" src="https://github.com/user-attachments/assets/c9ce469c-be0f-427a-b594-bcc3dd5f58eb" />
+
+**Note:** Best Practice For learning: .vault_pass For production: Store vault passwords in Jenkins credentials, Use GitHub Secrets, Use HashiCorp Vault, Never commit vault passwords to Git etc.
+
+That separation of encrypted data and password storage is the key concept behind Ansible Vault. 
 
 ---
 
