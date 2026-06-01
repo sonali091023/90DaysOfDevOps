@@ -339,7 +339,84 @@ Run it:
 ansible-playbook site.yml
 ```
 
+**Steps to follow:**
+
+Step 1: Verify Role Structure: tree roles/webserver
+
+Step 2: Create Default Variables: vi roles/webserver/defaults/main.yml
+
+Step 3: Create Tasks: vi roles/webserver/tasks/main.yml & add above code into it
+
+Step 4: Create Handler: vi roles/webserver/handlers/main.yml
+
+Step 5: Create index.html Template: vi roles/webserver/templates/index.html.j2
+
+Step 6: Create nginx.conf.j2: You built Nginx templates in Task 1. Create: vi roles/webserver/templates/nginx.conf.j2
+
+Step 7: Create vhost.conf.j2: vi roles/webserver/templates/vhost.conf.j2
+
+Step 8: Create site.yml: Create it in the root of ansible project: vi site.yml
+
+Step 9: Validate YAML: In the root of your Ansible project: Inside playbooks directory
+
+Step 9: Validate YAML: Before running, check syntax: ansible-playbook -i inventory.ini playbooks/site.yml --syntax-check
+
+<img width="1383" height="82" alt="image" src="https://github.com/user-attachments/assets/9ec67007-2b4f-4472-980f-60ac06318810" />
+
+Step 10: Run the Role: ansible-playbook -i inventory.ini playbooks/site.yml
+
+<img width="1901" height="967" alt="image" src="https://github.com/user-attachments/assets/8d6f9028-a866-4a6f-98d5-51f0f200de9f" />
+
+<img width="1902" height="707" alt="image" src="https://github.com/user-attachments/assets/90a66a80-0487-47b6-ab8d-23ddaa2123a1" />
+
+**Faced issue:** in file: vi roles/webserver/templates/vhost.conf.j2 mentioned user as nginx, That works on some distributions such as Amazon Linux, but on Ubuntu the Nginx service runs as: ubuntu, To confirm Check your OS: cat /etc/os-release, If it is ubuntu then make chnages in the file: vi roles/webserver/templates/vhost.conf.j2 
+
+<img width="1918" height="873" alt="image" src="https://github.com/user-attachments/assets/e7e804b0-bcc5-4b3f-a8a2-bdefc945a8cc" />
+
+Step 11: Verify Nginx Service: ssh -i ../terraform-practice/my-key.pem ubuntu@3.110.204.168
+
+<img width="1418" height="493" alt="image" src="https://github.com/user-attachments/assets/85ca9e55-1b28-4344-b604-b7cbb14c5adc" />
+
+-->sudo systemctl status nginx
+
+<img width="1365" height="375" alt="image" src="https://github.com/user-attachments/assets/646af9fd-e2d8-4079-9265-bfea5542c057" />
+
+Step 12: Verify Generated Files
+
+-->Check Nginx config: sudo cat /etc/nginx/nginx.conf
+
+-->Check virtual host: sudo cat /etc/nginx/conf.d/terraweek.conf
+
+-->Check generated webpage: cat /var/www/terraweek/index.html
+
+<img width="1482" height="752" alt="image" src="https://github.com/user-attachments/assets/bcf9f7bb-e1d2-4abe-a3db-c39f825e95d8" />
+
+Step 13: Curl from the Server: curl localhost
+
+<img width="1095" height="40" alt="image" src="https://github.com/user-attachments/assets/7d080c58-483e-4c8f-a087-546c2ac93a14" />
+
 **Verify:** Curl the web server. Does the custom page load?
+-->Yes, that's the final verification step for the task. After fixing Nginx and rerunning the playbook successfully, verify in this order:
+
+Step 14: Curl from Your Laptop: ansible all -i inventory.ini -m shell -a "curl -s ifconfig.me"
+
+<img width="1676" height="133" alt="image" src="https://github.com/user-attachments/assets/389cc80c-f9ce-4d00-ae0c-0ebc254a5510" />
+
+-->curl http://3.110.204.168
+
+<img width="1658" height="62" alt="image" src="https://github.com/user-attachments/assets/1d8a440f-318f-4538-8aea-5ab8e6156130" />
+
+<img width="655" height="292" alt="image" src="https://github.com/user-attachments/assets/b343c900-b25b-4e79-9fe9-6694e2f2098f" />
+
+-->Nginx listening on port 80: sudo ss -tulpn | grep :80
+
+<img width="1620" height="72" alt="image" src="https://github.com/user-attachments/assets/f063ad8d-aadb-4c07-8f2f-1b08b5b229e0" />
+
+-->Web root exists: ls -l /var/www/terraweek
+
+-->Generated page exists: cat /var/www/terraweek/index.html
+
+<img width="740" height="202" alt="image" src="https://github.com/user-attachments/assets/d6ecefe3-0cd1-4eeb-8737-04c194a8749e" />
 
 ---
 
