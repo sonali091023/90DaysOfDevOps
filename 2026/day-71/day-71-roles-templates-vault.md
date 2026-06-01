@@ -710,6 +710,43 @@ Run:
 ansible-playbook site.yml
 ```
 
+**Steps to follow:**
+
+-->This task is basically a mini real-world infrastructure project because it combines: Roles, Templates, Ansible Galaxy, Vault, Variables, Multiple host groups Let's do it step by step.
+
+Step 1: Check Your Inventory: vi inventory.ini
+
+<img width="1463" height="438" alt="image" src="https://github.com/user-attachments/assets/807fcc97-3424-4c95-9058-45f5ac49db3a" />
+
+Step 2: Verify Project Structure: use command: tree
+
+<img width="1061" height="947" alt="image" src="https://github.com/user-attachments/assets/199e175e-b7af-4608-af94-9a0317782342" />
+<img width="1215" height="907" alt="image" src="https://github.com/user-attachments/assets/5489cde0-d951-44dd-b086-5683a91da986" />
+
+Step 3: Create the Database Templates: mkdir -p templates && templates/db-config.j2
+
+<img width="351" height="122" alt="image" src="https://github.com/user-attachments/assets/b9cd2a2c-9c74-438b-bf3d-ad639be53bc7" />
+
+Step 4: Create/Update site.yml: Because your playbooks are inside playbooks/: vi playbooks/site.yml
+
+**Note:** Important Because: playbooks/site.yml is inside playbooks/ and templates/db-config.j2 is at the project root, you may need: src: ../templates/db-config.j2, If Ansible later complains it can't find the template, we'll move it into a role or adjust the path.
+
+Step 5: Verify Vault Variables Exist: ansible-vault view group_vars/db/vault.yml
+
+<img width="1197" height="102" alt="image" src="https://github.com/user-attachments/assets/1d0c4a80-b22f-4439-b2c1-4f69b6b29456" />
+
+Step 6: Syntax Check: To check the ansible-practice dir structurre: ansible-playbook playbooks/site.yml --syntax-check
+
+<img width="1185" height="60" alt="image" src="https://github.com/user-attachments/assets/3c588d72-0d65-4f9a-a14b-f3b49907462c" />
+
+Step 7: Run the Playbook: If you configured: vault_password_file = .vault_pass inside ansible.cfg: ansible-playbook playbooks/site.yml
+
+
+
+
+
+
+
 **Verify:** SSH into the db server and check `/etc/db-config.env`. Are the secrets rendered correctly? Is the file permission `600`?
 
 ---
