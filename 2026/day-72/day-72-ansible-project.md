@@ -574,6 +574,50 @@ server {
     state: restarted
 ```
 
+**Steps to follow:**
+
+Step 1: Configure Default Variables: vi roles/nginx/defaults/main.yml
+
+<img width="273" height="212" alt="image" src="https://github.com/user-attachments/assets/51f9300f-b0fc-4913-9836-dd8a023fb495" />
+
+Step 2: Create Nginx Handlers: vi roles/nginx/handlers/main.yml
+
+<img width="256" height="326" alt="image" src="https://github.com/user-attachments/assets/35bc5251-de49-465e-9061-962f5b2dd180" />
+
+Step 3: Create Main Nginx Configuration Template: vi roles/nginx/templates/nginx.conf.j2
+
+<img width="397" height="455" alt="image" src="https://github.com/user-attachments/assets/c7365cf4-a9cb-49ff-97b8-310d4cd43079" />
+
+Step 4: Create Reverse Proxy Template: vi roles/nginx/templates/app-proxy.conf.j2
+
+<img width="592" height="651" alt="image" src="https://github.com/user-attachments/assets/d2b35d9c-3c56-48ce-a50e-bf44017a0490" />
+
+Step 5: Create Nginx Tasks: vi roles/nginx/tasks/main.yml
+
+Step 6: Update site.yml: vi site.yml
+
+<img width="366" height="463" alt="image" src="https://github.com/user-attachments/assets/380e3dc9-7788-4cc7-b417-07e2e2881680" />
+
+Step 7: Syntax Check: ansible-playbook site.yml --syntax-check
+
+<img width="438" height="495" alt="image" src="https://github.com/user-attachments/assets/519555aa-55c6-45ad-9067-b039f8a415f8" />
+
+<img width="1587" height="72" alt="image" src="https://github.com/user-attachments/assets/1f8d08f2-43f3-452a-8952-1b976508f4b8" />
+
+Step 8: Run Only Nginx Tasks: ansible-playbook site.yml --tags nginx
+
+<img width="1857" height="970" alt="image" src="https://github.com/user-attachments/assets/9ebf3533-a627-443a-8318-6604768a148f" />
+
+<img width="1652" height="955" alt="image" src="https://github.com/user-attachments/assets/4620d55f-4ab4-4853-ad99-78a4426ec0ba" />
+
+Step 9: Verify on Web Server: ssh -i ../terraform-practice/my-key.pem ubuntu@13.207.184.47
+
+<img width="1652" height="955" alt="image" src="https://github.com/user-attachments/assets/a55e5813-f502-4403-a79c-5add792317cc" />
+
+<img width="782" height="797" alt="image" src="https://github.com/user-attachments/assets/3ee1882f-c8ad-4dca-9e79-5349051e77a0" />
+
+<img width="645" height="697" alt="image" src="https://github.com/user-attachments/assets/7c8c8117-4388-4bd6-a1f8-9e042ad1ae2e" />
+
 ---
 
 ### Task 5: Encrypt Docker Hub Credentials with Vault
