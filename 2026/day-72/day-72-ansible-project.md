@@ -467,7 +467,33 @@ Step 4: Create Docker Handler: vi roles/docker/handlers/main.yml
 
 <img width="307" height="201" alt="image" src="https://github.com/user-attachments/assets/bd7a9899-aab7-4bf5-993b-bdd1c81835a4" />
 
-Step 5: Build Docker Tasks: 
+Step 5: Build Docker Tasks: Added above mentioned tasks in file: vi roles/docker/tasks/main.yml
+
+Step 6: Update site.yml: 
+
+<img width="280" height="316" alt="image" src="https://github.com/user-attachments/assets/24d6a7bf-52dc-4c0b-8910-87357762fdb4" />
+
+Step 7: Syntax Check: ansible-playbook site.yml --syntax-check
+
+-->To resume the exection from the failed task: ansible-playbook site.yml --tags docker --start-at-task="Install Docker Python SDK"
+
+<img width="1586" height="107" alt="image" src="https://github.com/user-attachments/assets/a0b58b60-5208-437b-88d8-836f74f0b0e6" />
+
+Step 8: Run Only Docker Tasks: ansible-playbook site.yml --tags docker
+
+<img width="1721" height="900" alt="image" src="https://github.com/user-attachments/assets/cb178528-b4bb-4371-8668-05be10cb1580" />
+
+Step 9: Verify on App Server: Here ssh to web-server only -->ssh -i ../terraform-practice/my-app.pem ubuntu@13.207.196.162
+
+<img width="1866" height="838" alt="image" src="https://github.com/user-attachments/assets/3fc9d003-3411-4261-a1fd-b1ff989bfe65" />
+
+Step 10: Verify Web Response: curl localhost:8080
+
+<img width="1717" height="673" alt="image" src="https://github.com/user-attachments/assets/649d4670-f790-459f-9b42-125680f7b3e6" />
+
+-->Also on the browser: First make sure port 8080 is opened and then paste the instance ip:8080 and there also we can see the nginx webpage
+
+<img width="1761" height="852" alt="image" src="https://github.com/user-attachments/assets/e8c07b27-8520-410b-a347-3a3a89789926" />
 
 ---
 
