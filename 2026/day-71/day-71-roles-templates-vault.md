@@ -741,13 +741,35 @@ Step 6: Syntax Check: To check the ansible-practice dir structurre: ansible-play
 
 Step 7: Run the Playbook: If you configured: vault_password_file = .vault_pass inside ansible.cfg: ansible-playbook playbooks/site.yml
 
+<img width="1918" height="976" alt="image" src="https://github.com/user-attachments/assets/d82ab857-7118-405b-a55a-ca88574670f3" />
 
+<img width="1918" height="982" alt="image" src="https://github.com/user-attachments/assets/3870dc9a-16bd-4b36-9abe-2641e65cb4fe" />
 
+<img width="1905" height="976" alt="image" src="https://github.com/user-attachments/assets/653347de-e53e-451a-8614-9b5343139738" />
 
-
-
+<img width="1906" height="811" alt="image" src="https://github.com/user-attachments/assets/037ed3fb-d1e1-4c4f-bf77-59dcfc2ace9e" />
 
 **Verify:** SSH into the db server and check `/etc/db-config.env`. Are the secrets rendered correctly? Is the file permission `600`?
+
+Step 8: Verify on DB Server: ssh -i ../terraform-practice/my-key.pem ubuntu@3.110.204.168
+
+<img width="1702" height="616" alt="image" src="https://github.com/user-attachments/assets/4490cbb1-c090-40cf-955a-0e163aa6c338" />
+
+-->Check file: sudo cat /etc/db-config.env
+
+<img width="1247" height="163" alt="image" src="https://github.com/user-attachments/assets/0030b8a3-4b66-4b24-b232-9ba6a3e1db29" />
+
+Step 9: Verify Permissions: ls -l /etc/db-config.env
+
+-->ls -l /etc/db-config.env
+
+<img width="1112" height="77" alt="image" src="https://github.com/user-attachments/assets/11dc3819-f993-4452-9fd5-bbf114dcc124" />
+
+-->stat -c "%a %n" /etc/db-config.env
+
+<img width="733" height="76" alt="image" src="https://github.com/user-attachments/assets/a2359ddf-2fb0-4663-a00f-490a0891c23c" />
+
+<img width="371" height="818" alt="image" src="https://github.com/user-attachments/assets/2f55de6b-7322-43f8-892c-e4cec9ff7d7b" />
 
 ---
 
