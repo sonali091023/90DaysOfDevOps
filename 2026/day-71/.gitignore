@@ -1,0 +1,41 @@
+# Ansible Vault password file
+.vault_pass
+
+# Vault-encrypted secrets (optional)
+# Uncomment if you don't want to store encrypted vault files in Git
+# group_vars/**/vault.yml
+
+# SSH private keys
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Ansible retry files
+*.retry
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# IntelliJ/PyCharm
+.idea/
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+*.tfvars
+
+# Local inventory (only if it contains private IPs or personal data)
+# inventory.ini

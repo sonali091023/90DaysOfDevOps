@@ -1,0 +1,64 @@
+---
+- name: Apply common config
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Show common packages
+      debug:
+        var: common_packages
+
+    - name: Install common packages
+      apt:
+        name: "{{ common_packages }}"
+        state: present
+
+    - name: Show environment
+      debug:
+        msg: "Environment: {{ app_env }}"
+
+    - name: Show NTP server
+      debug:
+        msg: "NTP Server: {{ ntp_server }}"
+
+- name: Configure web servers
+  hosts: web
+  become: true
+
+  roles:
+    - role: webserver
+      vars:
+        app_name: terraweek
+        http_port: 80
+
+- name: Configure app servers with Docker
+  hosts: app
+  become: true
+
+  roles:
+    - geerlingguy.docker
+
+- name: Configure database servers
+  hosts: db
+  become: true
+
+  tasks:
+    - name: Show database configuration
+      debug:
+        msg: "Database port: {{ db_port }}"
+
+    - name: Show database packages
+      debug:
+        var: db_packages
+
+    - name: Create DB config with secrets
+      template:
+        src: ../templates/db-config.j2
+        dest: /etc/db-config.env
+        owner: root
+        mode: '0600'
