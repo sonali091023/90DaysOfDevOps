@@ -646,6 +646,14 @@ host_key_checking = False
 vault_password_file = .vault_pass
 ```
 
+**Steps to follow:**
+
+Step 1: Decide Where the Vault File Belongs: 
+
+<img width="577" height="671" alt="image" src="https://github.com/user-attachments/assets/4a36bc6a-ae7f-4707-99f6-ad653e833770" />
+
+Step 2: Create the Vault File: ansible-vault create group_vars/web/vault.yml
+
 ---
 
 ### Task 6: Write the Master Playbook and Deploy
