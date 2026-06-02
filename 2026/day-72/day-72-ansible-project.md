@@ -449,6 +449,26 @@ Tag all tasks with `docker`.
 ansible-galaxy collection install community.docker
 ```
 
+**Steps to follow:**
+
+Step 1: Install Docker Collection on Control Node: ansible-galaxy collection install community.docker
+
+<img width="1711" height="162" alt="image" src="https://github.com/user-attachments/assets/844c12b1-89d4-4887-b755-5ce0dc7753a8" />
+
+Step 2: Create Docker Default Variables: vi roles/docker/defaults/main.yml
+
+<img width="251" height="206" alt="image" src="https://github.com/user-attachments/assets/b2ea8cc0-d02d-4a7e-863a-4f4237951e8e" />
+
+Step 3: Configure Vault Variables: 
+
+<img width="671" height="447" alt="image" src="https://github.com/user-attachments/assets/3e30fb6c-98f3-4202-9cbd-1e3cf8a61bd2" />
+
+Step 4: Create Docker Handler: vi roles/docker/handlers/main.yml
+
+<img width="307" height="201" alt="image" src="https://github.com/user-attachments/assets/bd7a9899-aab7-4bf5-993b-bdd1c81835a4" />
+
+Step 5: Build Docker Tasks: 
+
 ---
 
 ### Task 4: Build the Nginx Role
