@@ -153,8 +153,6 @@ Common Role: The generated role already contains: roles/common/tasks/main.yml So
 
 Step 10: Create Initial site.yml: So here site.yml file is created at root level
 
-Set up your `ansible.cfg` and `inventory.ini` using what you built on Day 68.
-
 Step 11: Add Common Variables: Create under dir: vi group_vars/all.yml
 
 <img width="403" height="308" alt="image" src="https://github.com/user-attachments/assets/b9af1d3b-7d1a-4d48-ad14-b39ab0cbe1b9" />
@@ -247,6 +245,8 @@ Step 14: Verify Vault: cat group_vars/web/vault.yml
 
 <img width="1078" height="976" alt="image" src="https://github.com/user-attachments/assets/763faf65-3b5d-41b2-8ed5-857948500ac4" />
 
+Set up your `ansible.cfg` and `inventory.ini` using what you built on Day 68.
+
 ---
 
 ### Task 2: Build the Common Role
@@ -303,6 +303,72 @@ common_packages:
   - jq
   - unzip
 ```
+
+**Steps to follow:**
+
+Step 1: Open group_vars/all.yml: vi group_vars/all.yml So here already data were available and if wanted add new dont delete previous one onstead merge the new data into it.
+
+<img width="367" height="437" alt="image" src="https://github.com/user-attachments/assets/a9a40829-d36e-48a8-91ee-dc21f2e5865a" />
+
+Step 2: Understand Why These Variables Are Here: 
+
+<img width="458" height="408" alt="image" src="https://github.com/user-attachments/assets/20c39b9d-90b7-484c-be87-6e69be3c944b" />
+
+<img width="662" height="692" alt="image" src="https://github.com/user-attachments/assets/2aa10079-59a1-4ba2-a649-19803607b95c" />
+
+Step 3: Open the Common Role: vi roles/common/tasks/main.yml [Remove the default content created by ansible-galaxy.]
+
+Step 4: Add the Common Role Tasks: Add the belwo code into file: vi roles/common/tasks/main.yml
+
+<img width="422" height="557" alt="image" src="https://github.com/user-attachments/assets/533a16c6-b47a-4025-96d9-be52373ab6e0" />
+
+Step 5: Why We Changed wheel: 
+
+<img width="367" height="506" alt="image" src="https://github.com/user-attachments/assets/58dcc2d7-de15-4bd2-992b-3ba35c2ada43" />
+
+Step 6: Verify YAML Syntax: ansible-playbook site.yml --syntax-check
+
+<img width="1170" height="92" alt="image" src="https://github.com/user-attachments/assets/3253504c-3d7d-4a06-b06d-712ca43695c9" />
+
+Step 7: Create a Minimal site.yml: vi site.yml [Which is already created in task 1 and added code to it as well.]
+
+Step 8: Verify Inventory: ansible all -m ping
+
+<img width="1017" height="257" alt="image" src="https://github.com/user-attachments/assets/bf92ff42-76ea-4529-a883-6adad064aa5d" />
+
+**How to create .vault_pass file?**
+
+-->echo "your_vault_password" > .vault_pass
+
+-->And then chnage the permission of the file: chmod 600 .vault_pass
+
+-->Verify the seted periomssion of the file: ls -la .vault_pass  [Now Ansible can automatically read the password & we dont have to run cmd: ansible-playbook site.yml --ask-vault-pass all the time]
+
+-->Once this .vault_pass file gets created configure it int in the ansible.cfg [vault_password_file = .vault_pass] file and then while exection we dont have to enter the password everytime.
+
+Step 9: Run the Common Role: ansible-playbook site.yml
+
+<img width="1896" height="742" alt="image" src="https://github.com/user-attachments/assets/96719872-d06c-4a69-aeed-b047aa61892e" />
+
+Step 10: Verify Package Installation: ssh -i ../terreaform-practice/my-key.pem ubuntu@13.207.184.47 & ssh -i ../terreaform-practice/my-key.pem ubuntu@13.207.196.162
+
+<img width="1227" height="881" alt="image" src="https://github.com/user-attachments/assets/8717d6da-6e0d-4296-9d4b-6f52228a38f2" />
+
+Step 11: Verify Hostname: hostname
+
+<img width="1186" height="862" alt="image" src="https://github.com/user-attachments/assets/9d1fda6e-9619-4383-aa40-b13ed55843d8" />
+
+Step 12: Verify Timezone: timedatectl
+
+<img width="1136" height="946" alt="image" src="https://github.com/user-attachments/assets/e9d1a0ec-5451-4eb2-99c3-635ec93c0876" />
+
+Step 13: Verify Deploy User: id deploy
+
+<img width="1180" height="877" alt="image" src="https://github.com/user-attachments/assets/36cd7184-820e-4a47-b1b9-c63f0cd6df9b" />
+
+Step 14: Test Tags: ansible-playbook site.yml --tags common [Useful later when your project contains Docker and Nginx roles too.]
+
+<img width="1912" height="830" alt="image" src="https://github.com/user-attachments/assets/453ae45c-a62f-469b-a0f7-f714cc675f7d" />
 
 ---
 
