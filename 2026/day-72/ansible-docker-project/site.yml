@@ -1,0 +1,27 @@
+---
+- name: Configure all servers
+  hosts: all
+  become: true
+
+  roles:
+    - common
+  tags:
+    - common
+
+- name: Configure application servers
+  hosts: app
+  become: true
+
+  roles:
+    - docker
+  tags:
+    - docker
+
+- name: Configure web servers
+  hosts: web
+  become: true
+
+  roles:
+    - nginx
+  tags:
+    - nginx
