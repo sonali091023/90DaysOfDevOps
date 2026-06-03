@@ -853,11 +853,30 @@ Now run the full playbook one more time:
 ```bash
 ansible-playbook site.yml
 ```
+Faced issue: fatal: [app-server]: FAILED! => {"changed": false, "msg": "Error connecting: Error while fetching server API version: Not supported URL scheme http+docker"}
+
+<img width="1915" height="961" alt="image" src="https://github.com/user-attachments/assets/ce88debd-66d5-4556-b6c1-b14cefabaddc" />
+
+To fix this:
+
+<img width="678" height="790" alt="image" src="https://github.com/user-attachments/assets/83e72e53-3063-44e0-a542-4763c0808689" />
+
+Note: The failure occurred because the old Nginx container and new Apache container had different names, so the old container was not removed and continued using port 8080. Keeping the same container name allowed Ansible to remove the old container first and successfully deploy the new Apache container on the same port.
 
 The output should show mostly `ok` with zero or minimal `changed`. This proves your entire setup is **idempotent**.
 
+-->Here i replace the image from nginx to httpd and run the command: ansible-playbook site.yml So here existing container got destroyed and new one gort created with httpd:latest image hence proved entire setup is independent. 
+
 **Reflect and document:**
+
 1. How many total tasks ran?
+
+<img width="1905" height="976" alt="image" src="https://github.com/user-attachments/assets/9907411b-d11c-41ec-808a-b71b9ffcde91" />
+
+<img width="1901" height="533" alt="image" src="https://github.com/user-attachments/assets/ccc8e92f-b604-4fee-add1-5fd587b90f2f" />
+
+-->This way: myapp container will be removed, httpd:latest will be pulled, New myapp container will start on port 8080, No extra -e arguments are needed.
+
 2. Map each Ansible concept to the day you learned it:
 
 | Day | Concept Used |
@@ -868,8 +887,14 @@ The output should show mostly `ok` with zero or minimal `changed`. This proves y
 | 71 | Roles, templates, Galaxy, Vault |
 | 72 | Everything combined in one project |
 
+<img width="690" height="557" alt="image" src="https://github.com/user-attachments/assets/e231a5b9-a10d-480b-a4e3-f63c858a7b62" />
+
 3. What would you add for production? (SSL with certbot, monitoring, log rotation, multi-container Compose)
+
+<img width="658" height="453" alt="image" src="https://github.com/user-attachments/assets/c879bc8b-83de-4983-b99d-2a4277c4ece2" />
+
 4. Clean up your EC2 instances when done. If you used Terraform: `terraform destroy`. If manual: terminate from the console.
+-->terraform destroy
 
 ---
 
