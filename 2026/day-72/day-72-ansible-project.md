@@ -652,7 +652,37 @@ Step 1: Decide Where the Vault File Belongs:
 
 <img width="577" height="671" alt="image" src="https://github.com/user-attachments/assets/4a36bc6a-ae7f-4707-99f6-ad653e833770" />
 
-Step 2: Create the Vault File: ansible-vault create group_vars/web/vault.yml
+<img width="618" height="287" alt="image" src="https://github.com/user-attachments/assets/d0ed9a4a-b641-497c-8f66-26feb7c69ea8" />
+
+<img width="1267" height="518" alt="image" src="https://github.com/user-attachments/assets/df0dce51-cf6b-467d-b85f-9cf5436bdd0a" />
+
+Step 2: Create the Vault File: ansible-vault create group_vars/web/vault.yml & set your dockerhub username and password here: ansible-vault create group_vars/web/vault.yml 
+
+-->So once run the above command we will prompted to set the password for the vault.yml file and once its done vault.yml file will get create.
+
+Step 3: Verify the File is Encrypted: cat group_vars/web/vault.yml
+
+<img width="1613" height="302" alt="image" src="https://github.com/user-attachments/assets/39506142-0092-4905-adb4-ab1b43e8007b" />
+
+Step 4: Create Vault Password File: echo "DevOps@123" > .vault_pass [Note: Use the same password you entered during ansible-vault create.]
+
+-->The secure this .vault_pass for that use command: chmod 600 .vault_pass
+
+-->Then verify the same with command: ls -l .vault_pass
+
+Step 5: Prevent Git from Uploading It: we can add this .vault_pass file in .gitignore file 
+
+Step 6: Configure Ansible: vi ansible.cfg: Here we can give the reference of the .vault_pass file to avoid the same file in command while exection
+
+<img width="377" height="177" alt="image" src="https://github.com/user-attachments/assets/c2e4af45-0d1e-4878-9b4d-ba9c373cad73" />
+
+-->To verify use command: cat ansible.cfg
+
+Step 7: Test Vault Access: ansible-vault view group_vars/web/vault.yml
+
+-->So Because vault_password_file is configured in ansible.cfg file, So it should display username and password when we run above command.
+
+<img width="498" height="771" alt="image" src="https://github.com/user-attachments/assets/00c90dbf-8ca7-4f61-9104-eb5c0bc298e5" />
 
 ---
 
