@@ -867,6 +867,55 @@ The output should show mostly `ok` with zero or minimal `changed`. This proves y
 
 -->Here i replace the image from nginx to httpd and run the command: ansible-playbook site.yml So here existing container got destroyed and new one gort created with httpd:latest image hence proved entire setup is independent. 
 
+-->Also tried to launch the Sample JioHotstar web application
+<img width="1890" height="970" alt="image" src="https://github.com/user-attachments/assets/54c2994e-7dbc-4b11-a759-980decff01be" />
+
+Steps followed: 
+
+-->So at root level itself i have created dir: my-app & then inside created files: **Dockerfile**, **app.py**, **requirements.txt** & then also create **templates dir** and again inside it create **index.html** file etc.
+
+-->Now go inside my-app dir: cd my-app
+
+<img width="905" height="891" alt="image" src="https://github.com/user-attachments/assets/c606c43a-c91f-49a0-adc2-07897519537b" />
+
+-->Then created image first: docker build -t my-flask-app:v1 .
+
+-->Verify image is created or not: docker images
+
+-->Create container based on image: docker run -d -p 8081:5000 my-flask-app:v1     [Note: By default, Flask runs on port 5000]
+
+-->To verify the created container: docker ps
+
+-->Tag the image with dockerhub username: docker tag my-flask-app:v1 sonali0910/my-flask-app:v1
+
+-->Login to the dockerhub: docker login
+
+-->Then push the docker image to the dockerhub: docker push sonali0910/my-flask-app:v1
+
+-->Now get out of the dir: cd ..
+
+-->Now at root level run command: ansible-playbook site.yml & this is how our application will get deploy on the server machine
+
+<img width="1906" height="961" alt="image" src="https://github.com/user-attachments/assets/e3deb7a3-eaf4-4286-a49a-b6e52cf9ce74" />
+
+-->Now ssh to the server: ssh -i ../terraform-practice/my-key.pem ubuntu@65.2.73.250
+
+<img width="1347" height="537" alt="image" src="https://github.com/user-attachments/assets/82dac4e4-cd51-42e3-9ce0-a28537a03f5b" />
+
+<img width="1610" height="136" alt="image" src="https://github.com/user-attachments/assets/e3db1f1b-75a0-46a0-acf2-99895e5eb419" />
+
+**Note:** If face any issue like when on browser when we launch the application: http://65.2.73.250:8081/ At the time if we face "This site cant be reached" So to fix this we can use command: sudo docker logs <container-id> OR sudo docker logs $(sudo docker ps -lq)
+
+-->Moreover to get the created list of files and dirs in the container use command: sudo docker exec a6e72dec097f find /app -type f
+
+<img width="742" height="101" alt="image" src="https://github.com/user-attachments/assets/38f76a5b-4b92-49d3-90f6-cd31f5e40da4" />
+
+-->To run the curl command at terminal: curl http://65.2.73.250:8081 & application got launched
+
+-->And to launch the application on the browser: http://65.2.73.250:8081 & application got launched
+
+<img width="1866" height="935" alt="image" src="https://github.com/user-attachments/assets/1906c2dd-dc83-4569-a0f6-7e5da4232e5f" />
+
 **Reflect and document:**
 
 1. How many total tasks ran?
