@@ -721,6 +721,8 @@ ansible-playbook site.yml --check --diff
 ansible-playbook site.yml
 ```
 
+Note: 
+
 Use tags for selective execution:
 ```bash
 # Only set up Docker and containers
@@ -733,10 +735,107 @@ ansible-playbook site.yml --tags nginx
 ansible-playbook site.yml --skip-tags common
 ```
 
+**Steps to follow:**
+
+-->ssh to the instance first: ssh -i ../terraform-practice/my-key.yml ubuntu@
+
+Verify Direct Container Access: curl http://<public-ip>:8080
+
+Verify Nginx Reverse Proxy: curl http://<public-ip> OR curl http://<public-ip>:80
+
+<img width="247" height="158" alt="image" src="https://github.com/user-attachments/assets/1972cbf5-13f3-4784-bfc9-ef217ab209f4" />
+
+Note: Before running the playbook common commands to use:
+
+-->Let's validate that Ansible can see the roles: ansible-playbook site.yml --syntax-check
+
+-->Then run a dry run: ansible-playbook site.yml --check --diff
+
+**This is where we'll likely catch any:**
+
+-->missing variables
+
+-->vault issues
+
+-->template issues
+
+-->role dependency issues
+
+Faced issue: While running dry run command i faced issue as below, that is like No package matching 'tree' is available
+<img width="1918" height="432" alt="image" src="https://github.com/user-attachments/assets/96cb74ed-1c6b-4009-b8f0-c1bcd5f4ab90" />
+
+**So to fix this issue followed steps:**
+
+-->Step 1: Check the common role: cat roles/common/tasks/main.yml OR or at least the package installation task.
+
+<img width="302" height="167" alt="image" src="https://github.com/user-attachments/assets/6320374b-b2c7-4d12-9111-f11bb519b8b8" />
+
+Step 2: Check the OS of the servers: ansible all -i inventory.ini -m setup -a "filter=ansible_distribution" OR we can ssh to the server and run command: cat /etc/os-release.
+
+**The reason is that:**
+
+-->tree exists on Ubuntu/Debian.
+
+-->tree exists on Amazon Linux, but repositories may not be enabled yet.
+
+-->Sometimes a package cache issue causes Ansible to think it's unavailable.
+
+Step 3: Fastest debugging: grep -R "tree" roles/common
+
+-->Quick manual test: To ssh to the server and install manually tree package, And i f it installing successfully then the issue is probably: stale package cache, repository configuration,
+or a package list problem.
+
+-->If it fails manually too, the exact error will tell us what's wrong. For now, send me: roles/common/defaults/main.yml & roles/common/vars/main.yml Also Output of cat /etc/os-release from one server
+
+**There are two possibilities:**
+
+**Possibility 1: Ubuntu 26.04 repository issue** Since you're on a very new Ubuntu release: Ubuntu 26.04 LTS (Resolute Raccoon) the package metadata or repositories may not be fully available on those images.
+
+**Possibility 2: Ansible's --check mode** Sometimes package modules behave oddly in check mode because they simulate installation without actually performing all repository operations.
+
+-->So manily reason behind failure is Possibility 2 due to running dry run command we may face issue sometimes so to cross check just once run playboook exection command: ansible-playbook site.yml & this will definitely get pass. 
+
+<img width="1912" height="976" alt="image" src="https://github.com/user-attachments/assets/3427470b-6f7b-42f3-87a2-03cf47dca575" />
+
+<img width="1855" height="897" alt="image" src="https://github.com/user-attachments/assets/0272382a-5e0a-4b2b-9856-f39d12d30263" />
+
 **Verify:**
 1. Curl the server on port 8080 -- does the Docker container respond directly?
+
+-->curl http://65.2.73.250:8080 == returned the Nginx welcome page, confirming that the Docker container is running correctly and responding directly on port 8080 through the app server.
+
 2. Curl the server on port 80 -- does Nginx reverse proxy the request to the container?
+
+-->Yes. curl http://52.66.175.134 or curl http://52.66.175.134:80 It returned the Nginx welcome page, confirming that the web server is successfully serving requests on port 80 and forwarding them to the application running in the Docker container through the Nginx reverse proxy.
+
 3. Check `docker ps` on the server -- is the container running with the correct port mapping?
+
+Yes. docker ps: on the app server showed the container in a running state with the port mapping: 0.0.0.0:8080->80/tcp & This confirms that requests sent to port 8080 on the app server are correctly forwarded to port 80 inside the Docker container, so the container is running with the expected port mapping.
+
+-->So here **web-server ansible_host**=52.66.175.134 & **app-server ansible_host**=65.2.73.250
+
+-->On web_server executed command: curl http://52.66.175.134:80 OR curl http://52.66.175.134 We can see the nginx welcome page 
+
+-->On app_server executed command: curl http://65.2.73.250:8080 OR curl http://52.66.175.134:80 OR curl http://52.66.175.134:80 We can see the nginx welcome page  
+
+-->In this project, the application is running inside a Docker container on the app server. The container uses the nginx:latest image and is configured with a port mapping of 8080:80, which means requests sent to port 8080 on the app server are forwarded to port 80 inside the container. When the command curl http://65.2.73.250:8080 was executed on the app server, it returned the Nginx welcome page. This confirms that the Docker container is running successfully and is accessible directly through port 8080.
+
+-->The web server has Nginx installed and configured as a reverse proxy. A reverse proxy receives client requests and forwards them to another server—in this case, the app server where the Docker container is running. When the command curl http://52.66.175.134 or curl http://52.66.175.134:80 was executed, the Nginx welcome page was displayed. This confirms that the web server is successfully receiving requests on port 80 and serving content. In a typical production setup, users access the web server, and the web server forwards requests to the application server running the container.
+
+-->Therefore, the verification demonstrates two successful layers of access. First, the application can be accessed directly through the app server on port 8080, proving that the Docker container is running correctly. Second, the application can be accessed through the web server on port 80, proving that Nginx is functioning correctly and handling incoming web requests. This confirms that the Ansible deployment successfully configured both the Docker-based application layer and the Nginx web server layer.
+
+<img width="573" height="471" alt="image" src="https://github.com/user-attachments/assets/d67c7852-7516-4543-911d-9c533649c069" />
+
+web_server o/p:
+
+<img width="1837" height="978" alt="image" src="https://github.com/user-attachments/assets/cfb19901-4ee1-4a9d-be6b-c7c9b8b182a6" />
+<img width="1577" height="518" alt="image" src="https://github.com/user-attachments/assets/f3a3a0b0-3272-4421-8446-a2d344ec398a" />
+
+app-server o/p:
+<img width="1668" height="968" alt="image" src="https://github.com/user-attachments/assets/bc874a14-17a9-4236-ba83-d16adf4dcdc7" />
+<img width="1607" height="970" alt="image" src="https://github.com/user-attachments/assets/dcd9bfaa-b30e-42b7-aa4e-c311bb33bee6" />
+<img width="1598" height="410" alt="image" src="https://github.com/user-attachments/assets/9868c838-4173-408f-acd0-64a4796f4ab8" />
+<img width="1852" height="856" alt="image" src="https://github.com/user-attachments/assets/185a10a9-d1c1-413a-94e8-cfb7bd7ed200" />
 
 ---
 
