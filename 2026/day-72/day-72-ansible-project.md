@@ -867,6 +867,8 @@ The output should show mostly `ok` with zero or minimal `changed`. This proves y
 
 -->Here i replace the image from nginx to httpd and run the command: ansible-playbook site.yml So here existing container got destroyed and new one gort created with httpd:latest image hence proved entire setup is independent. 
 
+<img width="1790" height="842" alt="t7i12" src="https://github.com/user-attachments/assets/16deb989-cfe5-43c9-8f18-15683e8a5b71" />
+
 -->Also tried to launch the Sample JioHotstar web application
 <img width="1890" height="970" alt="image" src="https://github.com/user-attachments/assets/54c2994e-7dbc-4b11-a759-980decff01be" />
 
