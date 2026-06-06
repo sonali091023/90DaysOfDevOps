@@ -186,7 +186,81 @@ prometheus_http_requests_total
 prometheus_http_requests_total{handler="/api/v1/query"}
 ```
 
+**Steps to follow:**
+
+Step 1: Access Prometheus UI: Since we've already built an observability stack earlier, make sure Prometheus is running: docker ps [Here You should see the Prometheus dashboard.]
+
+<img width="1906" height="235" alt="image" src="https://github.com/user-attachments/assets/abdc3450-5f8e-4181-80f0-0695e4d3e621" />
+
+Step 2: Understand the Architecture: 
+
+<img width="528" height="721" alt="image" src="https://github.com/user-attachments/assets/369e695a-6d09-4820-92ed-e2d5b6271a0e" />
+
+Step 3: Explore Targets Page: on prometheus page click on Status → Targets [So here These metrics exist because Prometheus exports its own metrics.]
+
+<img width="681" height="541" alt="image" src="https://github.com/user-attachments/assets/f872d7db-82a2-41a5-970b-b56da49e920d" />
+
+<img width="548" height="443" alt="image" src="https://github.com/user-attachments/assets/20c7b153-aa9d-4375-a9ed-b19e5b80b898" />
+
+<img width="887" height="721" alt="image" src="https://github.com/user-attachments/assets/cdf5d9f7-438b-4539-baf9-2e046f3becb5" />
+
+What is a Scrape Target?
+
+-->A scrape target is simply an endpoint exposing metrics, For Example: http://node-exporter:9100/metrics
+
+-->Prometheus visits this endpoint every few seconds and collects metrics, Example metrics: node_cpu_seconds_total, node_memory_MemAvailable_bytes node_disk_reads_completed_total etc.
+
+Step 4: Go to Graph Page: Open:
+
+http://<PROMETHEUS_IP>:9090/graph So This is where you query metrics using PromQL.
+
+<img width="1903" height="692" alt="image" src="https://github.com/user-attachments/assets/4d5fc597-cfc9-454a-bc02-81665d12020e" />
+
+Step 5: Query #1 - Count All Metrics: 
+
+-->count({__name__=~".+"}) == Meaning of it count(all metric names) [So it tells us How many unique time series Prometheus currently stores.]
+
+Step 6: Query #2 - Memory Used by Prometheus: process_resident_memory_bytes [So This metric belongs to Prometheus itself.]
+
+-->For example: 2.3e+08 So Convert it: 230,000,000 bytes ≈ 230 MB & Meaning of it: Current RAM consumed by Prometheus process
+
+Step 7: Query #3 - Total HTTP Requests: prometheus_http_requests_total
+
+<img width="520" height="618" alt="image" src="https://github.com/user-attachments/assets/01b0590c-84ec-40c3-9fd2-06a83196693e" />
+
+Step 8: Query #4 - Specific Handler: prometheus_http_requests_total{handler="/api/v1/query"} This filters requests only for: /api/v1/query
+
+-->Meaning: How many PromQL queries users executed
+
+Understanding Metric Types:
+
 **Document:** What is the difference between a counter and a gauge? Give one real-world example of each.
+
+1. Counter: A Counter only increases. Examples: Total requests served, Total logins, Total errors, Total page views
+
+Metric example: http_requests_total
+
+Values: 1, 5, 10, 25, 100 [It only goes up & If service restarts: it goes 100 → 0 because process restarted.]
+
+-->Real-world Example: Bank ATM withdrawals: Withdrawal count: 1, 2, 3, 4 [Never decreases]
+
+2. Gauge: Gauge can increase and decrease, Examples: CPU Usage, Memory Usage, Temperature, Active Users, Open Connections
+
+-->Metric example: node_memory_MemAvailable_bytes
+
+-->Values: 5GB, 4GB, 6GB, 3GB [It Moves both directions]
+
+-->Real-world Example: Water level in a tank: 100L, 120L, 90L, 140L [Can go up and down]
+
+<img width="693" height="353" alt="image" src="https://github.com/user-attachments/assets/6d30971b-a678-4250-8ae1-1b3d0743e0cf" />
+
+<img width="431" height="712" alt="image" src="https://github.com/user-attachments/assets/7107f7fa-a411-4bea-9764-4466fc793dff" />
+
+<img width="362" height="798" alt="image" src="https://github.com/user-attachments/assets/dabd0369-f5cb-4278-9029-6b0394aea4cc" />
+
+<img width="410" height="687" alt="image" src="https://github.com/user-attachments/assets/96ef8fb7-cdce-445f-9375-27c8e775e1b2" />
+
+<img width="803" height="692" alt="image" src="https://github.com/user-attachments/assets/adca930f-fc86-4c54-8f0f-b7b40496eecd" />
 
 ---
 
@@ -233,7 +307,71 @@ This converts bytes to megabytes.
 topk(5, prometheus_http_requests_total)
 ```
 
+**Steps to follow:**
+
+Step 1: Open Graph UI: http://<prometheus-ip>:9090/graph
+
+<img width="417" height="171" alt="image" src="https://github.com/user-attachments/assets/b8faddaf-b43e-43b5-b887-3dffeb61759f" />
+
+Step 2: Instant Vector Query: 
+
+<img width="412" height="561" alt="image" src="https://github.com/user-attachments/assets/f834a481-463b-48cb-a4e7-279d041fdbf2" />
+
+Step 3: Understand Labels: 
+
+<img width="526" height="536" alt="image" src="https://github.com/user-attachments/assets/c78fb675-93cf-4350-8ddd-40a81bdc8747" />
+
+Step 4: Range Vector Query: 
+
+<img width="548" height="691" alt="image" src="https://github.com/user-attachments/assets/f62cd503-bb29-45af-9ccb-8a1825993edc" />
+
+<img width="1907" height="962" alt="image" src="https://github.com/user-attachments/assets/cedb04f6-58ca-40dc-b79e-28f966728a04" />
+
+Step 5: Learn Rate(): 
+
+<img width="650" height="727" alt="image" src="https://github.com/user-attachments/assets/e925a482-7f73-47fd-a3ae-81ac8f4becf4" />
+
+<img width="1902" height="963" alt="image" src="https://github.com/user-attachments/assets/b1e87b6d-289e-4b14-8c1f-987b3fefe9df" />
+
+<img width="367" height="396" alt="image" src="https://github.com/user-attachments/assets/fc641bf5-d63b-4e61-9764-1a65a414fa29" />
+
+Step 6: Generate Some Traffic: 
+
+<img width="1516" height="962" alt="image" src="https://github.com/user-attachments/assets/70d81545-98d4-418a-a0f1-f72241a974ea" />
+
+Step 7: Aggregation: 
+
+<img width="485" height="627" alt="image" src="https://github.com/user-attachments/assets/ebb13b63-1f68-420a-a72d-07d49aed42fd" />
+
+<img width="1917" height="762" alt="image" src="https://github.com/user-attachments/assets/2aad6384-072c-4fb2-b60a-09c2b23be6be" />
+
+Step 8: Explore Labels: 
+
+<img width="292" height="382" alt="image" src="https://github.com/user-attachments/assets/bb59ba03-8bfd-4544-aec6-1698800a15fb" />
+
+<img width="1913" height="970" alt="image" src="https://github.com/user-attachments/assets/a49d233a-7d73-4f50-8ce4-bdb9c64bbcb3" />
+
+Step 9: Filter by Label: 
+
+<img width="505" height="501" alt="image" src="https://github.com/user-attachments/assets/3dd9ed28-e8a2-418a-9c1a-42570eefaa6f" />
+
+Step 10: Arithmetic: 
+
+<img width="486" height="556" alt="image" src="https://github.com/user-attachments/assets/9642a37f-e338-4942-b666-b28970a04ea2" />
+
+<img width="1908" height="430" alt="image" src="https://github.com/user-attachments/assets/8e88ac36-dfbd-474d-b41c-b92993d184c5" />
+
+Step 11: Top-K: 
+
+<img width="430" height="431" alt="image" src="https://github.com/user-attachments/assets/3cfc6489-93dc-4a9f-98b0-dbf3128c2738" />
+
+<img width="1908" height="531" alt="image" src="https://github.com/user-attachments/assets/2a4c0fbf-1b60-4a40-a714-f0975b07bcf9" />
+
 **Try this exercise:** Write a PromQL query that shows the per-second rate of non-200 HTTP requests to Prometheus over the last 5 minutes. (Hint: use `rate()` with a label filter on `code!="200"`)
+
+<img width="637" height="550" alt="image" src="https://github.com/user-attachments/assets/ff6bd8a8-3326-49ab-a0b4-c2a89f28ffb7" />
+
+<img width="1918" height="442" alt="image" src="https://github.com/user-attachments/assets/f344ee38-d541-4a6b-8fa1-b8a96130fa1a" />
 
 ---
 
@@ -295,6 +433,10 @@ curl http://localhost:8000
 ```
 
 **Note:** Not all applications expose Prometheus metrics natively. In later days you will learn how Node Exporter, cAdvisor, and OTEL Collector act as metric exporters for systems that do not have built-in Prometheus support.
+
+**Steps to follow:**
+
+
 
 ---
 
