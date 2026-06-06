@@ -500,7 +500,11 @@ command:
 
 3. Check the TSDB status in the UI: Status > TSDB Status
 
-**Document:** What happens when retention is exceeded? Why is a volume mount important for Prometheus data?
+**Document:** What happens when retention is exceeded? 
+-->Prometheus automatically removes the oldest time-series data when either the configured retention period or retention size limit is exceeded. This ensures disk usage remains within configured limits while allowing Prometheus to continue collecting new metrics.
+
+Why is a volume mount important for Prometheus data?
+-->A volume mount ensures Prometheus data persists across container restarts, upgrades, and recreations. Without a volume, all collected metrics and historical time-series data would be lost whenever the container is removed.
 
 **Steps to folloow:**
 
@@ -526,9 +530,29 @@ Step 3: Open TSDB Status Page: http://localhost:9090/status
 
 <img width="1897" height="282" alt="image" src="https://github.com/user-attachments/assets/56c5bfb9-844a-4b53-bf3f-5340957c3f59" />
 
+Step 4: Understand Retention: Current default: 15 days, Prometheus keeps metrics for: Last 15 Days, After that: Old data is deleted automatically
 
+Step 5: Configure Retention: 
 
+<img width="390" height="815" alt="image" src="https://github.com/user-attachments/assets/2d544641-c95b-4a4e-ba0c-4d52a7124364" />
 
+Step 6: Restart Prometheus: run command: docker-compose down & then command: docker-compose up -d
+
+<img width="1907" height="433" alt="image" src="https://github.com/user-attachments/assets/17007f50-427e-4a43-921c-09b390ae00d4" />
+
+-->We can see retention-related startup information.
+
+<img width="1906" height="957" alt="image" src="https://github.com/user-attachments/assets/374864b0-75fc-44f0-8150-58a0d7390bb2" />
+
+<img width="747" height="507" alt="image" src="https://github.com/user-attachments/assets/f42b12e6-7515-4f15-b75b-cee58bd54d84" />
+
+<img width="782" height="632" alt="image" src="https://github.com/user-attachments/assets/3df84938-89eb-4671-a539-d3afa7824a71" />
+
+<img width="557" height="837" alt="image" src="https://github.com/user-attachments/assets/281c6686-2e9c-44e0-abd8-f67d2db36893" />
+
+<img width="571" height="337" alt="image" src="https://github.com/user-attachments/assets/437a274f-3d99-4f07-9ae4-8ea7e92c254a" />
+
+<img width="785" height="463" alt="image" src="https://github.com/user-attachments/assets/d84f5a1b-e343-4a12-96f6-babc34fb719d" />
 
 ---
 
