@@ -483,6 +483,8 @@ Step 10: Check What Metrics Notes-App Exposes: Open: http://localhost:8000/metri
 ### Task 6: Explore Data Retention and Storage
 Understand how Prometheus stores data:
 
+Note: Excellent. This task is about understanding where Prometheus stores data and how retention works, which becomes very important in production environments.
+
 1. Check how much disk space Prometheus is using:
 ```bash
 docker exec prometheus du -sh /prometheus
@@ -499,6 +501,34 @@ command:
 3. Check the TSDB status in the UI: Status > TSDB Status
 
 **Document:** What happens when retention is exceeded? Why is a volume mount important for Prometheus data?
+
+**Steps to folloow:**
+
+Step 1: Check Current Storage Usage: docker exec prometheus du -sh /prometheus
+
+-->this mean? Prometheus stores: Metrics, Time series, Indexes, WAL (Write Ahead Log) inside: /prometheus So This is Prometheus' TSDB (Time Series Database).
+
+<img width="1193" height="43" alt="image" src="https://github.com/user-attachments/assets/3f8b235f-1db9-4215-8329-7d6e675e6200" />
+
+Step 2: Look Inside the TSDB: docker exec prometheus ls -lh /prometheus
+
+<img width="1221" height="81" alt="image" src="https://github.com/user-attachments/assets/ea4d1e8d-2ec4-4914-8a6e-57aaa048f76c" />
+
+Step 3: Open TSDB Status Page: http://localhost:9090/status
+
+<img width="343" height="832" alt="image" src="https://github.com/user-attachments/assets/97e632c0-cd7f-4f93-922a-55de152adc4c" />
+
+<img width="1896" height="971" alt="image" src="https://github.com/user-attachments/assets/80c7664b-5507-411c-8e04-b26fdbe584cc" />
+
+<img width="1907" height="972" alt="image" src="https://github.com/user-attachments/assets/c498c331-2800-4a18-a435-b189947a5cba" />
+
+<img width="1902" height="967" alt="image" src="https://github.com/user-attachments/assets/dc73f842-ebd3-4a62-8806-bd0b25b3b8c0" />
+
+<img width="1897" height="282" alt="image" src="https://github.com/user-attachments/assets/56c5bfb9-844a-4b53-bf3f-5340957c3f59" />
+
+
+
+
 
 ---
 
