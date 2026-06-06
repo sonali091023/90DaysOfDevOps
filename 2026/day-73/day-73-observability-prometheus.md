@@ -111,10 +111,6 @@ Start Prometheus:
 docker-compose up -d
 ```
 
-Open `http://localhost:9090` in your browser. You should see the Prometheus web UI.
-
-**Verify:** Go to Status > Targets. You should see one target (`prometheus`) with state `UP`.
-
 **Steps to follow:**
 
 STEP 1: Create Observability Folder (Inside your project): 
@@ -151,13 +147,14 @@ Step 8: Check logs: docker logs prometheus: Look for messages like: Server is re
 
 <img width="1917" height="533" alt="image" src="https://github.com/user-attachments/assets/3c7c5139-d4b5-4ddd-b6b4-a2eb79027095" />
 
-Step 9: Open Prometheus UI: 
+Step 9: Open Prometheus UI:  Open `http://localhost:9090` in your browser. You should see the Prometheus web UI
+
+<img width="1910" height="602" alt="image" src="https://github.com/user-attachments/assets/74494774-5b8f-4cce-b202-71f6f46965f6" />
 
 
+**Verify:** Go to Status > Targets. You should see one target (`prometheus`) with state `UP`.
 
-
-
-
+<img width="1912" height="657" alt="image" src="https://github.com/user-attachments/assets/591391eb-8788-46e5-bbc3-485db1976eaf" />
 
 ---
 
