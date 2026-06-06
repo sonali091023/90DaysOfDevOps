@@ -436,7 +436,47 @@ curl http://localhost:8000
 
 **Steps to follow:**
 
+<img width="1341" height="936" alt="image" src="https://github.com/user-attachments/assets/54def0f6-58f6-459f-b1d2-a7fc2056731d" />
 
+<img width="410" height="357" alt="image" src="https://github.com/user-attachments/assets/9d723bf2-ad11-4313-bc4f-566b53a4e855" />
+
+Step 1: Update docker-compose.yml: vi docker-compose.yml [Here update above mentioned code]
+
+Step 2: Update prometheus.yml: vi prometheus.yml: [Here update above mentioned code]
+
+Step 3: Pull the New Image: docker compose pull
+
+Step 4: Start the Stack: docker compose up -d
+
+Step 5: Verify Containers: docker ps [here both containers status should be up]
+
+Step 6: Verify Notes App: http://localhost:8000 [in browser] OR curl http://localhost:8000 [Interminal]
+
+-->You should get a response from the application., So if here we get Connection refused OR 404 OR show me check : docker logs notes-app
+
+Step 7: Verify Prometheus Targets: For that open: http://localhost:9090/targets
+
+<img width="562" height="192" alt="image" src="https://github.com/user-attachments/assets/c376dec8-9c16-47d7-92de-26c0be1eec24" />
+
+Step 8: Generate Traffic: curl http://localhost:8000 [Run this command multiple times in terminal] OR for i in {1..20}; do curl http://localhost:8000; done
+
+Step 9: Verify in Prometheus: http://localhost:9090/graph & run: up 
+
+<img width="441" height="158" alt="image" src="https://github.com/user-attachments/assets/6af2e4ef-5dc8-4e0d-afee-8bd838604458" />
+
+<img width="1917" height="812" alt="image" src="https://github.com/user-attachments/assets/7faba4f4-f7b5-4b51-b7f5-bf33520250d1" />
+
+<img width="1901" height="961" alt="image" src="https://github.com/user-attachments/assets/233b0704-e777-47fe-ad3d-dbc4d663cdc2" />
+
+<img width="1913" height="985" alt="image" src="https://github.com/user-attachments/assets/2969b868-cbdb-45d3-99ee-fcf5a73c06d4" />
+
+<img width="1915" height="482" alt="image" src="https://github.com/user-attachments/assets/d56e56d6-4556-46f8-9847-d6d9f79dedf4" />
+
+Step 10: Check What Metrics Notes-App Exposes: Open: http://localhost:8000/metrics [in browser] OR curl http://localhost:8000/metrics [in terminal]
+
+<img width="1913" height="397" alt="image" src="https://github.com/user-attachments/assets/89bb19d8-44e6-4a29-acb1-28c6bc2f00e0" />
+
+<img width="1480" height="966" alt="image" src="https://github.com/user-attachments/assets/a558663d-17a7-44f0-a304-1865816d4355" />
 
 ---
 
