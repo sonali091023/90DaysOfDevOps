@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+venv/
+.env/
+.venv/
+
+# Environment Variables
+.env
+.env.*
+
+# Flask
+instance/
+*.db
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-data/
+postgres-data/
+prometheus-data/
+
+# Prometheus
+*.prom
+
+# Terraform (if used elsewhere)
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Ansible
+*.retry
+
+# Coverage Reports
+htmlcov/
+.coverage
+
+# Testing
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+tmp/
+temp/
