@@ -361,6 +361,80 @@ Open `http://localhost:3000`. Log in with `admin` / `admin123`.
 3. Set URL to `http://prometheus:9090` (use the container name, not localhost -- they are on the same Docker network)
 4. Click Save & Test -- you should see "Successfully queried the Prometheus API"
 
+**Steps to follow:**
+
+Step 1: Update vi docker-compose.yml
+
+<img width="582" height="411" alt="image" src="https://github.com/user-attachments/assets/fecaf891-ad81-4df8-a109-f5f9b8482aa9" />
+
+Step 2: Update Volumes Section: 
+
+<img width="456" height="386" alt="image" src="https://github.com/user-attachments/assets/a1457cf3-aae4-4942-8cd8-12cc2c38c0f4" />
+
+Step 3: Validate YAML: docker-compose config
+
+<img width="1323" height="972" alt="image" src="https://github.com/user-attachments/assets/3ed450a2-6213-4bac-8eed-457f9f7d72b1" />
+
+<img width="1365" height="980" alt="image" src="https://github.com/user-attachments/assets/19b6be4c-7169-4b47-b3e4-abbfc6320a51" />
+
+<img width="1262" height="977" alt="image" src="https://github.com/user-attachments/assets/b17bc449-d15b-4a07-8f5a-14089d34fd1b" />
+
+Step 4: Start Grafana: docker-compose up -d
+
+-->Then verify the containers: docker ps
+
+<img width="1637" height="346" alt="image" src="https://github.com/user-attachments/assets/b2b58682-3d85-4cd0-847d-8370a58e7e4b" />
+
+Step 5: Verify Grafana Logs: docker logs grafana
+
+<img width="1911" height="982" alt="image" src="https://github.com/user-attachments/assets/cc9ec376-5e67-4d6c-97a9-f2f0e0957995" />
+
+Step 6: Open Grafana: http://localhost:3000
+
+-->Login: Username: admin & Password: admin123, Grafana may ask you to change the password. You can: Skip or set a new one.
+
+<img width="1891" height="957" alt="image" src="https://github.com/user-attachments/assets/96aebb16-a96d-4187-a574-df4fef842ee2" />
+
+<img width="1916" height="967" alt="image" src="https://github.com/user-attachments/assets/29cb9a7f-3d46-4c21-8f59-49ce7f8f2d8f" />
+
+Step 7: Add Prometheus Datasource
+
+<img width="493" height="402" alt="image" src="https://github.com/user-attachments/assets/a7bcc7a1-cd51-4751-bc98-0343f16f2295" />
+
+Step 8: Select Prometheus: Prometheus
+
+<img width="1917" height="922" alt="image" src="https://github.com/user-attachments/assets/3f75ff8e-ebb4-4047-8624-2c1a5fe9c5d2" />
+
+Step 9: Configure URL: 
+
+-->Very important: Use http://prometheus:9090 NOT http://localhost:9090
+
+-->Why? --> Because Grafana runs inside a Docker container and talks to Prometheus through Docker networking. Docker service names act like DNS names: grafana ---> prometheus, So:
+
+http://prometheus:9090 is correct. But If we're getting "This site can't be reached" for: http://prometheus:9090 that's actually expected from your browser.
+
+-->Important distinction about prometheus is a Docker service name, not a hostname your Windows browser knows about. So Use: http://localhost:9090 in your browser to access Prometheus.
+& Use: http://prometheus:9090 inside Grafana's datasource configuration, because Grafana and Prometheus are on the same Docker network.
+
+<img width="1911" height="797" alt="image" src="https://github.com/user-attachments/assets/3af8bd0d-3750-414a-ba39-8987f2ef3230" />
+
+<img width="1912" height="763" alt="image" src="https://github.com/user-attachments/assets/1b6fcf64-01fa-469a-aa5a-812d6b9494e7" />
+
+Step 10: Save & Test: Expected: Successfully queried the Prometheus API, It means Grafana and Prometheus are connected successfully.
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/188535ef-8d6c-437f-ac7c-aab5fef09426" />
+
+<img width="838" height="577" alt="image" src="https://github.com/user-attachments/assets/cf3cff3b-36b8-4bf7-84ad-f8aa8e61137d" />
+
+<img width="1907" height="970" alt="image" src="https://github.com/user-attachments/assets/e1480a12-7a4c-4ae9-9300-563f6bec653c" />
+
+Step 11: Verify Metrics: Go to: Explore & Select datasource: Prometheus Run: up, You should see: prometheus, node-exporter, cadvisor with value: 1 which means UP.
+
+
+
+
+
+
 ---
 
 ### Task 4: Build Your First Dashboard
