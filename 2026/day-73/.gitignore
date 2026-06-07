@@ -10,6 +10,13 @@ venv/
 .env/
 .venv/
 
+#Ansible vault
+vault.yml
+.vault_pass
+
+#terraform pem-key
+my-key.pem
+
 # Environment Variables
 .env
 .env.*
