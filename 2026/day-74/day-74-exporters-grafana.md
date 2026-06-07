@@ -428,12 +428,31 @@ Step 10: Save & Test: Expected: Successfully queried the Prometheus API, It mean
 
 <img width="1907" height="970" alt="image" src="https://github.com/user-attachments/assets/e1480a12-7a4c-4ae9-9300-563f6bec653c" />
 
-Step 11: Verify Metrics: Go to: Explore & Select datasource: Prometheus Run: up, You should see: prometheus, node-exporter, cadvisor with value: 1 which means UP.
+Step 11: Verify Metrics: Go to: Explore & Select datasource: Select Code tab form right top corner: Prometheus Run: up, You should see: prometheus, node-exporter, cadvisor with value: 1 which means UP.
 
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/bbb09d2b-d43b-4b82-8131-128afd92d64f" />
 
+<img width="1902" height="346" alt="image" src="https://github.com/user-attachments/assets/8524fe17-1bcf-4f04-8953-495bfbec17a5" />
 
+-->we can see prometheus, node-exporter, cadvisor with value: 1 which means UP.
 
+Step 12: Test Node Exporter Metrics: node_memory_MemTotal_bytes [You should get a graph.]
 
+<img width="1918" height="962" alt="image" src="https://github.com/user-attachments/assets/a1c63216-e33f-4800-af8d-51d6a539e97b" />
+
+Step 13: Test cAdvisor Metrics: container_memory_usage_bytes [You should get container metrics.]
+
+<img width="1910" height="968" alt="image" src="https://github.com/user-attachments/assets/4b811a03-f0ee-4e8a-8e32-9cdf36651b51" />
+
+Step 14: Create Your First Dashboard: Click: Dashboards → New Dashboard → Add Visualization then select Datasource: Prometheus & there Query:
+
+(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 & then Click: Run Query [You should see memory usage % of your machine.] Save dashboard: Host Monitoring
+
+<img width="1915" height="962" alt="image" src="https://github.com/user-attachments/assets/8c8fb3fe-6d82-48c5-82f7-c8528b5478d0" />
+
+<img width="1903" height="960" alt="image" src="https://github.com/user-attachments/assets/cd53da62-8a77-4b22-9038-610b7131a5ed" />
+
+<img width="901" height="747" alt="image" src="https://github.com/user-attachments/assets/89830ce4-c9dd-40fd-9095-852ca5130bbc" />
 
 ---
 
