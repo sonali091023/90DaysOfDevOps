@@ -502,6 +502,21 @@ container_memory_usage_bytes{name!=""} / 1024 / 1024
 
 Save the dashboard as "DevOps Observability Overview".
 
+**Steps to follow:**
+
+Step 1: Create a New Dashboard: In Grafana: Dashboards → New Dashboard Click: Add Visualization then Select: prometheus-1 (your Prometheus datasource)
+
+Step 2: Create CPU Usage Panel: Run the quesry: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+<img width="407" height="662" alt="image" src="https://github.com/user-attachments/assets/b83e2675-04ed-4783-a26d-e50ee15cb6a8" />
+
+Step 3: Add Memory Usage Panel: Top right: Add → Visualization Datasource: prometheus-1 then run the Query: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+
+<img width="317" height="460" alt="image" src="https://github.com/user-attachments/assets/a960a3b4-545c-49d4-8906-1de4ae4c96b9" />
+
+<img width="1911" height="962" alt="image" src="https://github.com/user-attachments/assets/ee93e48a-7113-4e27-9f9b-65e86c27fa0f" />
+
+
 ---
 
 ### Task 5: Auto-Provision Datasources with YAML
