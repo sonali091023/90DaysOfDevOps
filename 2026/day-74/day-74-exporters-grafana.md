@@ -229,7 +229,97 @@ topk(3, container_memory_usage_bytes{name!=""})
 
 The `{name!=""}` filter removes aggregated/system-level entries and shows only named containers.
 
+**Steps to follow:**
+
+<img width="671" height="736" alt="image" src="https://github.com/user-attachments/assets/0bea9714-16b9-4d19-9bea-8bb7e866210e" />
+
+Step 1: Add cAdvisor to vi docker-compose.yml: Add this service below node-exporter:
+
+<img width="518" height="371" alt="image" src="https://github.com/user-attachments/assets/4f49f24d-79b1-4103-988e-21919344f6e2" />
+
+Step 2: Your services section should now look like: 
+
+<img width="290" height="190" alt="image" src="https://github.com/user-attachments/assets/1495ebc2-10a8-4d98-9e73-40b88f45da01" />
+
+Step 3: Update vi prometheus.yml:
+
+<img width="402" height="497" alt="image" src="https://github.com/user-attachments/assets/9e7bbea1-5541-4ac0-a8eb-3bc5492e62f2" />
+
+Step 4: Validate Compose: docker-compose config
+
+<img width="1631" height="982" alt="image" src="https://github.com/user-attachments/assets/fa5883ac-25dd-41d2-8dde-1f6f5c1fea30" />
+
+<img width="1533" height="981" alt="image" src="https://github.com/user-attachments/assets/b6d4de19-cf95-4218-8e8a-d59276b94200" />
+
+<img width="1692" height="815" alt="image" src="https://github.com/user-attachments/assets/69bd2263-5543-4d0b-98e2-ea02c203a3f9" />
+
+Step 5: Restart Everything: 
+
+-->docker-compose down
+
+-->docker-compose up -d
+
+<img width="1232" height="176" alt="image" src="https://github.com/user-attachments/assets/6289cee6-1076-4461-8e35-5feb020cda7f" />
+
+<img width="1382" height="197" alt="image" src="https://github.com/user-attachments/assets/1f023eae-3413-4529-81ee-467c807ef66c" />
+
+Step 6: Verify Containers: docker ps: [5 containers should be running.]
+
+<img width="1911" height="268" alt="image" src="https://github.com/user-attachments/assets/0823d437-10ec-4497-885b-07089164703b" />
+
+Step 7: Test cAdvisor Directly: http://localhost:8080 [You should see the cAdvisor UI.]
+
+-->Click: Docker Containers You should see: jiohotstar, db, prometheus, node-exporter, cadvisor with CPU and memory statistics.
+
+<img width="1907" height="891" alt="image" src="https://github.com/user-attachments/assets/f902f3f0-8f6e-4874-9b83-bc1cd6ca5822" />
+
+Step 8: Verify Prometheus Targets: http://localhost:9090/targets [Here all services should be up]
+
+<img width="1912" height="945" alt="image" src="https://github.com/user-attachments/assets/e47d53df-df89-42da-b846-4bd29e676db0" />
+
+Step 9: Test Container Metrics: In Prometheus run: CPU per container: rate(container_cpu_usage_seconds_total{name!=""}[5m])
+
+-->To run this query go to query section:
+
+<img width="1917" height="702" alt="image" src="https://github.com/user-attachments/assets/16462eaa-e25f-4721-ae71-a57204bbc273" />
+
+-->Faced issue: So when i run the above quesry i did get any data against to it, That is because newer versions of cAdvisor on some Docker/cgroup setups don't expose the name label.
+
+<img width="616" height="516" alt="image" src="https://github.com/user-attachments/assets/f07c1dc3-a3cb-4e76-8037-985b62c698da" />
+
+-->To handle this make chnages in vi docker-compose.yml file
+
+<img width="460" height="510" alt="image" src="https://github.com/user-attachments/assets/d73bc9ec-c908-4962-b61b-2e005bf8bb29" />
+
+-->Now again run the same query: rate(container_cpu_usage_seconds_total{name!=""}[5m])
+
+<img width="1907" height="972" alt="image" src="https://github.com/user-attachments/assets/8620cbfe-936d-4b4e-9a84-d70affb7fb8b" />
+
+-->Memory per container: container_memory_usage_bytes{name!=""}
+
+<img width="1917" height="965" alt="image" src="https://github.com/user-attachments/assets/6912dcf7-ab5e-4f63-85ae-a4d03b8ed93e" />
+
+-->Network per container: rate(container_network_receive_bytes_total{name!=""}[5m])
+
+<img width="1908" height="970" alt="image" src="https://github.com/user-attachments/assets/b1117c4e-9c42-47bc-8ca3-18de1cb86d78" />
+
+Top 3 memory consumers: topk(3, container_memory_usage_bytes{name!=""})
+
+<img width="1917" height="876" alt="image" src="https://github.com/user-attachments/assets/8d673d39-5eba-49f4-b7e8-ffa8e7441b46" />
+
 **Document:** What is the difference between Node Exporter and cAdvisor? When would you use each?
+
+<img width="808" height="298" alt="image" src="https://github.com/user-attachments/assets/77cfa994-6757-4be5-884d-27342d63c44f" />
+
+**When to use Node Exporter?**
+
+-->Use Node Exporter when you want: Server CPU usage, RAM usage, Disk utilization, Network traffic, Filesystem metrics **Example:** node_memory_MemAvailable_bytes
+
+**When to use cAdvisor?**
+
+-->Use cAdvisor when you want: Which container uses most RAM, Which container consumes CPU, Container network traffic, Container filesystem usage **Example:** container_memory_usage_bytes
+
+Note: Node Exporter monitors the host machine, while cAdvisor monitors Docker containers running on that machine. Together they provide complete visibility into infrastructure and container performance.
 
 ---
 
