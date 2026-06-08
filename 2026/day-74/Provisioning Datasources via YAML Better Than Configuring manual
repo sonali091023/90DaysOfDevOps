@@ -53,3 +53,41 @@ When Grafana starts, it automatically loads this configuration and creates the d
 ## Conclusion
 
 Provisioning datasources through YAML provides a repeatable, automated, and production-ready approach to Grafana configuration. It improves reliability, simplifies recovery, reduces manual effort, and supports Infrastructure as Code practices, making it the preferred method for managing Grafana in modern DevOps environments.
+
+## Community Dashboards
+
+To accelerate observability setup, Grafana community dashboards were imported and connected to Prometheus.
+
+### Imported Dashboards
+
+#### Node Exporter Full (ID: 1860)
+
+Provides detailed host-level monitoring including:
+
+* CPU utilization
+* Memory usage
+* Disk performance
+* Network throughput
+* System load
+* Filesystem statistics
+
+#### Docker Monitoring (ID: 193)
+
+Provides container-level visibility including:
+
+* Container CPU usage
+* Container memory consumption
+* Network traffic
+* Filesystem activity
+* Running container statistics
+
+### Benefits
+
+* Production-ready visualizations
+* Faster dashboard setup
+* Best-practice PromQL queries
+* Easy customization and extension
+* Improved infrastructure observability
+
+
+
