@@ -645,6 +645,60 @@ docker compose up -d grafana
 
 Check Connections > Data Sources -- Prometheus should already be there without any manual setup.
 
+-->Excellent. You're now moving from a manual Grafana setup to Infrastructure as Code for observability, which is exactly how production environments work.
+
+-->Task 5 is about making Grafana automatically configure itself whenever the stack starts.
+
+**Steps to follow:**
+
+Step 1: Create Grafana Provisioning Structure: On your app server where the docker-compose.yml exists:
+
+-->mkdir -p grafana/provisioning/datasources
+
+-->mkdir -p grafana/provisioning/dashboards & then to verify use command: tree grafana
+
+<img width="271" height="137" alt="image" src="https://github.com/user-attachments/assets/f958cefd-f6c0-4d99-8135-8595c46644cb" />
+
+Step 2: Create Datasource Configuration: vi grafana/provisioning/datasources/datasources.yml
+
+<img width="351" height="272" alt="image" src="https://github.com/user-attachments/assets/1be1ed98-c18f-4755-9a06-fdcbb07c2d6a" />
+
+Step 3: Understand What Each Field Means: 
+
+<img width="592" height="815" alt="image" src="https://github.com/user-attachments/assets/afef9098-ebf6-4074-ba92-d710b92a348d" />
+
+<img width="567" height="818" alt="image" src="https://github.com/user-attachments/assets/9b5fc593-7629-4624-b4d9-c54ca7765d0b" />
+
+Step 4: Update Docker Compose: vi docker-compose.yml
+
+<img width="611" height="841" alt="image" src="https://github.com/user-attachments/assets/47606671-7bb1-4ac1-a8e4-534f2464d531" />
+
+Step 5: Validate Compose File: docker-compose config
+
+<img width="1687" height="982" alt="image" src="https://github.com/user-attachments/assets/6abd876c-57ed-435f-a543-bc73b15bf5c6" />
+
+<img width="1380" height="986" alt="image" src="https://github.com/user-attachments/assets/8542f837-669c-41fc-a7d3-f4491655fa57" />
+
+Step 6: Restart Grafana: docker-compose up -d grafana OR docker-compose restart grafana & then check logs: docker logs grafana --tail 50
+
+<img width="1887" height="973" alt="image" src="https://github.com/user-attachments/assets/3043ccc1-7a9a-43c8-a2fa-15f171f6a832" />
+
+Step 7: Verify Auto-Provisioning: So here when we open http://localhost:3000 & login with it Navigate: Connections → Data Sources
+
+-->You should already see: Prometheus without manually adding it.
+
+Step 8: Test the Datasource: Click: Prometheus Then: Save & Test Expected: Successfully queried the Prometheus API
+
+<img width="1912" height="968" alt="image" src="https://github.com/user-attachments/assets/877766a0-255b-46ce-8f1b-168fca561caa" />
+
+Step 9: Prove It Really Works: Delete Grafana container: docker-compose down & then run: docker-compose up -d
+
+-->Once the docker up login again to the grafana dashboard & there we can see Datasource automatically exists. No manual clicks required. That's the entire goal of provisioning.
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/0e242523-d56f-4802-93e5-386aa373ede5" />
+
+<img width="525" height="411" alt="image" src="https://github.com/user-attachments/assets/0cf584b5-8a0c-4795-9821-572192a51ebe" />
+
 **Document:** Why is provisioning datasources via YAML better than configuring them manually through the UI?
 
 ---
