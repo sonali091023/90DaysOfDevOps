@@ -506,16 +506,97 @@ Save the dashboard as "DevOps Observability Overview".
 
 Step 1: Create a New Dashboard: In Grafana: Dashboards → New Dashboard Click: Add Visualization then Select: prometheus-1 (your Prometheus datasource)
 
-Step 2: Create CPU Usage Panel: Run the quesry: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+<img width="430" height="356" alt="image" src="https://github.com/user-attachments/assets/5d55a990-16d2-4f36-b2e3-d1a01dc8dea2" />
+
+Step 2: Create a New Dashboard:
+
+Panel 1: CPU Usage % Run the quesry: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
 
 <img width="407" height="662" alt="image" src="https://github.com/user-attachments/assets/b83e2675-04ed-4783-a26d-e50ee15cb6a8" />
 
-Step 3: Add Memory Usage Panel: Top right: Add → Visualization Datasource: prometheus-1 then run the Query: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+-->Select Prometheus first & then Visualization On the right side: Visualization → Gauge
+
+-->Configure Unit: Under: Standard options & then Set: Unit → Percent (0-100)
+
+-->Apply
+
+<img width="441" height="667" alt="image" src="https://github.com/user-attachments/assets/c7b21642-7d4e-45f2-87c6-b22b39181049" />
+
+<img width="1915" height="967" alt="image" src="https://github.com/user-attachments/assets/32cf1bd2-b6e1-4ca5-abbe-66880280bb95" />
+
+Panel 2: Memory Usage %: Top right: Add → Visualization Datasource: prometheus-1 then run the Query: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
 
 <img width="317" height="460" alt="image" src="https://github.com/user-attachments/assets/a960a3b4-545c-49d4-8906-1de4ae4c96b9" />
 
 <img width="1911" height="962" alt="image" src="https://github.com/user-attachments/assets/ee93e48a-7113-4e27-9f9b-65e86c27fa0f" />
 
+-->Select Prometheus first & then Visualization On the right side: Visualization → Gauge
+
+-->Panel Title: Memory Usage %: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+
+-->Configure Unit: Under: Standard options & then Set: Unit → Percent (0-100)
+
+-->Optional Threshold: Green < 70, Yellow < 85, Red >= 85 etc.
+
+-->Apply
+
+<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/44ca9a12-a1fd-40c6-aaf3-1809a4401b92" />
+
+Panel 3: Container CPU Usage: So this uses cAdvisor metrics: rate(container_cpu_usage_seconds_total{name!=""}[5m]) * 100
+
+-->Select Prometheus first & then Visualization On the right side: Visualization → Time series
+
+-->Title: Container CPU Usage
+
+-->Legend: Under Query Options: Legend Enter: {{name}} So This shows: grafana, prometheus, cadvisor, node-exporter instead of long labels.
+
+-->Apply
+
+<img width="1916" height="968" alt="image" src="https://github.com/user-attachments/assets/2ad76795-720d-4659-b937-758ab556ded6" />
+
+Panel 4: Container Memory Usage: container_memory_usage_bytes{name!=""} / 1024 / 1024
+
+-->Add Visualization in that Select: Prometheus & then on top right side select Visualization: Bar chart
+
+-->Title: Container Memory (MB)
+
+-->Legend: {{name}} & Unit: Megabytes (MB) 
+
+-->Apply
+
+<img width="1913" height="967" alt="image" src="https://github.com/user-attachments/assets/4dd6823a-64b6-4477-85b0-a9d6231daa83" />
+
+Panel 5: Disk Usage %: (1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100
+
+--> Add Visualization Select: Prometheus & then form top right corner select visualization: Stat
+
+-->Title: Disk Usage %
+
+-->Unit: Percent (0-100)
+
+-->Apply
+
+<img width="1918" height="970" alt="image" src="https://github.com/user-attachments/assets/1110180a-2d84-448d-a8ba-4152cae2a6a7" />
+
+Step 3: Arrange the Dashboard: 
+
+<img width="412" height="393" alt="image" src="https://github.com/user-attachments/assets/240af038-dabe-4a73-8e1b-d828b0d9a4a9" />
+
+Step 4: Save Dashboard: Click: Save Dashboard (top-right floppy disk icon) Name: DevOps Observability Overview Click: Save
+
+<img width="1918" height="971" alt="image" src="https://github.com/user-attachments/assets/b04901c0-8020-433c-acbe-ba75a6be3585" />
+
+Step 5: Verify Metrics: Generate some load on your server and watch the dashboard change.
+
+-->CPU Load Test: Install first: sudo apt install stress -y & then run: **stress --cpu 2 --timeout 60** You should see: CPU Usage % ↑
+
+-->Memory Load Test: run: **stress --vm 1 --vm-bytes 500M --timeout 60** You should see: Memory Usage % ↑
+
+<img width="473" height="622" alt="image" src="https://github.com/user-attachments/assets/c31cd66e-72ec-43db-9043-75a9bd715be0" />
+
+<img width="1918" height="965" alt="image" src="https://github.com/user-attachments/assets/348ef279-c12e-47b7-acdc-65d674bd115b" />
+
+-->Your dashboard should now display: Overall CPU usage, Overall memory usage, Per-container CPU usage, Per-container memory usage & Disk usage etc.
 
 ---
 
