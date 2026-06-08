@@ -1,4 +1,4 @@
-# Day 74 -- Node Exporter, cAdvisor, and Grafana Dashboards
+<img width="1915" height="610" alt="image" src="https://github.com/user-attachments/assets/60fcee95-b304-4c9e-b6c6-8231c65c9336" /># Day 74 -- Node Exporter, cAdvisor, and Grafana Dashboards
 
 ## Task
 Prometheus is running and you can query metrics. But right now it is only monitoring itself. In production, you need to monitor two critical things: the **host machine** (CPU, memory, disk, network) and the **Docker containers** running on it.
@@ -708,6 +708,8 @@ Step 9: Prove It Really Works: Delete Grafana container: docker-compose down & t
 ### Task 6: Import a Community Dashboard
 The Grafana community maintains thousands of pre-built dashboards. Import one for Node Exporter:
 
+Great! Task 6 is where Grafana starts feeling like a real production monitoring platform because instead of building every panel manually, you'll leverage dashboards already created and tested by the community.
+
 1. Go to Dashboards > New > Import
 2. Enter dashboard ID: **1860** (Node Exporter Full)
 3. Select your Prometheus datasource
@@ -728,6 +730,72 @@ Verify all are running:
 ```bash
 docker compose ps
 ```
+
+**Steps to follow:**
+
+Step 1: Verify All Monitoring Containers Are Running: docker-compose ps: 
+
+<img width="1897" height="916" alt="image" src="https://github.com/user-attachments/assets/c5518e30-e57c-4e97-a422-51525f6cdcdf" />
+
+Step 2: Open Grafana: http://localhost:3000 & login with it
+
+Step 3: Import Node Exporter Dashboard: 
+
+<img width="523" height="413" alt="image" src="https://github.com/user-attachments/assets/f8a3df0a-9db1-4619-816b-a55970b34de4" />
+
+<img width="1673" height="847" alt="image" src="https://github.com/user-attachments/assets/d4b893b9-f233-4e40-8077-aa8b47a2e7b6" />
+
+<img width="1548" height="762" alt="image" src="https://github.com/user-attachments/assets/f6fd2ce8-6a86-411a-84e2-6ed47ed59d72" />
+
+-->Clicked on import button on above screen and then displayed below screen,
+
+<img width="1905" height="972" alt="image" src="https://github.com/user-attachments/assets/2946d8fa-07db-488e-aa76-351640beaa4a" />
+
+Step 5: Explore Node Exporter Full Dashboard: This dashboard is one of the most popular Grafana dashboards.
+
+<img width="425" height="632" alt="image" src="https://github.com/user-attachments/assets/56e62114-98ce-44ab-8679-26396ca481fd" />
+
+Step 6: Verify Metrics Match Your Earlier Queries: **node_memory_MemTotal_bytes** Now Grafana is visualizing exactly the same metric. Similarly: **node_cpu_seconds_total** is being transformed into CPU utilization graphs. This is a good learning moment: Prometheus stores the data & Grafana only visualizes it.
+
+Step 7: Import Docker Monitoring Dashboard: enter 193
+
+<img width="501" height="557" alt="image" src="https://github.com/user-attachments/assets/79cf74da-1a19-4b7f-b9fc-99485db011cf" />
+
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/774d2d98-4885-40e9-b8fe-38ccf6be91e4" />
+
+Step 8: Explore cAdvisor Metrics: 
+
+<img width="547" height="625" alt="image" src="https://github.com/user-attachments/assets/8b24c2a8-46f5-476c-ba95-a416f0ab7bcb" />
+
+Step 9: Generate Activity and Watch Metrics Change: In terminal Check container CPU usage: docker stats
+
+Now generate traffic to your app: while true do curl http://localhost:8081 > /dev/null done
+
+-->Refresh Grafana. You should notice: CPU spike, Network traffic increases, Request handling activity to stop this Press: CTRL+C
+
+<img width="1918" height="973" alt="image" src="https://github.com/user-attachments/assets/3f94fc87-69bd-4110-8bb7-ec5fae0d46d6" />
+
+Step 10: Verify Prometheus Targets: http://localhost:9090/targets
+
+<img width="1915" height="917" alt="image" src="https://github.com/user-attachments/assets/8b9d4690-e905-42de-98a5-35bdf44d47eb" />
+
+-->You should see: UP  prometheus, UP  node-exporter, UP  cadvisor & If anything is DOWN, dashboards may show missing data.
+
+Step 11: Verify Metrics Directly: 
+
+-->Node Exporter: curl http://localhost:9100/metrics | head
+
+-->cAdvisor: curl http://localhost:8080/metrics | head
+
+<img width="1918" height="350" alt="image" src="https://github.com/user-attachments/assets/25ab6741-f830-4ae7-b32a-3425512a34c9" />
+
+-->Prometheus query example: up 
+
+<img width="1915" height="610" alt="image" src="https://github.com/user-attachments/assets/548595fd-e8de-4654-8beb-95e88a91e123" />
+
+-->Here expected cadvisor 1, node-exporter 1, prometheus 1
+
+<img width="697" height="332" alt="image" src="https://github.com/user-attachments/assets/b67a0792-5fd8-4a1c-8079-6a1e3ec1ecdf" />
 
 ---
 
