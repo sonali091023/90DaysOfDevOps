@@ -701,7 +701,7 @@ Step 9: Prove It Really Works: Delete Grafana container: docker-compose down & t
 
 **Document:** Why is provisioning datasources via YAML better than configuring them manually through the UI?
 
--->(Provisioning Datasources via YAML Better Than Configuring manual)[2026/day-74/Provisioning Datasources via YAML Better Than Configuring manual]
+-->### [Provisioning Datasources via YAML Better Than Configuring Manual](https://grafana.com/docs/grafana/latest/administration/provisioning/)
 
 ---
 
