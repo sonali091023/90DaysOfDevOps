@@ -1,0 +1,55 @@
+# Why is Provisioning Datasources via YAML Better Than Configuring Them Manually?
+
+Grafana datasource provisioning using YAML files is considered a production best practice because it enables Infrastructure as Code (IaC). Instead of manually creating datasources through the Grafana web interface, the configuration is stored as code and automatically applied whenever Grafana starts.
+
+## Benefits of YAML Provisioning
+
+### 1. Repeatability
+
+The same datasource configuration can be deployed consistently across development, testing, and production environments. Every Grafana instance receives identical settings without requiring manual intervention.
+
+### 2. Automation
+
+Datasources are created automatically during startup. This eliminates repetitive UI configuration and reduces deployment time.
+
+### 3. Version Control
+
+YAML files can be stored in Git alongside application and infrastructure code. Changes can be tracked, reviewed, and rolled back when necessary.
+
+### 4. Disaster Recovery
+
+If a Grafana container or server is lost, recreating the environment is simple. After restarting the stack, Grafana automatically restores all configured datasources from the provisioning files.
+
+### 5. Reduced Human Error
+
+Manual configuration can lead to mistakes such as incorrect URLs, authentication settings, or datasource names. YAML provisioning ensures the same validated configuration is applied every time.
+
+### 6. Scalability
+
+In large organizations with multiple Grafana instances, manually configuring datasources becomes impractical. Provisioning allows centralized management and consistent deployments across many environments.
+
+### 7. Supports DevOps Practices
+
+Provisioning aligns with DevOps principles by treating configuration as code. It enables automated deployments through tools such as Ansible, Docker, Terraform, and CI/CD pipelines.
+
+## Example
+
+Instead of manually adding a Prometheus datasource through the Grafana UI after every deployment, the datasource can be defined once in a YAML file:
+
+```yaml
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+```
+
+When Grafana starts, it automatically loads this configuration and creates the datasource.
+
+## Conclusion
+
+Provisioning datasources through YAML provides a repeatable, automated, and production-ready approach to Grafana configuration. It improves reliability, simplifies recovery, reduces manual effort, and supports Infrastructure as Code practices, making it the preferred method for managing Grafana in modern DevOps environments.
