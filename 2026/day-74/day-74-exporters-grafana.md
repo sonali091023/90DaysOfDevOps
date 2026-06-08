@@ -1,4 +1,4 @@
-<img width="1915" height="610" alt="image" src="https://github.com/user-attachments/assets/60fcee95-b304-4c9e-b6c6-8231c65c9336" /># Day 74 -- Node Exporter, cAdvisor, and Grafana Dashboards
+# Day 74 -- Node Exporter, cAdvisor, and Grafana Dashboards
 
 ## Task
 Prometheus is running and you can query metrics. But right now it is only monitoring itself. In production, you need to monitor two critical things: the **host machine** (CPU, memory, disk, network) and the **Docker containers** running on it.
