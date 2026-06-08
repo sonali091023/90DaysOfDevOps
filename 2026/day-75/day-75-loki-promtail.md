@@ -327,8 +327,85 @@ for i in $(seq 1 20); do curl -s http://localhost:8000 > /dev/null; done
 
 **Steps to follow:**
 
+-->Excellent. You're now at the point where logs will actually start flowing.
 
+<img width="333" height="521" alt="image" src="https://github.com/user-attachments/assets/91374033-59ea-4391-a2f6-abe51ae539c6" />
 
+Step 1: Create Promtail Directory: Inside your observability-stack directory: mkdir -p promtail
+
+-->To verify created dir use command: tree -L 2
+
+<img width="1646" height="226" alt="image" src="https://github.com/user-attachments/assets/35563363-f8d2-4d2d-8e92-ac7bce815a72" />
+
+Step 2: Create Promtail Configuration: vi promtail/promtail-config.yml
+
+<img width="513" height="438" alt="image" src="https://github.com/user-attachments/assets/0f64e475-996a-427a-8c3e-9f4b60c49a80" />
+
+Step 3: Understand the Configuration: 
+
+<img width="475" height="821" alt="image" src="https://github.com/user-attachments/assets/caaf22b1-c68a-44ba-a811-76c2bcde3718" />
+
+<img width="427" height="812" alt="image" src="https://github.com/user-attachments/assets/0073c121-16cd-4b49-b2c1-2919edab8524" />
+
+Step 4: Add Promtail Service: vi docker-compose.yml
+
+<img width="568" height="272" alt="image" src="https://github.com/user-attachments/assets/2395cb6a-2493-4326-a3cc-c3439ca9f260" />
+
+Step 5: Validate Compose: docker-compose config
+
+<img width="1643" height="972" alt="image" src="https://github.com/user-attachments/assets/8b26f04b-cd64-4015-acc7-24512e6c3a52" />
+
+<img width="1468" height="971" alt="image" src="https://github.com/user-attachments/assets/e716f90b-152a-4442-b78b-726bff017bb5" />
+
+<img width="1487" height="977" alt="image" src="https://github.com/user-attachments/assets/cfde8b71-6afc-475c-9899-287febe651a4" />
+
+Step 6: Start Everything: docker-compose up -d
+
+-->Once done to verify run command: docker-compose ps
+
+<img width="1918" height="387" alt="image" src="https://github.com/user-attachments/assets/374f1846-c8a8-4dc2-9896-01dae9b66998" />
+
+Step 7: Verify Promtail: docker logs promtail
+
+<img width="1917" height="837" alt="image" src="https://github.com/user-attachments/assets/9395068b-de85-4f42-a2a7-6854f58b788e" />
+
+Step 8: Generate Application Logs: Your jiohotstar app appears to be running on port 8081 according to the task. To Generate traffic: for i in {1..20}; do curl -s http://localhost:8000 > /dev/null; done
+
+-->This creates web access logs.
+
+Step 9: Verify Loki Receives Logs: 
+
+-->First verify promtail logs: docker logs promtail --tail 50
+
+-->Now check loki logs: docker logs loki --tail 50
+
+<img width="1918" height="802" alt="image" src="https://github.com/user-attachments/assets/4cee838c-864b-4bea-8577-dd78b70fc68c" />
+
+<img width="1827" height="907" alt="image" src="https://github.com/user-attachments/assets/3b96084e-04ac-455f-9882-66ddcca92b24" />
+
+Step 10: Verify Log Files Exist: sudo ls /var/lib/docker/containers  [You should see many container IDs.]
+
+<img width="1892" height="110" alt="image" src="https://github.com/user-attachments/assets/b2e13206-6497-4472-86dd-bb3fd2bbc399" />
+
+-->For example check the following one: sudo find /var/lib/docker/containers -name "*json.log" | head
+
+<img width="1917" height="186" alt="image" src="https://github.com/user-attachments/assets/8a3b8657-5691-4cf8-a157-f29fdad6246b" />
+
+-->Expected: /var/lib/docker/containers/xxxxx/xxxxx-json.log This confirms Promtail has files to scrape.
+
+-->Architecture After completation of task 3
+
+<img width="461" height="370" alt="image" src="https://github.com/user-attachments/assets/c4d43102-c963-4d3d-9b3b-235b788160be" />
+
+**Verification checklist:**
+
+-->docker-compose ps
+
+-->docker logs promtail --tail 30
+
+-->curl http://localhost:3100/ready
+
+-->for i in {1..20}; do curl -s http://localhost:8000 > /dev/null; done
 
 ---
 
