@@ -325,6 +325,11 @@ Generate some logs by hitting the notes app:
 for i in $(seq 1 20); do curl -s http://localhost:8000 > /dev/null; done
 ```
 
+**Steps to follow:**
+
+
+
+
 ---
 
 ### Task 4: Add Loki as a Grafana Datasource
