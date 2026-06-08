@@ -90,6 +90,12 @@ filtering by labels. For example: {container="notes-app"} |= "ERROR"
 
 -->Loki first finds all logs from the notes-app container using indexed labels, then searches those logs for the word "ERROR". In contrast, Elasticsearch can search indexed text more quickly because every word is already indexed.
 
+Note: Loki prioritizes lower cost, simpler operations, and cloud-native scalability by indexing only labels rather than full log content. The trade-off is that text searches can be slower than systems that perform full-text indexing, but the reduction in infrastructure overhead makes Loki an attractive choice for many modern DevOps environments.
+
+Q: Why does Loki index labels instead of full text?
+
+A: Loki indexes only labels to reduce storage, memory, and CPU usage. This makes it much cheaper and simpler to operate than ELK. The trade-off is that text searches may be slower because Loki scans log streams after filtering by labels rather than using a full-text index.
+
 ---
 
 ### Task 2: Add Loki to the Stack
@@ -168,6 +174,90 @@ curl http://localhost:3100/ready
 ```
 
 You should see `ready`.
+
+**Steps to follow:**
+
+-->Excellent. You're now extending your observability stack from Metrics (Prometheus) to Logs (Loki).
+
+<img width="312" height="281" alt="image" src="https://github.com/user-attachments/assets/64827368-6800-48b3-8f33-4e7293f27fbf" />
+
+Step 1: Move into Your Observability Directory: cd observability-stack and once go inside dir run command: pwd [To check current working dir]
+
+Step 2: Create Loki Directory: mkdir -p loki       
+
+-->Once loki dir gets create check it for that use command: tree -L 2
+
+<img width="983" height="307" alt="image" src="https://github.com/user-attachments/assets/f3130ed2-b3a6-4758-a638-888eb400ed96" />
+
+Step 3: Create Loki Configuration File: vi loki/loki-config.yml
+
+<img width="341" height="557" alt="image" src="https://github.com/user-attachments/assets/1b654889-e1bc-40c4-ab99-2009e4c0e888" />
+
+Step 4: Understand the Configuration: 
+
+<img width="371" height="742" alt="image" src="https://github.com/user-attachments/assets/86072d34-d4c4-41bd-9342-8ed37693f4e5" />
+
+<img width="371" height="742" alt="image" src="https://github.com/user-attachments/assets/7bfbaf70-5a35-4ace-8f9b-3f141decf6f0" />
+
+<img width="332" height="732" alt="image" src="https://github.com/user-attachments/assets/bd324ff1-bc96-415f-b961-cdff9f7c0d81" />
+
+<img width="240" height="341" alt="image" src="https://github.com/user-attachments/assets/d8c37dd3-eb49-40a4-868f-9a041a17593a" />
+
+Step 5: Add Loki Service to vi docker-compose.yml
+
+<img width="522" height="283" alt="image" src="https://github.com/user-attachments/assets/3d64f16d-bd1d-48d7-8d50-42b8cab43c98" />
+
+Step 6: Add Persistent Storage: 
+
+<img width="418" height="355" alt="image" src="https://github.com/user-attachments/assets/ce9e5bf0-507e-4ef8-bbfa-9b377947ff29" />
+
+Step 7: Validate Compose File: docker-compose config
+
+<img width="1358" height="977" alt="image" src="https://github.com/user-attachments/assets/73326992-6449-4e82-a508-3e54169aa9e2" />
+
+<img width="1347" height="975" alt="image" src="https://github.com/user-attachments/assets/f16b0e9d-046d-4a96-a6a3-71e2903a5418" />
+
+<img width="1376" height="972" alt="image" src="https://github.com/user-attachments/assets/7bf53731-4175-4d5a-a098-0447b782cca3" />
+
+Step 8: Pull and Start Loki: docker-compose up -d loki 
+
+-->To verify run command: docker-compose ps also run docker ps
+
+<img width="1918" height="423" alt="image" src="https://github.com/user-attachments/assets/e324088b-8ac4-4221-9e58-e3a2522e4ae1" />
+
+Step 9: Check Loki Logs: docker logs loki
+
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/53cde2b7-58a8-452e-b7a0-45f99772acbe" />
+
+Step 10: Verify Health Endpoint: curl http://localhost:3100/ready
+
+<img width="1153" height="97" alt="image" src="https://github.com/user-attachments/assets/7bc9d412-8671-4f24-8190-f8c7e045de03" />
+
+<img width="377" height="331" alt="image" src="https://github.com/user-attachments/assets/8e19420a-ae2a-413a-9cdc-95ea2b1868a2" />
+
+Step 11: Verify Loki API: curl http://localhost:3100/metrics | head
+
+<img width="417" height="236" alt="image" src="https://github.com/user-attachments/assets/7525ce7a-b6e5-4fb8-aae3-866aee0134b7" />
+
+<img width="1905" height="318" alt="image" src="https://github.com/user-attachments/assets/6bb0ad51-54a9-4326-9134-9eb384024e09" />
+
+Step 12: Confirm Stack Status: docker-compose ps
+
+<img width="1877" height="176" alt="image" src="https://github.com/user-attachments/assets/448332e6-2c1b-4a86-acf4-3473a038e089" />
+
+**Verification Checklist:**
+
+-->docker compose config
+
+-->docker compose ps
+
+-->curl http://localhost:3100/ready [here we test the readiness endpoint]
+
+-->docker logs loki
+
+-->To check loki is really running: docker ps | grep loki
+
+<img width="1741" height="117" alt="image" src="https://github.com/user-attachments/assets/1d963d89-89c0-49ff-a9fc-c5374af3fd46" />
 
 ---
 
