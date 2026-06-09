@@ -1,4 +1,4 @@
-# Day 76 -- OpenTelemetry and Alerting
+<img width="1918" height="517" alt="image" src="https://github.com/user-attachments/assets/2611fe77-c2c1-41ec-8c37-3015db24c477" /># Day 76 -- OpenTelemetry and Alerting
 
 ## Task
 You have metrics (Prometheus) and logs (Loki). Today you add the third pillar -- traces -- using OpenTelemetry, the industry-standard framework for collecting telemetry data. Then you set up alerting so your system notifies you when something goes wrong, instead of you staring at dashboards all day.
@@ -305,6 +305,42 @@ test_requests_total
 ```
 
 The metric traveled: your curl command -> OTEL Collector (OTLP receiver) -> Prometheus exporter -> Prometheus scraped it. This is how OTEL bridges different telemetry formats.
+
+**Steps to follow:**
+
+-->Great! This task is your first hands-on test of OpenTelemetry. The goal is to prove that the OTEL Collector can receive traces and metrics.
+
+Step 1: Verify Collector is Running: docker ps | grep otel
+
+Step 2: Send a Test Trace: Copy and run the command exactly as given:
+
+<img width="585" height="652" alt="image" src="https://github.com/user-attachments/assets/acfd415d-d06d-4a52-9db0-c5620d9ae3cd" />
+
+Step 3: Expected Result: If successful: {} or HTTP 200 No errors should appear.
+
+Step 4: Check Collector Logs: docker logs otel-collector 2>&1 | grep -A 20 "test-span"
+
+<img width="1918" height="980" alt="image" src="https://github.com/user-attachments/assets/5d22193c-4b8d-481f-a63f-1f6855345293" />
+
+<img width="396" height="531" alt="image" src="https://github.com/user-attachments/assets/8b4aeed7-5e25-4f6f-92c2-37a4aa06a9e1" />
+
+Step 5: Send a Test Metric: 
+
+<img width="461" height="611" alt="image" src="https://github.com/user-attachments/assets/87ce179f-268a-45f6-8d14-5621df7bd377" />
+
+<img width="1918" height="517" alt="image" src="https://github.com/user-attachments/assets/d711ceb8-108d-41ec-ac55-d19241708533" />
+
+Step 6: Check Collector Logs Again: docker logs otel-collector --tail 100
+
+<img width="1918" height="792" alt="image" src="https://github.com/user-attachments/assets/a44a021b-b830-4272-8438-2830619c525d" />
+
+Step 7: Verify Prometheus Can See It: test_requests_total
+
+<img width="1918" height="578" alt="image" src="https://github.com/user-attachments/assets/46aadf21-3ad9-4ce1-8515-ba9157556176" />
+
+<img width="502" height="752" alt="image" src="https://github.com/user-attachments/assets/e1d112a0-06ee-4dc1-a7b0-23a227c0709b" />
+
+<img width="590" height="672" alt="image" src="https://github.com/user-attachments/assets/aefa9f23-4162-4018-9827-81632760f09f" />
 
 ---
 
