@@ -1,0 +1,32 @@
+timezone: Asia/Kolkata
+project_name: devops-app
+app_env: development
+
+# ─── Docker Apps (Web + DB) ───────────────────────────────────────────
+docker_apps:
+  - name: jiohotstar-web
+    image: sonali0910/jiohotstar
+    tag: latest
+    app_port: 8081
+    container_port: 5000
+
+  - name: jiohotstar-db
+    image: sonali0910/postgres
+    tag: latest
+    app_port: 5432
+    container_port: 5432
+    env_vars:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      POSTGRES_DB: devops_db
+
+# ─── Common Packages ──────────────────────────────────────────────────
+common_packages:
+  - vim
+  - curl
+  - wget
+  - git
+  - htop
+  - tree
+  - jq
+  - unzip

@@ -1,0 +1,35 @@
+#terrform
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+
+#Private SSH Keys
+*.pem
+*.ppk
+*.key
+
+#Ansible Vault Files
+**/vault.yml
+
+#Python Cache Files
+__pycache__/
+*.py[cod]
+
+#python Virtual Environments
+venv/
+.venv/
+env/
+
+#IDE Files
+.vscode/
+.idea/
+
+#OS Files
+.DS_Store
+Thumbs.db
+
+# Ansible
+*.retry
