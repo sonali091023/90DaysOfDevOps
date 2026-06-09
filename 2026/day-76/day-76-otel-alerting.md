@@ -155,8 +155,74 @@ Verify the collector is running:
 ```bash
 docker logs otel-collector 2>&1 | tail -5
 ```
-
 Check Prometheus Targets -- you should now see `otel-collector` as UP.
+
+**Steps to follow:**
+
+-->Great! You're now moving into OpenTelemetry (OTEL), which is the next step after metrics (Prometheus), logs (Loki), and dashboards (Grafana). Since your project structure already has an observability-stack directory, create the collector inside that directory.
+
+Step 1: Create the Directory: inside observisibility-stack dir: mkdir -p otel-collector So once it gets create to verify use command: tree -L 2
+
+<img width="1293" height="376" alt="image" src="https://github.com/user-attachments/assets/2ef3915f-dd3d-4b0a-8665-9540050f34a0" />
+
+Step 2: Create OTEL Collector Config: vi otel-collector/otel-collector-config.yml
+
+<img width="410" height="698" alt="image" src="https://github.com/user-attachments/assets/119afc7a-59df-4a1e-b0b8-a58435d894f5" />
+
+Step 3: Add OTEL Collector Service: vi docker-compose.yml Add this service alongside your other services:
+
+<img width="608" height="602" alt="image" src="https://github.com/user-attachments/assets/965d83fa-b3bf-4660-97bc-db15bb4b6a66" />
+
+Step 4: Add Prometheus Scrape Job: vi prometheus.yml
+
+<img width="417" height="620" alt="image" src="https://github.com/user-attachments/assets/3d192681-3d85-4b55-aa1d-d8b91db05f35" />
+
+Step 5: Validate the Compose File: docker-compose config 
+
+<img width="1667" height="977" alt="image" src="https://github.com/user-attachments/assets/a13db6a2-0eb7-4b3f-8208-3f85b157711e" />
+
+Step 6: Start the Collector: docker-compose up -d OR docker compose up -d otel-collector
+
+-->Then to verify use command: docker-compose ps OR docker ps
+
+Step 7: Check Collector Logs: docker logs otel-collector --tail 20
+
+<img width="1896" height="245" alt="image" src="https://github.com/user-attachments/assets/6b638c5a-5028-4f9b-bbdb-ec21a4996a8d" />
+
+Step 8: Restart Prometheus: docker-compose restart prometheus
+
+<img width="1912" height="622" alt="image" src="https://github.com/user-attachments/assets/b8733233-fc07-4fae-8031-f8561c191be4" />
+
+Step 9: Verify Target in Prometheus: http://localhost:9090/targets
+
+<img width="1912" height="971" alt="image" src="https://github.com/user-attachments/assets/49c9adca-3b80-4221-8d93-a76678974da8" />
+
+Step 10: Verify Metrics Endpoint Directly: curl http://localhost:8889/metrics | head
+
+<img width="1602" height="140" alt="image" src="https://github.com/user-attachments/assets/efd727c8-64f9-4e12-a18f-0131d7515357" />
+
+-->You should see Prometheus metrics such as: # HELP, # TYPE, otelcol_receiver_accepted_metric_points etc.
+
+**Why use the OpenTelemetry Collector instead of sending telemetry directly to each backend?**
+
+-->Centralizes telemetry collection in one place, Applications send data once using OTLP. The collector can fan out data to multiple backends simultaneously.
+
+-->Processors can batch, filter, enrich, or sample telemetry before export. Reduces application complexity because apps don't need separate integrations for Prometheus, Jaeger, Loki, Datadog, etc. Makes backend changes easier since only the collector configuration changes, not the application code.
+
+Troubleshooting command:
+
+-->Check if the container exists: docker ps | grep otel OR docker ps -a | grep otel
+
+-->Check your compose file: docker-compose config | grep otel
+
+-->Check Prometheus configuration: cat prometheus.yml & then restart it: docker compose restart prometheus & then check logs: docker logs prometheus --tail 20
+
+-->Verify the collector logs: docker logs otel-collector
+
+-->Also verify Prometheus can see the target: docker exec -it prometheus wget -qO- http://otel-collector:8889/metrics | head OR use command: docker exec -it prometheus sh & then inside run command: wget -qO- http://otel-collector:8889/metrics | head
+
+
+
 
 ---
 
