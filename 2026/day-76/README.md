@@ -22,57 +22,25 @@ By the end of today, your observability stack covers all three pillars and activ
 Research and write notes on:
 
 1. **What is OpenTelemetry (OTEL)?**
-- A vendor-neutral, open-source framework for generating, collecting, and exporting telemetry data (metrics, logs, traces)
-- It is not a backend -- it collects and ships data to backends like Prometheus, Jaeger, Loki, Datadog
--->OpenTelemetry (OTEL) is an open-source observability framework that provides a standardized way to generate, collect, process, and export telemetry data from applications and infrastructure.
-
-<img width="702" height="552" alt="image" src="https://github.com/user-attachments/assets/a08a20a1-6e69-4b9b-a4b7-7d3c0418b828" />
+   - A vendor-neutral, open-source framework for generating, collecting, and exporting telemetry data (metrics, logs, traces)
+   - It is not a backend -- it collects and ships data to backends like Prometheus, Jaeger, Loki, Datadog
 
 2. **What is the OTEL Collector?**
-- A standalone service that receives, processes, and exports telemetry
-- Three components in the pipeline:
-- **Receivers** -- accept data (OTLP, Prometheus, Jaeger formats)
-- **Processors** -- transform data (batching, filtering, sampling)
-- **Exporters** -- send data to backends (Prometheus, debug console, Jaeger)
--->The OTEL Collector is a service that receives telemetry, processes it, and exports it to observability backends. Think of it as a central telemetry router.
-
-<img width="722" height="621" alt="image" src="https://github.com/user-attachments/assets/afe7401d-89a7-4882-a6fd-e770e56b28b1" />
-
-<img width="565" height="782" alt="image" src="https://github.com/user-attachments/assets/3d345fa5-2b04-4d28-a4a2-bfa6bcb9a5a3" />
+   - A standalone service that receives, processes, and exports telemetry
+   - Three components in the pipeline:
+     - **Receivers** -- accept data (OTLP, Prometheus, Jaeger formats)
+     - **Processors** -- transform data (batching, filtering, sampling)
+     - **Exporters** -- send data to backends (Prometheus, debug console, Jaeger)
 
 3. **What is OTLP?**
-- OpenTelemetry Protocol -- the standard wire format for sending telemetry
-- Supports gRPC (port 4317) and HTTP (port 4318)
--->OTLP (OpenTelemetry Protocol) is the standard protocol used by OpenTelemetry components to exchange telemetry data. It defines how metrics, logs, and traces are transmitted.
-
-<img width="651" height="487" alt="image" src="https://github.com/user-attachments/assets/3b5fe885-2175-4f6a-b15a-ebf260397a4b" />
+   - OpenTelemetry Protocol -- the standard wire format for sending telemetry
+   - Supports gRPC (port 4317) and HTTP (port 4318)
 
 4. **What are distributed traces?**
-- A trace tracks a single request as it travels through multiple services
-- Each step in the trace is called a **span**
-- Spans have: trace ID, span ID, parent span ID, start time, duration, attributes
-- Example: User request -> API Gateway (span 1) -> Auth Service (span 2) -> Database (span 3)
--->A distributed trace follows a request as it moves through multiple services.
-
--->It answers questions like: Where is latency occurring?, Which service failed?, Which database query is slow? etc.
-
-<img width="437" height="667" alt="image" src="https://github.com/user-attachments/assets/d631d286-4d26-4a75-ac2c-1d4fb00e37bb" />
-
--->Span Information Every span contains: Trace ID, Span ID, Parent Span ID, Start Time, End Time, Duration, Attributes etc.
-
-<img width="547" height="708" alt="image" src="https://github.com/user-attachments/assets/709f054b-890a-44f3-8c17-6a1a20741fe5" />
-
-**Quick Interview Summary:**
-
-**What is OpenTelemetry?** An open-source observability framework used to collect metrics, logs, and traces and send them to various backends.
-
-**What is the OTEL Collector?** A telemetry pipeline component that receives, processes, and exports observability data.
-
-**What is OTLP?** OpenTelemetry Protocol, the standard protocol used to send telemetry data via gRPC (4317) or HTTP (4318).
-
-**What is a distributed trace?** A complete record of a request traveling through multiple services.
-
-**What is a span?** A single operation or step within a trace.
+   - A trace tracks a single request as it travels through multiple services
+   - Each step in the trace is called a **span**
+   - Spans have: trace ID, span ID, parent span ID, start time, duration, attributes
+   - Example: User request -> API Gateway (span 1) -> Auth Service (span 2) -> Database (span 3)
 
 ---
 
