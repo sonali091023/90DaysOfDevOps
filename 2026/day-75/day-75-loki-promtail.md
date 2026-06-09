@@ -446,6 +446,73 @@ docker compose restart grafana
 
 Either way, you should now have two datasources in Grafana: Prometheus and Loki.
 
+**Steps to follow:**
+
+Step 1: Open the Datasource Configuration: Go to your observability project: cd observability-stack
+
+-->And then open datasources yml file: vi grafana/provisioning/datasources/datasources.yml
+
+Step 2: Update the File: 
+
+<img width="447" height="658" alt="image" src="https://github.com/user-attachments/assets/e0dcd909-b116-42a2-ae7a-e2a3f649b22c" />
+
+Step 3: Verify YAML Formatting: cat grafana/provisioning/datasources/datasources.yml [in this file both entries are starts with - So This indicates two items in the datasource list.]
+
+Step 4: Restart Grafana: 
+
+-->docker-compose restart grafana OR docker-compose up -d
+
+-->Grafana only loads provisioning files during startup.
+
+-->And then check the status: docker-compose ps
+
+<img width="1902" height="396" alt="image" src="https://github.com/user-attachments/assets/e174d0a8-6b78-42d3-8045-8daa646c0593" />
+
+Step 5: Check Grafana Logs: docker logs grafana --tail 50
+
+<img width="1918" height="982" alt="image" src="https://github.com/user-attachments/assets/00da0888-8762-4315-b0f1-d21efadde806" />
+
+Step 6: Open Grafana: http://localhost:3000
+
+Step 7: Verify Datasources: Navigate: to connections --> then data sources there we can see Prometheus, Loki Two datasources.
+
+Connections
+  |
+  └── Data Sources
+<img width="1918" height="750" alt="image" src="https://github.com/user-attachments/assets/865a61aa-7364-4038-8874-a5535ad466c1" />
+
+Step 8: Verify Prometheus: So select prometheus and then we can see ok or data source is working
+
+Step 9: Verify Loki: Click: Loki & Look for: Save & Test (or Grafana may already show it as provisioned) & Expected result: Data source connected successfully
+
+Step 10: Verify Loki Connectivity from Grafana Container: docker exec -it grafana sh
+
+-->Here in grafana container run command: wget -qO- http://loki:3100/ready
+
+<img width="1648" height="131" alt="image" src="https://github.com/user-attachments/assets/0fba7814-48de-4dfe-9822-7bd39ac213f6" />
+
+Step 11: Verify Network Connectivity:
+
+-->List containers:: docker network ls
+
+-->Find your compose network: docker network inspect observability-stack_default
+
+<img width="1607" height="940" alt="image" src="https://github.com/user-attachments/assets/9057b585-68f4-4dc0-b14e-e847b341b24a" />
+
+<img width="1523" height="986" alt="image" src="https://github.com/user-attachments/assets/cb59560b-45d4-4f17-b123-b56823e4f88e" />
+
+<img width="521" height="435" alt="image" src="https://github.com/user-attachments/assets/19f244be-3606-43d3-86fe-2989d62e5212" />
+
+Verification Checklist:
+
+-->docker-compose ps
+
+-->docker-compose restart grafana
+
+-->docker logs grafana --tail 50
+
+-->Then in grafana container check the connectivity of the loki: To go inside grafana container use command: docker exec -it grafana sh & then inside run command: wget -qO- http://loki:3100/ready to check the lokis servers readniess
+
 ---
 
 ### Task 5: Query Logs with LogQL
@@ -496,8 +563,87 @@ rate({job="docker"}[5m])
 ```logql
 topk(5, sum by (container_name) (rate({job="docker"}[5m])))
 ```
+**Steps to follow:**
+
+-->Excellent! This is where Loki becomes useful. Up to now you've been collecting logs; now you'll search, filter, and analyze them using LogQL.
+
+Step 1: Open Grafana Explore: http://localhost:3000 and then select loki from  the data source
+
+Step 2: Verify Logs Are Coming In: query: {job="docker"}
+
+Steps to run query:
+
+-->You run the LogQL queries inside Grafana, not in the Linux terminal. For that launch the grafana and login to it, later look for option Explore[Compass icon] option & select it and then on the next page we can find search filter click on it and select loki, Then on top right corner we can see 2 options available builder and Code in that we have to switch to Code and then in the search filter paste the above mentioned query and then simply run the query
+
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/95eaa3ab-4f4c-4dad-93c0-6fae2db50e05" />
+
+Step 3: Generate Fresh Logs: for i in {1..20}; do   curl -s http://localhost:8081 > /dev/null; done
+
+<img width="1910" height="157" alt="image" src="https://github.com/user-attachments/assets/d7ab8d8f-7f06-45f2-9d25-8014d16a2cac" />
+
+<img width="1917" height="970" alt="image" src="https://github.com/user-attachments/assets/8789bf96-9fa9-401b-ad94-8330fa306bc6" />
+
+Step 4: Learn Basic LogQL: 
+
+-->Show All Docker Logs: {job="docker"} -->This is queal to SELECT * FROM logs
+
+<img width="1917" height="970" alt="image" src="https://github.com/user-attachments/assets/aefe8fed-0dbc-49ea-ad4d-94d799bf81c1" />
+
+-->Search for a Word: {job="docker"} |= "error" -->Means Show logs containing "error" [Like for ex: database error, connection error, internal server error etc.]
+
+<img width="1912" height="972" alt="image" src="https://github.com/user-attachments/assets/8520706c-6bce-4473-9f7f-b2bf1ed394bd" />
+
+-->Exclude a Word: {job="docker"} != "health" -->Meaning: Show everything except lines containing "health" [Useful when health checks flood logs]
+
+<img width="1916" height="977" alt="image" src="https://github.com/user-attachments/assets/6ecdcf29-a8ed-419e-b0ac-702ec4c6a274" />
+
+-->Regex Search: {job="docker"} |~ "status=[45]\\d{2}" -->Matches: status=404, status=500, status=503 [Useful for finding failed requests.]
+
+<img width="1916" height="967" alt="image" src="https://github.com/user-attachments/assets/7691aec7-7649-47f8-bc7c-7ef79b319730" />
+
+Step 5: Discover Available Labels: 
+
+<img width="576" height="471" alt="image" src="https://github.com/user-attachments/assets/ec1773d5-95db-4f2a-9f17-24b5ce430995" />
+
+Step 6: Filter By Container: 
+
+<img width="606" height="467" alt="image" src="https://github.com/user-attachments/assets/c0ab4bfe-754f-4037-b19c-4abe4527fe4f" />
+
+Step 7: Log Metrics: Loki can turn logs into metrics.
+
+-->Count Logs: count_over_time({job="docker"}[5m]) -->[Meaning: How many log lines appeared in the last 5 minutes?]
+
+<img width="1897" height="963" alt="image" src="https://github.com/user-attachments/assets/6f792fb2-a01f-4faf-b5da-de3e15527885" />
+
+-->Log Rate: rate({job="docker"}[5m]) -->[Meaning:, Logs per second ]
+
+-->Top Log Producers: 
+
+<img width="1915" height="982" alt="image" src="https://github.com/user-attachments/assets/ae41080d-e036-4961-848a-7644826f1aae" />
 
 **Exercise:** Write a LogQL query that finds all error logs from the notes-app container in the last 1 hour. Then write another query that counts how many error lines per minute.
+
+<img width="531" height="696" alt="image" src="https://github.com/user-attachments/assets/c6fe596d-20ba-4c4e-8310-69a097f49ab6" />
+
+**Useful Queries for Your Project:**
+
+-->Show Flask App Logs: {container_name="jiohotstar"}
+
+-->Show PostgreSQL Logs: {container_name="db"}
+
+-->Show Grafana Logs: {container_name="grafana"}
+
+-->Show Prometheus Logs: {container_name="prometheus"}
+
+-->Show Only HTTP Errors: {container_name="jiohotstar"} |~ "40[0-9]|50[0-9]"
+
+-->Count All Logs Per Minute: count_over_time({job="docker"}[1m])
+
+**Quick Troubleshooting:**
+
+-->Run command: {job="docker"} returns No logs found, check: docker logs promtail --tail 50 & docker logs loki --tail 50
+
+-->Also verify that Promtail is reading Docker logs: docker exec -it promtail cat /tmp/positions.yaml & If the file contains entries, Promtail is actively tracking log files.
 
 ---
 
@@ -521,7 +667,52 @@ The real power of observability is correlation -- seeing metrics and logs togeth
 
 3. **Time sync:** Click on a spike in the metrics graph and both panels will zoom to that time range. This is how you debug in production -- you see a metric anomaly and immediately check the logs from that exact moment.
 
+**Steps to follow:**
+
+-->Great! This task is more about understanding observability workflows than configuring new components. Since your Promtail setup does not expose container_name labels, we'll slightly adapt the tutorial queries to match your environment.
+
+Step 1: Open Your Existing Dashboard: In Grafana: Dashboards → DevOps Observability Overview
+
+Step 2: Add a Logs Panel: Click: Edit Dashboard  → Add → Visualization there Select datasource: Loki & then run the Query {job="docker"}
+
+-->Visualization: Here Select: Logs then Set: Title: Container Logs & then Click: Apply
+
+<img width="1918" height="968" alt="image" src="https://github.com/user-attachments/assets/a0c134c0-10dd-44c4-a78d-4ccde996beaa" />
+
+<img width="1918" height="962" alt="image" src="https://github.com/user-attachments/assets/62628243-be07-4c64-b06e-a56bae7282b9" />
+
+Step 3: Save Dashboard: here we can see CPU Usage, Memory Usage, Container CPU, Container Memory, Disk Usage, Container Logs on one dashboard.
+
+Step 4: Explore Split View: Go to: Explore Click the: Split button (two panels side-by-side)
+
+<img width="455" height="830" alt="image" src="https://github.com/user-attachments/assets/9ba97046-8a6d-4195-8a7e-1da07ea1b1a1" />
+
+<img width="1912" height="967" alt="image" src="https://github.com/user-attachments/assets/0e6b8bb0-fe06-418d-89c1-5637019904fa" />
+
+Step 5: Generate Activity: for i in {1..50}; do   curl -s http://localhost:8081 > /dev/null; done
+
+--?This creates: Web requests, Application logs, Container activity etc.
+
+Step 6: Observe Correlation: 
+
+<img width="307" height="282" alt="image" src="https://github.com/user-attachments/assets/90758329-9748-43c1-87df-196dbe492c65" />
+
+Step 7: Time Synchronization: 
+
+<img width="1913" height="970" alt="image" src="https://github.com/user-attachments/assets/49f462b6-ccfa-43a3-a6a2-28e8322a778b" />
+
+-->One of Grafana's biggest strengths: Suppose you see: CPU spike at 13:45 You can: Select that time range in the metric graph then Grafana automatically updates the log panel & Logs now show only entries around: 13:45 Instead of searching manually through thousands of log lines.
+
+<img width="377" height="706" alt="image" src="https://github.com/user-attachments/assets/f953cc69-a6f5-414b-917a-905d9e456b7a" />
+
 **Document:** How does having metrics and logs in the same tool (Grafana) help during incident response compared to checking separate systems?
+-->Having metrics and logs available in the same Grafana interface significantly reduces troubleshooting time during incidents. Metrics help identify when and where a problem occurred, such as high CPU usage, memory pressure, increased error rates, or abnormal traffic patterns. Logs provide the detailed context needed to understand why the issue happened.
+
+With Grafana's correlation capabilities, engineers can move directly from a metric anomaly to the corresponding logs within the same time range. This eliminates the need to switch between separate monitoring and logging tools, reduces context switching, and accelerates root cause analysis.
+
+For example, if a CPU spike is observed at a specific timestamp, Grafana allows the user to immediately view container logs from that exact period. This helps teams quickly determine whether the spike was caused by application errors, increased traffic, database issues, or infrastructure problems.
+
+As a result, having metrics and logs in the same platform improves operational visibility, shortens incident resolution time, and enhances overall system reliability.
 
 ---
 
