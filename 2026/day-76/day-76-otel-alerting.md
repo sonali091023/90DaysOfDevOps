@@ -1,4 +1,4 @@
-<img width="1918" height="517" alt="image" src="https://github.com/user-attachments/assets/2611fe77-c2c1-41ec-8c37-3015db24c477" /># Day 76 -- OpenTelemetry and Alerting
+# Day 76 -- OpenTelemetry and Alerting
 
 ## Task
 You have metrics (Prometheus) and logs (Loki). Today you add the third pillar -- traces -- using OpenTelemetry, the industry-standard framework for collecting telemetry data. Then you set up alerting so your system notifies you when something goes wrong, instead of you staring at dashboards all day.
@@ -465,6 +465,10 @@ Wait 1-2 minutes, then check Alerts in the Prometheus UI. Start it back up when 
 ```bash
 docker compose start notes-app
 ```
+
+**Steps to follow:**
+
+
 
 ---
 
