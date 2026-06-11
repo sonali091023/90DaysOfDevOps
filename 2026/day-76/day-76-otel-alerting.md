@@ -695,6 +695,46 @@ docker compose ps
 
 All 8 containers should be healthy and running.
 
+**Steps to follow:**
+
+Step 1: Check Running Containers: docker-compose ps OR docker ps
+
+<img width="1907" height="650" alt="image" src="https://github.com/user-attachments/assets/630a0eb5-ff98-4ee4-a524-e52a146cec6d" />
+
+Step 2: Verify Each Service: 
+
+-->Open prometheus: http://localhost:9090 & then check Status → Targets -->   All should be UP.
+
+<img width="1916" height="958" alt="image" src="https://github.com/user-attachments/assets/d5624213-e875-4593-bd35-e2c998356d86" />
+
+-->Open Grafana: http://localhost:3000 then Login: admin & password: admin123 Verify: Connections → Data Sources You should see: Prometheus, Loki
+
+<img width="1912" height="825" alt="image" src="https://github.com/user-attachments/assets/bcab378e-f46f-459f-bdc0-c5396ee0af53" />
+
+-->Loki In Grafana: Explore → Loki datasource there Run Query: {job="docker"} Logs should appear.
+
+<img width="1913" height="966" alt="image" src="https://github.com/user-attachments/assets/6ad21614-0971-42f6-94de-f0ac88bd5b4a" />
+
+-->Promtail: Verify Promtail is shipping logs: docker logs promtail --tail 20 No major errors should appear.
+
+<img width="1912" height="815" alt="image" src="https://github.com/user-attachments/assets/7d6ac247-5b01-472d-8c9d-09e68ac0901e" />
+
+-->OTEL Collector Verify: docker logs otel-collector --tail 20 Expected: Everything is ready. Begin running and processing data.
+
+<img width="1918" height="288" alt="image" src="https://github.com/user-attachments/assets/632fa618-80ef-46e7-9179-c907b9092e5c" />
+
+Step 3: Understand the Metrics Pipeline: 
+
+<img width="417" height="822" alt="image" src="https://github.com/user-attachments/assets/0f303c35-1ee6-4b0c-9bf4-2712f46c71b4" />
+
+Step 4: Understand the Logs Pipeline:
+
+<img width="317" height="427" alt="image" src="https://github.com/user-attachments/assets/e84a7617-5237-44a3-a06b-6bbaa361ee77" />
+
+Step 5: Understand the Traces Pipeline: 
+
+<img width="412" height="663" alt="image" src="https://github.com/user-attachments/assets/05d065f8-73e1-49d0-882a-91e76a02a654" />
+
 ---
 
 ## Hints
