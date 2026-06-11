@@ -221,9 +221,6 @@ Troubleshooting command:
 
 -->Also verify Prometheus can see the target: docker exec -it prometheus wget -qO- http://otel-collector:8889/metrics | head OR use command: docker exec -it prometheus sh & then inside run command: wget -qO- http://otel-collector:8889/metrics | head
 
-
-
-
 ---
 
 ### Task 3: Send Test Traces to the Collector
@@ -645,8 +642,19 @@ Step 8: Verify Rule: Go to: Alerting --> Alert Rules You should see: High Contai
 
 Step 9: Create Notification Policy: Navigate: Alerting --> Notification policies
 
+<img width="383" height="715" alt="image" src="https://github.com/user-attachments/assets/4a55a4af-2614-4f23-9c54-7d6d98b6e4ac" />
 
+Step 10: Test Alert: 
 
+<img width="727" height="436" alt="image" src="https://github.com/user-attachments/assets/aa83a1a7-139b-46b8-b24b-16330542eeeb" />
+
+**Q. Difference Between Prometheus Alerts and Grafana Alerts**
+
+<img width="812" height="820" alt="image" src="https://github.com/user-attachments/assets/3c0cf179-13dd-4564-b628-bde88dc76b9c" />
+
+<img width="566" height="380" alt="image" src="https://github.com/user-attachments/assets/b7234314-913f-45b5-8209-293c8c6c0c0d" />
+
+-->Prometheus alerts are evaluated by Prometheus using PromQL and are usually used for infrastructure monitoring. Grafana alerts are evaluated by Grafana and can use multiple data sources such as Prometheus, Loki, Elasticsearch, and InfluxDB. Prometheus typically relies on Alertmanager for notifications, whereas Grafana has built-in contact points and notification policies. Prometheus alerts are preferred for core monitoring, while Grafana alerts are useful for centralized observability and dashboard-driven alerting.
 
 ---
 
