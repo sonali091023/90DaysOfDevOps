@@ -1,0 +1,77 @@
+# Day 76 – Full Observability Stack Review
+
+## Metrics Pipeline
+
+Metrics are collected from:
+
+* Node Exporter (host metrics)
+* cAdvisor (container metrics)
+* OpenTelemetry Collector (OTLP metrics)
+
+Prometheus scrapes these targets every 15 seconds and stores the data. Grafana queries Prometheus to create dashboards and alert rules.
+
+Flow:
+
+Node Exporter → Prometheus → Grafana
+
+cAdvisor → Prometheus → Grafana
+
+OTEL Collector → Prometheus → Grafana
+
+Prometheus Alerts → Notifications
+
+## Logs Pipeline
+
+Docker containers generate logs.
+
+Promtail collects log files from Docker containers and forwards them to Loki.
+
+Grafana queries Loki to visualize and search logs.
+
+Flow:
+
+Docker Containers → Promtail → Loki → Grafana
+
+## Traces Pipeline
+
+OpenTelemetry Collector receives telemetry using OTLP over gRPC (4317) and HTTP (4318).
+
+Traces are currently exported to the debug exporter for testing.
+
+Flow:
+
+Application / curl → OTEL Collector → Debug Exporter
+
+Future:
+
+Application → OTEL Collector → Tempo or Jaeger → Grafana
+
+## Services
+
+Prometheus (9090) – Metrics storage and querying
+
+Node Exporter (9100) – Host metrics
+
+cAdvisor (8080) – Container metrics
+
+Grafana (3000) – Dashboards and alerting
+
+Loki (3100) – Log storage
+
+Promtail (9080) – Log collection
+
+OTEL Collector (4317/4318/8889) – Telemetry collection
+
+JioHotstar Application (8081) – Sample application
+
+PostgreSQL (5432) – Application database
+
+## Outcome
+
+The observability stack now supports all three observability pillars:
+
+1. Metrics
+2. Logs
+3. Traces
+
+This enables monitoring, troubleshooting, alerting, and root cause analysis from a single Grafana interface.
