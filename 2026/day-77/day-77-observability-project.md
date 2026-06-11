@@ -187,6 +187,49 @@ topk(3, container_memory_usage_bytes{name!=""})
 
 Compare the `prometheus.yml` from the reference repo with the one you built over days 73-76. Note the scrape jobs and intervals.
 
+**Steps to follow:**
+
+Step 1: Open the Prometheus Targets Page: on browser launch: http://localhost:9090/targets
+
+<img width="602" height="533" alt="image" src="https://github.com/user-attachments/assets/8c65959c-3c58-4108-8378-f2b6096d26e0" />
+
+<img width="350" height="817" alt="image" src="https://github.com/user-attachments/assets/e5a597d1-a4eb-4228-a74d-be3ffa7694d8" />
+
+Step 2: Verify "up" Metric: http://localhost:9090 -->Click: Graph → Execute Query: up & then click on Execute.
+
+Expected:
+
+<img width="512" height="443" alt="image" src="https://github.com/user-attachments/assets/15e79829-f00c-45b4-9623-797dccbf3213" />
+
+Step 3: Validate CPU Metrics: 
+
+<img width="542" height="782" alt="image" src="https://github.com/user-attachments/assets/728b9e84-6b23-44a6-b19b-6c1508b40838" />
+
+Step 4: Validate Memory Usage:
+
+<img width="537" height="782" alt="image" src="https://github.com/user-attachments/assets/496248bb-22fd-4332-85ee-3ff620a1fc55" />
+
+Step 5: Container CPU Usage: 
+
+<img width="516" height="675" alt="image" src="https://github.com/user-attachments/assets/e564786e-f668-4354-b432-eca57cdb7280" />
+
+Step 6: Top Memory Consumers: 
+
+<img width="401" height="650" alt="image" src="https://github.com/user-attachments/assets/fc4df744-08e5-4833-972b-afbdc2504b0e" />
+
+Step 7: Switch to Graph View: 
+
+<img width="460" height="477" alt="image" src="https://github.com/user-attachments/assets/b45b905b-b7ca-46ee-b7f8-57dbeb55667e" />
+
+Step 8: Inspect the Reference Prometheus Configuration: cat prometheus.yml
+
+<img width="1153" height="517" alt="image" src="https://github.com/user-attachments/assets/69e90f3d-04e8-491e-bf81-2603f2610330" />
+
+Step 9: Compare with Your Day 73–76 Setup: Open your old Prometheus configuration. Example: cat ~/90DaysOfDevOps/.../prometheus.yml Compare: Day 73–76 Stack
+Typically:
+
+<img width="502" height="703" alt="image" src="https://github.com/user-attachments/assets/2884d8de-6b0d-4cac-a13a-43becb8787bc" />
+
 ---
 
 ### Task 3: Validate the Logs Pipeline
