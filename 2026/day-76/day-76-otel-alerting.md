@@ -1,4 +1,4 @@
-<img width="1907" height="970" alt="image" src="https://github.com/user-attachments/assets/5e96508c-b486-4cb9-abbd-d4adebebf5b7" /># Day 76 -- OpenTelemetry and Alerting
+# Day 76 -- OpenTelemetry and Alerting
 
 ## Task
 You have metrics (Prometheus) and logs (Loki). Today you add the third pillar -- traces -- using OpenTelemetry, the industry-standard framework for collecting telemetry data. Then you set up alerting so your system notifies you when something goes wrong, instead of you staring at dashboards all day.
@@ -609,14 +609,17 @@ You should receive an email within a few seconds.
 
 <img width="1916" height="965" alt="image" src="https://github.com/user-attachments/assets/57b61f2d-ba80-4b6c-9473-068dfd318103" />
 
-
-
-
-Step 3: Create Alert Rule: 
+Step 3: Create Alert Rule: It will look for your container labels.
 
 <img width="555" height="762" alt="image" src="https://github.com/user-attachments/assets/9ea50d9e-6ccd-4944-981c-b4dc72625f20" />
 
 <img width="417" height="402" alt="image" src="https://github.com/user-attachments/assets/8cf3b1ad-6c3e-47b6-82ff-5e48a3cde9fe" />
+
+<img width="1916" height="962" alt="image" src="https://github.com/user-attachments/assets/60ed9711-0675-4e58-822b-65feef727620" />
+
+<img width="1897" height="948" alt="image" src="https://github.com/user-attachments/assets/2be12145-1763-4275-914d-03d01d26afa7" />
+
+<img width="1916" height="966" alt="image" src="https://github.com/user-attachments/assets/27812844-0b85-4f53-87a4-e30c888bb444" />
 
 Step 4: Create Condition: 
 
@@ -630,7 +633,17 @@ Step 6: Add Labels: Add label: severity = warning
 
 Step 7: Link Contact Point: Select: DevOps Team as notification destination & Save Rule.
 
-Step 8: Verify Rule:  
+<img width="1900" height="968" alt="image" src="https://github.com/user-attachments/assets/de3d9d20-362e-40b7-84f6-bf7b6daf8b03" />
+
+<img width="1905" height="963" alt="image" src="https://github.com/user-attachments/assets/ccdcd6cd-dec4-4fd6-8735-b12f49f6554e" />
+
+Step 8: Verify Rule: Go to: Alerting --> Alert Rules You should see: High Container Memory
+
+<img width="1886" height="958" alt="image" src="https://github.com/user-attachments/assets/f2ab982e-62b2-4eb4-b0c0-961a33d96959" />
+
+<img width="407" height="420" alt="image" src="https://github.com/user-attachments/assets/2227fa68-5fc8-4457-939a-4ee0a569758b" />
+
+Step 9: Create Notification Policy: Navigate: Alerting --> Notification policies
 
 
 
