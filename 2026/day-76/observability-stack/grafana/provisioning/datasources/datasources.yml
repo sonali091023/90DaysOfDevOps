@@ -1,0 +1,15 @@
+apiVersion: 1                   #Provisioning schema version.
+
+datasources:
+  - name: Prometheus            #Datasource name visible inside Grafana.
+    type: prometheus            #Datasource type.
+    access: proxy               #Grafana queries Prometheus directly. Browser never talks to Prometheus.
+    url: http://prometheus:9090 #Uses Docker internal networking.
+    isDefault: true             #Makes Prometheus the default datasource.
+    editable: false             #Prevents accidental changes from the UI. Very common in production.
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
