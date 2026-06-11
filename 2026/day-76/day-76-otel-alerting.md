@@ -468,7 +468,60 @@ docker compose start notes-app
 
 **Steps to follow:**
 
+Step 1: Create alert-rules.yml: First go to dir cd observability-stack & then create file vi alert-rules.yml & paste the below code into it, 
 
+<img width="1197" height="782" alt="image" src="https://github.com/user-attachments/assets/1396dd1d-56fc-456e-b6c4-cf46758508af" />
+
+-->Now first let's verify whether the alert works in your environment, But before adding it, check whether the metric actually exists.
+
+Step 2: Check if container_last_seen exists: launch the prometheus: http://localhost:9090 & then run quesry: container_last_seen & Click Execute.
+
+<img width="1913" height="958" alt="image" src="https://github.com/user-attachments/assets/52781b76-4c1e-4cd4-b092-c07408ae7c64" />
+
+-->You'll see rows similar to: container_last_seen{container_label_...} Then the metric exists and we can use the alert. & if not get any result run below queries,
+
+<img width="372" height="327" alt="image" src="https://github.com/user-attachments/assets/7e7117d8-a78e-4948-9062-34fe80a42dea" />
+
+-->If container_last_seen exists Since your container name is: container_name: jiohotstar the alert should become:
+
+<img width="502" height="743" alt="image" src="https://github.com/user-attachments/assets/ca15f642-fc16-4b4b-927d-48bbb9921b32" />
+
+<img width="622" height="303" alt="image" src="https://github.com/user-attachments/assets/0adefb86-20d1-4149-86c0-67d4035edcd7" />
+
+<img width="1698" height="810" alt="image" src="https://github.com/user-attachments/assets/11a76ac9-8db0-4d90-95fe-c8a03dfc0858" />
+
+Step 3: Mount Alert Rules in Docker Compose: vi alert-rules.yml
+
+<img width="541" height="397" alt="image" src="https://github.com/user-attachments/assets/b639fb67-f5f0-4ae8-a7e8-8003257acdfe" />
+
+Step 4: Update Prometheus Configuration: vi prometheus.yml
+
+<img width="548" height="852" alt="image" src="https://github.com/user-attachments/assets/9e9f8cc4-3e9f-4c6c-9edc-99e57e15dba9" />
+
+Step 5: Restart Prometheus: docker restart prometheus & then check the logs for that use command: docker logs prometheus --tail 20
+
+Step 6: Verify Rules Loaded: Open Prometheus: http://localhost:9090 Navigate: Status → Rules, There we should see: HighCPUUsage, HighMemoryUsage, TargetDown, HighDiskUsage & State should be: Inactive which is expected.
+
+<img width="1910" height="751" alt="image" src="https://github.com/user-attachments/assets/700969dc-6166-412b-9b08-7e3571a9e779" />
+
+Step 7: Test Alerting: A safe test is the TargetDown alert. Stop Node Exporter: docker stop node-exporter then Wait about 1 minute. Then open: Prometheus → Alerts
+You should see: TargetDown wcich is move through: inactive → pending → firing
+
+<img width="1916" height="672" alt="image" src="https://github.com/user-attachments/assets/e43e94e9-7215-4cd0-9eb3-373146112c03" />
+
+Step 8: Recover: Start Node Exporter again: docker start node-exporter After a short time the alert will return to: inactive
+
+**Q. Why is the for field important in Prometheus alerts?**
+
+-->It prevents false alarms caused by temporary spikes.
+
+-->Prometheus requires the alert condition to remain true for the specified duration before firing.
+
+-->This avoids alert flapping (rapid firing and clearing).
+
+**Example:** a CPU spike lasting 10 seconds should not wake an engineer at 2 AM, but CPU above 80% for 2 minutes likely indicates a real problem.
+
+<img width="313" height="286" alt="image" src="https://github.com/user-attachments/assets/f0b31bd6-3069-4f90-9e79-0eba61d0fb3c" />
 
 ---
 
