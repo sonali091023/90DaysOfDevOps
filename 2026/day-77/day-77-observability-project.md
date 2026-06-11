@@ -107,12 +107,53 @@ Step 4: Verify Docker is Running:
 
 -->Check daemon: docker ps
 
--->
+Step 5: Pull Images (Optional but Recommended): This avoids waiting during startup: docker-compose pull
 
+-->This may take a few minutes because it downloads: Grafana, Prometheus, Loki, Promtail, cAdvisor, Node Exporter, OTEL Collector Notes App dependencies etc.
 
+Step 6: Start the Entire Stack: docker-compose up -d
 
+<img width="371" height="695" alt="image" src="https://github.com/user-attachments/assets/4aa13cbd-5a98-4138-b26e-e82276476b24" />
 
+Step 7: Verify All Containers: docker ps [We'll get the list of all the containers]
 
+Step 8: Check Prometheus: Open browser: http://localhost:9090 You should see the Prometheus UI.
+
+-->To Test targets: Navigate: Status → Targets Expected: node-exporter UP, cadvisor UP, prometheus UP, otel-collector UP etc.
+
+Step 9: Check Node Exporter: In Terminal: curl http://localhost:9100/metrics | head -5
+
+<img width="357" height="182" alt="image" src="https://github.com/user-attachments/assets/78b7e4a3-7652-46c9-b432-b0e55d1fa543" />
+
+Step 10: Check cAdvisor: Browser: http://localhost:8080 You should see: Container statistics Click: Docker Containers, You'll see CPU, Memory, Network metrics for all containers.
+
+Step 11: Check Grafana: 
+
+<img width="437" height="572" alt="image" src="https://github.com/user-attachments/assets/252e6797-834c-48c7-94ee-ed3b408d5023" />
+
+Step 12: Check Loki: 
+
+<img width="443" height="425" alt="image" src="https://github.com/user-attachments/assets/4e071721-b1c5-4cb9-9b08-fe24cc39e75d" />
+
+Step 13: Check Promtail: 
+
+<img width="397" height="327" alt="image" src="https://github.com/user-attachments/assets/5da43229-f1a3-4377-bd9d-ab3ba8773cdd" />
+
+Step 14: Check OTEL Collector: 
+
+<img width="542" height="293" alt="image" src="https://github.com/user-attachments/assets/9012805b-0f95-42e7-9b05-f1cd09b0d988" />
+
+<img width="428" height="415" alt="image" src="https://github.com/user-attachments/assets/45b2a609-2a38-4162-b9cf-bba45a993f0b" />
+
+Step 16: Final Health Check: docker-compose ps [All services should show: Up No container should be: Exited, Restarting, Unhealthy ]
+
+**Some Troubleshooting Commands:** If something fails, these are the first commands to run:
+
+-->docker-compose ps
+
+-->docker-compose logs
+
+-->Single service: docker logs grafana OR docker logs prometheus OR docker logs loki OR docker logs otel-collector
 
 ---
 
