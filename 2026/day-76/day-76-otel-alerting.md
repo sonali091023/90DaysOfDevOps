@@ -577,6 +577,8 @@ Step 2: Create an App Password: After enabling 2FA: Open Google Account --> Secu
 
 <img width="1897" height="965" alt="image" src="https://github.com/user-attachments/assets/bf0e6a6b-f57e-4139-b387-25fc2d2726a0" />
 
+<img width="1257" height="672" alt="image" src="https://github.com/user-attachments/assets/97f8f501-4dc3-4a95-9d14-4c066d059742" />
+
 Step 3: Update docker-compose.yml: vi docker-compose.yml
 
 <img width="443" height="642" alt="image" src="https://github.com/user-attachments/assets/82a71c9a-35f6-4b6d-ae7f-73e048cdb5a8" />
