@@ -1,4 +1,4 @@
-# Day 76 -- OpenTelemetry and Alerting
+<img width="1907" height="970" alt="image" src="https://github.com/user-attachments/assets/5e96508c-b486-4cb9-abbd-d4adebebf5b7" /># Day 76 -- OpenTelemetry and Alerting
 
 ## Task
 You have metrics (Prometheus) and logs (Loki). Today you add the third pillar -- traces -- using OpenTelemetry, the industry-standard framework for collecting telemetry data. Then you set up alerting so your system notifies you when something goes wrong, instead of you staring at dashboards all day.
@@ -555,6 +555,85 @@ Grafana can also evaluate alerts and send notifications to Slack, email, PagerDu
    - You should see your rule in Normal, Pending, or Firing state
 
 **Document:** What is the difference between Prometheus alerts and Grafana alerts? When would you use each?
+
+**Steps to follow:**
+
+Step 1: Open Grafana: http://localhost:3000 & then login to it
+
+Step 2: Create a Contact Point: A contact point tells Grafana where to send notifications.
+
+<img width="382" height="757" alt="image" src="https://github.com/user-attachments/assets/d7320cf3-51b8-4a02-a0dc-4d805e170270" />
+
+**Important Note:** Email notifications work only if SMTP is configured., For learning purposes you can still create the contact point even if emails won't actually send. If Grafana later shows SMTP errors, that's expected.
+
+Facing this issue:
+
+<img width="1907" height="970" alt="image" src="https://github.com/user-attachments/assets/389b3c67-920b-4c5f-b298-bed1746cee42" />
+
+-->That's expected. Creating a Grafana Email Contact Point is only half the setup. Grafana also needs an SMTP server configured to actually send emails.
+
+-->To fix this let see how to configure SMTP settings:
+
+Step 1: Enable 2-Step Verification: Go to your Google Account Security settings and enable: 2-Step Verification
+
+Step 2: Create an App Password: After enabling 2FA: Open Google Account --> Security --> App Passwords [Search for it] Then Select: App: Mail, Device: Other (Grafana) & then Generate password, Google will give you something like: abcd efgh ijkl mnop [Use this password, not your normal Gmail password.]
+
+<img width="1897" height="965" alt="image" src="https://github.com/user-attachments/assets/bf0e6a6b-f57e-4139-b387-25fc2d2726a0" />
+
+Step 3: Update docker-compose.yml: vi docker-compose.yml
+
+<img width="443" height="642" alt="image" src="https://github.com/user-attachments/assets/82a71c9a-35f6-4b6d-ae7f-73e048cdb5a8" />
+
+Q. GF_SMTP_USER , GF_SMTP_FROM_ADDRESS both email address can i keep the same?
+
+-->Yes, absolutely. For most Grafana + Gmail SMTP setups, GF_SMTP_USER and GF_SMTP_FROM_ADDRESS are the same email address.
+
+--> Difference between them is GF_SMTP_USER → The account Grafana uses to log in to Gmail & GF_SMTP_FROM_ADDRESS → The sender address that appears in the email.
+
+**Note:** Since Gmail generally only allows sending from the authenticated account, keeping them the same is the correct choice.
+
+<img width="776" height="276" alt="image" src="https://github.com/user-attachments/assets/86ef6b73-bcf9-4684-8212-829ef6c19a20" />
+
+Step 4: Restart Grafana: docker-compose up -d grafana OR docker restart grafana 
+
+<img width="1016" height="361" alt="image" src="https://github.com/user-attachments/assets/13d36924-fa48-4dec-b1af-35cdf1703186" />
+
+Step 5: Verify SMTP: Check logs: docker logs grafana | grep SMTP OR docker logs grafana --tail 50 [You should not see SMTP authentication errors.]
+
+<img width="1917" height="932" alt="image" src="https://github.com/user-attachments/assets/1c0e8e50-efe9-4a21-b49a-20c3e927838a" />
+
+Step 6: Test Contact Point: In Grafana: Alerting → Contact Points → DevOps Team → Test Enter your email and click: Send test notification
+You should receive an email within a few seconds.
+
+<img width="1908" height="951" alt="image" src="https://github.com/user-attachments/assets/5c35bb14-3daa-43ff-8469-17197a8e484e" />
+
+<img width="1916" height="965" alt="image" src="https://github.com/user-attachments/assets/57b61f2d-ba80-4b6c-9473-068dfd318103" />
+
+
+
+
+Step 3: Create Alert Rule: 
+
+<img width="555" height="762" alt="image" src="https://github.com/user-attachments/assets/9ea50d9e-6ccd-4944-981c-b4dc72625f20" />
+
+<img width="417" height="402" alt="image" src="https://github.com/user-attachments/assets/8cf3b1ad-6c3e-47b6-82ff-5e48a3cde9fe" />
+
+Step 4: Create Condition: 
+
+-->Click: Add expression Choose: Reduce & Settings: Function = Last & Save.
+
+-->Add another expression: Threshold & Condition: IS ABOVE 100 [Meaning: Alert if memory > 100 MB]
+
+Step 5: Evaluation Settings: Set: Evaluate every = 1m For = 2m
+
+Step 6: Add Labels: Add label: severity = warning
+
+Step 7: Link Contact Point: Select: DevOps Team as notification destination & Save Rule.
+
+Step 8: Verify Rule:  
+
+
+
 
 ---
 
