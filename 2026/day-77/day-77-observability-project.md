@@ -573,6 +573,68 @@ Step 2: Create Row 1 – System Health: Click Add → Row then Rename that with 
 
 <img width="1907" height="967" alt="image" src="https://github.com/user-attachments/assets/6056d1fe-4f8f-43a2-b8be-8acdcc4ce704" />
 
+<img width="636" height="492" alt="image" src="https://github.com/user-attachments/assets/77917d4b-1f2e-42be-886d-c675ed84aae7" />
+
+<img width="1912" height="975" alt="image" src="https://github.com/user-attachments/assets/d543642d-f859-48a4-ae3c-5bf454a340db" />
+
+<img width="737" height="551" alt="image" src="https://github.com/user-attachments/assets/53df9a83-b314-431c-bb47-de1764e2c181" />
+
+<img width="1917" height="970" alt="image" src="https://github.com/user-attachments/assets/9d0b12a9-9220-476e-bc56-da9a7d3df89e" />
+
+<img width="1917" height="971" alt="image" src="https://github.com/user-attachments/assets/36175c9e-3c49-46c5-9546-92e36a92a81b" />
+
+Step 3: Create Row 2 – Container Metrics: Add new Row: Container matrices
+
+<img width="595" height="787" alt="image" src="https://github.com/user-attachments/assets/6119f434-3b3a-4af0-ab4d-25609a786f8f" />
+
+<img width="1912" height="967" alt="image" src="https://github.com/user-attachments/assets/638eab89-7e86-4464-9a21-3a61602fd505" />
+
+<img width="511" height="522" alt="image" src="https://github.com/user-attachments/assets/2c30cd5c-5117-45b5-9f2f-1caf9b6727aa" />
+
+<img width="1907" height="957" alt="image" src="https://github.com/user-attachments/assets/4ad6ebcc-d35c-4598-9e11-f244c41250fb" />
+
+<img width="567" height="426" alt="image" src="https://github.com/user-attachments/assets/c5f369b1-d7ed-4b81-9dff-cc1c4bfb00ff" />
+
+<img width="1912" height="970" alt="image" src="https://github.com/user-attachments/assets/bedbdaca-26c5-4b43-aa06-5c44ea85d43f" />
+
+Step 4: Create Row 3 – Application Logs: Select datasource as Loki here
+
+<img width="382" height="692" alt="image" src="https://github.com/user-attachments/assets/c81286b7-53d9-481c-88ad-0449c46c55b1" />
+
+<img width="1912" height="966" alt="image" src="https://github.com/user-attachments/assets/aa4293e8-2f7b-4641-a6a0-ce1e9520ca5f" />
+
+<img width="657" height="347" alt="image" src="https://github.com/user-attachments/assets/e6e0c022-f603-4fac-ba80-90aefe04925b" />
+
+<img width="1915" height="972" alt="image" src="https://github.com/user-attachments/assets/c5ef1dc5-e93c-4de4-863e-5ed20f3a0329" />
+
+<img width="507" height="272" alt="image" src="https://github.com/user-attachments/assets/1e5df478-51a9-4c07-8cba-5c31e6223c6d" />
+
+<img width="1907" height="967" alt="image" src="https://github.com/user-attachments/assets/e813b9ac-47ba-45f6-b0c6-403b5bbfcf28" />
+
+<img width="1852" height="961" alt="image" src="https://github.com/user-attachments/assets/465148cd-8763-43f9-8309-48b32a363189" />
+
+Step 5: Create Row 4 – Service Overview: Switch back to Prometheus datasource:
+
+<img width="602" height="287" alt="image" src="https://github.com/user-attachments/assets/7d749682-8461-41a4-970c-d4cd99f8bf23" />
+
+<img width="1907" height="962" alt="image" src="https://github.com/user-attachments/assets/217279e8-35f6-4d48-8f02-427a530d4afc" />
+
+<img width="496" height="506" alt="image" src="https://github.com/user-attachments/assets/2b49912d-30d6-471a-9d77-24a6b3656cee" />
+
+<img width="1907" height="962" alt="image" src="https://github.com/user-attachments/assets/1ac30087-d0bc-4b4b-80cb-060883aa1c9b" />
+
+<img width="467" height="490" alt="image" src="https://github.com/user-attachments/assets/4fa14d03-456d-4859-803c-ccae4cd1481b" />
+
+
+
+
+
+
+
+
+
+
+
 
 
 
