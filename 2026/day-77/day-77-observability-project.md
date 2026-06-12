@@ -422,6 +422,100 @@ You should see both spans with their attributes, the parent-child relationship, 
 
 Compare `otel-collector/otel-collector-config.yml` from the reference repo with yours from Day 76.
 
+Steps to follow:
+
+Step 1: Verify OTEL Collector is Running: docker ps | grep otel
+
+<img width="1917" height="80" alt="image" src="https://github.com/user-attachments/assets/cf42c64b-74c8-402f-86fb-8633f5c4bf38" />
+
+Step 2: Check OTEL Collector Ports: Run command: docker port otel-collector OR in Compose run command: docker inspect otel-collector | grep 4318
+
+<img width="1691" height="267" alt="image" src="https://github.com/user-attachments/assets/b500d1ab-ad7c-45e8-8d16-7efe539d175d" />
+
+-->The important part is that 4318 is exposed because the task uses HTTP OTLP.
+
+Step 3: Verify Collector Receivers: Check your collector configuration: Runcommand in terminal: cat otel-collector/otel-collector-config.yml
+
+<img width="1522" height="637" alt="image" src="https://github.com/user-attachments/assets/d331d9a7-2d87-4557-b5d2-a2396d8fb501" />
+
+Step 4: Send the Trace: Run the following query in terminal and check the output:
+```bash
+curl -X POST http://localhost:4318/v1/traces \
+  -H "Content-Type: application/json" \
+  -d '{
+    "resourceSpans": [{
+      "resource": {
+        "attributes": [{
+          "key": "service.name",
+          "value": { "stringValue": "notes-app" }
+        }]
+      },
+      "scopeSpans": [{
+        "spans": [{
+          "traceId": "aaaabbbbccccdddd1111222233334444",
+          "spanId": "1111222233334444",
+          "name": "GET /api/notes",
+          "kind": 2,
+          "startTimeUnixNano": "1700000000000000000",
+          "endTimeUnixNano": "1700000000150000000",
+          "attributes": [{
+            "key": "http.method",
+            "value": { "stringValue": "GET" }
+          },
+          {
+            "key": "http.route",
+            "value": { "stringValue": "/api/notes" }
+          },
+          {
+            "key": "http.status_code",
+            "value": { "intValue": "200" }
+          }],
+          "status": { "code": 1 }
+        },
+        {
+          "traceId": "aaaabbbbccccdddd1111222233334444",
+          "spanId": "5555666677778888",
+          "parentSpanId": "1111222233334444",
+          "name": "SELECT notes FROM database",
+          "kind": 3,
+          "startTimeUnixNano": "1700000000020000000",
+          "endTimeUnixNano": "1700000000120000000",
+          "attributes": [{
+            "key": "db.system",
+            "value": { "stringValue": "sqlite" }
+          },
+          {
+            "key": "db.statement",
+            "value": { "stringValue": "SELECT * FROM notes" }
+          }]
+        }]
+      }]
+    }]
+  }'
+```
+
+Step 5: Check Curl Response: 
+
+-->I can see the partialSuccess kind of message in return
+
+<img width="1687" height="884" alt="image" src="https://github.com/user-attachments/assets/1f556d73-0e54-41fa-a881-25d82ba9f91e" />
+
+Step 6: Verify Collector Received the Trace: docker logs otel-collector --tail 100
+
+<img width="1917" height="946" alt="image" src="https://github.com/user-attachments/assets/af2edca2-c89c-4fc8-add8-54a6947f6acb" />
+
+-->Or we can use command to get the vault from the log: docker logs otel-collector 2>&1 | grep -A 20 "GET /api/notes"
+
+<img width="1462" height="786" alt="image" src="https://github.com/user-attachments/assets/6bf2a2ed-1331-4973-8746-d146215ebf02" />
+
+Step 7: If Nothing Appears: 
+
+<img width="672" height="597" alt="image" src="https://github.com/user-attachments/assets/e175f42c-1168-49e9-95aa-20d5575464cc" />
+
+Step 8: What You Should Eventually See:
+
+<img width="461" height="785" alt="image" src="https://github.com/user-attachments/assets/f3b8b142-ed70-4382-82f1-5277395453fe" />
+
 ---
 
 ### Task 5: Build a Unified "Production Overview" Dashboard
