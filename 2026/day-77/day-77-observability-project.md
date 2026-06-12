@@ -559,6 +559,23 @@ Save the dashboard as "Production Overview -- Observability Stack".
 
 Set the dashboard time range to "Last 30 minutes" and enable auto-refresh (every 10s).
 
+**Steps to follow:**
+
+Step 1: Create Dashboard: Open: http://localhost:3000 & navigate to Dashboards → New Dashboard and click on Add Visualization & select Prometheus
+
+Step 2: Create Row 1 – System Health: Click Add → Row then Rename that with System Health
+
+<img width="612" height="615" alt="image" src="https://github.com/user-attachments/assets/65ce4dc6-4fd9-47f3-8243-9e261a0b1c1d" />
+
+<img width="1917" height="962" alt="image" src="https://github.com/user-attachments/assets/e88c98fe-2ed7-41d0-b78e-72734509ad7a" />
+
+<img width="647" height="487" alt="image" src="https://github.com/user-attachments/assets/96b5d451-8a9b-44ce-9fa2-9309e1e433fc" />
+
+<img width="1907" height="967" alt="image" src="https://github.com/user-attachments/assets/6056d1fe-4f8f-43a2-b8be-8acdcc4ce704" />
+
+
+
+
 ---
 
 ### Task 6: Compare Your Stack with the Reference and Document
