@@ -295,6 +295,62 @@ curl -s http://localhost:9080/targets | head -30
 
 Compare `promtail/promtail-config.yml` from the reference repo with yours from Day 75.
 
+**Step to follow:**
+
+Step 1: Verify Loki and Promtail Containers: Run command: docker ps OR docker-compose ps [So i can see al the containers prometheus, grafana, loki, promtail, node-exporter
+cadvisor, otel-collector, notes-app etc.
+
+<img width="1917" height="830" alt="image" src="https://github.com/user-attachments/assets/83fd023e-39d5-4b48-9189-71cfc3eb8ebd" />
+
+Step 2: Generate Application Traffic: for this run following program: This creates log entries for the application.
+for i in $(seq 1 50); do   curl -s http://localhost:8000 > /dev/null; curl -s http://localhost:8000/api/ > /dev/null; done
+
+Step 3: Verify the App Is Producing Logs: Before checking Grafana, verify Docker logs exist:
+
+-->Find your app container: docker ps
+
+-->Check docker logs: docker logs notes-app --tail 20
+
+<img width="1917" height="830" alt="image" src="https://github.com/user-attachments/assets/f128edf6-decf-4718-b6ab-6c124b5ec7b1" />
+
+Step 4: Verify Promtail Targets: Run the following command: curl -s http://localhost:9080/targets OR curl -s http://localhost:9080/targets | head -30
+
+-->Look for something similar: Ready, Labels: job="docker" OR job="containers"
+
+Step 5: Verify Loki Datasource: In browser open url: http://localhost:3000& login to it by providing creds admin as un & pswd.
+
+-->Navigate: Connections → Data Sources Confirm: Loki Status = OK
+
+<img width="1897" height="540" alt="image" src="https://github.com/user-attachments/assets/69a5453f-befe-4cd7-88f3-7327bba8aca4" />
+
+<img width="1907" height="975" alt="image" src="https://github.com/user-attachments/assets/be171f91-31c1-4428-98ed-b7a8b21e3501" />
+
+Step 6: Open Grafana Explore: Navigate: Explore Select datasource: Loki
+
+<img width="1912" height="662" alt="image" src="https://github.com/user-attachments/assets/77ec4cac-deee-4cd7-b361-b3c5e60f5c73" />
+
+Step 7: Discover Existing Labels: Instead of immediately running the assignment queries, start with: {job="docker"} & then click on run query
+
+<img width="1912" height="971" alt="image" src="https://github.com/user-attachments/assets/231e38a2-4b04-4b64-8bbf-ba6c9dbf7927" />
+
+Step 8: Check Available Labels: Any of the label is ot available as mentioned in the below screenshot,
+
+<img width="435" height="726" alt="image" src="https://github.com/user-attachments/assets/e167e645-2577-4c44-8b07-572c55c86430" />
+
+Step 9: Assignment Queries: Following label: {container_name="notes-app"} is not exist
+
+<img width="426" height="727" alt="image" src="https://github.com/user-attachments/assets/839d9ae4-321d-43c8-8c14-0b41e95732cd" />
+
+Step 10: If Queries Return Nothing:
+
+-->docker logs promtail --tail 50
+
+-->docker logs loki --tail 50
+
+-->curl -s http://localhost:9080/targets | head -30
+
+-->cat promtail/promtail-config.yml
+
 ---
 
 ### Task 4: Validate the Traces Pipeline
