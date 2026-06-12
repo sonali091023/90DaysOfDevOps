@@ -621,22 +621,9 @@ Step 5: Create Row 4 – Service Overview: Switch back to Prometheus datasource:
 
 <img width="496" height="506" alt="image" src="https://github.com/user-attachments/assets/2b49912d-30d6-471a-9d77-24a6b3656cee" />
 
-<img width="1907" height="962" alt="image" src="https://github.com/user-attachments/assets/1ac30087-d0bc-4b4b-80cb-060883aa1c9b" />
+<img width="1912" height="971" alt="image" src="https://github.com/user-attachments/assets/56648d36-ae23-4ed0-b571-d46c4d789293" />
 
 <img width="467" height="490" alt="image" src="https://github.com/user-attachments/assets/4fa14d03-456d-4859-803c-ccae4cd1481b" />
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
@@ -680,6 +667,38 @@ docker compose down -v
 ```
 
 The `-v` flag removes named volumes (Prometheus data, Grafana data, Loki data). Only use this if you are done exploring.
+
+**Steps to follow:**
+
+Step 1: Compare Configuration Files: 
+
+<img width="686" height="766" alt="image" src="https://github.com/user-attachments/assets/0eda6156-7127-4500-aa4f-111cb47baa52" />
+
+<img width="557" height="672" alt="image" src="https://github.com/user-attachments/assets/7837f91e-d014-420d-b765-14153079fa05" />
+
+<img width="486" height="702" alt="image" src="https://github.com/user-attachments/assets/6445229c-b4e8-4e21-995b-ef6d33634d0d" />
+
+<img width="431" height="822" alt="image" src="https://github.com/user-attachments/assets/24b10aa4-e674-423c-8c4c-db6f8ffa1271" />
+
+<img width="417" height="772" alt="image" src="https://github.com/user-attachments/assets/c043a5f2-3698-46d9-989a-bcbbd0ca9ee6" />
+
+Step 2: Learning Reflection:
+
+<img width="515" height="637" alt="image" src="https://github.com/user-attachments/assets/f9614fc6-11e9-466e-a0e3-df0b1e31bd67" />
+
+Step 3: Production Improvements:
+
+<img width="567" height="552" alt="image" src="https://github.com/user-attachments/assets/537eaaf5-515c-495f-adb1-42e80af19578" />
+
+Step 4: Compare with Managed Solutions: 
+
+<img width="582" height="547" alt="image" src="https://github.com/user-attachments/assets/b314342e-bf25-456c-bb23-87faa8cfa426" />
+
+Final Cleanup (Only If You're Done): Run commmand: docker-compose down -v
+
+<img width="662" height="592" alt="image" src="https://github.com/user-attachments/assets/8da5407b-864f-40ba-8d1d-ffdc5df4432f" />
+
+
 
 ---
 
