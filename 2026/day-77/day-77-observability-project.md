@@ -195,27 +195,45 @@ Step 1: Open the Prometheus Targets Page: on browser launch: http://localhost:90
 
 <img width="350" height="817" alt="image" src="https://github.com/user-attachments/assets/e5a597d1-a4eb-4228-a74d-be3ffa7694d8" />
 
-Step 2: Verify "up" Metric: http://localhost:9090 -->Click: Graph → Execute Query: up & then click on Execute.
+<img width="1915" height="971" alt="image" src="https://github.com/user-attachments/assets/ef165059-69cd-465e-b43a-357054540514" />
 
-Expected:
+Step 2: Verify "up" Metric: http://localhost:9090 -->Click: Graph[Is nothing but query] → Execute Query: up & then click on Execute.
 
 <img width="512" height="443" alt="image" src="https://github.com/user-attachments/assets/15e79829-f00c-45b4-9623-797dccbf3213" />
 
-Step 3: Validate CPU Metrics: 
+<img width="1911" height="865" alt="image" src="https://github.com/user-attachments/assets/f71e3bd8-894a-400f-9808-022fae96e5bc" />
+
+Step 3: Validate CPU Metrics: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
 
 <img width="542" height="782" alt="image" src="https://github.com/user-attachments/assets/728b9e84-6b23-44a6-b19b-6c1508b40838" />
 
-Step 4: Validate Memory Usage:
+<img width="1917" height="442" alt="image" src="https://github.com/user-attachments/assets/53918d30-5b8b-410c-b23b-1dc2984f7358" />
+
+<img width="677" height="462" alt="image" src="https://github.com/user-attachments/assets/203bee42-adf8-47c1-b3c6-f170a11a41f9" />
+
+Step 4: Validate Memory Usage: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
 
 <img width="537" height="782" alt="image" src="https://github.com/user-attachments/assets/496248bb-22fd-4332-85ee-3ff620a1fc55" />
 
-Step 5: Container CPU Usage: 
+<img width="1910" height="530" alt="image" src="https://github.com/user-attachments/assets/4cdef466-2dd1-4a52-b2ef-39cd7ae34c6d" />
+
+<img width="597" height="472" alt="image" src="https://github.com/user-attachments/assets/93f271e3-6afb-41b0-8d70-b458209e38d8" />
+
+Step 5: Container CPU Usage: rate(container_cpu_usage_seconds_total{name!=""}[5m]) * 100 [This query returns no data]
 
 <img width="516" height="675" alt="image" src="https://github.com/user-attachments/assets/e564786e-f668-4354-b432-eca57cdb7280" />
 
-Step 6: Top Memory Consumers: 
+<img width="637" height="332" alt="image" src="https://github.com/user-attachments/assets/b048cbce-f42a-44e2-98a8-625ed1d461f3" />
+
+-->Running other Query: container_cpu_usage_seconds_total
+
+<img width="1912" height="967" alt="image" src="https://github.com/user-attachments/assets/ca3ee863-7663-4b1a-8f1e-d83c91beab04" />
+
+Step 6: Top Memory Consumers: topk(3, container_memory_usage_bytes{name!=""}) [This query return no data]
 
 <img width="401" height="650" alt="image" src="https://github.com/user-attachments/assets/fc4df744-08e5-4833-972b-afbdc2504b0e" />
+
+<img width="605" height="317" alt="image" src="https://github.com/user-attachments/assets/b19bedf1-005f-4fbd-b481-06f58f755663" />
 
 Step 7: Switch to Graph View: 
 
@@ -229,6 +247,16 @@ Step 9: Compare with Your Day 73–76 Setup: Open your old Prometheus configurat
 Typically:
 
 <img width="502" height="703" alt="image" src="https://github.com/user-attachments/assets/2884d8de-6b0d-4cac-a13a-43becb8787bc" />
+
+<img width="630" height="461" alt="image" src="https://github.com/user-attachments/assets/8cab8c8a-b954-4c36-ac47-98f7bf7f38a4" />
+
+Step 10: Document Findings: Create a validation note:
+
+
+
+
+
+
 
 ---
 
