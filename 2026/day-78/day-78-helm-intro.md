@@ -169,6 +169,57 @@ service.yml   hpa.yml   cert-manager.yml
 
 12 files -- Deployments, Services, ConfigMaps, Secrets, PVCs, HPA, and more. All hardcoded values. On Day 79, you will convert these into a Helm chart.
 
+**Steps to follow:**
+
+Step 1: Check Prerequisites: Check docker --version, kubectl version --client, kind --version, git --version installed or not
+
+<img width="1917" height="477" alt="image" src="https://github.com/user-attachments/assets/a0b0efc2-d55c-4800-9892-d92fd2d4c276" />
+
+Step 2: Clone the AI-BankApp Repository: git clone -b feat/gitops https://github.com/TrainWithShubham/AI-BankApp-DevOps.git
+
+<img width="1917" height="342" alt="image" src="https://github.com/user-attachments/assets/e95a67da-0841-4be7-bbe1-b13f85a1a93a" />
+
+Step 3: Examine the Kind Configuration: Before creating the cluster, inspect the config file: cat setup-k8s/kind-config.yml
+
+<img width="657" height="512" alt="image" src="https://github.com/user-attachments/assets/efcd85f9-621a-43ed-ac84-320d7e2dc0d2" />
+
+<img width="1517" height="425" alt="image" src="https://github.com/user-attachments/assets/3294f716-0997-440d-b330-d3eb14ed07c6" />
+
+Step 4: Create the Kind Cluster: kind create cluster --config setup-k8s/kind-config.yml
+
+<img width="590" height="222" alt="image" src="https://github.com/user-attachments/assets/16caf38a-3a95-448f-bc44-51f55d54f6a3" />
+
+<img width="1817" height="387" alt="image" src="https://github.com/user-attachments/assets/040751d5-78b0-42fd-8e85-78b14acd4839" />
+
+Step 5: Verify Cluster Creation: kubectl get nodes
+
+<img width="582" height="242" alt="imacurl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bashge" src="https://github.com/user-attachments/assets/b28db2fc-2f61-4acc-ba71-bb37181984be" />
+
+Step 6: Verify Cluster Information: kubectl cluster-info
+
+<img width="1595" height="147" alt="image" src="https://github.com/user-attachments/assets/d9a92f49-bc60-42cf-9d48-022217473451" />
+
+-->Also check tbe system pods: kubectl get pods -A
+
+<img width="1697" height="502" alt="image" src="https://github.com/user-attachments/assets/7af36f5a-a16c-4c89-9dcd-f0c522969b66" />
+
+Step 7: Install Helm: For Ubuntu/Linux use command: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+Step 8: Verify Helm Installation: helm version
+
+<img width="1901" height="331" alt="image" src="https://github.com/user-attachments/assets/8add83aa-1c22-47aa-98d9-15b8000cebd7" />
+
+Step 9: Verify Helm Can Reach Kubernetes: helm list
+
+-->Also check helm ls -A
+
+
+
+
+
+
+
+
 ---
 
 ### Task 3: Deploy MySQL Using a Helm Chart
