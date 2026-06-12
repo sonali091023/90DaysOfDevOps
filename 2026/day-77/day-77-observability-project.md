@@ -252,11 +252,7 @@ Typically:
 
 Step 10: Document Findings: Create a validation note:
 
-
-
-
-
-
+<img width="682" height="512" alt="image" src="https://github.com/user-attachments/assets/b954ac39-7cd9-4ea8-a7e2-e122225b5b50" />
 
 ---
 
