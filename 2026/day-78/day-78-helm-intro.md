@@ -420,24 +420,19 @@ Explaination on all above:
 
 -->Check databases: kubectl exec -it bankapp-mysql-0 -- mysql -uroot -pTest@123 -e "SHOW DATABASES;"
 
+<img width="635" height="732" alt="image" src="https://github.com/user-attachments/assets/864430d9-5a89-4328-9f5e-ad0767de047e" />
 
+<img width="587" height="702" alt="image" src="https://github.com/user-attachments/assets/a04b02fa-0147-4575-a50d-949c42e4ba93" />
 
+<img width="642" height="676" alt="image" src="https://github.com/user-attachments/assets/0d552655-512a-4b87-ab8e-30ebc7f728b7" />
 
+<img width="580" height="642" alt="image" src="https://github.com/user-attachments/assets/c28e1b4e-d79c-48bb-bd26-823a59d18ad9" />
 
+<img width="605" height="512" alt="image" src="https://github.com/user-attachments/assets/e83b5e44-5f42-46e2-acad-39e41da85b61" />
 
+<img width="485" height="782" alt="image" src="https://github.com/user-attachments/assets/c9a3eef4-0ab3-4eef-beb9-a777ebae0979" />
 
-
-
-
-
-
-  
-
-
-
-
-
-
+<img width="627" height="412" alt="image" src="https://github.com/user-attachments/assets/fdc97a51-fc8b-4f28-9929-85594d8ba11a" />
 
 ---
 
