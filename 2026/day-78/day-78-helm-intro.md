@@ -295,6 +295,122 @@ kubectl exec -it bankapp-mysql-0 -- mysql -uroot -pTest@123 -e "SHOW DATABASES;"
 
 You should see `bankappdb` in the output.
 
+**Steps to follow:**
+
+Step 1: Verify Your Cluster is Running: kubectl get nodes
+
+<img width="1465" height="152" alt="image" src="https://github.com/user-attachments/assets/2f1a8aed-e2a6-4c5e-af84-8b15cebbd8cb" />
+
+Step 2: Add the Bitnami Helm Repository: Helm repositories are similar to apt repositories in Ubuntu.
+
+-->Add Bitnami: helm repo add bitnami https://charts.bitnami.com/bitnami [Expected: "bitnami" has been added to your repositories]
+
+-->Update the repository index: helm repo update [Expected: Hang tight while we grab the latest from your chart repositories Successfully got an update from the "bitnami" chart repository Update Complete.]
+
+-->To verify: helm repo list [Expected: name and URL in return]
+
+<img width="1897" height="247" alt="image" src="https://github.com/user-attachments/assets/e785d7dc-6537-42c5-860c-3a9d5e4e9344" />
+
+Step 3: Search for the MySQL Chart: helm search repo bitnami/mysql [So This confirms Helm can find the chart.]
+
+<img width="1382" height="107" alt="image" src="https://github.com/user-attachments/assets/0f976c13-1ab4-4744-bebc-2cf8ca4823c0" />
+
+Step 4: Understand the Installation Command: 
+
+helm install bankapp-mysql bitnami/mysql \
+  --set auth.rootPassword=Test@123 \
+  --set auth.database=bankappdb \
+  --set primary.resources.requests.memory=256Mi \
+  --set primary.resources.requests.cpu=250m \
+  --set primary.resources.limits.memory=512Mi \
+  --set primary.resources.limits.cpu=500m \
+  --set primary.persistence.size=5Gi
+
+<img width="1836" height="967" alt="image" src="https://github.com/user-attachments/assets/458be5eb-2794-43ff-9b5f-52a417109946" />
+
+<img width="1917" height="417" alt="image" src="https://github.com/user-attachments/assets/99002cb6-49ec-4242-af05-8c00084e8be1" />
+
+Explaination on all above:
+
+<img width="722" height="641" alt="image" src="https://github.com/user-attachments/assets/d48acb41-aa76-4d19-b1d5-c99c267dc012" />
+
+<img width="690" height="742" alt="image" src="https://github.com/user-attachments/assets/0c85a1ec-8769-4a2a-a947-3efe3b629fb7" />
+
+<img width="1667" height="112" alt="image" src="https://github.com/user-attachments/assets/0502ef87-05e7-4888-8ac4-0b027a0c9f0e" />
+
+<img width="605" height="712" alt="image" src="https://github.com/user-attachments/assets/d588d308-3097-4dff-a99c-a81bef51dd4e" />
+
+3. Resource Requests:
+
+<img width="512" height="821" alt="image" src="https://github.com/user-attachments/assets/17b59ee6-fa4d-4456-bf83-41a01495609e" />
+
+4. Resource Limits:
+
+<img width="502" height="777" alt="image" src="https://github.com/user-attachments/assets/fc6660b1-5c96-4497-80d1-002674daafbe" />
+
+<img width="687" height="277" alt="image" src="https://github.com/user-attachments/assets/a97c9632-b357-43f9-ac1c-6c2d06925bd4" />
+
+<img width="507" height="755" alt="image" src="https://github.com/user-attachments/assets/a2aba9a5-1e41-4b7b-8dfd-363ba54c1afd" />
+
+6. Understanding the Output: Helm returned: NAME: bankapp-mysql [Release name] Check it: helm list & we can see STATUS: deployed Means: Chart Installed Successfully
+
+-->Possible other statuses: deployed, failed, pending-install, pending-upgrade, uninstalled etc.
+
+<img width="447" height="467" alt="image" src="https://github.com/user-attachments/assets/4c1738c8-e6d9-499b-ae29-99b5af83c0ef" />
+
+<img width="1792" height="137" alt="image" src="https://github.com/user-attachments/assets/d72ddb84-3731-4be1-8f3c-3af2770067cc" />
+
+<img width="605" height="412" alt="image" src="https://github.com/user-attachments/assets/549bad9b-4f25-4166-bd6b-bcc8deb21f44" />
+
+<img width="635" height="417" alt="image" src="https://github.com/user-attachments/assets/c1fceb58-e153-4d49-8729-a381fb07ef46" />
+
+<img width="592" height="667" alt="image" src="https://github.com/user-attachments/assets/8989b331-d3c0-4006-9b6c-5d7c218e5d6f" />
+
+<img width="1655" height="202" alt="image" src="https://github.com/user-attachments/assets/174cf525-67a3-498b-8bc2-82d40cb6639d" />
+
+10. What Resources Helm Actually Created:
+
+-->kubectl get all -l app.kubernetes.io/instance=bankapp-mysql [we'll likely see: pod/bankapp-mysql-0, service/bankapp-mysql, statefulset.apps/bankapp-mysql etc.]
+
+-->kubectl get svc
+
+-->kubectl get secrets
+
+<img width="1887" height="426" alt="image" src="https://github.com/user-attachments/assets/91eee69b-cab3-4815-a0a9-e4f254a3fbbd" />
+
+-->So one Helm command created: StatefulSet, Service, Secret, PersistentVolumeClaim, ConfigMaps, Storage configuration etc.
+
+11. Understanding the Warning:
+
+<img width="702" height="476" alt="image" src="https://github.com/user-attachments/assets/ec06a65d-b18a-4f85-b0d5-22517897a8d9" />
+
+12. Verify Everything:
+
+-->Check Helm release:: helm list
+
+-->Check pods: kubectl get pods
+
+-->Check storage: kubectl get pvc
+
+-->Check databases: kubectl exec -it bankapp-mysql-0 -- mysql -uroot -pTest@123 -e "SHOW DATABASES;"
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
 ---
 
 ### Task 4: Customize a Deployment with Values Files
