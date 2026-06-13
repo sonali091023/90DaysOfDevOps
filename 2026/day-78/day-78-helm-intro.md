@@ -329,7 +329,7 @@ Step 2: Add the Bitnami Helm Repository: Helm repositories are similar to apt re
 
 <img width="862" height="646" alt="image" src="https://github.com/user-attachments/assets/6c8b51e6-a512-4615-89bd-1bdf1c69a798" />
 
-**Note:** Here in above screenshot we can see at last values.yml file is used that is ulternet options to set the all values which we have set in above command
+**Note:** Here in above screenshot we can see at last values.yml file is used that is ulternet option to set the all values which we have set in above command
 
 <img width="817" height="641" alt="image" src="https://github.com/user-attachments/assets/53a77538-f3e4-44a3-8fa4-3fd66a21ac56" />
 
@@ -350,9 +350,9 @@ helm install my-mysql mysql/mysql \
   --set primary.resources.limits.cpu=500m \
   --set primary.persistence.size=5Gi
   
-<img width="1836" height="967" alt="image" src="https://github.com/user-attachments/assets/458be5eb-2794-43ff-9b5f-52a417109946" />
+<img width="1482" height="947" alt="image" src="https://github.com/user-attachments/assets/45bb9ec5-b916-4b91-ad68-a0c565152d29" />
 
-<img width="1917" height="417" alt="image" src="https://github.com/user-attachments/assets/99002cb6-49ec-4242-af05-8c00084e8be1" />
+<img width="1827" height="205" alt="image" src="https://github.com/user-attachments/assets/e759e99a-7a7a-41e0-8221-159e05cdcdf4" />
 
 Explaination on all above:
 
@@ -360,7 +360,7 @@ Explaination on all above:
 
 <img width="690" height="742" alt="image" src="https://github.com/user-attachments/assets/0c85a1ec-8769-4a2a-a947-3efe3b629fb7" />
 
-<img width="1667" height="112" alt="image" src="https://github.com/user-attachments/assets/0502ef87-05e7-4888-8ac4-0b027a0c9f0e" />
+<img width="1542" height="91" alt="image" src="https://github.com/user-attachments/assets/6c62ce8c-eb1c-4ac3-8bfd-8db161367fd7" />
 
 <img width="605" height="712" alt="image" src="https://github.com/user-attachments/assets/d588d308-3097-4dff-a99c-a81bef51dd4e" />
 
@@ -382,6 +382,8 @@ Explaination on all above:
 
 <img width="447" height="467" alt="image" src="https://github.com/user-attachments/assets/4c1738c8-e6d9-499b-ae29-99b5af83c0ef" />
 
+<img width="1807" height="127" alt="image" src="https://github.com/user-attachments/assets/fef8878b-31f3-48b0-afd9-dad100c4afff" />
+
 <img width="1792" height="137" alt="image" src="https://github.com/user-attachments/assets/d72ddb84-3731-4be1-8f3c-3af2770067cc" />
 
 <img width="605" height="412" alt="image" src="https://github.com/user-attachments/assets/549bad9b-4f25-4166-bd6b-bcc8deb21f44" />
@@ -400,7 +402,7 @@ Explaination on all above:
 
 -->kubectl get secrets
 
-<img width="1887" height="426" alt="image" src="https://github.com/user-attachments/assets/91eee69b-cab3-4815-a0a9-e4f254a3fbbd" />
+<img width="1612" height="362" alt="image" src="https://github.com/user-attachments/assets/541e0abd-6942-449e-81d2-60421658bc1a" />
 
 -->So one Helm command created: StatefulSet, Service, Secret, PersistentVolumeClaim, ConfigMaps, Storage configuration etc.
 
