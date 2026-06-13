@@ -211,10 +211,28 @@ Step 8: Verify Helm Installation: helm version
 
 <img width="1901" height="331" alt="image" src="https://github.com/user-attachments/assets/8add83aa-1c22-47aa-98d9-15b8000cebd7" />
 
-Step 9: Verify Helm Can Reach Kubernetes: helm list
+Step 9: Verify Helm Can Reach Kubernetes/cluster: helm list
 
--->Also check helm ls -A
+<img width="1596" height="96" alt="image" src="https://github.com/user-attachments/assets/b1db4dfd-6dad-438b-bd23-b5bd3ca07fd1" />
 
+-->So as above image, Empty output is fine because nothing is installed yet. Helm successfully talking to Kubernetes means: kubeconfig works, kubectl works
+Helm works
+
+Step 10: Explore Current Kubernetes Manifests: Run command: ls k8s/
+
+<img width="1637" height="102" alt="image" src="https://github.com/user-attachments/assets/d9890935-fb53-4385-9527-2b27ac06acc2" />
+
+Step 11: Understand What Each File Does:
+
+<img width="860" height="722" alt="image" src="https://github.com/user-attachments/assets/62027cfc-059a-4156-a223-b6ab343955f2" />
+
+Step 12: Inspect a Deployment: Open BankApp deployment: cat k8s/bankapp-deployment.yml 
+
+-->Here Look for hardcoded values like: image: trainwithshubham/ai-bankapp:v1, replicas: 2, container port 8501 These are currently fixed values.
+
+Step 13: Identify What Helm Will Replace: 
+
+<img width="636" height="820" alt="image" src="https://github.com/user-attachments/assets/4217055e-b45b-4198-8c0d-fa7400b37cdb" />
 
 
 
