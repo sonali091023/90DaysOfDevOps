@@ -311,13 +311,37 @@ Step 2: Add the Bitnami Helm Repository: Helm repositories are similar to apt re
 
 <img width="1897" height="247" alt="image" src="https://github.com/user-attachments/assets/e785d7dc-6537-42c5-860c-3a9d5e4e9344" />
 
+**Issue Faced While Deploying MySQL with Bitnami Helm Chart:**
+
+<img width="642" height="690" alt="image" src="https://github.com/user-attachments/assets/85cf5f5e-3e4d-4af9-9a6d-8c2b6c55a9f4" />
+
+<img width="765" height="751" alt="image" src="https://github.com/user-attachments/assets/7b733f08-225a-4143-be40-aed8396722b1" />
+
+<img width="727" height="477" alt="image" src="https://github.com/user-attachments/assets/454896d4-9e56-4658-b0a4-7538761034a0" />
+
+<img width="717" height="552" alt="image" src="https://github.com/user-attachments/assets/4392a7db-6170-4c4b-9855-9c71300305e2" />
+
+-->So went to the page: https://artifacthub.io/ & then search for "mysql helm chart" & then select related option, Used Option 1 here 
+
+<img width="1912" height="962" alt="image" src="https://github.com/user-attachments/assets/cd47be43-0f8f-491a-8dca-f59df405d2b8" />
+
+<img width="1902" height="961" alt="image" src="https://github.com/user-attachments/assets/1b1505e9-ca86-4590-9fd4-5be3065dbf4d" />
+
+<img width="862" height="646" alt="image" src="https://github.com/user-attachments/assets/6c8b51e6-a512-4615-89bd-1bdf1c69a798" />
+
+**Note:** Here in above screenshot we can see at last values.yml file is used that is ulternet options to set the all values which we have set in above command
+
+<img width="817" height="641" alt="image" src="https://github.com/user-attachments/assets/53a77538-f3e4-44a3-8fa4-3fd66a21ac56" />
+
+<img width="822" height="581" alt="image" src="https://github.com/user-attachments/assets/f43e2849-f129-4bbb-86e9-ee9e9ef84a3a" />
+
 Step 3: Search for the MySQL Chart: helm search repo bitnami/mysql [So This confirms Helm can find the chart.]
 
 <img width="1382" height="107" alt="image" src="https://github.com/user-attachments/assets/0f976c13-1ab4-4744-bebc-2cf8ca4823c0" />
 
 Step 4: Understand the Installation Command: 
 
-helm install bankapp-mysql bitnami/mysql \
+helm install my-mysql mysql/mysql \
   --set auth.rootPassword=Test@123 \
   --set auth.database=bankappdb \
   --set primary.resources.requests.memory=256Mi \
@@ -325,7 +349,7 @@ helm install bankapp-mysql bitnami/mysql \
   --set primary.resources.limits.memory=512Mi \
   --set primary.resources.limits.cpu=500m \
   --set primary.persistence.size=5Gi
-
+  
 <img width="1836" height="967" alt="image" src="https://github.com/user-attachments/assets/458be5eb-2794-43ff-9b5f-52a417109946" />
 
 <img width="1917" height="417" alt="image" src="https://github.com/user-attachments/assets/99002cb6-49ec-4242-af05-8c00084e8be1" />
@@ -393,6 +417,8 @@ Explaination on all above:
 -->Check storage: kubectl get pvc
 
 -->Check databases: kubectl exec -it bankapp-mysql-0 -- mysql -uroot -pTest@123 -e "SHOW DATABASES;"
+
+
 
 
 
