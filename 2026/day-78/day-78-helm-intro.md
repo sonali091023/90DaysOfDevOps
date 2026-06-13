@@ -234,11 +234,21 @@ Step 13: Identify What Helm Will Replace:
 
 <img width="636" height="820" alt="image" src="https://github.com/user-attachments/assets/4217055e-b45b-4198-8c0d-fa7400b37cdb" />
 
+Learning Outcome for This Task:
 
+Kubernetes: 
 
+-->Kind creates local Kubernetes clusters.
 
+AI-BankApp cluster contains: 1 Control Plane & 2 Workers
 
+Helm:
 
+-->Helm is a package manager for Kubernetes.
+
+-->Helm packages resources into Charts. which makes the application reusable across development, staging, and production environments.
+
+-->Helm talks to Kubernetes using the same kubeconfig as kubectl
 
 ---
 
