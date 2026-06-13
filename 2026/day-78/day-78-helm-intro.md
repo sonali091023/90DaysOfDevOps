@@ -181,6 +181,8 @@ Step 2: Clone the AI-BankApp Repository: git clone -b feat/gitops https://github
 
 Step 3: Examine the Kind Configuration: Before creating the cluster, inspect the config file: cat setup-k8s/kind-config.yml
 
+-->This tells Kind to create: 1 Control plane[master plane] & 2 worker nodes total 3 nodes
+
 <img width="657" height="512" alt="image" src="https://github.com/user-attachments/assets/efcd85f9-621a-43ed-ac84-320d7e2dc0d2" />
 
 <img width="1517" height="425" alt="image" src="https://github.com/user-attachments/assets/3294f716-0997-440d-b330-d3eb14ed07c6" />
@@ -193,11 +195,11 @@ Step 4: Create the Kind Cluster: kind create cluster --config setup-k8s/kind-con
 
 Step 5: Verify Cluster Creation: kubectl get nodes
 
-<img width="582" height="242" alt="imacurl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bashge" src="https://github.com/user-attachments/assets/b28db2fc-2f61-4acc-ba71-bb37181984be" />
+<img width="1595" height="147" alt="t2i8" src="https://github.com/user-attachments/assets/0e5e3207-0f4b-4c46-8caa-7b7e0644a6d7" />
 
 Step 6: Verify Cluster Information: kubectl cluster-info
 
-<img width="1595" height="147" alt="image" src="https://github.com/user-attachments/assets/d9a92f49-bc60-42cf-9d48-022217473451" />
+<img width="1697" height="502" alt="t2i9" src="https://github.com/user-attachments/assets/9da99dc9-7d96-4c75-9ce2-a27bc958210c" />
 
 -->Also check tbe system pods: kubectl get pods -A
 
