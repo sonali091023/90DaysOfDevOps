@@ -477,6 +477,9 @@ This is your reference for every knob you can turn. Notice how the chart support
 ```bash
 helm uninstall bankapp-mysql-v2
 ```
+**Steps to follow:**
+
+
 
 ---
 
