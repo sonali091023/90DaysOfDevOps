@@ -628,6 +628,8 @@ Step 3: Upgrade the Release: Since metrics previously caused issues in your char
 
 Step 4: Watch the Upgrade: Open another terminal: kubectl get pods -w
 
+<img width="1387" height="240" alt="image" src="https://github.com/user-attachments/assets/b1f0fd27-7bf8-4303-bbf0-dbc54edbccc7" />
+
 sona@SonaAshu:~/trainwithshubham/90DaysOfDevOps/2026/day-78/AI-BankApp-DevOps$ kubectl get pods -w
 
 <img width="462" height="726" alt="image" src="https://github.com/user-attachments/assets/f238373e-d6f2-40e0-938c-8a9872571f1f" />
@@ -682,6 +684,14 @@ Task 5 Issue Documentation – Helm Upgrade/Rollback with MySQL Metrics: Objecti
 <img width="627" height="611" alt="image" src="https://github.com/user-attachments/assets/f568be03-a25a-4785-aec9-9ff0295a2610" />
 
 <img width="671" height="707" alt="image" src="https://github.com/user-attachments/assets/afa97683-911e-4f30-ab50-a086db0f0386" />
+
+<img width="1665" height="861" alt="image" src="https://github.com/user-attachments/assets/4710873d-f8c8-407e-b444-d5255d06b965" />
+
+<img width="1917" height="747" alt="image" src="https://github.com/user-attachments/assets/25b7584c-a8b2-4ea1-afb3-4a909f06e759" />
+
+Note: the goal is to learn Helm revisions. You don't necessarily need to upgrade only metrics. You can safely upgrade several other settings and observe revision changes.
+
+
 
 ---
 
