@@ -251,6 +251,29 @@ gateway:
 
 **Compare:** The raw `k8s/secrets.yml` has base64-encoded credentials hardcoded. The Helm chart uses `values.yaml` and templates the Secret, so each environment can override credentials without editing YAML.
 
+**Steps to follow:**
+
+Step 1: Update Chart.yaml: vi bankapp/chart.yaml [Delete everything and paste new code]
+
+<img width="680" height="402" alt="image" src="https://github.com/user-attachments/assets/c96b7267-b4ec-4010-a960-38477fef6730" />
+
+<img width="1452" height="477" alt="image" src="https://github.com/user-attachments/assets/be754e06-938f-46c8-9751-50603408d9d5" />
+
+Step 2: Replace values.yaml: vi bankapp/values.yaml [Delete everything and paste new code]
+
+-->Note: Code is provided above
+
+Step 3: Understand Why We Use values.yaml: In the original Kubernetes manifests, values were hardcoded. 
+
+
+
+
+
+
+
+
+
+
 ---
 
 ### Task 3: Write the Core Templates
