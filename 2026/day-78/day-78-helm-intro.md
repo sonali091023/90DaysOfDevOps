@@ -479,6 +479,62 @@ helm uninstall bankapp-mysql-v2
 ```
 **Steps to follow:**
 
+-->So we are gonna see here Customize a Deployment with Values Files: 
+
+**Q. What is a Values File?**
+
+-->So in In Task 3, we passed configuration using many --set flags: Like **helm install my-mysql mysql/mysql --set auth.rootPassword=Test@123 \
+--set auth.database=bankappdb** So This becomes difficult to manage as the number of settings grows, A values file lets you keep all configuration in one YAML file. 
+
+Step 1: Create mysql-values.yaml: vi mysql-values.yml [Code is given above]
+
+Step 2: Verify File Contents: cat mysql-values.yaml
+
+<img width="1386" height="597" alt="image" src="https://github.com/user-attachments/assets/7d7aa00c-87e8-42f4-985e-d888f51857c0" />
+
+**Note:** Before creating new setup make sure previously created one is delete for that use below commands:
+
+-->1. Check Current Helm Releases: helm list
+
+-->2. Uninstall the Helm Release: helm uninstall my-mysql
+
+-->3. Verify Release Removal: helm list
+
+-->4. Check Remaining Resources: kubectl get all [All should get delete and bydefault service only should be present]
+
+-->5. Check PVC: kubectl get pvc [Helm often does not delete PVCs automatically.]
+
+-->To delete PVC: kubectl delete pvc data-my-mysql-0
+
+-->6. Verify PVC Removal: kubectl get pvc
+
+-->7. Check PV: kubectl get pv [No resource should be found, but if in case present delete it]
+
+**Note:** To delete this PV is totally depends on the StorageClass reclaim policy & If it was automatically deleted, No resource will found.
+
+<img width="1540" height="367" alt="image" src="https://github.com/user-attachments/assets/c77c0a11-71dc-4c0e-93c6-2fbc7b949362" />
+
+Step 3: Deploy Using Values File: helm install bankapp-mysql-v2 bitnami/mysql -f mysql-values.yaml
+
+**Important:** In your environment, the Bitnami chart previously failed because: **docker.io/bitnami/mysql:9.4.0-debian-12-r1** was unavailable, So So if you run: **helm install bankapp-mysql-v2 bitnami/mysql -f mysql-values.yaml** you will likely get: ImagePullBackOff again. So instead of that we can use: **helm install my-mysql-v2 mysql/mysql -f mysql-values.yaml**
+
+<img width="1697" height="921" alt="image" src="https://github.com/user-attachments/assets/6f037ca9-1202-44da-a9ef-7cc045461a9c" />
+
+Step 4: Verify Helm Release: helm list
+
+Step 5: Check Pods: kubectl get pods
+
+Step 6: Inspect What Helm Created: kubectl get all [So Expected: Pod, Service, StatefulSet for the second release]
+
+Step 7: Verify PVC: kubectl get pvc
+
+Step 8: View All Chart Configurable Values: **[This is one of the most important Helm commands.]**
+
+-->For Bitnami: helm show values bitnami/mysql | head -80
+
+-->For your working chart: helm show values mysql/mysql | head -80
+
+
 
 
 ---
