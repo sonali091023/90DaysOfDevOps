@@ -560,8 +560,21 @@ Step 8: View All Chart Configurable Values: **[This is one of the most important
 
 -->For your working chart: helm show values mysql/mysql | head -80
 
+<img width="657" height="420" alt="image" src="https://github.com/user-attachments/assets/2ce571de-abc8-4733-a3f7-f96a189a0d10" />
 
+<img width="1735" height="977" alt="image" src="https://github.com/user-attachments/assets/71e9cb2c-9a15-4e89-8bfe-da2d0f34fbc6" />
 
+<img width="1667" height="970" alt="image" src="https://github.com/user-attachments/assets/d6df17fd-d80c-443f-905d-1e86a5fea1e3" />
+
+Step 9: Compare Values File vs --set: 
+
+<img width="572" height="527" alt="image" src="https://github.com/user-attachments/assets/eb70520c-ba4c-4c1d-9b01-38b90cbfb2ab" />
+
+Step 10: Cleanup: 
+
+<img width="595" height="447" alt="image" src="https://github.com/user-attachments/assets/4fd27a14-707d-48c5-bd50-68afc0330b1e" />
+
+**Note:** Helm values files provide a maintainable way to customize deployments. Instead of passing multiple --set flags, configuration is stored in a YAML file and applied during installation using -f values.yaml. This approach is commonly used in production because it supports version control, reuse across environments, and easier configuration management. We also used helm show values to explore all configurable options exposed by a chart.
 
 ---
 
@@ -596,6 +609,79 @@ helm history bankapp-mysql
 Revision 3 appears -- a rollback to revision 1.
 
 **Compare this to raw manifests:** With `kubectl apply`, there is no built-in rollback. You would have to `git revert` or manually re-apply old YAML. Helm gives you `helm rollback` out of the box.
+
+**Steps to follow:**
+
+Step 1: Check Current Release: helm list
+
+Step 2: Check Current Values: Before upgrading: helm get values my-mysql-v2
+
+<img width="1757" height="482" alt="image" src="https://github.com/user-attachments/assets/284e1455-8e89-499b-89c6-960fdfdf39d9" />
+
+Step 3: Upgrade the Release: Since metrics previously caused issues in your chart, this is actually a good exercise to see Helm revisions in action.
+
+-->Run command: helm upgrade my-mysql-v2 mysql/mysql -f mysql-values.yaml --set metrics.enabled=true
+
+-->**What happens:** Helm creates Revision 2, Updates StatefulSet, Attempts to start metrics exporter
+
+<img width="1915" height="972" alt="image" src="https://github.com/user-attachments/assets/14900cac-f78b-4b50-82a9-9ab8e679d504" />
+
+Step 4: Watch the Upgrade: Open another terminal: kubectl get pods -w
+
+sona@SonaAshu:~/trainwithshubham/90DaysOfDevOps/2026/day-78/AI-BankApp-DevOps$ kubectl get pods -w
+
+<img width="462" height="726" alt="image" src="https://github.com/user-attachments/assets/f238373e-d6f2-40e0-938c-8a9872571f1f" />
+
+-->So upgrade process is done but after that we faced issue of CrashLoopBackoff, It means 2 of one container is not getting create, to fix that we used below stesp:
+
+Task 5 Issue Documentation – Helm Upgrade/Rollback with MySQL Metrics: Objective Learn how Helm revisions work using: helm upgrade, helm history, helm rollback
+
+<img width="372" height="720" alt="image" src="https://github.com/user-attachments/assets/f99afbc6-9610-4100-b974-a3c9acabe710" />
+
+<img width="660" height="767" alt="image" src="https://github.com/user-attachments/assets/88ea1a38-3e88-4580-b4f9-23694ef6ad78" />
+
+**Investigation Commands Used:**
+
+-->1. Check Pod Status: kubectl get pods [Purpose is to Verify pod health]
+
+-->2. Watch Pod Continuously: kubectl get pods -w [Purpose is to Monitor restart behavior]
+
+-->3. View All Resources: kubectl get all [Purpose is to Check Service, StatefulSet, Pod status]
+
+-->4. Check Pod Details: kubectl describe pod my-mysql-v2-0 [Purpose is to View events, Identify failing container Important finding: "Back-off restarting failed container metrics"]
+
+-->5. Check Metrics Container Logs: kubectl logs my-mysql-v2-0 -c metrics [This revealed the actual problem.]
+
+-->Output: failed to validate config no user specified in section or parent
+
+-->6. Check Helm Values: helm get values my-mysql-v2: [Purpose is to check metrics value is enable or disable]
+
+-->7. Check Revision History: helm history my-mysql-v2 [Purpose: View Helm revisions]
+
+<img width="1307" height="107" alt="image" src="https://github.com/user-attachments/assets/14932d34-c16a-418c-99b4-d56bd1ea3633" />
+
+-->8. Rollback Release: helm rollback my-mysql-v2 1 [Purpose is to verify Return to Revision 1]
+
+-->So the output is Rollback was a success! Happy Helming!
+
+-->9. Verify Rollback Values: helm get values my-mysql-v2 [Purpose is to verify Confirm rollback restored old values]
+
+-->Outout is Metrics section disappeared.
+
+10. Check Containers in Pod: kubectl get pod my-mysql-v2-0 -o jsonpath='{.spec.containers[*].name}'
+
+-->This is Important finding: Even after rollback, the old metrics sidecar still existed in the StatefulSet. & its output is mysql metrics
+
+11. Restart StatefulSet: kubectl rollout restart statefulset my-mysql-v2 [Purpose: Force pod recreation using rollback configuration]
+
+12. Verify Rollout: kubectl rollout status statefulset my-mysql-v2 [Expected: statefulset rolling update complete
+
+13. Final Verification: kubectl get pods [Expected: my-mysql-v2-0   1/1   Running]
+
+-->Note: We can manually as well delete the StateFulSet container and then it will get recreate
+<img width="627" height="611" alt="image" src="https://github.com/user-attachments/assets/f568be03-a25a-4785-aec9-9ff0295a2610" />
+
+<img width="671" height="707" alt="image" src="https://github.com/user-attachments/assets/afa97683-911e-4f30-ab50-a086db0f0386" />
 
 ---
 
