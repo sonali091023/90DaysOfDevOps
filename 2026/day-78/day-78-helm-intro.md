@@ -520,6 +520,30 @@ Step 3: Deploy Using Values File: helm install bankapp-mysql-v2 bitnami/mysql -f
 
 <img width="1697" height="921" alt="image" src="https://github.com/user-attachments/assets/6f037ca9-1202-44da-a9ef-7cc045461a9c" />
 
+Issue Faced: Helm Values File Troubleshooting Notes: Goal: Deploy MySQL using a Helm values file instead of multiple --set parameters. For the execution we used above command, After that faced issue as below,
+
+Issue 1: Pod Started But Not Fully Ready: **kubectl get pods** O/P: my-mysql-v2-0   1/2   CrashLoopBackOff [Only 1 container was healthy.]
+
+<img width="1841" height="526" alt="image" src="https://github.com/user-attachments/assets/f5ae5f44-8dd7-45d2-a387-fd61147c86c2" />
+
+-->To Investigate this used command to check pod details: **kubectl describe pod my-mysql-v2-0** & Observed: spec.containers{metrics}: Back-off restarting failed container metrics, So this showed the metrics container was failing, not MySQL itself.
+
+Issue 2: Metrics Exporter Crash: Check logs: **kubectl logs my-mysql-v2-0 -c metrics** 
+
+<img width="486" height="177" alt="image" src="https://github.com/user-attachments/assets/55273124-dde3-4f0c-9240-66bc4f109809" />
+
+<img width="627" height="525" alt="image" src="https://github.com/user-attachments/assets/2299b733-fdc2-487d-bcd1-d2c379aec8b2" />
+
+Issue 3: Values File Validation: Checked applied values: **helm get values my-mysql-v2**
+
+<img width="581" height="412" alt="image" src="https://github.com/user-attachments/assets/cdd03940-7d0e-4043-ba56-fcea388573fa" />
+
+-->Resolution: Remove metrices part from the mysql-values.yml file & then redeployed it but before destroy previous setup **helm uninstall my-mysql-v2** & also delete Delete PVC as well: **kubectl delete pvc data-my-mysql-v2-0** & then Deploy again: **helm install my-mysql-v2 mysql/mysql -f mysql-values.yaml**
+
+<img width="535" height="402" alt="image" src="https://github.com/user-attachments/assets/c85a995c-3cde-42fc-b560-847887491203" />
+
+<img width="1792" height="967" alt="image" src="https://github.com/user-attachments/assets/5c186895-0d36-49d8-a402-f28c8d15ad82" />
+
 Step 4: Verify Helm Release: helm list
 
 Step 5: Check Pods: kubectl get pods
@@ -527,6 +551,8 @@ Step 5: Check Pods: kubectl get pods
 Step 6: Inspect What Helm Created: kubectl get all [So Expected: Pod, Service, StatefulSet for the second release]
 
 Step 7: Verify PVC: kubectl get pvc
+
+<img width="1917" height="617" alt="image" src="https://github.com/user-attachments/assets/c2a9dcbf-2075-410f-98f1-9a19cfebd9ff" />
 
 Step 8: View All Chart Configurable Values: **[This is one of the most important Helm commands.]**
 
