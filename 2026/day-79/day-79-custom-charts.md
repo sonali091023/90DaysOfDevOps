@@ -265,14 +265,21 @@ Step 2: Replace values.yaml: vi bankapp/values.yaml [Delete everything and paste
 
 Step 3: Understand Why We Use values.yaml: In the original Kubernetes manifests, values were hardcoded. 
 
+<img width="672" height="477" alt="image" src="https://github.com/user-attachments/assets/38745c60-f9b4-4bf7-a3da-4f9bcb5b830b" />
 
+Step 4: Verify the YAML: Run command: helm lint bankapp
 
+<img width="611" height="297" alt="image" src="https://github.com/user-attachments/assets/1d4bc33e-780d-4be9-92fe-778fe8998674" />
 
+Step 5: Inspect Values Like Helm Does: helm show values bankapp
 
+-->So You should see all sections: bankapp:, mysql:, ollama:, config:, secrets:, storageClass:, gateway: etc.
 
+Step 6: Understand What Will Become Templates: 
 
+<img width="781" height="502" alt="image" src="https://github.com/user-attachments/assets/4a56a44a-8e1c-4eb1-8555-7b4a09dcdeab" />
 
-
+-->Validation Checklist: So here run command: cat bankapp/Chart.yaml & then run command: helm lint bankapp
 
 ---
 
