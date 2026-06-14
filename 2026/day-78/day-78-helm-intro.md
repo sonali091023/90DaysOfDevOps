@@ -691,7 +691,58 @@ Task 5 Issue Documentation – Helm Upgrade/Rollback with MySQL Metrics: Objecti
 
 Note: the goal is to learn Helm revisions. You don't necessarily need to upgrade only metrics. You can safely upgrade several other settings and observe revision changes.
 
+<img width="567" height="667" alt="image" src="https://github.com/user-attachments/assets/d05ec47e-a1d8-4728-ab98-c3987e351f16" />
 
+<img width="547" height="627" alt="image" src="https://github.com/user-attachments/assets/b2afa6c4-df54-4521-a1be-f0bfcf4c576c" />
+
+<img width="507" height="696" alt="image" src="https://github.com/user-attachments/assets/13a67dbf-2610-4f6e-b609-add25eb358c0" />
+
+<img width="491" height="587" alt="image" src="https://github.com/user-attachments/assets/de83d466-c4dd-4199-9cd2-88e45683be35" />
+
+-->For now i am trying to upgrade the CPU or Memory upgrade: for that use command: helm upgrade my-mysql-v2 mysql/mysql -f mysql-values.yaml --set primary.resources.limits.cpu=1
+
+Step 5: Check Revision History: helm history my-mysql-v2
+
+<img width="1187" height="140" alt="image" src="https://github.com/user-attachments/assets/5cf85ac8-a262-4a83-909f-2e375a80a7b4" />
+
+Step 6: Inspect Release Status: helm status my-mysql-v2
+
+<img width="1291" height="920" alt="image" src="https://github.com/user-attachments/assets/694f8bec-fec2-4ad5-9c2f-cd4c78a44b03" />
+
+-->Useful information: Current revision, Resources managed by Helm, Deployment state
+
+Step 7: Roll Back: helm rollback my-mysql-v2 1 [Return to Revision 1 Expected: Rollback was a success!]
+
+<img width="1105" height="42" alt="image" src="https://github.com/user-attachments/assets/9d0fbe76-4d8d-4ce1-b7f4-9fd193a806d4" />
+
+Step 8: Verify Rollback: kubectl get pods -w [Expected: my-mysql-v2-0   1/1 Running]
+
+<img width="1121" height="62" alt="image" src="https://github.com/user-attachments/assets/f6f990e3-0be0-4fe7-98a6-57e9992019ac" />
+
+Step 9: Check History Again: helm history my-mysql-v2 [Notice: Revision 1 = Initial install, Revision 2 = Upgrade, Revision 3 = Rollback operation
+Helm never deletes history.
+
+<img width="1187" height="140" alt="image" src="https://github.com/user-attachments/assets/5cf85ac8-a262-4a83-909f-2e375a80a7b4" />
+
+Step 10: View Detailed Release Information: helm status my-mysql-v2 [You should now see: REVISION: 3 & STATUS: deployed]
+
+<img width="1291" height="920" alt="image" src="https://github.com/user-attachments/assets/694f8bec-fec2-4ad5-9c2f-cd4c78a44b03" />
+
+Step 11: Uninstall the Release: helm uninstall my-mysql-v2 [Expected: release "my-mysql-v2" uninstalled]
+
+Step 12: Verify Cleanup: 
+
+-->Check Helm releases: helm list [Expected: No releases found]
+
+-->Check Kubernetes resources: kubectl get all [MySQL resources should be gone.]
+
+**Important Note About PVCs:** Helm often does not delete PVCs created by StatefulSets.
+
+-->Check PVC: kubectl get pvc & still exists delete it: kubectl delete pvc data-my-mysql-v2-0 & Again to verify run command: kubectl get pvc Expected: No resources found]
+
+<img width="1787" height="377" alt="image" src="https://github.com/user-attachments/assets/801fe51e-678d-4eda-a86a-3dc900cb0769" />
+
+<img width="827" height="311" alt="image" src="https://github.com/user-attachments/assets/21f4d9e6-d417-41b5-8e0b-289bcd4a95f4" />
 
 ---
 
