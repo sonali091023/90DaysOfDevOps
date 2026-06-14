@@ -372,6 +372,10 @@ spec:
 {{- end }}
 ```
 
+**Steps to follow:**
+
+
+
 ---
 
 ### Task 4: Write the Deployment Templates
