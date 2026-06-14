@@ -804,6 +804,92 @@ Clean up:
 helm uninstall bankapp-mysql
 rm -rf mysql/
 ```
+**Steps to follow:**
+
+Step 1: Pull the Chart Locally: helm pull bitnami/mysql --untar 
+
+-->Then to verify use command: ls
+
+-->Then inspect the chart: ls mysql
+
+<img width="1917" height="112" alt="image" src="https://github.com/user-attachments/assets/4d856fb0-9ff1-4862-945f-3eecc0845749" />
+
+Step 2: Understand Chart.yaml: cat mysql/Chart.yaml
+
+<img width="1322" height="807" alt="image" src="https://github.com/user-attachments/assets/10169453-284d-4d24-b1c0-b47653db9ce6" />
+
+<img width="797" height="341" alt="image" src="https://github.com/user-attachments/assets/36decdc5-c2db-402d-b2b1-f7aa69500e3b" />
+
+Important Interview Question: Q. Difference Between version and appVersion?
+
+<img width="571" height="772" alt="image" src="https://github.com/user-attachments/assets/fe4a7c2f-fcc6-4899-9617-0edea1058403" />
+
+<img width="597" height="385" alt="image" src="https://github.com/user-attachments/assets/a19f1325-54b8-48fb-95ac-164c3d3e9b0d" />
+
+Step 3: Explore values.yaml: less mysql/values.yaml
+
+-->Search for /replicaCount
+<img width="1452" height="966" alt="image" src="https://github.com/user-attachments/assets/7c00c278-3d19-4d82-904a-653accdee3f3" />
+
+-->Search for /image
+<img width="1530" height="966" alt="image" src="https://github.com/user-attachments/assets/aec6a2ed-b0ea-449b-b282-27303e6b9d8b" />
+
+-->Search for /persistence
+<img width="1572" height="981" alt="image" src="https://github.com/user-attachments/assets/f196a91a-0d4c-4199-9b8b-bf74d9119d9f" />
+
+-->Search for /metrics
+<img width="1577" height="962" alt="image" src="https://github.com/user-attachments/assets/eba5a1a1-af61-40d6-b2e5-21aa5349ef3c" />
+
+<img width="542" height="467" alt="image" src="https://github.com/user-attachments/assets/a42e125e-a9fd-429d-856f-71cefb314a7a" />
+
+Step 4: Explore templates/: List templates: tree mysql/templates
+
+<img width="1512" height="786" alt="image" src="https://github.com/user-attachments/assets/ec6f288a-cb16-4545-883e-2e6de0bcd78c" />
+
+Step 5: Explore StatefulSet Template: open file: less mysql/templates/primary/statefulset.yaml & Look for: image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+<img width="1917" height="967" alt="image" src="https://github.com/user-attachments/assets/6e41f0f7-5aa4-447b-987c-6d9035aa8cf9" />
+
+-->Meaning:
+<img width="432" height="822" alt="image" src="https://github.com/user-attachments/assets/d6b52afe-4ab8-4ad9-9ed2-6c4a3b559766" />
+
+Step 6: Explore Secret Template: less mysql/templates/secrets.yaml
+
+<img width="472" height="460" alt="image" src="https://github.com/user-attachments/assets/c9324d2a-543f-404c-a785-638f457e36cd" />
+
+Step 7: Explore NOTES.txt: cat mysql/templates/NOTES.txt
+
+<img width="1917" height="957" alt="image" src="https://github.com/user-attachments/assets/3d05a749-932a-4baa-a372-c70fa7b873c8" />
+
+Step 8: Render the Templates: This is one of the most useful Helm commands: Run command: helm template my-test mysql/
+
+<img width="1432" height="972" alt="image" src="https://github.com/user-attachments/assets/99482c94-8ecd-4432-8b4e-105cf90cae6a" />
+
+Step 9: Compare with AI-BankApp: 
+
+<img width="592" height="467" alt="image" src="https://github.com/user-attachments/assets/10bfc966-d663-4709-b35d-6432eaa702b3" />
+
+Step 10: Useful Commands for Chart Exploration:
+
+-->Show Chart Metadata: helm show chart bitnami/mysql
+
+-->Show default values: helm show values bitnami/mysql | head -100
+
+-->Render templates: helm template my-test mysql/
+
+-->Lint chart: helm lint mysql/
+
+<img width="592" height="467" alt="image" src="https://github.com/user-attachments/assets/a788d3b2-1cee-4776-9b1a-808da164f63c" />
+
+Cleanup: rm -rf mysql/ & adter that do ls
+
+-->Befoer running command: rm -rf mysql/
+
+<img width="1917" height="100" alt="image" src="https://github.com/user-attachments/assets/73b306ab-adbd-4021-99d8-a6688fa4c8fc" />
+
+-->After running command: rm -rf mysql/
+
+<img width="1905" height="111" alt="image" src="https://github.com/user-attachments/assets/863c0fb9-f6b5-4ebb-9a52-d5e778478733" />
 
 ---
 
