@@ -1,4 +1,4 @@
-# Day 79 -- Creating a Custom Helm Chart for AI-BankApp
+<img width="1752" height="971" alt="image" src="https://github.com/user-attachments/assets/d3cf703b-2944-41e8-945f-6c604026e59e" /># Day 79 -- Creating a Custom Helm Chart for AI-BankApp
 
 ## Task
 Yesterday you deployed MySQL with a community Helm chart. Today you build a custom Helm chart for the AI-BankApp itself -- converting the 12 raw YAML files from the `k8s/` directory into a templated, configurable, reusable Helm chart.
@@ -374,9 +374,88 @@ spec:
 
 **Steps to follow:**
 
-Step 1: Verify _helpers.tpl Exists: So Before creating templates, check: ls bankapp/templates [Expected: We should see: _helpers.tpl, NOTES.txt]
+Step 1: Verify _helpers.tpl Exists: So Before creating templates, check: ls helm-chart/bankapp/templates [Expected: We should see: _helpers.tpl, NOTES.txt]
 
--->to open this file _helpers.tpl: bankapp/templates/_helpers.tpl
+-->to open this file _helpers.tpl: vi helm-chart/bankapp/templates/_helpers.tpl
+
+-->If it still contains the default Helm content, keep it for now because it already provides: {{ include "bankapp.fullname" . }}{{ include "bankapp.labels" . }} which your templates depend on.
+
+<img width="1762" height="216" alt="image" src="https://github.com/user-attachments/assets/bbd33f62-1436-4f8b-a97c-bc87715206c4" />
+
+<img width="1915" height="982" alt="image" src="https://github.com/user-attachments/assets/a5a38b0e-dfd6-4e11-b0c3-7c07963adfea" />
+
+Step 2: Create configmap.yaml: Create file: vi helm-chart/bankapp/templates/configmap.yaml [Code is given above] & then do ls to verify
+
+<img width="1716" height="122" alt="image" src="https://github.com/user-attachments/assets/89ff4d40-df21-47b8-92b9-cc8eabea3dda" />
+
+**Understanding What Changed:**
+
+<img width="565" height="632" alt="image" src="https://github.com/user-attachments/assets/3fcb11f3-1e71-43ca-832f-8c32708b0b93" />
+
+Step 3: Create secrets.yaml: vi helm-chart/bankapp/templates/secrets.yaml & then do ls to verify
+
+<img width="1585" height="101" alt="image" src="https://github.com/user-attachments/assets/3a65712b-bd66-4c9a-be1f-ac97771dc801" />
+
+Why b64enc Is Useful: 
+
+<img width="512" height="592" alt="image" src="https://github.com/user-attachments/assets/1727e681-d33e-42f9-866a-8c916b77a2a2" />
+
+Step 4: Create storage.yaml: vi helm-chart/bankapp/templates/storage.yaml & then do ls to verify
+
+Step 5: Verify Files Exist: tree tree helm-chart/bankapp
+
+<img width="1765" height="885" alt="image" src="https://github.com/user-attachments/assets/ac38fdab-0c25-4b20-ab48-6beb96e978e7" />
+
+Step 6: Render the Templates Locally: So Before deploying, ask Helm to render them: helm template bankapp ./helm-chart/bankapp
+
+While Rendering the template locally i was faced this issue,
+
+<img width="1917" height="121" alt="image" src="https://github.com/user-attachments/assets/90793fdb-3d05-47a1-8478-ef20786a13dc" />
+
+-->So Helm is not failing on your configmap.yaml, secrets.yaml, or storage.yaml, It's failing inside templates/NOTES.txt:
+
+<img width="597" height="551" alt="image" src="https://github.com/user-attachments/assets/6bfbc1e4-67dd-4fee-95ac-c86db67a40cf" />
+
+<img width="567" height="482" alt="image" src="https://github.com/user-attachments/assets/06cc915f-d505-45e8-a60d-eb01787f4870" />
+
+To Fix this i made chnages in NOTES.txt file as below,
+
+<img width="577" height="267" alt="image" src="https://github.com/user-attachments/assets/68e13f81-c272-4b95-a652-6530fa5039ff" />
+
+**Note:** Alternative is If you don't need NOTES.txt right now: rm helm-chart/bankapp/templates/NOTES.txt Helm charts work perfectly without it 
+
+-->Now run again 6th Step command: **helm template bankapp ./helm-chart/bankapp** OR **helm lint ./helm-chart/bankapp**
+
+<img width="1566" height="972" alt="image" src="https://github.com/user-attachments/assets/59a9feb9-722f-460e-b3e8-ab09c36f33e4" />
+
+<img width="1752" height="971" alt="image" src="https://github.com/user-attachments/assets/6a424aa8-6e61-441d-83d9-660df8c857de" />
+
+<img width="1181" height="130" alt="image" src="https://github.com/user-attachments/assets/ef654d51-4e94-4248-8912-16a6930d0c66" />
+
+-->Perfect, verification step has passed successfully. So What the output confirms is:
+
+<img width="602" height="541" alt="image" src="https://github.com/user-attachments/assets/2e10fb6b-c8ca-48b5-b289-860c9576005c" />
+
+<img width="607" height="517" alt="image" src="https://github.com/user-attachments/assets/765533a2-6380-492f-9b5d-11daeb92d977" />
+
+<img width="575" height="422" alt="image" src="https://github.com/user-attachments/assets/420aba7e-7546-467b-9e48-f60e3191b80e" />
+
+<img width="571" height="542" alt="image" src="https://github.com/user-attachments/assets/47d71b6a-6b2d-44cb-810a-99983fd2ef54" />
+
+<img width="617" height="742" alt="image" src="https://github.com/user-attachments/assets/fe922fa8-beeb-4d92-9827-aaa7239b64b7" />
+
+Step 7: Inspect Specific Output
+
+
+
+
+
+
+
+
+
+
+
 
 
 
