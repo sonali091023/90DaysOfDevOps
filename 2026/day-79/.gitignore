@@ -1,0 +1,20 @@
+# Helm
+*.tgz
+
+# Kubernetes
+kubeconfig
+
+# Secrets
+.env
+.env.*
+
+# SSH Keys
+*.pem
+*.key
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store

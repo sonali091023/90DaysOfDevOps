@@ -1,0 +1,12 @@
+AI-BankApp Helm Chart Installed Successfully
+
+Release Name: {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+Useful Commands:
+
+kubectl get all -n {{ .Release.Namespace }}
+
+kubectl get pvc -n {{ .Release.Namespace }}
+
+kubectl describe pods -n {{ .Release.Namespace }}
