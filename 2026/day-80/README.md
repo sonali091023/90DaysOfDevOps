@@ -205,6 +205,47 @@ helm template bankapp-prod bankapp/ -f bankapp/values-prod.yaml | grep "replicas
 
 Same chart, wildly different deployments.
 
+**Steps to follow:**
+
+-->Great! This task is about one of Helm's biggest advantages: using the same chart for multiple environments by changing only the values files.
+
+Step 1: Navigate to Your Chart: ls helm-chart/bankapp/
+
+<img width="1907" height="147" alt="image" src="https://github.com/user-attachments/assets/a76b5077-3866-4aa6-a148-0efb2239fac7" />
+
+Step 2: Create values-dev.yaml: vi helm-chart/bankapp/values-dev.yaml  [Added above mentioned code]
+
+Step 3: Create values-staging.yaml: vi helm-chart/bankapp/values-staging.yaml  [Added above mentioned code]
+
+Step 4: Create values-prod.yaml: vi helm-chart/bankapp/values-prod.yaml  [Added above mentioned code]
+
+Step 5: Verify Files Exist: ls -l helm-chart/bankapp/*.yaml
+
+<img width="1540" height="297" alt="image" src="https://github.com/user-attachments/assets/1f047a06-f45c-40bf-b762-561479bf3ae0" />
+
+Step 6: Validate the Chart: From the helm-chart directory: helm lint helm-bankapp/bankapp
+
+<img width="1522" height="142" alt="image" src="https://github.com/user-attachments/assets/f0f1b636-3489-4a2a-b9e5-14e383446905" />
+
+Step 7: Test the Dev Environment: 
+
+-->Render manifests: helm template bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml 
+
+-->Check the BankApp deployment replicas: helm template bankapp-dev helm-chart/bankapp -f bankapp/values-dev.yaml | grep replicas:
+
+<img width="1645" height="966" alt="image" src="https://github.com/user-attachments/assets/2af58b6b-9571-4725-8684-d1d601a9d866" />
+
+<img width="1840" height="82" alt="image" src="https://github.com/user-attachments/assets/6870fb23-7874-4c6f-8219-0a0b11185f0c" />
+
+-->So the deployment should contain a fixed replica count.
+
+Step 8: Test the Staging Environment: 
+
+
+
+
+
+
 ---
 
 ### Task 2: Add Helm Hooks
