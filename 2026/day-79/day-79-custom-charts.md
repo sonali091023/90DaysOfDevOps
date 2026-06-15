@@ -444,20 +444,19 @@ To Fix this i made chnages in NOTES.txt file as below,
 
 <img width="617" height="742" alt="image" src="https://github.com/user-attachments/assets/fe922fa8-beeb-4d92-9827-aaa7239b64b7" />
 
-Step 7: Inspect Specific Output
+Step 7: Inspect Specific Output: 
 
+-->Check ConfigMap: helm template bankapp ./helm-chart/bankapp | grep MYSQL_DATABASE -A 2
 
+-->Check secret: helm template bankapp ./helm-chart/bankapp | grep MYSQL_PASSWORD 
 
+-->So here we will get Expected output will be base64 encoded, even though values.yaml contains: mysqlPassword: Test@123
 
+Step 8: Run Helm Validation: Always lint after creating templates: helm lint helm-chart/bankapp
 
+<img width="1785" height="257" alt="image" src="https://github.com/user-attachments/assets/59bc768e-f768-47ec-8137-4492b219e5ad" />
 
-
-
-
-
-
-
-
+<img width="821" height="327" alt="image" src="https://github.com/user-attachments/assets/f888fbca-ac42-45cb-8b63-28312b9fa7bc" />
 
 ---
 
