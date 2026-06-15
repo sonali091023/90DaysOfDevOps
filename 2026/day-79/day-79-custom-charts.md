@@ -1,4 +1,4 @@
-<img width="1752" height="971" alt="image" src="https://github.com/user-attachments/assets/d3cf703b-2944-41e8-945f-6c604026e59e" /># Day 79 -- Creating a Custom Helm Chart for AI-BankApp
+# Day 79 -- Creating a Custom Helm Chart for AI-BankApp
 
 ## Task
 Yesterday you deployed MySQL with a community Helm chart. Today you build a custom Helm chart for the AI-BankApp itself -- converting the 12 raw YAML files from the `k8s/` directory into a templated, configurable, reusable Helm chart.
