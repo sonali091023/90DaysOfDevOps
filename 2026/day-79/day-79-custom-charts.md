@@ -1020,6 +1020,21 @@ Step 6: Confirm Storage Class on Kind: Check available StorageClasses:
 
 <img width="1625" height="96" alt="image" src="https://github.com/user-attachments/assets/eb9cf040-5e9f-4931-a863-68b401900fc3" />
 
+<img width="575" height="515" alt="image" src="https://github.com/user-attachments/assets/4d07717c-2fef-4ca7-8460-1b5ad5e2a9f3" />
+
+Step 7: Deploy the Chart: helm install my-bankapp ./helm-chart/bankapp -n bankapp --create-namespace --set storageClass.create=false \
+  --set mysql.persistence.storageClass=standard --set ollama.persistence.storageClass=standard
+
+<img width="1917" height="427" alt="image" src="https://github.com/user-attachments/assets/46622c29-6bc8-432f-a2b0-421742462657" />
+
+Step 8: Verify Helm Release: Check helm: helm list -n bankapp
+
+<img width="1417" height="61" alt="image" src="https://github.com/user-attachments/assets/3752dbd7-b388-49ee-b9f1-ed09524dce51" />
+
+Step 9: Verify Kubernetes Resources: kubectl get all -n bankapp
+
+
+
 
 
 
