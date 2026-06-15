@@ -952,6 +952,78 @@ Open `http://localhost:8080` -- you should see the AI-BankApp login page.
 helm uninstall my-bankapp -n bankapp
 ```
 
+**Stesp to follow:** 
+
+Step 1: Verify Current Chart Structure: tree helm-chart/bankapp
+
+<img width="1461" height="386" alt="image" src="https://github.com/user-attachments/assets/1369f319-076f-4d1e-b36f-626d22bef439" />
+
+Step 2: Lint the Chart: helm lint ./helm-chart/bankapp
+
+<img width="1402" height="132" alt="image" src="https://github.com/user-attachments/assets/a7bad759-79a1-4008-a9f5-95152bccd632" />
+
+**Note:** If lint fails: helm lint ./helm-chart/bankapp --debug and inspect the error line.
+
+Step 3: Render Templates Locally: This shows the final Kubernetes manifests Helm will generate.
+
+-->helm template my-bankapp ./helm-chart/bankapp
+
+<img width="1492" height="972" alt="image" src="https://github.com/user-attachments/assets/1e705477-59f4-4dd5-a30e-01f850e10b83" />
+
+<img width="1222" height="967" alt="image" src="https://github.com/user-attachments/assets/115b2a74-a755-4d2e-ae5d-4dffc11ebceb" />
+
+<img width="1290" height="976" alt="image" src="https://github.com/user-attachments/assets/3a1ed92d-4aa1-4f66-818f-748c4c9c4208" />
+
+-->Review the output & Things to verify:
+
+<img width="562" height="562" alt="image" src="https://github.com/user-attachments/assets/a753f8f4-8369-401d-a5a7-a87eb3c90d6d" />
+
+<img width="502" height="702" alt="image" src="https://github.com/user-attachments/assets/26fee8ce-6e98-4de0-b64e-b74ee2badc8e" />
+
+Step 4: Test Overrides: Render with custom values:
+
+-->helm template my-bankapp ./helm-chart/bankapp --set bankapp.image.tag=abc1234 --set bankapp.replicaCount=2 --set ollama.enabled=false
+
+<img width="1917" height="960" alt="image" src="https://github.com/user-attachments/assets/44ce63ba-a55a-4072-b4d4-1e655ddc9777" />
+
+-->**Verify: Image Tag Changed:** helm template my-bankapp ./helm-chart/bankapp --set bankapp.image.tag=abc1234 | grep image:
+
+-->Expected: image: "trainwithshubham/ai-bankapp-eks:abc1234"
+
+<img width="1917" height="137" alt="image" src="https://github.com/user-attachments/assets/a4718593-6a7a-4b82-b7ee-1aa0ea8451cc" />
+
+-->**verify: Ollama Removed:** helm template my-bankapp ./helm-chart/bankapp --set ollama.enabled=false | grep "name: my-bankapp-ollama"
+
+-->Expected: (no output)
+
+-->**Check PVC:** helm template my-bankapp ./helm-chart/bankapp --set ollama.enabled=false | grep ollama-pvc
+
+-->Expected: (no output) So This proves the conditional logic works.
+
+<img width="1905" height="67" alt="image" src="https://github.com/user-attachments/assets/3e3bb3dd-2dda-4132-b499-81fd3014b514" />
+
+Step 5: Dry Run Against Kubernetes: This validates against the cluster API without creating resources.
+
+-->helm install my-bankapp ./helm-chart/bankapp --dry-run --debug -n bankapp --create-namespace
+
+<img width="1917" height="971" alt="image" src="https://github.com/user-attachments/assets/af86f11f-9950-458f-aef8-96e4af77201e" />
+
+<img width="1521" height="972" alt="image" src="https://github.com/user-attachments/assets/757c0b8f-f58c-491b-ac5c-67f2363afc3c" />
+
+<img width="1422" height="972" alt="image" src="https://github.com/user-attachments/assets/520a8c08-e11a-47d1-b1c4-2f9f86def717" />
+
+<img width="1176" height="975" alt="image" src="https://github.com/user-attachments/assets/71375b5b-3a79-44cb-9c60-9860a4cd561e" />
+
+Step 6: Confirm Storage Class on Kind: Check available StorageClasses:
+
+-->kubectl get storageclass
+
+<img width="1625" height="96" alt="image" src="https://github.com/user-attachments/assets/eb9cf040-5e9f-4931-a863-68b401900fc3" />
+
+
+
+
+
 ---
 
 ## Hints
