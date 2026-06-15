@@ -1101,6 +1101,24 @@ Step 15: Cleanup:
 
 <img width="810" height="502" alt="image" src="https://github.com/user-attachments/assets/cc3fbde7-ea68-4225-828a-5a1f1b0d8310" />
 
+-->So as we have cleaned the application setup, And in case we again want to rebuild it we have to follow following steps:
+
+<img width="672" height="825" alt="image" src="https://github.com/user-attachments/assets/e5556f72-9399-4176-8e49-7cfafbd35395" />
+
+<img width="732" height="240" alt="image" src="https://github.com/user-attachments/assets/bfecca83-6031-4ac3-98e2-9a3aebc12feb" />
+
+**Useful commands to rebuild the app:**
+
+-->helm install my-bankapp ./helm-chart/bankapp -n bankapp --create-namespace --set storageClass.create=false --set mysql.persistence.storageClass=standard --set ollama.persistence.storageClass=standard
+
+-->kubectl get pods -n bankapp
+
+-->kubectl port-forward svc/my-bankapp-service -n bankapp 8080:8080
+
+-->http://localhost:8080 [Lunach in browser]
+
+**Note:** The Helm chart was validated using helm lint, rendered using helm template, successfully installed into the Kind cluster, and all deployments, services, PVCs, and HPA resources reached a healthy state. The release was then cleaned up using helm uninstall.
+
 ---
 
 ## Hints
