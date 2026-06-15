@@ -374,6 +374,10 @@ spec:
 
 **Steps to follow:**
 
+Step 1: Verify _helpers.tpl Exists: So Before creating templates, check: ls bankapp/templates [Expected: We should see: _helpers.tpl, NOTES.txt]
+
+-->to open this file _helpers.tpl: bankapp/templates/_helpers.tpl
+
 
 
 ---
