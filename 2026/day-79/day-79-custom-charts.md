@@ -658,6 +658,56 @@ spec:
 
 Notice: the Ollama model name (`tinyllama`) is now a value (`{{ .Values.ollama.model }}`). You can switch models without editing YAML.
 
+**Steps to follow:**
+
+Step 1: Create bankapp-deployment.yaml: 
+
+-->vi helm-chart/bankapp/templates/bankapp-deployment.yaml
+
+Important Things to Understand: 
+
+<img width="631" height="576" alt="image" src="https://github.com/user-attachments/assets/007afe00-6ce5-4f85-8374-b34b5bfb129e" />
+
+<img width="642" height="481" alt="image" src="https://github.com/user-attachments/assets/7f36d696-740e-4927-92ff-f792937fc6c2" />
+
+<img width="625" height="477" alt="image" src="https://github.com/user-attachments/assets/11807a72-2d17-4829-aaad-1ff86deb9bb4" />
+
+Step 2: Create mysql-deployment.yaml: vi helm-chart/bankapp/templates/mysql-deployment.yaml
+
+**Why Recreate Strategy?**
+
+<img width="495" height="737" alt="image" src="https://github.com/user-attachments/assets/57bede3b-c061-47d5-8339-907d35620a52" />
+
+Step 3: Create ollama-deployment.yaml: vi helm-chart/bankapp/templates/ollama-deployment.yaml
+
+<img width="377" height="705" alt="image" src="https://github.com/user-attachments/assets/bddfdeec-17f0-49e6-9371-cd270074fc75" />
+
+Step 4: Validate Template Syntax: ls helm-chart/bankapp/templates
+
+<img width="1882" height="162" alt="image" src="https://github.com/user-attachments/assets/6777aad9-02e8-4252-9bb8-a9f7823c30dd" />
+
+Step 5: Render Everything: helm template bankapp ./helm-chart/bankapp
+
+<img width="1657" height="977" alt="image" src="https://github.com/user-attachments/assets/9d0a1209-b4cf-441d-aadc-24def098b71f" />
+
+<img width="1461" height="975" alt="image" src="https://github.com/user-attachments/assets/668afeab-a204-4d5d-8c80-824351b153f2" />
+
+<img width="1596" height="977" alt="image" src="https://github.com/user-attachments/assets/ba465a47-df95-4a6a-aea4-25853749633a" />
+
+<img width="1420" height="977" alt="image" src="https://github.com/user-attachments/assets/477fd648-27ab-4336-8b10-115659fd0ed0" />
+
+<img width="1517" height="990" alt="image" src="https://github.com/user-attachments/assets/44fbcdf7-65fe-4dd2-9665-db206a2a4a6c" />
+
+Step 6: Quick Deployment Checks: helm template bankapp ./helm-chart/bankapp | grep image:
+
+<img width="1681" height="245" alt="image" src="https://github.com/user-attachments/assets/c0c1886b-b71d-4ab3-b01f-c10848a7609b" />
+
+Step 7: Lint Again: helm lint ./helm-chart/bankapp
+
+<img width="1587" height="122" alt="image" src="https://github.com/user-attachments/assets/9a5e56d7-54fd-4784-a735-a6550d190c79" />
+
+<img width="751" height="382" alt="image" src="https://github.com/user-attachments/assets/0445e83d-eacf-444c-8c36-20f48529a248" />
+
 ---
 
 ### Task 5: Write the Services and HPA Templates
@@ -744,6 +794,97 @@ spec:
           periodSeconds: 60
 {{- end }}
 ```
+**Steps to follow:**
+
+Step 1: Create services.yaml: vi helm-chart/bankapp/templates/services.yaml [Pasted above mentioned code here]
+
+Step 2: Understand the Service Design: This single template creates three Services:
+
+<img width="540" height="710" alt="image" src="https://github.com/user-attachments/assets/9290f25e-d631-4463-8890-3366638b36b2" />
+
+<img width="522" height="382" alt="image" src="https://github.com/user-attachments/assets/b8944af5-d39d-41c9-a050-1430137511d9" />
+
+Step 3: Create hpa.yaml: vi helm-chart/bankapp/templates/hpa.yaml [Pasted above code here]
+
+Step 4: Verify Files Exist: ls helm-chart/bankapp/templates
+
+Step 5: Render the Chart: Render everything: helm template bankapp ./helm-chart/bankapp
+
+<img width="1817" height="977" alt="image" src="https://github.com/user-attachments/assets/2a05fc03-e131-4668-ab77-5c4f49250438" />
+
+<img width="1476" height="976" alt="image" src="https://github.com/user-attachments/assets/802c0339-6db2-402d-b568-58dbe3d0e161" />
+
+<img width="1410" height="977" alt="image" src="https://github.com/user-attachments/assets/58f4851d-98fd-44a7-8e06-bbdb1cfd3a7b" />
+
+<img width="1390" height="982" alt="image" src="https://github.com/user-attachments/assets/28cacbca-89be-4522-a7bf-c95e65893269" />
+
+Step 6: Verify Services: Check generated Services: helm template bankapp ./helm-chart/bankapp | grep "^kind: Service" -A 10
+
+<img width="1702" height="717" alt="image" src="https://github.com/user-attachments/assets/e9ae7f51-199f-49f5-995c-538d66d10904" />
+
+Step 7: Verify HPA: Check HPA rendering: helm template bankapp ./helm-chart/bankapp | grep "HorizontalPodAutoscaler" -A 20
+
+<img width="1690" height="450" alt="image" src="https://github.com/user-attachments/assets/4dc6e4be-558c-46ec-81d6-b400dabb1e6d" />
+
+Step 8: Test Conditional Logic: Temporarily disable autoscaling: 
+
+-->helm template bankapp ./helm-chart/bankapp --set bankapp.autoscaling.enabled=false
+
+<img width="1731" height="960" alt="image" src="https://github.com/user-attachments/assets/a2327eb8-364f-4975-b362-3c6825817fef" />
+
+<img width="1402" height="982" alt="image" src="https://github.com/user-attachments/assets/1f386e79-3dd5-45c9-8c7b-15908281bf29" />
+
+<img width="1481" height="981" alt="image" src="https://github.com/user-attachments/assets/caee6a11-b971-4b2f-82b1-0c534bb43434" />
+
+<img width="1477" height="987" alt="image" src="https://github.com/user-attachments/assets/df5d7ace-d33b-41bb-b71f-9a614a768216" />
+
+-->Now verify: helm template bankapp ./helm-chart/bankapp --set bankapp.autoscaling.enabled=false | grep HorizontalPodAutoscaler
+
+-->Expected: (no output) And verify Deployment now contains: replicas: 4 because HPA is disabled. So You can check it in a few ways as below,
+
+**Method 1: Render and Search for replicas (Recommended)**
+
+-->helm template bankapp ./helm-chart/bankapp --set bankapp.autoscaling.enabled=false | grep replicas
+
+**Method 2: Inspect Only the Deployment Section:** 
+
+-->helm template bankapp ./helm-chart/bankapp --set bankapp.autoscaling.enabled=false | less
+
+-->Then Search for: kind: Deployment by using: /Deployment You should see something like:
+
+<img width="1547" height="977" alt="image" src="https://github.com/user-attachments/assets/0b788f1d-e2d0-4fed-bbec-821245e5346f" />
+
+**Method 3: Save Rendered Output to a File:** Generate the manifests:
+
+-->helm template bankapp ./helm-chart/bankapp --set bankapp.autoscaling.enabled=false > output.yaml
+
+-->grep -A 10 "kind: Deployment" output.yaml
+
+<img width="1917" height="732" alt="image" src="https://github.com/user-attachments/assets/2fec5390-bb56-40c8-86b5-3a4c1955a472" />
+
+<img width="716" height="477" alt="image" src="https://github.com/user-attachments/assets/6d4e5482-c43f-46b0-a911-8af3997103b6" />
+
+<img width="682" height="712" alt="image" src="https://github.com/user-attachments/assets/8def5c5d-1ea5-4b75-a220-29be742c2b77" />
+
+Step 9: Test Ollama Disable: 
+
+-->helm template bankapp ./helm-chart/bankapp --set ollama.enabled=false
+
+<img width="1627" height="967" alt="image" src="https://github.com/user-attachments/assets/79f076b9-9c95-461d-a33f-face51a7de41" />
+
+<img width="1282" height="977" alt="image" src="https://github.com/user-attachments/assets/d152d792-f2e9-40d3-bf05-65394b5e9948" />
+
+<img width="1471" height="975" alt="image" src="https://github.com/user-attachments/assets/b3a9fe0c-b3ee-42b0-812e-6c7734dd0429" />
+
+-->helm template bankapp ./helm-chart/bankapp --set ollama.enabled=false | grep ollama
+
+-->Expected: No Ollama Deployment, No Ollama Service, No Ollama PVC, No Ollama initContainer This confirms your conditional templating works.
+
+<img width="1461" height="55" alt="image" src="https://github.com/user-attachments/assets/704bf094-3b39-4ec3-98b7-1472123559bd" />
+
+Step 10: Final Validation: helm lint ./helm-chart/bankapp
+
+<img width="786" height="412" alt="image" src="https://github.com/user-attachments/assets/5f860f89-b279-4e5c-8eee-e5f58bc0c539" />
 
 ---
 
