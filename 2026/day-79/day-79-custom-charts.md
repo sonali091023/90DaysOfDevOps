@@ -1033,11 +1033,73 @@ Step 8: Verify Helm Release: Check helm: helm list -n bankapp
 
 Step 9: Verify Kubernetes Resources: kubectl get all -n bankapp
 
+<img width="1442" height="487" alt="image" src="https://github.com/user-attachments/assets/5d8a9fe9-d825-461b-8869-a76e05e5ce3a" />
 
+Step 10: Verify PVCs: kubectl get pvc -n bankapp [Expected: status should be bound]
 
+<img width="1725" height="111" alt="image" src="https://github.com/user-attachments/assets/1c920480-7b78-4ed0-8e33-90dc7b39b9fc" />
 
+Step 11: Verify ConfigMap and Secret: kubectl get configmap,secret -n bankapp
 
+<img width="1377" height="185" alt="image" src="https://github.com/user-attachments/assets/f5e223cb-d6b5-4a7d-b6a5-e41830230f72" />
 
+Step 12: Watch Pods Start: kubectl get pods -n bankapp -w 
+
+-->The Ollama pod may take several minutes because: ollama pull tinyllama, runs during startup & Wait until all pods show: status as running
+
+<img width="1437" height="140" alt="image" src="https://github.com/user-attachments/assets/3de9297d-84be-457a-86c1-b987aa00bd80" />
+
+-->So Helm deployment is fully working. The output of: kubectl get all -n bankapp
+
+-->So This means: Desired replicas = 2, Current replicas = 2, Available replicas = 2 Both application pods are healthy
+
+Step 13: Access the Application: kubectl port-forward svc/my-bankapp-service -n bankapp 8080:8080
+
+-->Note: Based on your services.yaml, the service name is: name: {{ include "bankapp.fullname" . }}-service
+
+-->For release my-bankapp, that becomes: my-bankapp-service & (not my-bankapp-bankapp-service). Then open: http://localhost:8080 & You should see the AI-BankApp login page.
+
+<img width="1587" height="117" alt="image" src="https://github.com/user-attachments/assets/7fbdc087-81e4-4272-8302-65ccb982140d" />
+
+<img width="1915" height="972" alt="image" src="https://github.com/user-attachments/assets/5489493e-8eb2-441d-b5d0-e6b5a1b77c6b" />
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/8b2ab47d-8968-4b0d-9409-a34a4aeefe73" />
+
+Step 14: Useful Troubleshooting Commands: 
+
+-->Check pod status: kubectl get pods -n bankapp
+
+-->Describe a pod: kubectl describe pod <pod-name> -n bankapp
+
+-->View logs: kubectl logs -f deployment/my-bankapp -n bankapp
+
+-->MySQL logs: kubectl logs -f deployment/my-bankapp-mysql -n bankapp
+
+-->Ollama logs: kubectl logs -f deployment/my-bankapp-ollama -n bankapp
+
+Step 15: Cleanup:
+
+-->Remove everything Helm created: helm uninstall my-bankapp -n bankapp
+
+-->verify release available or not: helm list -n bankapp
+
+-->verify the all the components: kubectl get all -n bankapp [The release should be gone.]
+
+<img width="1362" height="215" alt="image" src="https://github.com/user-attachments/assets/b5ac204f-0363-4031-9195-3a3429e9b16b" />
+
+<img width="770" height="327" alt="image" src="https://github.com/user-attachments/assets/24f75ac0-c6f1-4c7a-b694-bf4bd363576a" />
+
+<img width="1662" height="492" alt="image" src="https://github.com/user-attachments/assets/e1fde32c-0ee8-4258-8c11-0a78937e0c08" />
+
+<img width="587" height="605" alt="image" src="https://github.com/user-attachments/assets/97ff5390-f47b-4ef9-b94f-55d7d2d9db42" />
+
+<img width="580" height="815" alt="image" src="https://github.com/user-attachments/assets/19d9abc6-79f3-4f08-ab25-4b1c66164b93" />
+
+<img width="547" height="822" alt="image" src="https://github.com/user-attachments/assets/38f12214-b8d1-4245-84a1-e5e661165fb0" />
+
+<img width="512" height="811" alt="image" src="https://github.com/user-attachments/assets/2ec5e09c-5cb4-4dcc-b61f-feffa7cc98f8" />
+
+<img width="810" height="502" alt="image" src="https://github.com/user-attachments/assets/cc3fbde7-ea68-4225-828a-5a1f1b0d8310" />
 
 ---
 
