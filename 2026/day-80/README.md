@@ -377,7 +377,37 @@ Step 5: Verify the Hook Exists: helm template bankapp-dev ./helm-chart/bankapp -
 
 Step 6: Deploy a Test Release: If your previous deployment was removed:
 
+-->helm install bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml -n dev --create-namespace
 
+<img width="1917" height="127" alt="image" src="https://github.com/user-attachments/assets/c1ad173c-47e0-4d1c-805a-eb978010184a" />
+
+-->Your hook was: **helm.sh/hook: pre-install** and it was waiting for: **nc -z my-bankapp-mysql 3306** But MySQL wasn't created yet because Helm was still in the "pre-install" phase. So the job could never succeed.
+
+-->So For the AI-BankApp decided to Keep Init containers, Readiness probes, Liveness probes, Helm test & Remove **pre-install-job.yaml** The Helm test is valuable because it verifies: **helm test bankapp-dev -n dev** and confirms BankApp -> Service -> HTTP endpoint -> Health check works after deployment.
+
+<img width="857" height="572" alt="image" src="https://github.com/user-attachments/assets/d8782f8a-71d7-4998-9510-64b44dc72e6a" />
+
+-->To remove the problematic pre-install hook and continue with the lab, do the following,
+
+Option A: Rename the file (safest): mv helm-chart/bankapp/templates/pre-install-job.yaml helm-chart/bankapp/templates/pre-install-job.yaml.bak
+
+-->Then verify the file: ls helm-chart/bankapp/templates/
+
+<img width="1917" height="210" alt="image" src="https://github.com/user-attachments/assets/2b3ab9b1-5a66-4412-81b4-e8010d727c61" />
+
+Note: Helm only processes .yaml, .yml, and .tpl files, so .bak will be ignored.
+
+-->Now Remove the failed release: For that check the release: **helm list -A** & If you see: bankapp-dev remove it: helm uninstall bankapp-dev -n dev
+
+-->Verify: helm list -A It should no longer appear.
+
+-->After this Re-run lint: helm lint helm-chart/bankapp
+
+-->Deploy again: helm install bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml -n dev --create-namespace
+
+-->Watch the pods: kubectl get pods -n dev -w
+
+<img width="686" height="557" alt="image" src="https://github.com/user-attachments/assets/e7a5db77-917f-4053-bd21-a474417b7203" />
 
 
 
