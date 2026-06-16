@@ -883,6 +883,66 @@ kubectl delete namespace dev
 kind delete cluster --name tws-cluster
 ```
 
+**Steps to follow:**
+
+Task 6: Clean Up and Review: You are at the final stage of the Helm module. This task is mainly about validating your work, documenting what you learned, and cleaning up resources.
+
+Step 1: Review Existing Helm Releases: Check everything currently deployed: helm list -A
+
+<img width="1691" height="97" alt="image" src="https://github.com/user-attachments/assets/a6bccd5a-ed1e-494f-84f3-a03cd04926e5" />
+
+<img width="660" height="300" alt="image" src="https://github.com/user-attachments/assets/3d95df21-04d4-43b7-b1ad-db62866970d0" />
+
+Step 2: Document Your Learning:
+
+-->mkdir -p notes
+
+-->vi notes/helm-summary.md
+
+Step 3: Verify Chart Packages: 
+
+-->Check packaged charts: ls -lh *.tgz
+
+-->INspect the package: tar -tzf bankapp-0.2.0.tgz
+
+<img width="1307" height="427" alt="image" src="https://github.com/user-attachments/assets/6155b802-6114-48ab-aa8c-499ae36db962" />
+
+Step 4: Verify Helm Repository Index: 
+
+-->If you completed Task 3: cat chart-repo/index.yaml [So You should see entries for: version: 0.1.0 & version: 0.2.0]
+
+<img width="1356" height="857" alt="image" src="https://github.com/user-attachments/assets/ea74e940-259b-40b3-83d4-75ac4c844c67" />
+
+Step 5: Clean Up Helm Releases: 
+
+-->Forst inspect: helm list -A
+
+-->Remove Dev Namespace Release: helm uninstall bankapp-dev -n dev
+
+-->Remove Default Namespace Release: helm uninstall bankapp-dev -n default
+
+-->Remove BankApp Namespace Release: helm uninstall my-bankapp -n bankapp
+
+<img width="1827" height="217" alt="image" src="https://github.com/user-attachments/assets/80da6318-e939-4d85-bd87-7dc1261c1406" />
+
+Step 6: Delete Namespaces: 
+
+-->kubectl delete namespace dev && kubectl delete namespace bankapp
+
+-->verify: kubectl get ns
+
+<img width="1535" height="221" alt="image" src="https://github.com/user-attachments/assets/e4027ebc-676c-459e-b7d1-fda19e31b7c4" />
+
+Step 7: Delete the Kind Cluster: 
+
+-->Check cluster: kind get clusters
+
+-->You should see delete it: kind delete cluster --name tws-cluster
+
+-->verify: kind get clusters
+
+<img width="782" height="442" alt="image" src="https://github.com/user-attachments/assets/92386af5-430e-4b21-8213-6f231bf73b75" />
+
 ---
 
 ## Hints
