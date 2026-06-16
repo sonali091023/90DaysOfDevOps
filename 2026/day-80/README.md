@@ -326,21 +326,7 @@ spec:
 
 Create `bankapp/templates/tests/test-connection.yaml`:
 ```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: {{ include "bankapp.fullname" . }}-test
-  namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "bankapp.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": test
-spec:
-  containers:
-    - name: test
-      image: busybox:1.36
-      command: ['sh', '-c', 'wget -qO- http://{{ include "bankapp.fullname" . }}-service:8080/actuator/health']
-  restartPolicy: Never
+ 
 ```
 
 After deploying, run:
@@ -349,6 +335,52 @@ helm test bankapp-dev -n dev
 ```
 
 This hits the Spring Boot health endpoint and confirms the app is running.
+
+**Steps to follow:**
+
+Step 1: Create the Pre-Install Hook: vi helm-chart/bankapp/templates/pre-install-job.yaml [Added above mentioned code]
+
+<img width="617" height="717" alt="image" src="https://github.com/user-attachments/assets/52f099d4-2b1c-4ba5-98be-45898fc922a3" />
+
+Step 2: Validate the Hook: Render the chart: helm template bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml
+
+<img width="1907" height="966" alt="image" src="https://github.com/user-attachments/assets/31497007-75c1-455f-a36e-62c3e52f41a5" />
+
+<img width="1632" height="966" alt="image" src="https://github.com/user-attachments/assets/efb45ea8-dfc7-4463-8cf6-8efdfc5e5f70" />
+
+<img width="1557" height="972" alt="image" src="https://github.com/user-attachments/assets/7772c01d-0902-4942-a638-db0710d045f5" />
+
+-->Search for: kind: Job
+<img width="1923" height="801" alt="image" src="https://github.com/user-attachments/assets/2d6f92bf-b664-4381-806b-f58d41c2653f" />
+
+-->OR run command: helm template bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml | grep db-ready
+
+<img width="1767" height="67" alt="image" src="https://github.com/user-attachments/assets/d4dffd6b-9b06-472f-b838-6912625bc15a" />
+
+Step 3: Create the Helm Test: 
+
+-->Since you deleted the original tests/ folder earlier, recreate it: mkdir -p helm-chart/bankapp/templates/tests
+
+-->Now create file: vi helm-chart/bankapp/templates/tests/test-connection.yaml [Added above mentioned code]
+
+<img width="612" height="492" alt="image" src="https://github.com/user-attachments/assets/efd0b826-a45a-49fb-b579-9a858d100684" />
+
+Step 4: Lint Again: Run command: helm lint ./helm-chart/bankapp
+
+<img width="1592" height="156" alt="image" src="https://github.com/user-attachments/assets/378887e0-9243-41e3-b618-90b8f509b66d" />
+
+Step 5: Verify the Hook Exists: helm template bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml | grep "helm.sh/hook"
+
+<img width="1907" height="162" alt="image" src="https://github.com/user-attachments/assets/131cd765-965f-489e-8c60-13f16c96f9d8" />
+
+-->So this confirms both resources are being rendered.
+
+Step 6: Deploy a Test Release: If your previous deployment was removed:
+
+
+
+
+
 
 ---
 
