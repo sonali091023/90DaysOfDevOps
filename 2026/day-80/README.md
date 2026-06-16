@@ -455,6 +455,15 @@ Also check PVCs: kubectl get pvc -n dev [So statuds should be bouns for both MyS
 
 <img width="722" height="612" alt="image" src="https://github.com/user-attachments/assets/2baf3ca3-6e14-4c04-a873-366574fc586f" />
 
+<img width="1847" height="330" alt="image" src="https://github.com/user-attachments/assets/84f77469-a643-4363-81df-fe9870c3d9d1" />
+
+<img width="676" height="376" alt="image" src="https://github.com/user-attachments/assets/5b42cf79-c095-46a4-b3a7-c66da68319ff" />
+
+-->Checked after sometime,
+
+<img width="1907" height="762" alt="image" src="https://github.com/user-attachments/assets/8025012a-38ff-4a13-a0f0-00571932c0ef" />
+
+
 
 
 
