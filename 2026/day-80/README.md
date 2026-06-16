@@ -409,6 +409,26 @@ Note: Helm only processes .yaml, .yml, and .tpl files, so .bak will be ignored.
 
 <img width="686" height="557" alt="image" src="https://github.com/user-attachments/assets/e7a5db77-917f-4053-bd21-a474417b7203" />
 
+<img width="1911" height="761" alt="image" src="https://github.com/user-attachments/assets/5008c000-c3fd-4beb-ae06-d1986fd74fab" />
+
+<img width="1402" height="257" alt="image" src="https://github.com/user-attachments/assets/21831d60-fcd9-4400-ad6f-cec3a393f079" />
+
+-->As we can see in above screenshot our bankapp-dev is got deployed but some of the containers are still not working, Facing ContainerCreating issue also OOMKilled, the old hook pod is still present, but your new deployment has started successfully. Notice: bankapp-dev-db-ready & That pod is 55 minutes old, while the new resources are only: 18s old, So the hook from the previous failed installation wasn't cleaned up completely. To fix this follow th following steps:
+
+-->First, check current Helm release: helm list -n dev
+
+-->Then check pod status again after a few minutes: kubectl get pods -n dev
+
+<img width="1697" height="222" alt="image" src="https://github.com/user-attachments/assets/a01726d4-1088-42d2-a8f6-0c2f3d95c9ae" />
+
+-->If MySQL and Ollama remain in ContainerCreating Describe them: kubectl describe pod bankapp-dev-mysql-5d68b4c64d-g964p -n dev
+
+
+
+
+
+
+
 
 
 
