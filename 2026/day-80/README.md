@@ -1,4 +1,4 @@
-<img width="1671" height="977" alt="image" src="https://github.com/user-attachments/assets/29a56852-478c-4026-94d0-2e32e7b8f499" /># Day 80 -- Helm Project: Multi-Environment Deployment and CI/CD
+# Day 80 -- Helm Project: Multi-Environment Deployment and CI/CD
 
 ## Task
 Two days of Helm -- chart basics and a custom chart for the AI-BankApp. Today you bring it all together. You will create environment-specific values for dev, staging, and production, add Helm hooks, package the chart, and integrate Helm into the AI-BankApp's CI/CD pipeline.
@@ -463,24 +463,27 @@ Also check PVCs: kubectl get pvc -n dev [So statuds should be bouns for both MyS
 
 <img width="1907" height="762" alt="image" src="https://github.com/user-attachments/assets/8025012a-38ff-4a13-a0f0-00571932c0ef" />
 
+-->after creation of the deployment lets check: helm list -n dev
 
+<img width="1750" height="97" alt="image" src="https://github.com/user-attachments/assets/4c1f40f7-036e-4964-bf71-f2f3650f0f25" />
 
+Step 7: Verify Hook Job: 
 
+-->After installation: kubectl get jobs -n dev [So Expected: bankapp-dev-db-ready]
 
+-->Also inspect the same: kubectl logs job/bankapp-dev-db-ready -n dev [So Expected: Waiting for MySQL to be ready... MySQL is ready!]
 
+Step 8: Run Helm Test: 
 
+-->Once all pods are running: kubectl get pods -n dev
 
+-->Then: helm test bankapp-dev -n dev
 
+-->View the test logs: kubectl logs bankapp-dev-test -n dev
 
+<img width="1780" height="712" alt="image" src="https://github.com/user-attachments/assets/f67f7e45-772b-4918-8046-2cdf3ed05921" />
 
-
-
-
-
-
-
-
-
+<img width="916" height="432" alt="image" src="https://github.com/user-attachments/assets/0e318eea-4f1f-45e0-a6ca-68ca461efaf0" />
 
 ---
 
@@ -523,6 +526,106 @@ cp bankapp-*.tgz chart-repo/
 helm repo index chart-repo/ --url https://your-username.github.io/helm-charts
 cat chart-repo/index.yaml
 ```
+
+**Steps to follow:**
+
+-->This task is about converting your Helm chart into a versioned distributable package, which is how charts are shared in real-world organizations.
+
+Step 1: Verify your chart structure: 
+
+-->tree helm-chart/bankapp
+
+-->ls -l helm-chart/bankapp
+
+<img width="1441" height="796" alt="image" src="https://github.com/user-attachments/assets/3a31cd79-229f-4b7c-969e-d2b324a47077" />
+
+Step 2: Lint the chart: From your project root: helm lint helm-chart/bankapp
+
+<img width="1495" height="147" alt="image" src="https://github.com/user-attachments/assets/3e662d57-c5e5-4c7e-8ad0-56013dfe7971" />
+
+Step 3: Package the chart: 
+
+-->helm package helm-chart/bankapp:
+
+-->Once package is done verify: ls -lh *.tgz
+
+<img width="1842" height="130" alt="image" src="https://github.com/user-attachments/assets/eed06d9b-56ef-47d8-a8a7-8d2e2537ae8d" />
+
+Step 4: Inspect the package: 
+
+-->So here You can look inside without extracting: tar -tzf bankapp-0.1.0.tgz
+
+<img width="1597" height="445" alt="image" src="https://github.com/user-attachments/assets/9cfd3b08-dc43-41a9-9078-fe8679845f75" />
+
+-->This confirms Helm packaged everything correctly.
+
+Step 5: Update Chart Version: Open file: vi helm-chart/bankapp/Chart.yaml
+
+Before:
+<img width="1296" height="431" alt="image" src="https://github.com/user-attachments/assets/612cec69-9a24-4573-b33e-cffdd6392e0e" />
+
+-->Now chnage the version: 0.2.0 & appVersion: "1.1.0"
+
+After:
+<img width="1307" height="427" alt="image" src="https://github.com/user-attachments/assets/509b9ace-1140-497c-a77b-4bb0098bd915" />
+
+<img width="772" height="487" alt="image" src="https://github.com/user-attachments/assets/2efb4481-e3c9-4288-80ed-798e4511ec09" />
+
+Step 6: Re-package: 
+
+-->Again run the package creation command: helm package helm-chart/bankapp
+
+-->And to verify: ls -lh *.tgz
+
+<img width="1755" height="150" alt="image" src="https://github.com/user-attachments/assets/d25d8f41-d1a4-4dd5-a947-d0b7c6b3bdc5" />
+
+Step 7: Install directly from package: 
+
+-->Instead of installing from source: helm install bankapp-dev ./helm-chart/bankapp
+
+-->Install from package: helm install my-bankapp ./bankapp-0.2.0.tgz -f helm-chart/bankapp/values-dev.yaml -n bankapp --create-namespace
+
+-->Once done check: helm list -n bankapp
+
+<img width="1917" height="887" alt="image" src="https://github.com/user-attachments/assets/93602cbf-f9fe-4d9a-837b-698f9a7f6ea3" />
+
+Step 8: Create a local chart repository: 
+
+-->Create directory: mkdir chart-repo
+
+-->Copy packages: cp bankapp-*.tgz chart-repo/
+
+-->ls chart-repo
+
+<img width="1812" height="177" alt="image" src="https://github.com/user-attachments/assets/071210af-7c56-408e-a1a8-a4c7864b583f" />
+
+Step 9: Generate repository index: 
+
+-->helm repo index chart-repo --url https://your-username.github.io/helm-charts
+
+-->This creates: chart-repo/index.yaml
+
+-->To verify: cat chart-repo/index.yaml
+
+<img width="1717" height="935" alt="image" src="https://github.com/user-attachments/assets/21b763bc-1764-44bc-a80d-84d75f0d9183" />
+
+Step 10: Real-world usage
+
+<img width="802" height="505" alt="image" src="https://github.com/user-attachments/assets/105398db-ff48-4dba-8dfb-cff7bb55bf32" />
+
+**Commands used in task 3:**
+
+-->helm package helm-chart/bankapp
+
+-->ls -lh *.tgz
+
+-->mkdir -p chart-repo
+
+-->cp bankapp-*.tgz chart-repo/
+
+-->helm repo index chart-repo --url https://your-username.github.io/helm-charts
+
+-->cat chart-repo/index.yaml
 
 ---
 
@@ -586,6 +689,10 @@ source:
 ArgoCD natively supports Helm charts -- it renders templates and applies the result, tracking drift against the rendered output.
 
 **Document:** What are the advantages of ArgoCD syncing a Helm chart vs raw manifests?
+
+Stesp to follow:
+
+-->This task is mostly about understanding how Helm fits into a GitOps workflow with ArgoCD. You don't need to write code right now; you need to understand the flow and document the advantages.
 
 ---
 
