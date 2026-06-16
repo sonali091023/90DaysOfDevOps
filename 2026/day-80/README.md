@@ -789,6 +789,69 @@ spec:
 
 The `values.yaml` defaults are fine for local dev but should be overridden in CI/CD via `--set` with pipeline secrets.
 
+**Steps to follow:**
+
+-->This task is about learning the production-grade Helm practices that DevOps engineers actually use in CI/CD pipelines. Let's go through each one with practical examples.
+
+1. Always Use helm upgrade --install:
+
+-->Instead of: helm install bankapp ... or helm upgrade bankapp ... So use below command:
+
+-->helm upgrade --install bankapp helm-chart/bankapp -f helm-chart/bankapp/values-prod.yaml --set bankapp.image.tag=$GIT_SHA -n bankapp --create-namespace --wait --timeout 300s --atomic
+
+<img width="562" height="702" alt="image" src="https://github.com/user-attachments/assets/e51d5ddf-9e93-4324-b37e-78c9dc07ceb2" />
+
+<img width="592" height="726" alt="image" src="https://github.com/user-attachments/assets/1e9e5aea-65a0-425e-86a5-d4bdddda7e8c" />
+
+<img width="712" height="187" alt="image" src="https://github.com/user-attachments/assets/3089e93e-18bc-466e-bf82-94afef5cb2c4" />
+
+<img width="662" height="592" alt="image" src="https://github.com/user-attachments/assets/f0f1d97b-69a4-428d-9f5d-e3c02f045b70" />
+
+2. Use Helm Diff Before Upgrading:
+
+-->**Install Plugin:** helm plugin install https://github.com/databus23/helm-diff
+
+-->Then verify: helm plugin list
+
+-->**Compare Changes: Before upgrading:**  helm diff upgrade bankapp helm-chart/bankapp -f helm-chart/bankapp/values-prod.yaml
+
+<img width="545" height="207" alt="image" src="https://github.com/user-attachments/assets/9d13bb19-84ba-4223-9b4b-43a09482a2ad" />
+
+-->You can review changes before touching production.
+
+-->Real-world workflow: helm diff upgrade ... [Review output.]
+
+-->And If everything looks good: helm upgrade --install ...
+
+3. Add Resource Quotas: Create file: vi helm-chart/bankapp/templates/resourcequota.yaml
+
+<img width="611" height="367" alt="image" src="https://github.com/user-attachments/assets/078a8fa7-ca8f-4d59-b439-d3d92fb2af97" />
+
+-->Verify: render: helm template bankapp helm-chart/bankapp | grep ResourceQuota -A20 [Expected o/p: kind: ResourceQuota]
+
+<img width="597" height="327" alt="image" src="https://github.com/user-attachments/assets/610e81a7-a098-4420-82d1-6e15baf216da" />
+
+4. Never Store Production Secrets in values.yaml:
+
+<img width="702" height="591" alt="image" src="https://github.com/user-attachments/assets/ded33a51-9478-42df-a575-da355f0eaea4" />
+
+<img width="636" height="822" alt="image" src="https://github.com/user-attachments/assets/77bbb125-ce77-432b-b4bf-2b4e2d91d3c0" />
+
+**Recommended AI-BankApp Production Command:** If this project were deployed to EKS, the command would look like:
+
+-->helm upgrade --install bankapp helm-chart/bankapp -f helm-chart/bankapp/values-prod.yaml --set bankapp.image.tag=$GIT_SHA -n bankapp \
+  --create-namespace --wait --timeout 300s --atomic
+
+<img width="527" height="282" alt="image" src="https://github.com/user-attachments/assets/365d7a7e-ea40-4ab8-a622-044a27e0c7aa" />
+
+-->helm lint helm-chart/bankapp
+
+-->helm template bankapp helm-chart/bankapp
+
+-->helm package helm-chart/bankapp
+
+Note: If all three commands succeed, you've correctly implemented the production best-practice example.
+
 ---
 
 ### Task 6: Clean Up and Review
