@@ -227,11 +227,14 @@ Step 6: Validate the Chart: From the helm-chart directory: helm lint helm-bankap
 
 <img width="1522" height="142" alt="image" src="https://github.com/user-attachments/assets/f0f1b636-3489-4a2a-b9e5-14e383446905" />
 
-Step 7: Test the Dev Environment: 
+Step 7: Test the Dev Environment: Render manifests: 
 
--->Render manifests: helm template bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml 
+-->helm template bankapp-dev ./helm-chart/bankapp -f ./helm-chart/bankapp/values-dev.yaml OR
 
--->Check the BankApp deployment replicas: helm template bankapp-dev helm-chart/bankapp -f bankapp/values-dev.yaml | grep replicas:
+-->helm template bankapp-dev helm-chart/bankapp -f helm-chart/bankapp/values-dev.yaml [So here in this command ./in front of helm-chart is not required]
+
+-->Check the BankApp deployment replicas: helm template bankapp-dev helm-chart/bankapp -f helm-chart/bankapp/values-dev
+.yaml | grep replicas:
 
 <img width="1645" height="966" alt="image" src="https://github.com/user-attachments/assets/2af58b6b-9571-4725-8684-d1d601a9d866" />
 
@@ -241,11 +244,32 @@ Step 7: Test the Dev Environment:
 
 Step 8: Test the Staging Environment: 
 
+-->Check the BankApp deployment replicas: helm template bankapp-staging helm-chart/bankapp -f helm-chart/bankapp/values-staging.yaml | grep replicas:
 
+-->You may not see: replicas: 2 because when HPA is enabled, your deployment template intentionally omits the replicas field & This is correct behavior.
 
+Check below indetail: 
 
+<img width="781" height="557" alt="image" src="https://github.com/user-attachments/assets/536017ce-f9ee-40b5-85ce-8514aec657d8" />
 
+-->To verify the HPA settings, run: helm template bankapp-staging helm-chart/bankapp -f helm-chart/bankapp/values-staging.yaml | grep -A5 HorizontalPodAutoscaler
 
+<img width="1907" height="257" alt="image" src="https://github.com/user-attachments/assets/015cd46c-b17d-4119-a646-6205be9ff5b1" />
+
+-->helm template bankapp-staging helm-chart/bankapp -f helm-chart/bankapp/values-staging.yaml | grep -A20 HorizontalPodAutoscaler
+
+-->helm template bankapp-staging helm-chart/bankapp -f helm-chart/bankapp/values-staging.yaml | grep -A5 HorizontalPodAutoscaler
+
+-->helm template bankapp-staging helm-chart/bankapp -f helm-chart/bankapp/values-staging.yaml | grep minReplicas
+
+-->helm template bankapp-staging helm-chart/bankapp -f helm-chart/bankapp/values-staging.yaml | grep maxReplicas
+
+<img width="1917" height="781" alt="image" src="https://github.com/user-attachments/assets/07297fea-f383-4c8d-aa02-012405e984e0" />
+
+Step 9: Test the Production Environment: helm template bankapp-prod helm-chart/bankapp -f helm-chart/bankapp/values-prod.yaml | grep -A25 HorizontalPodAutoscaler
+
+<img width="1901" height="620" alt="image" src="https://github.com/user-attachments/assets/7da9561f-8eba-424d-9711-1e75e3165df4" />
+                                      
 ---
 
 ### Task 2: Add Helm Hooks
