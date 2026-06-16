@@ -1,4 +1,4 @@
-# Day 80 -- Helm Project: Multi-Environment Deployment and CI/CD
+<img width="1671" height="977" alt="image" src="https://github.com/user-attachments/assets/29a56852-478c-4026-94d0-2e32e7b8f499" /># Day 80 -- Helm Project: Multi-Environment Deployment and CI/CD
 
 ## Task
 Two days of Helm -- chart basics and a custom chart for the AI-BankApp. Today you bring it all together. You will create environment-specific values for dev, staging, and production, add Helm hooks, package the chart, and integrate Helm into the AI-BankApp's CI/CD pipeline.
@@ -421,7 +421,48 @@ Note: Helm only processes .yaml, .yml, and .tpl files, so .bak will be ignored.
 
 <img width="1697" height="222" alt="image" src="https://github.com/user-attachments/assets/a01726d4-1088-42d2-a8f6-0c2f3d95c9ae" />
 
--->If MySQL and Ollama remain in ContainerCreating Describe them: kubectl describe pod bankapp-dev-mysql-5d68b4c64d-g964p -n dev
+**If MySQL and Ollama remain in ContainerCreating Describe them:** 
+
+-->kubectl describe pod bankapp-dev-mysql-5d68b4c64d-g964p -n dev
+
+<img width="1671" height="977" alt="image" src="https://github.com/user-attachments/assets/3334ec71-28af-4853-8182-ab46a87fd739" />
+
+<img width="1876" height="421" alt="image" src="https://github.com/user-attachments/assets/c676de5a-e4e3-4160-8fc6-2828052cf011" />
+
+-->kubectl describe pod bankapp-dev-ollama-6f997d754b-9f4v4 -n dev
+
+<img width="1590" height="971" alt="image" src="https://github.com/user-attachments/assets/7ff4a377-9194-41e4-a557-40aed3bd72db" />
+
+<img width="1882" height="252" alt="image" src="https://github.com/user-attachments/assets/9d06410c-d2cb-4330-a203-0bd6d2e57485" />
+
+Look at the Events section at the bottom: Common causes: Pulling image, Insufficient memory, PVC not bound, Failed mount
+
+Also check PVCs: kubectl get pvc -n dev [So statuds should be bouns for both MySQL and Ollama PVCs.]
+
+<img width="1651" height="110" alt="image" src="https://github.com/user-attachments/assets/d74ec3b2-5f71-43b7-a23e-868705f9125e" />
+
+**Check node resources (important for Ollama): Kind clusters often struggle with Ollama:**
+
+-->kubectl top nodes: If not get any response & If metrics-server isn't installed: kubectl describe node & and look for: Allocated resources
+
+<img width="1712" height="972" alt="image" src="https://github.com/user-attachments/assets/33051d25-aa8e-4d71-82f3-0d185ddea1ec" />
+
+<img width="1912" height="977" alt="image" src="https://github.com/user-attachments/assets/35a264cc-ee18-4dc7-a83c-979b0a36a3a6" />
+
+<img width="1755" height="981" alt="image" src="https://github.com/user-attachments/assets/759ae3d8-20ca-4d15-8634-ae78c0241aef" />
+
+<img width="1900" height="800" alt="image" src="https://github.com/user-attachments/assets/bb0799c0-04a4-43b4-a88e-8cef8cd856b9" />
+
+<img width="722" height="612" alt="image" src="https://github.com/user-attachments/assets/2baf3ca3-6e14-4c04-a873-366574fc586f" />
+
+
+
+
+
+
+
+
+
 
 
 
