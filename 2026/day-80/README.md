@@ -694,6 +694,50 @@ Stesp to follow:
 
 -->This task is mostly about understanding how Helm fits into a GitOps workflow with ArgoCD. You don't need to write code right now; you need to understand the flow and document the advantages.
 
+Step 1: Understand the Current AI-BankApp Flow: Today your pipeline works like this:
+
+<img width="552" height="817" alt="image" src="https://github.com/user-attachments/assets/09bfaeaf-ab44-4770-bfc6-7fde60ad28a0" />
+
+Step 2: Understand the Helm-Based Flow: With Helm, GitHub Actions doesn't touch Deployment YAMLs:
+
+-->Instead it updates a value:
+
+<img width="497" height="832" alt="image" src="https://github.com/user-attachments/assets/d536a58d-53a9-4c93-8658-a351c3a6f662" />
+
+Step 3: Understand the GitHub Actions Change: 
+
+-->**Current approach:** sed -i "s/tag:.*/tag:$TAG/g" k8s/bankapp-deployment.yml
+
+-->Problem: Fragile text replacement, Hardcoded paths, Hardcoded manifest structure
+
+-->**Helm approach:** yq -i '.bankapp.image.tag = "'$TAG'"' helm-chart/bankapp/values-prod.yaml
+
+-->Benefits: Updates structured YAML safely, Doesn't depend on Deployment layout, Easier to maintain
+
+Step 4: Understand the ArgoCD Change: 
+
+<img width="617" height="385" alt="image" src="https://github.com/user-attachments/assets/4728a030-222d-4ea1-98ba-d09ee8d094da" />
+
+<img width="662" height="692" alt="image" src="https://github.com/user-attachments/assets/67245f41-0f10-4ac9-92b7-cffe04ddb533" />
+
+Step 5: Document the Advantages: Advantages of ArgoCD Syncing a Helm Chart vs Raw Kubernetes Manifests:
+
+<img width="695" height="741" alt="image" src="https://github.com/user-attachments/assets/7211ed5f-01b8-49a2-af56-dcca86018d5c" />
+
+<img width="702" height="626" alt="image" src="https://github.com/user-attachments/assets/bb740be7-ffa0-4c01-b2fe-f14f849762f3" />
+
+<img width="727" height="680" alt="image" src="https://github.com/user-attachments/assets/df6875e3-d6eb-456f-a551-ada1fa16dade" />
+
+Step 6: Practical Verification:
+
+-->Review your chart: helm lint helm-chart/bankapp
+
+-->Render production values: helm template bankapp-prod helm-chart/bankapp -f helm-chart/bankapp/values-prod.yaml
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/ff0d8f2e-561b-49b2-b00c-adc3d6b13a4b" />
+
+-->This simulates exactly what ArgoCD would render before applying resources to the cluster.
+
 ---
 
 ### Task 5: Helm Best Practices for Production
