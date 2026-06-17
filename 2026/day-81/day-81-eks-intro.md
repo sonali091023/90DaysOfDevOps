@@ -250,6 +250,26 @@ node_max_count     = 5
 
 **Document:** Draw the architecture: VPC -> Subnets -> EKS Control Plane -> Node Group -> Pods
 
+**Steps to follow:**
+
+-->For this task, your goal is not just to read the Terraform files but to understand how the entire AWS infrastructure is built from code and how it supports the AI-BankApp deployment.
+
+Step 1: Clone and Explore the Repository: 
+
+-->git clone -b feat/gitops https://github.com/TrainWithShubham/AI-BankApp-DevOps.git
+
+-->cd AI-BankApp-DevOps/terraform
+
+-->ls & we will get the list of files & directories
+
+<img width="1827" height="431" alt="image" src="https://github.com/user-attachments/assets/3d731946-ca9c-422a-892f-8e539f2e82ad" />
+
+**Understanding the Terraform Flow: Terraform provisions resources in roughly this order:**
+
+
+
+
+
 ---
 
 ### Task 3: Provision the EKS Cluster
