@@ -266,9 +266,65 @@ Step 1: Clone and Explore the Repository:
 
 **Understanding the Terraform Flow: Terraform provisions resources in roughly this order:**
 
+<img width="652" height="696" alt="image" src="https://github.com/user-attachments/assets/abf15870-0d67-468f-a33f-d26ec938b1f6" />
 
+**1. variables.tf:** Defines all configurable values used throughout the project, Think of it as the "input form" for Terraform.
 
+<img width="612" height="630" alt="image" src="https://github.com/user-attachments/assets/704a32e0-839f-467c-a2b5-ab1bafd7878d" />
 
+**2. terraform.tfvars:** Provides actual values for the variables.
+
+<img width="715" height="487" alt="image" src="https://github.com/user-attachments/assets/8f5bed32-8806-4bc5-94c4-08641fb373b3" />
+
+3. provider.tf: Configures Terraform providers, Providers are plugins that allow Terraform to communicate with AWS, Helm, Kubernetes, etc.
+
+**Typical flow:** terraform --> AWS Provider --> AWS API
+
+<img width="561" height="582" alt="image" src="https://github.com/user-attachments/assets/5d11dd2a-511f-4f70-96bc-86c3151a32e8" />
+
+4. vpc.tf: Creates the networking foundation & Everything inside AWS runs within a VPC.
+
+<img width="542" height="721" alt="image" src="https://github.com/user-attachments/assets/b2300959-efe4-4bfb-b3e4-6f327a0172ab" />
+
+<img width="491" height="767" alt="image" src="https://github.com/user-attachments/assets/c400a696-3567-4e7d-bed7-6a6181c8b0d1" />
+
+<img width="592" height="777" alt="image" src="https://github.com/user-attachments/assets/4f9bd356-01f1-417e-b43b-fca232483403" />
+
+<img width="500" height="712" alt="image" src="https://github.com/user-attachments/assets/8ea64734-465a-4b01-bf25-10183bcbf527" />
+
+<img width="522" height="802" alt="image" src="https://github.com/user-attachments/assets/3177784c-c548-42ca-9eca-41470db8d17f" />
+
+<img width="435" height="825" alt="image" src="https://github.com/user-attachments/assets/83f9b960-a676-4199-b329-ef9427728d87" />
+
+<img width="512" height="631" alt="image" src="https://github.com/user-attachments/assets/1521697a-236e-47bb-870d-5662339b350b" />
+
+<img width="442" height="807" alt="image" src="https://github.com/user-attachments/assets/f4b3a2e3-1b11-4f3d-91a5-c9062e13c30c" />
+
+<img width="487" height="796" alt="image" src="https://github.com/user-attachments/assets/a90c9d5b-1d75-4a03-af57-b46bded84dd0" />
+
+<img width="442" height="532" alt="image" src="https://github.com/user-attachments/assets/87578509-83ab-4977-9cfd-d2910d5c0b9c" />
+
+<img width="421" height="802" alt="image" src="https://github.com/user-attachments/assets/1c174cff-2106-48d8-863c-42f359af4425" />
+
+<img width="587" height="552" alt="image" src="https://github.com/user-attachments/assets/4311a87c-2796-4892-9cdc-44d817756d81" />
+
+**Complete Architecture Diagram:**
+
+<img width="516" height="732" alt="image" src="https://github.com/user-attachments/assets/d301e8b1-2286-4933-a5b6-82c4e08ebb8d" />
+
+<img width="482" height="312" alt="image" src="https://github.com/user-attachments/assets/3a0cb0b9-0f5c-4947-90fd-6e27c3905f13" />
+
+**Key Takeaway:** The Terraform configuration creates a production-style AWS environment where:
+
+-->**vpc.tf:** builds the network foundation.
+
+-->**eks.tf:** creates the managed Kubernetes cluster and worker nodes.
+
+-->**EKS add-ons:** provide networking, storage, IAM, and metrics.
+
+-->**argocd.tf:** installs ArgoCD for GitOps deployments.
+
+-->**outputs.tf:** provides helper commands to access and manage the cluster.
 
 ---
 
