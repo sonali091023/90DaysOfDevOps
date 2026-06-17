@@ -700,6 +700,11 @@ Open `http://localhost:8080` -- you should see the AI-BankApp login page. Regist
 ```bash
 kubectl get hpa -n bankapp
 ```
+**Steps to follow:**
+
+
+
+
 
 ---
 
