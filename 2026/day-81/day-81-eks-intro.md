@@ -310,9 +310,7 @@ Step 1: Clone and Explore the Repository:
 
 **Complete Architecture Diagram:**
 
-<img width="516" height="732" alt="image" src="https://github.com/user-attachments/assets/d301e8b1-2286-4933-a5b6-82c4e08ebb8d" />
-
-<img width="482" height="312" alt="image" src="https://github.com/user-attachments/assets/3a0cb0b9-0f5c-4947-90fd-6e27c3905f13" />
+<img width="400" height="782" alt="image" src="https://github.com/user-attachments/assets/c62e658b-9ab7-475d-804b-d9b8b79b667f" />
 
 **Key Takeaway:** The Terraform configuration creates a production-style AWS environment where:
 
@@ -372,6 +370,124 @@ After completion, note the outputs:
 ```bash
 terraform output
 ```
+
+**Steps to follow:**
+
+-->**Provision the EKS Cluster:** In this task, you'll use Terraform to create the complete AWS infrastructure for the AI-BankApp, including the VPC, EKS cluster, node group, add-ons, IAM roles, and ArgoCD.
+
+**Step 1: Verify Required Tools: Check that all required tools are installed.**
+
+-->terraform --version
+
+-->aws --version
+
+-->kubectl version --client
+
+-->helm version
+
+<img width="1747" height="396" alt="image" src="https://github.com/user-attachments/assets/75d58959-b3b3-465f-91a3-b6526fc265d7" />
+
+Step 2: Verify AWS Permissions: 
+
+-->To set the User identity OR Configure AWS CLI: aws configure
+
+-->Once configuration done Test your current identity: aws sts get-caller-identity  
+
+<img width="1727" height="291" alt="image" src="https://github.com/user-attachments/assets/3dca0d10-aff9-4070-8407-d8d2c420ca38" />
+
+Step 3: Move to Terraform Directory: 
+
+-->cd AI-BankApp-DevOps/terraform & verify files fir that run command: ls 
+
+<img width="1297" height="102" alt="image" src="https://github.com/user-attachments/assets/49e204e6-02bc-4ecb-ae7e-63054c3bb9ab" />
+
+Step 4: Initialize Terraform:
+
+-->So inside terraform dir run command: terraform init
+
+-->Terraform downloads: AWS provider, Helm provider, VPC module, EKS module etc.
+
+**Note:** While terraform init faced issue:
+
+<img width="1877" height="250" alt="image" src="https://github.com/user-attachments/assets/09e3ca58-d5a9-430a-9eb5-ecce40095a3f" />
+
+-->This error occurs because your .terraform.lock.hcl file has locked the AWS provider to 6.40.0, but one of the modules now requires >= 6.42.0.
+
+-->So to Fix this run command: terraform init -upgrade [This tells Terraform to ignore the locked provider version and download a newer compatible version.]
+
+-->Verify which module requires the newer version: terraform providers
+
+-->If terraform init -upgrade still fails: Then first Delete the Terraform cache and lock file, then reinitialize: For that run below commands:
+
+1. rm -rf .terraform
+
+2. rm -f .terraform.lock.hcl
+
+3. terraform init OR terraform init -upgrade
+
+<img width="715" height="532" alt="image" src="https://github.com/user-attachments/assets/5b63ca3c-b789-4821-b7f5-0a923920320b" />
+
+<img width="1252" height="872" alt="image" src="https://github.com/user-attachments/assets/d53884b8-0747-48c0-a0b8-2e49ab2aade1" />
+
+<img width="1080" height="901" alt="image" src="https://github.com/user-attachments/assets/a732dce8-9134-4b29-97d9-f04826f1e3eb" />
+
+Step 5: Validate Configuration (Recommended):
+
+-->Before planning: terraform validate   [Expected: Success! The configuration is valid.]
+
+-->If validation fails: Check syntax errors, Ensure all files exist, Verify Terraform version etc.
+
+Step 6: Review the Execution Plan: Terraform calculates everything it intends to create, The output may be very long.
+
+-->Run command: terraform plan  
+
+<img width="1917" height="966" alt="image" src="https://github.com/user-attachments/assets/1242909a-4bf8-40b7-b49d-ed58ff4cc5dd" />
+
+<img width="1817" height="976" alt="image" src="https://github.com/user-attachments/assets/6b32b2eb-897d-477a-a23a-6ea997207cd8" />
+
+**Understand What Terraform Will Create:**
+
+<img width="527" height="712" alt="image" src="https://github.com/user-attachments/assets/86ef6d89-54f2-4984-8e0e-e8c19fcc7c30" />
+
+<img width="402" height="752" alt="image" src="https://github.com/user-attachments/assets/b271daed-e8a8-47ef-9861-5142a7fa080c" />
+
+<img width="632" height="587" alt="image" src="https://github.com/user-attachments/assets/123ab351-11d3-4df4-9a4f-25e655f2bf0a" />
+
+Step 7: Apply the Infrastructure: 
+
+-->When the plan looks correct: terraform apply OR terraform apply --auto-approve
+
+<img width="647" height="635" alt="image" src="https://github.com/user-attachments/assets/13754a35-b6bf-4ad5-a4ae-8748ee568a9b" />
+
+<img width="535" height="737" alt="image" src="https://github.com/user-attachments/assets/c9d5f8ae-8517-4989-9f59-ce19b8f1af21" />
+
+<img width="637" height="812" alt="image" src="https://github.com/user-attachments/assets/c66e453c-25e4-47ca-af6c-890f6354d463" />
+
+**Common Issues:**
+
+<img width="531" height="696" alt="image" src="https://github.com/user-attachments/assets/bfdce0b0-dee7-4f43-83d3-3f01a7722648" />
+
+<img width="656" height="566" alt="image" src="https://github.com/user-attachments/assets/e6d1f00d-fd1f-4a2d-b818-738d4eac81e1" />
+
+Step 8: Review Terraform Outputs: These outputs help you connect to the cluster and access ArgoCD.
+
+-->After successful completion: terraform output
+
+Step 9: Save Important Information: Record: Cluster Name, AWS Region, Node Count, ArgoCD Password Command, kubectl Configuration Command
+
+<img width="637" height="627" alt="image" src="https://github.com/user-attachments/assets/10972b03-ff39-44cc-b4b5-f33bb3fabcef" />
+
+**Verification Checklist:**
+
+-->terraform init        
+
+-->terraform validate    
+
+-->terraform plan        
+
+-->terraform apply      
+
+-->terraform output  
 
 ---
 
