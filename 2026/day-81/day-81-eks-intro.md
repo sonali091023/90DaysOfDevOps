@@ -42,6 +42,84 @@ Research and write notes on:
    - `eks-pod-identity-agent` -- enables pod-level IAM roles
    - `aws-ebs-csi-driver` -- allows pods to use EBS volumes (needed for MySQL and Ollama storage)
    - `metrics-server` -- enables `kubectl top` and HPA
+  
+**Steps to follow:**
+
+For this task, you should focus on understanding the EKS architecture conceptually and relate it to the AI-BankApp deployment. Here are structured notes you can use.
+
+Task 1: Understand EKS Architecture: 
+
+1. What Does "Managed Kubernetes" Mean?
+
+-->Self managed kubernetes:
+
+<img width="695" height="335" alt="image" src="https://github.com/user-attachments/assets/e117eb3c-2e19-45f0-98b4-54079a91cfaa" />
+
+-->EKS managed kubernetes:
+
+<img width="802" height="792" alt="image" src="https://github.com/user-attachments/assets/4c9c7143-a840-4da8-8254-336012163adb" />
+
+2. EKS Architecture Overview:
+
+<img width="557" height="522" alt="image" src="https://github.com/user-attachments/assets/1bd68ae6-7eef-47ba-a4ff-8ad3378ee688" />
+
+**EKS Components:** EKS Components as below,
+
+**A. EKS Control Plane:** The control plane is the "brain" of Kubernetes.
+
+**Components:**
+
+1. **API Server:** Entry point for all Kubernetes requests, It receives commands from: kubectl, Terraform, Helm, Controllers etc. **Ex:** kubectl get all & once the request send, It goes to the API Server.
+
+2. **etcd:** Stores cluster state/data: Ex: Deployments, Services, Secrets, ConfigMaps, Node information Think of etcd as Kubernetes' database.
+
+3. **Scheduler:** Determines where Pods should run
+
+<img width="512" height="232" alt="image" src="https://github.com/user-attachments/assets/8bb80071-89a6-4991-9475-3c371193bb63" />
+
+4. Controller Manager: Ensures desired state matches actual state.
+
+<img width="567" height="342" alt="image" src="https://github.com/user-attachments/assets/4136d0c8-9b70-4281-b98e-10f14cb0c11a" />
+
+**EKS Control Plane Characteristics:**
+
+-->Fully managed by AWS
+
+-->Runs in an AWS-owned VPC
+
+-->Highly available across multiple Availability Zones
+
+-->Automatically patched and upgraded
+
+**B. Node Groups:** Node groups contain the EC2 instances where Pods run.
+
+1. Managed Node Groups:
+
+<img width="607" height="457" alt="image" src="https://github.com/user-attachments/assets/225c8b04-22f4-43e3-b4ac-6c09578b71f2" />
+
+2. Self-Managed Nodes:
+
+<img width="651" height="387" alt="image" src="https://github.com/user-attachments/assets/67fd397b-df99-424d-b515-64cdaa583bc9" />
+
+3. Fargate Profiles:
+
+<img width="637" height="422" alt="image" src="https://github.com/user-attachments/assets/795a9ffa-1e36-4b8a-9e20-4734b986e59f" />
+
+C. VPC and Networking: EKS runs within your AWS VPC
+
+<img width="462" height="510" alt="image" src="https://github.com/user-attachments/assets/63541e0e-568c-49ef-998f-c4f045a867d6" />
+
+1. Pod Networking: Unlike many Kubernetes distributions, EKS uses AWS networking directly.
+
+-->Each Pod receives: A VPC IP address & Direct communication capability, So This is enabled through the AWS VPC CNI[Container network interface] plugin.
+
+D. IAM Integration: One of EKS's biggest advantages is integration with AWS IAM.
+
+
+
+
+
+
 
 ---
 
