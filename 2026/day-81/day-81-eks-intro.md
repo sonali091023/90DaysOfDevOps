@@ -544,6 +544,112 @@ kubectl get svc -n argocd argocd-server -o jsonpath='{.status.loadBalancer.ingre
 
 Open the URL in your browser and log in with `admin` and the password from above. You will use ArgoCD on Days 84-86.
 
+**Steps to follow:**
+
+-->Before starting, make sure terraform apply completed successfully and you can see outputs from: terraform output
+
+Step 1: Configure kubectl Access: EKS does not automatically configure kubectl.
+
+-->aws eks update-kubeconfig --name bankapp-eks --region us-west-2
+
+Step 2: Verify Current Context: Check which cluster kubectl is connected to: kubectl config current-context
+
+**Note:** If you have multiple clusters: kubectl config get-contexts
+
+Step 3: Verify Cluster Connectivity: kubectl cluster-info
+
+-->If you see: connection refused or Unauthorized verify: **aws sts get-caller-identity** and ensure you're using the same AWS account that created the cluster.
+
+Step 4: Verify Worker Nodes: 
+
+-->List nodes: kubectl get nodes -o wide [Expected: You should see: 3 nodes, STATUS = Ready, Internal VPC IPs]
+
+Step 5: Verify Node Instance Type: 
+
+-->Check labels: kubectl get nodes --show-labels | grep instance-type OR kubectl get nodes -L node.kubernetes.io/instance-type
+
+-->Expected: used instance type should be display
+
+Step 6: Verify Availability Zones: 
+
+-->Check node placement: kubectl get nodes -L topology.kubernetes.io/zone [Expected: This confirms the node group spans 3 Availability Zones.]
+
+Step 7: Explore System Pods: View Kubernetes system components: kubectl get pods -n kube-system
+
+<img width="612" height="452" alt="image" src="https://github.com/user-attachments/assets/9a14e4c2-e3b7-47ab-b4e0-5d03d72faa9a" />
+
+Step 8: Verify DaemonSets: 
+
+-->DaemonSets ensure one pod runs on every node: kubectl get daemonsets -n kube-system
+
+<img width="641" height="396" alt="image" src="https://github.com/user-attachments/assets/b7353f3b-babe-4411-9b0c-2a984e8bdd9a" />
+
+Step 9: Verify EBS CSI Driver: 
+
+-->Check CSI controller: kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-ebs-csi-driver
+
+<img width="681" height="451" alt="image" src="https://github.com/user-attachments/assets/464d8423-0c4a-44d1-9445-c06e65a66961" />
+
+Step 10: Verify Metrics Server: kubectl top nodes
+
+<img width="597" height="382" alt="image" src="https://github.com/user-attachments/assets/1e6d964c-f921-45a9-861b-f5fe1af83670" />
+
+Step 11: Verify ArgoCD Pods: 
+
+-->Check namespace: kubectl get pods -n argocd
+
+<img width="630" height="340" alt="image" src="https://github.com/user-attachments/assets/ac76c40a-7a80-4788-a443-18b7ee4e62d4" />
+
+Step 12: Verify ArgoCD Service: 
+
+-->Check service exposure: kubectl get svc -n argocd
+
+**Note:** The EXTERNAL-IP or hostname may take several minutes.
+
+Step 13: Get ArgoCD Admin Password: 
+
+-->Retrieve the initial password: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+**Note:** Save it somewhere safe.
+
+Step 14: Get ArgoCD URL: 
+
+-->Retrieve the LoadBalancer hostname: kubectl get svc -n argocd argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+
+<img width="582" height="271" alt="image" src="https://github.com/user-attachments/assets/4c1abab0-b69f-4c7e-8de7-cd20a6fc75d6" />
+
+Step 15: Open ArgoCD: 
+
+-->Open: http://<load-balancer-hostname> OR https://<load-balancer-hostname> [Login by providing UN & PSWD]
+
+**Final Verification Checklist:**
+
+-->kubectl config current-context
+
+-->kubectl cluster-info
+
+-->kubectl get nodes -o wide
+
+-->kubectl get pods -n kube-system
+
+-->kubectl get daemonsets -n kube-system
+
+-->kubectl top nodes
+
+-->kubectl get pods -n argocd
+
+-->kubectl get svc -n argocd
+
+<img width="355" height="277" alt="image" src="https://github.com/user-attachments/assets/87f278c9-a8d0-4ffa-a473-b71076647fef" />
+
+**Note:** If any step fails use below command:
+
+-->kubectl get nodes -o wide
+
+-->kubectl get pods -A
+
+-->kubectl get svc -n argocd
+
 ---
 
 ### Task 5: Deploy the AI-BankApp Manually (Before ArgoCD)
