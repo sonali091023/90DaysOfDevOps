@@ -457,6 +457,10 @@ Step 7: Apply the Infrastructure:
 
 -->When the plan looks correct: terraform apply OR terraform apply --auto-approve
 
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/cf2e8031-db22-4f2a-aded-89a9174eaac6" />
+
+<img width="1911" height="977" alt="image" src="https://github.com/user-attachments/assets/73390d06-e863-463a-a814-4299709f83b9" />
+
 <img width="647" height="635" alt="image" src="https://github.com/user-attachments/assets/13754a35-b6bf-4ad5-a4ae-8748ee568a9b" />
 
 <img width="535" height="737" alt="image" src="https://github.com/user-attachments/assets/c9d5f8ae-8517-4989-9f59-ce19b8f1af21" />
@@ -472,6 +476,8 @@ Step 7: Apply the Infrastructure:
 Step 8: Review Terraform Outputs: These outputs help you connect to the cluster and access ArgoCD.
 
 -->After successful completion: terraform output
+
+<img width="1872" height="397" alt="image" src="https://github.com/user-attachments/assets/d1fd9b53-9f4d-438f-9778-570881e04547" />
 
 Step 9: Save Important Information: Record: Cluster Name, AWS Region, Node Count, ArgoCD Password Command, kubectl Configuration Command
 
@@ -564,9 +570,13 @@ Step 4: Verify Worker Nodes:
 
 -->List nodes: kubectl get nodes -o wide [Expected: You should see: 3 nodes, STATUS = Ready, Internal VPC IPs]
 
+<img width="1917" height="101" alt="image" src="https://github.com/user-attachments/assets/b7ef8cef-39fc-41b6-b3af-869ffe42053a" />
+
 Step 5: Verify Node Instance Type: 
 
 -->Check labels: kubectl get nodes --show-labels | grep instance-type OR kubectl get nodes -L node.kubernetes.io/instance-type
+
+<img width="1861" height="142" alt="image" src="https://github.com/user-attachments/assets/35050281-2ed9-4a09-8612-b57e5bed5881" />
 
 -->Expected: used instance type should be display
 
