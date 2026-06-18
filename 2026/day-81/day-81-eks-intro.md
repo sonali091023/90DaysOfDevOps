@@ -588,15 +588,21 @@ Step 5: Verify Node Instance Type:
 
 <img width="1861" height="142" alt="image" src="https://github.com/user-attachments/assets/35050281-2ed9-4a09-8612-b57e5bed5881" />
 
+<img width="1907" height="350" alt="image" src="https://github.com/user-attachments/assets/d80e3b10-1bec-4c01-b5b0-c1604055d3e4" />
+
 -->Expected: used instance type should be display
 
 Step 6: Verify Availability Zones: 
 
 -->Check node placement: kubectl get nodes -L topology.kubernetes.io/zone [Expected: This confirms the node group spans 3 Availability Zones.]
 
+<img width="1241" height="107" alt="image" src="https://github.com/user-attachments/assets/fb5a6583-4b9a-447d-8a54-09a25d415b4c" />
+
 Step 7: Explore System Pods: View Kubernetes system components: kubectl get pods -n kube-system
 
 <img width="612" height="452" alt="image" src="https://github.com/user-attachments/assets/9a14e4c2-e3b7-47ab-b4e0-5d03d72faa9a" />
+
+<img width="1302" height="322" alt="image" src="https://github.com/user-attachments/assets/8ee3a5e1-6a4b-49ef-a35b-692bf42e8aef" />
 
 Step 8: Verify DaemonSets: 
 
@@ -604,15 +610,21 @@ Step 8: Verify DaemonSets:
 
 <img width="641" height="396" alt="image" src="https://github.com/user-attachments/assets/b7353f3b-babe-4411-9b0c-2a984e8bdd9a" />
 
+<img width="1675" height="132" alt="image" src="https://github.com/user-attachments/assets/016fc733-5bad-43ca-8f89-e5d2a9522607" />
+
 Step 9: Verify EBS CSI Driver: 
 
 -->Check CSI controller: kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-ebs-csi-driver
 
 <img width="681" height="451" alt="image" src="https://github.com/user-attachments/assets/464d8423-0c4a-44d1-9445-c06e65a66961" />
 
+<img width="1757" height="132" alt="image" src="https://github.com/user-attachments/assets/a64a3b4d-a56c-402d-82d4-0655b9dc8546" />
+
 Step 10: Verify Metrics Server: kubectl top nodes
 
 <img width="597" height="382" alt="image" src="https://github.com/user-attachments/assets/1e6d964c-f921-45a9-861b-f5fe1af83670" />
+
+<img width="1221" height="92" alt="image" src="https://github.com/user-attachments/assets/da5e41be-cd62-4b95-b7b8-83f15e974761" />
 
 Step 11: Verify ArgoCD Pods: 
 
@@ -620,11 +632,15 @@ Step 11: Verify ArgoCD Pods:
 
 <img width="630" height="340" alt="image" src="https://github.com/user-attachments/assets/ac76c40a-7a80-4788-a443-18b7ee4e62d4" />
 
+<img width="1487" height="157" alt="image" src="https://github.com/user-attachments/assets/f8d71aea-d2da-4f9b-b271-e9239dac837d" />
+
 Step 12: Verify ArgoCD Service: 
 
 -->Check service exposure: kubectl get svc -n argocd
 
 **Note:** The EXTERNAL-IP or hostname may take several minutes.
+
+<img width="1781" height="142" alt="image" src="https://github.com/user-attachments/assets/cc64447f-07e5-4f80-b0e4-a8a6bdce29bf" />
 
 Step 13: Get ArgoCD Admin Password: 
 
@@ -632,15 +648,21 @@ Step 13: Get ArgoCD Admin Password:
 
 **Note:** Save it somewhere safe.
 
+<img width="1912" height="77" alt="image" src="https://github.com/user-attachments/assets/37709bb9-554c-4449-af67-c7bceafaff36" />
+
 Step 14: Get ArgoCD URL: 
 
 -->Retrieve the LoadBalancer hostname: kubectl get svc -n argocd argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 
 <img width="582" height="271" alt="image" src="https://github.com/user-attachments/assets/4c1abab0-b69f-4c7e-8de7-cd20a6fc75d6" />
 
+<img width="1907" height="82" alt="image" src="https://github.com/user-attachments/assets/be3802ba-80de-49bc-b1c7-7a5b22cbe888" />
+
 Step 15: Open ArgoCD: 
 
--->Open: http://<load-balancer-hostname> OR https://<load-balancer-hostname> [Login by providing UN & PSWD]
+-->Open: http://<load-balancer-hostname OR https://<load-balancer-hostname> [Login by providing UN & PSWD]
+
+Ex: http://a102287f3d8304ddfa6128b16a5290ca-1311083611.ap-south-1.elb.amazonaws.com
 
 **Final Verification Checklist:**
 
