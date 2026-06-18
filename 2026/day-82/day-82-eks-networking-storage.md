@@ -141,6 +141,31 @@ kubectl get crd gateways.gateway.networking.k8s.io 2>/dev/null || \
   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
 ```
 
+**Steps to follow:**
+
+-->In this task we are gonna install Envoy gateway
+
+-->**Objective:** Install Envoy Gateway, verify that it is running correctly, and ensure the Gateway API CRDs are available in your Kubernetes cluster.
+
+Step 1: Check Your Kubernetes Cluster: Before installing Envoy Gateway, verify that your cluster is healthy.
+
+-->kubectl cluster-info
+
+-->kubectl get nodes
+
+Step 2: Verify Helm Installation: 
+
+-->Check Helm version: helm version
+
+**Note:** If helm is not installed: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+Step 3: Install Envoy Gateway: 
+
+-->helm install envoy-gateway oci://docker.io/envoyproxy/gateway-helm --version v1.4.0 -n envoy-gateway-system --create-namespace --wait
+
+
+
+
 ---
 
 ### Task 3: Deploy the AI-BankApp with Gateway API
