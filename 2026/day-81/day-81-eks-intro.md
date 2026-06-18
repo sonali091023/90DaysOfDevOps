@@ -988,6 +988,8 @@ terraform destroy
 
 -->Verify cleanup: kubectl get all -A
 
+<img width="1712" height="432" alt="image" src="https://github.com/user-attachments/assets/23a00a9f-f111-4485-a422-5aa699e84128" />
+
 Note: you should still see: kube-system resources, ArgoCD resources, EKS add-ons but no BankApp resources.
 
 -->Destroy Everything: 
@@ -1001,6 +1003,10 @@ Note: you should still see: kube-system resources, ArgoCD resources, EKS add-ons
 -->Check cluster: aws eks list-clusters
 
 -->Check VPC: aws ec2 describe-vpcs  [Expected: Ensure the bankapp-eks VPC is gone.]
+
+<img width="906" height="741" alt="image" src="https://github.com/user-attachments/assets/43e99d3b-fb55-4280-8fca-089a8edc9b9d" />
+
+<img width="1475" height="972" alt="image" src="https://github.com/user-attachments/assets/5451eae1-449e-4748-a56b-bb888cfa8c61" />
 
 
 
