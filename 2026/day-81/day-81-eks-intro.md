@@ -830,9 +830,13 @@ Step 8: Deploy Ollama: kubectl apply -f k8s/ollama-deployment.yml  [Expected: Th
 
 -->To verify: kubectl get pods -n bankapp -w
 
+<img width="1292" height="180" alt="image" src="https://github.com/user-attachments/assets/6c06a717-39d3-4bdc-ade8-dec9091ed557" />
+
 **Monitor Ollama Model Download:**
 
 -->Check logs: kubectl logs -f deployment/ollama -n bankapp   [Expected: You should see TinyLlama being downloaded.]
+
+<img width="1917" height="970" alt="image" src="https://github.com/user-attachments/assets/e166a194-5eb6-4fc6-abd8-5a9477e1809f" />
 
 Step 9: Deploy BankApp: kubectl apply -f k8s/bankapp-deployment.yml
 
@@ -840,9 +844,13 @@ Step 9: Deploy BankApp: kubectl apply -f k8s/bankapp-deployment.yml
 
 -->once deployment is complete check the status: kubectl get pods -n bankapp -w
 
+<img width="1467" height="265" alt="image" src="https://github.com/user-attachments/assets/dddfb37f-d1a8-4924-b8fe-9ca82d38a47c" />
+
 Step 10: Deploy HPA: kubectl apply -f k8s/hpa.yml
 
 -->verify: kubectl get hpa -n bankapp
+
+<img width="1612" height="115" alt="image" src="https://github.com/user-attachments/assets/bed7dd51-35c8-4c93-b45a-7767d02ac10e" />
 
 Step 11: Verify All Pods: kubectl get pods -n bankapp  [Expected: all should running]
 
@@ -854,15 +862,49 @@ Step 13: Verify EBS Volumes:
 
 -->List AWS-backed volumes: kubectl describe pvc -n bankapp  [Expected: StorageClass, Volume, Capacity]
 
+<img width="1772" height="902" alt="image" src="https://github.com/user-attachments/assets/fa480127-bdc5-4923-9551-fcef3e6a2ccb" />
+
 Step 14: Access the Application: 
 
 -->Forward the service: kubectl port-forward svc/bankapp-service -n bankapp 8080:8080
 
 -->here keep the terminal open & then in browser launch URL: http://localhost:8080  [Expected: AI-BankApp Login Page]
 
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/66b68ee1-04e0-483d-8471-f8e5d6a93ef4" />
+
 Step 15: Test the Application: 
 
+<img width="597" height="752" alt="image" src="https://github.com/user-attachments/assets/698ba67d-4a34-40a1-8315-6ffcab72e182" />
 
+<img width="1912" height="972" alt="image" src="https://github.com/user-attachments/assets/497b39bf-a265-45ad-9682-60743b06c20e" />
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/1dc266b9-61f4-4088-96e9-f6b9a24cd591" />
+
+<img width="1907" height="952" alt="image" src="https://github.com/user-attachments/assets/21a58409-8334-4694-af32-02cbc2650e43" />
+
+<img width="1912" height="967" alt="image" src="https://github.com/user-attachments/assets/f258456f-1cd8-4042-89d7-0f511297c307" />
+
+**Troubleshooting Commands:**
+
+-->Check all resources: kubectl get all -n bankapp
+
+-->View events: kubectl get events -n bankapp --sort-by=.metadata.creationTimestamp
+
+-->Describe pod: kubectl describe pod <pod-name> -n bankapp
+
+-->View logs MySQL: kubectl logs deployment/mysql -n bankapp
+
+-->View logs Ollama: kubectl logs deployment/ollama -n bankapp
+
+-->View logs BankApp: kubectl logs deployment/bankapp -n bankapp
+
+**Expected Final State:**
+
+-->kubectl get pods -n bankapp
+
+-->kubectl get pvc -n bankapp
+
+-->kubectl get hpa -n bankapp
 
 ---
 
@@ -901,6 +943,68 @@ terraform destroy
 ```
 
 **Document:** What are the cost components of the AI-BankApp EKS setup? Why is the NAT Gateway surprisingly expensive?
+
+**Steps to follow:**
+
+-->**Understand EKS Costs and Clean-Up Strategy:** This task is important because EKS is one of the most expensive services you'll use during the 90 Days of DevOps journey. Unlike Kind or Minikube, resources continue billing even when you're not actively using the cluster.
+
+<img width="876" height="452" alt="image" src="https://github.com/user-attachments/assets/156c8a6c-e589-4443-8588-027ab0ea3bbf" />
+
+**Q. Why is the NAT Gateway Surprisingly Expensive?**
+
+-->The NAT Gateway often surprises people because: It does Your EKS worker nodes are deployed in private subnets for security.
+
+**Flow:** Internet --> NAT Gateway --> Private Subnets -->Worker Nodes
+
+-->When pods need to: Pull Docker images, Download packages, Access AWS APIs, Download Ollama models they route traffic through the NAT Gateway.
+
+**Q. Why it costs so much?**
+
+-->Unlike EC2, you're charged:
+
+<img width="711" height="516" alt="image" src="https://github.com/user-attachments/assets/1255ba25-9a41-4aec-be58-4dc782c9fcd8" />
+
+**Clean Up the Application (Keep Cluster):**
+
+-->kubectl delete -f k8s/hpa.yml
+
+-->kubectl delete -f k8s/bankapp-deployment.yml
+
+-->kubectl delete -f k8s/ollama-deployment.yml
+
+-->kubectl delete -f k8s/mysql-deployment.yml
+
+-->kubectl delete -f k8s/service.yml
+
+-->kubectl delete -f k8s/secrets.yml
+
+-->kubectl delete -f k8s/configmap.yml
+
+-->kubectl delete -f k8s/pvc.yml
+
+-->kubectl delete -f k8s/pv.yml
+
+-->kubectl delete -f k8s/namespace.yml
+
+-->Verify cleanup: kubectl get all -A
+
+Note: you should still see: kube-system resources, ArgoCD resources, EKS add-ons but no BankApp resources.
+
+-->Destroy Everything: 
+
+-->cd terraform
+
+-->terraform destroy
+
+**Verification After Destroy:**
+
+-->Check cluster: aws eks list-clusters
+
+-->Check VPC: aws ec2 describe-vpcs  [Expected: Ensure the bankapp-eks VPC is gone.]
+
+
+
+
 
 ---
 
