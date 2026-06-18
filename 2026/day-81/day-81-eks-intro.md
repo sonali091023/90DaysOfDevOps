@@ -660,9 +660,13 @@ Step 14: Get ArgoCD URL:
 
 Step 15: Open ArgoCD: 
 
--->Open: http://<load-balancer-hostname OR https://<load-balancer-hostname> [Login by providing UN & PSWD]
+-->Open: http://<load-balancer-hostname OR https://<load-balancer-hostname> [Login by providing UN: admin & PSWD: Password from 13th step]
 
 Ex: http://a102287f3d8304ddfa6128b16a5290ca-1311083611.ap-south-1.elb.amazonaws.com
+
+<img width="1912" height="967" alt="image" src="https://github.com/user-attachments/assets/978d9bf5-d4df-4124-8ef0-118dd266d3db" />
+
+<img width="1906" height="966" alt="image" src="https://github.com/user-attachments/assets/4b2e8a3b-7e64-4b63-87e2-62f8bcdac96e" />
 
 **Final Verification Checklist:**
 
@@ -744,7 +748,51 @@ kubectl get hpa -n bankapp
 ```
 **Steps to follow:**
 
+-->Deploy the AI-BankApp Manually (Before ArgoCD), So The goal of this task is to verify that:
 
+-->EKS cluster is healthy
+
+-->EBS CSI Driver works
+
+-->Persistent Volumes can be created
+
+-->MySQL starts successfully
+
+-->Ollama can pull the TinyLlama model
+
+-->BankApp can connect to both services
+
+-->HPA is created successfully
+
+Step 1: Verify You're Connected to EKS: Before deploying, make sure you're NOT on the old Kind cluster.
+
+-->kubectl config current-context
+
+-->Check the nodes: kubectl get nodes  [Expected: You should see EKS worker nodes in Ready state.]
+
+ Step 2: Move to Repository Root: We are currently inside AI-BankApp-DevOps/terraform dir, So go back one step cd .. and then run command pwd & after that run command: ls k8s
+
+<img width="1271" height="177" alt="image" src="https://github.com/user-attachments/assets/125619f9-ab25-4cde-9499-958a5eae585a" />
+
+Step 3: Create Namespace: kubectl apply -f k8s/namespace.yml
+
+-->then verify created namespace: kubectl get ns
+
+<img width="1290" height="242" alt="image" src="https://github.com/user-attachments/assets/4518d80d-0a25-4adf-b02b-401cf7e08d43" />
+
+Step 4: Deploy Storage Resources: Apply PV and PVC definitions:
+
+-->kubectl apply -f k8s/pv.yml
+
+-->kubectl apply -f k8s/pvc.yml
+
+-->To verify created pv: kubectl get pv
+
+-->To verify created pvc: kubectl get pvc
+
+<img width="1371" height="892" alt="image" src="https://github.com/user-attachments/assets/5245d856-e22a-4d1d-b068-73099bed3ca1" />
+
+<img width="677" height="630" alt="image" src="https://github.com/user-attachments/assets/e74122f6-9ab3-4feb-aafa-c7cf9fdea965" />
 
 
 
