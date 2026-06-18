@@ -554,23 +554,33 @@ Open the URL in your browser and log in with `admin` and the password from above
 
 -->Before starting, make sure terraform apply completed successfully and you can see outputs from: terraform output
 
+<img width="1832" height="471" alt="image" src="https://github.com/user-attachments/assets/cd7f645d-2891-4d71-951c-3654dbfa92aa" />
+
 Step 1: Configure kubectl Access: EKS does not automatically configure kubectl.
 
--->aws eks update-kubeconfig --name bankapp-eks --region us-west-2
+-->aws eks update-kubeconfig --name bankapp-eks --region ap-south-1
+
+<img width="1911" height="185" alt="image" src="https://github.com/user-attachments/assets/e1285787-42bf-436e-81d4-3bb2db0cf295" />
 
 Step 2: Verify Current Context: Check which cluster kubectl is connected to: kubectl config current-context
 
 **Note:** If you have multiple clusters: kubectl config get-contexts
 
+<img width="1901" height="237" alt="image" src="https://github.com/user-attachments/assets/21c0566b-684c-4948-bd63-e643479afa87" />
+
 Step 3: Verify Cluster Connectivity: kubectl cluster-info
 
--->If you see: connection refused or Unauthorized verify: **aws sts get-caller-identity** and ensure you're using the same AWS account that created the cluster.
+**Note:** If you see: connection refused or Unauthorized verify: **aws sts get-caller-identity** and ensure you're using the same AWS account that created the cluster.
+
+<img width="1912" height="142" alt="image" src="https://github.com/user-attachments/assets/2eae42b6-fc0c-48f8-98a4-3d1bbe3adaec" />
 
 Step 4: Verify Worker Nodes: 
 
 -->List nodes: kubectl get nodes -o wide [Expected: You should see: 3 nodes, STATUS = Ready, Internal VPC IPs]
 
 <img width="1917" height="101" alt="image" src="https://github.com/user-attachments/assets/b7ef8cef-39fc-41b6-b3af-869ffe42053a" />
+
+<img width="1871" height="117" alt="image" src="https://github.com/user-attachments/assets/b66a106e-231c-4c47-b2ca-a11d123b5d0c" />
 
 Step 5: Verify Node Instance Type: 
 
@@ -711,6 +721,8 @@ Open `http://localhost:8080` -- you should see the AI-BankApp login page. Regist
 kubectl get hpa -n bankapp
 ```
 **Steps to follow:**
+
+
 
 
 
