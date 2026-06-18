@@ -782,9 +782,9 @@ Step 3: Create Namespace: kubectl apply -f k8s/namespace.yml
 
 Step 4: Deploy Storage Resources: Apply PV and PVC definitions:
 
--->kubectl apply -f k8s/pv.yml
+-->Apply pv: kubectl apply -f k8s/pv.yml
 
--->kubectl apply -f k8s/pvc.yml
+-->apply pvc: kubectl apply -f k8s/pvc.yml
 
 -->To verify created pv: kubectl get pv
 
@@ -792,9 +792,75 @@ Step 4: Deploy Storage Resources: Apply PV and PVC definitions:
 
 <img width="1371" height="892" alt="image" src="https://github.com/user-attachments/assets/5245d856-e22a-4d1d-b068-73099bed3ca1" />
 
+**Note:** Initially: Pending is normal.Once EBS volumes are provisioned: Bound should appear.
+
 <img width="677" height="630" alt="image" src="https://github.com/user-attachments/assets/e74122f6-9ab3-4feb-aafa-c7cf9fdea965" />
 
+Step 5: Deploy Configuration: 
 
+-->kubectl apply -f k8s/configmap.yml
+
+-->kubectl apply -f k8s/secrets.yml
+
+-->verify configmap: kubectl get configmap -n bankapp
+
+-->verify secret: kubectl get secrets -n bankapp
+
+<img width="1492" height="236" alt="image" src="https://github.com/user-attachments/assets/fe1750c7-6729-4e81-b02e-766ae0754ace" />
+
+Step 6: Deploy MySQL: kubectl apply -f k8s/mysql-deployment.yml
+
+-->To verify: kubectl get pods -n bankapp -w
+
+<img width="1217" height="122" alt="image" src="https://github.com/user-attachments/assets/5803a52a-52ca-46bd-9ad1-b4398c0af64c" />
+
+**And if MySQL isn't starting:** 
+
+-->To check the deployment logs use command: kubectl logs -n bankapp deployment/mysql
+
+-->To check the pod details: kubectl describe pod <mysql-pod-name> -n bankapp
+
+Step 7: Deploy Services: kubectl apply -f k8s/service.yml
+
+-->To verify: kubectl get svc -n bankapp
+
+<img width="1320" height="185" alt="image" src="https://github.com/user-attachments/assets/36e7f809-8faf-4581-9903-315438b2fa01" />
+
+Step 8: Deploy Ollama: kubectl apply -f k8s/ollama-deployment.yml  [Expected: This may take several minutes, This is usually the longest step.]
+
+-->To verify: kubectl get pods -n bankapp -w
+
+**Monitor Ollama Model Download:**
+
+-->Check logs: kubectl logs -f deployment/ollama -n bankapp   [Expected: You should see TinyLlama being downloaded.]
+
+Step 9: Deploy BankApp: kubectl apply -f k8s/bankapp-deployment.yml
+
+-->The BankApp uses init containers, **Startup sequence:** MySQL --> Ollama --> BankApp Init Containers --> BankApp
+
+-->once deployment is complete check the status: kubectl get pods -n bankapp -w
+
+Step 10: Deploy HPA: kubectl apply -f k8s/hpa.yml
+
+-->verify: kubectl get hpa -n bankapp
+
+Step 11: Verify All Pods: kubectl get pods -n bankapp  [Expected: all should running]
+
+Step 12: Verify PVCs: kubectl get pvc -n bankapp [Expected: status should be bound]
+
+-->Also check volume: kubectl get pv   [Expected: 5Gi, 10Gi bound]
+
+Step 13: Verify EBS Volumes: 
+
+-->List AWS-backed volumes: kubectl describe pvc -n bankapp  [Expected: StorageClass, Volume, Capacity]
+
+Step 14: Access the Application: 
+
+-->Forward the service: kubectl port-forward svc/bankapp-service -n bankapp 8080:8080
+
+-->here keep the terminal open & then in browser launch URL: http://localhost:8080  [Expected: AI-BankApp Login Page]
+
+Step 15: Test the Application: 
 
 
 
