@@ -50,6 +50,70 @@ The AI-BankApp uses the Gateway API instead of the traditional Ingress resource.
 [Pods: bankapp x2-4] (with session affinity via cookie)
 ```
 
+**Steps to follow:**
+
+Task 1: Understand Gateway API vs Ingress:
+
+**Q. What is Ingress?**
+
+-->Ingress is the traditional Kubernetes resource used to expose HTTP and HTTPS services outside the cluster.
+
+<img width="867" height="456" alt="image" src="https://github.com/user-attachments/assets/fc01fa73-95a0-4cd2-a2bb-14b17c45b5a4" />
+
+**Q. What is Gateway API?**
+
+-->Gateway API is the next-generation Kubernetes traffic management API designed to overcome Ingress limitations.
+
+<img width="911" height="530" alt="image" src="https://github.com/user-attachments/assets/133ffb7e-9bed-4a89-b4dd-0e4ae92b2bfb" />
+
+<img width="872" height="576" alt="image" src="https://github.com/user-attachments/assets/15e56bf9-73a1-4ac9-8f67-3b0e57ca2552" />
+
+**Role Separation in Gateway API: One of the biggest improvements is separation of concerns.**
+
+<img width="730" height="777" alt="image" src="https://github.com/user-attachments/assets/7d98f0fd-c60b-4775-97f3-7e1728df6ce2" />
+
+<img width="750" height="480" alt="image" src="https://github.com/user-attachments/assets/7ad30830-de2a-4176-bf3f-04d2521ad498" />
+
+<img width="797" height="420" alt="image" src="https://github.com/user-attachments/assets/f479c4d2-d0a8-4eeb-8738-a663b293f123" />
+
+**Request Flow:**
+
+Step 1: User Accesses Application: https://bank.example.com [Expected: Request arrives from the internet.]
+
+Step 2: AWS NLB Receives Traffic: The Envoy Gateway controller automatically provisions an AWS Network Load Balancer.
+
+**Flow:** Internet --> NLB
+
+**Benefits:** High availability, Layer-4 load balancing, Static endpoint etc.
+
+Step 3: Gateway Handles Listeners: The Gateway listens on:
+
+<img width="490" height="217" alt="image" src="https://github.com/user-attachments/assets/79cd1375-3af7-4eb4-9685-7521d9a5e942" />
+
+-->Functions: Accept connections, TLS termination, Forward traffic to routes etc.
+
+Step 4: HTTPRoute Matches Requests: 
+
+<img width="710" height="426" alt="image" src="https://github.com/user-attachments/assets/d7e714d1-f530-4dc8-9f46-fd69cd35a3e0" />
+
+Step 5: Service Load Balances Traffic: 
+
+<img width="716" height="817" alt="image" src="https://github.com/user-attachments/assets/05b9d4e4-36f3-4c61-ab35-db934b763033" />
+
+**Session Affinity in AI-BankApp:** Banking applications often require users to remain connected to the same backend instance.
+
+-->Gateway API with Envoy supports: kind: BackendTrafficPolicy
+
+<img width="605" height="277" alt="image" src="https://github.com/user-attachments/assets/27ee702a-495f-4c98-93fd-baa043907401" />
+
+-->Benefits: Consistent user sessions, Better user experience, Reduced re-authentication etc.
+
+<img width="720" height="266" alt="image" src="https://github.com/user-attachments/assets/aaad2033-e991-4753-bc30-6ae221b3b55c" />
+
+-->**Key Takeaway:** Ingress is suitable for simple applications and legacy Kubernetes environments.
+
+**Note:** Gateway API is the modern Kubernetes networking standard, offering advanced routing, traffic management, session persistence, TLS handling, and team-based ownership. The AI-BankApp adopts Gateway API because it provides enterprise-grade traffic control and integrates cleanly with Envoy Gateway on AWS.
+
 ---
 
 ### Task 2: Install Envoy Gateway
