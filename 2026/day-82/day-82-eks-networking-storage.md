@@ -666,13 +666,29 @@ Step 6: Update the Gateway: Your current Gateway probably contains:
 
 Step 7: Watch Certificate Issuance: kubectl get certificate -n bankapp
 
+Issue faced: Used following steps mentioned in the file,
 
+[steps-to-fix-issue-steps](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-82/steps-to-fix-issue.md)
 
+-->Check certificate: kubectl get certificate -n bankapp
 
+-->watch: kubectl get certificate -n bankapp -w
 
+-->Check challenge: kubectl get challenges -A
 
+-->Check order: kubectl get orders -A
 
+<img width="1542" height="235" alt="image" src="https://github.com/user-attachments/assets/450f11e9-ec31-4e91-97f9-d425718a3eeb" />
 
+Step 8: Verify Secret Creation: kubectl get secret bankapp-tls -n bankapp
+
+<img width="1347" height="102" alt="image" src="https://github.com/user-attachments/assets/2bce30cd-c981-4157-b5d7-745a0d465a61" />
+
+Step 9: Test HTTPS: 
+
+-->curl -I https://$HOSTNAME
+
+-->OR open in the browser: https://15.207.9.148.nip.io
 
 ---
 
