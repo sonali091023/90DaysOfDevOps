@@ -386,7 +386,7 @@ Step 1: Verify AI-BankApp is Running: kubectl get pods -n bankapp
 
 <img width="1297" height="287" alt="image" src="https://github.com/user-attachments/assets/34fbbde2-18b0-48c2-bb1f-21e4019b42ee" />
 
--->Command used: cd AI-BankApp-DevOps && kubectl apply -f k8s/namespace.yml && kubectl apply -f k8s/pv.yml && kubectl apply -f k8s/pvc.yml && kubectl apply -f k8s/configmap.yml && kubectl apply -f k8s/secrets.yml && kubectl apply -f k8s/mysql-deployment.yml && kubectl apply -f k8s/service.yml && kubectl apply -f k8s/ollama-deployment.yml && kubectl apply -f k8s/bankapp-deployment.yml && kubectl apply -f k8s/hpa.yml
+-->Command used: cd AI-BankApp-DevOps && kubectl apply -f k8s/namespace.yml && kubectl apply -f k8s/pv.yml && kubectl apply -f k8s/pvc.yml && kubectl apply -f k8s/configmap.yml && kubectl apply -f k8s/secrets.yml && kubectl apply -f k8s/mysql-deployment.yml && kubectl apply -f k8s/service.yml && kubectl apply -f k8s/ollama-deployment.yml && kubectl apply -f k8s/bankapp-deployment.yml && kubectl apply -f k8s/hpa.yml && kubectl apply -f gateway.yml && kubectl apply -f cert-manager.yml 
 
 <img width="1895" height="337" alt="image" src="https://github.com/user-attachments/assets/d7ced32c-2dd4-4524-9cd7-ef871cd67a62" />
 
@@ -425,6 +425,30 @@ Step 6: Apply the Gateway Resources:
 <img width="1372" height="890" alt="image" src="https://github.com/user-attachments/assets/90e498b9-4fa7-49b1-a7ee-7e672c103a98" />
 
 Step 7: Verify Resources: kubectl get gateway -n bankapp
+
+-->Check routes: kubectl get httproute -n bankapp
+
+<img width="1521" height="141" alt="image" src="https://github.com/user-attachments/assets/2280fedf-6b59-4e34-9523-27b28e0c17a0" />
+
+Step 8: Watch Envoy Create AWS NLB: After applying the Gateway:
+
+<img width="690" height="467" alt="image" src="https://github.com/user-attachments/assets/3b781e87-1878-481d-9deb-677f7bf94bc2" />
+
+Step 9: Verify Route Acceptance: kubectl describe httproute bankapp-route -n bankapp
+
+<img width="1667" height="977" alt="image" src="https://github.com/user-attachments/assets/f37ad7a7-03aa-4326-a429-3a764fac859c" />
+
+<img width="1607" height="536" alt="image" src="https://github.com/user-attachments/assets/c40a267e-2b74-49ef-8631-7608484bb5de" />
+
+-->Also check: kubectl describe gateway bankapp-gateway -n bankapp
+
+<img width="1612" height="960" alt="image" src="https://github.com/user-attachments/assets/f7e3d03b-086b-4a08-bbae-1f8766a9531a" />
+
+<img width="1477" height="971" alt="image" src="https://github.com/user-attachments/assets/00dcd48e-52cb-4cb1-b647-b68b542bf1d5" />
+
+
+
+
 
 
 
