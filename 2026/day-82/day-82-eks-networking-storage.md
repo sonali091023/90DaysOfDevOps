@@ -429,25 +429,35 @@ Step 1: Verify AI-BankApp is Running: kubectl get pods -n bankapp
 
 <img width="1297" height="287" alt="image" src="https://github.com/user-attachments/assets/34fbbde2-18b0-48c2-bb1f-21e4019b42ee" />
 
--->Command used: cd AI-BankApp-DevOps && kubectl apply -f k8s/namespace.yml && kubectl apply -f k8s/pv.yml && kubectl apply -f k8s/pvc.yml && kubectl apply -f k8s/configmap.yml && kubectl apply -f k8s/secrets.yml && kubectl apply -f k8s/mysql-deployment.yml && kubectl apply -f k8s/service.yml && kubectl apply -f k8s/ollama-deployment.yml && kubectl apply -f k8s/bankapp-deployment.yml && kubectl apply -f k8s/hpa.yml && kubectl apply -f gateway.yml && kubectl apply -f cert-manager.yml 
+-->Command used: cd AI-BankApp-DevOps && kubectl apply -f k8s/namespace.yml && kubectl apply -f k8s/pv.yml && kubectl apply -f k8s/pvc.yml && kubectl apply -f k8s/configmap.yml && kubectl apply -f k8s/secrets.yml && kubectl apply -f k8s/mysql-deployment.yml && kubectl apply -f k8s/service.yml && kubectl apply -f k8s/ollama-deployment.yml && kubectl apply -f k8s/bankapp-deployment.yml && kubectl apply -f k8s/hpa.yml  && kubectl apply -f cert-manager.yml 
 
 <img width="1895" height="337" alt="image" src="https://github.com/user-attachments/assets/d7ced32c-2dd4-4524-9cd7-ef871cd67a62" />
 
 <img width="1397" height="277" alt="image" src="https://github.com/user-attachments/assets/d4331e90-cf12-4cf3-9cb0-1742af748504" />
 
-Step 2: Verify GatewayClass Exists: kubectl get gatewayclass
+Step 2: Check the Gateway Manifest: 
 
-Step 3: Examine the Gateway Resource: The Gateway acts like an Ingress Controller entry point.
+<img width="892" height="520" alt="image" src="https://github.com/user-attachments/assets/c8ae9484-fa54-443f-9ed5-9e7c3a910296" />
+
+Step 3: Apply Gateway Resources: kubectl apply -f k8s/gateway.yml
+
+Now: Verify Resources
+
+Step 4: Verify GatewayClass Exists: kubectl get gatewayclass
+
+<img width="1395" height="92" alt="image" src="https://github.com/user-attachments/assets/d919e3e0-9426-4f57-b977-3f3c8d340015" />
+
+Step 5: Examine the Gateway Resource: The Gateway acts like an Ingress Controller entry point.
 
 <img width="422" height="690" alt="image" src="https://github.com/user-attachments/assets/b51daa51-3458-403a-b82a-2a1670ef2aaf" />
 
 <img width="632" height="460" alt="image" src="https://github.com/user-attachments/assets/dab9a7ef-b3ce-4cf8-85d0-b2889bd81cd4" />
 
-Step 4: About hostname: <your-ip>.nip.io: You'll need the Load Balancer IP/hostname later.
+Step 6: About hostname: <your-ip>.nip.io: You'll need the Load Balancer IP/hostname later.
 
 <img width="776" height="405" alt="image" src="https://github.com/user-attachments/assets/89db4102-5559-4350-abcb-4dd150ec590c" />
 
-Step 5: Understand HTTPRoute: The HTTPRoute replaces traditional Ingress rules.
+Step 7: Understand HTTPRoute: The HTTPRoute replaces traditional Ingress rules.
 
 <img width="570" height="546" alt="image" src="https://github.com/user-attachments/assets/3b970818-4e04-4c69-b683-b9fd86582378" />
 
@@ -457,7 +467,11 @@ Step 5: Understand HTTPRoute: The HTTPRoute replaces traditional Ingress rules.
 
 <img width="1350" height="486" alt="image" src="https://github.com/user-attachments/assets/9e37d50b-ec71-4d00-8841-578e36b8920f" />
 
-Step 6: Apply the Gateway Resources: 
+-->kubectl get backendtrafficpolicy -n bankapp
+
+<img width="1512" height="87" alt="image" src="https://github.com/user-attachments/assets/c2a7c6d2-228a-4c50-8b41-9b970e4df521" />
+
+Step 8: Apply the Gateway Resources: 
 
 -->First inspect the file: cat k8s/gateway.yml
 
@@ -467,17 +481,17 @@ Step 6: Apply the Gateway Resources:
 
 <img width="1372" height="890" alt="image" src="https://github.com/user-attachments/assets/90e498b9-4fa7-49b1-a7ee-7e672c103a98" />
 
-Step 7: Verify Resources: kubectl get gateway -n bankapp
+Step 9: Verify Resources: kubectl get gateway -n bankapp
 
 -->Check routes: kubectl get httproute -n bankapp
 
 <img width="1521" height="141" alt="image" src="https://github.com/user-attachments/assets/2280fedf-6b59-4e34-9523-27b28e0c17a0" />
 
-Step 8: Watch Envoy Create AWS NLB: After applying the Gateway:
+Step 10: Watch Envoy Create AWS NLB: After applying the Gateway:
 
 <img width="690" height="467" alt="image" src="https://github.com/user-attachments/assets/3b781e87-1878-481d-9deb-677f7bf94bc2" />
 
-Step 9: Verify Route Acceptance: kubectl describe httproute bankapp-route -n bankapp
+Step 11: Verify Route Acceptance: kubectl describe httproute bankapp-route -n bankapp
 
 <img width="1667" height="977" alt="image" src="https://github.com/user-attachments/assets/f37ad7a7-03aa-4326-a429-3a764fac859c" />
 
@@ -488,6 +502,18 @@ Step 9: Verify Route Acceptance: kubectl describe httproute bankapp-route -n ban
 <img width="1612" height="960" alt="image" src="https://github.com/user-attachments/assets/f7e3d03b-086b-4a08-bbae-1f8766a9531a" />
 
 <img width="1477" height="971" alt="image" src="https://github.com/user-attachments/assets/00dcd48e-52cb-4cb1-b647-b68b542bf1d5" />
+
+Step 12: Get the External Address: Run below any of the commands in terminal:
+
+--> kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}'
+
+-->export GATEWAY_IP=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}') echo $GATEWAY_IP
+
+<img width="1697" height="192" alt="image" src="https://github.com/user-attachments/assets/69fb80a0-65dd-4be2-ae24-12fc35e16669" />
+
+Step 13: Test Connectivity: In terminal run command: curl http://$GATEWAY_IP OR curl -I http://$GATEWAY_IP
+
+
 
 ---
 
