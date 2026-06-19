@@ -143,7 +143,7 @@ kubectl get crd gateways.gateway.networking.k8s.io 2>/dev/null || \
 
 **Steps to follow:**
 
--->In this task we are gonna install Envoy gateway
+-->**Note:** Before installing Envoy Gateway, make sure your cluster is running and reachable:
 
 -->**Objective:** Install Envoy Gateway, verify that it is running correctly, and ensure the Gateway API CRDs are available in your Kubernetes cluster.
 
