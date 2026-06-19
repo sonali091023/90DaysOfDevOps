@@ -373,6 +373,49 @@ spec:
         - name: bankapp-service
           port: 8080
 ```
+**4. BackendTrafficPolicy** -- session persistence via cookies:
+```yaml
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: bankapp-session
+  namespace: bankapp
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: bankapp-route
+  loadBalancer:
+    type: ConsistentHash
+    consistentHash:
+      type: Cookie
+      cookie:
+        name: BANKAPP_AFFINITY
+        ttl: 3600s
+```
+
+**Why cookie-based session affinity?** The AI-BankApp uses Spring Security with form-based login. Without session affinity, a user's requests could hit different pods, and they would be logged out. The `BANKAPP_AFFINITY` cookie ensures all requests from a user go to the same pod.
+
+Apply the Gateway configuration:
+```bash
+kubectl apply -f k8s/gateway.yml
+```
+
+Wait for the NLB to be provisioned:
+```bash
+kubectl get gateway -n bankapp -w
+```
+
+Get the external IP:
+```bash
+export GATEWAY_IP=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
+echo "App URL: http://$GATEWAY_IP"
+```
+
+Test access:
+```bash
+curl http://$GATEWAY_IP
+```
 
 **Steps to floow:**
 
@@ -445,63 +488,6 @@ Step 9: Verify Route Acceptance: kubectl describe httproute bankapp-route -n ban
 <img width="1612" height="960" alt="image" src="https://github.com/user-attachments/assets/f7e3d03b-086b-4a08-bbae-1f8766a9531a" />
 
 <img width="1477" height="971" alt="image" src="https://github.com/user-attachments/assets/00dcd48e-52cb-4cb1-b647-b68b542bf1d5" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-**4. BackendTrafficPolicy** -- session persistence via cookies:
-```yaml
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: BackendTrafficPolicy
-metadata:
-  name: bankapp-session
-  namespace: bankapp
-spec:
-  targetRefs:
-    - group: gateway.networking.k8s.io
-      kind: HTTPRoute
-      name: bankapp-route
-  loadBalancer:
-    type: ConsistentHash
-    consistentHash:
-      type: Cookie
-      cookie:
-        name: BANKAPP_AFFINITY
-        ttl: 3600s
-```
-
-**Why cookie-based session affinity?** The AI-BankApp uses Spring Security with form-based login. Without session affinity, a user's requests could hit different pods, and they would be logged out. The `BANKAPP_AFFINITY` cookie ensures all requests from a user go to the same pod.
-
-Apply the Gateway configuration:
-```bash
-kubectl apply -f k8s/gateway.yml
-```
-
-Wait for the NLB to be provisioned:
-```bash
-kubectl get gateway -n bankapp -w
-```
-
-Get the external IP:
-```bash
-export GATEWAY_IP=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
-echo "App URL: http://$GATEWAY_IP"
-```
-
-Test access:
-```bash
-curl http://$GATEWAY_IP
-```
 
 ---
 
