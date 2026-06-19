@@ -1,4 +1,4 @@
-<img width="1885" height="262" alt="image" src="https://github.com/user-attachments/assets/685fb416-f6f3-4e48-a494-be57228f1c17" /># Day 82 -- EKS Networking with Gateway API and Persistent Storage
+# Day 82 -- EKS Networking with Gateway API and Persistent Storage
 
 ## Task
 Your EKS cluster is running and the AI-BankApp deployed with raw manifests. But production needs proper ingress, HTTPS, session persistence, and reliable storage. The AI-BankApp project uses the Kubernetes Gateway API with Envoy Gateway instead of traditional Ingress -- the next generation of Kubernetes traffic management.
@@ -237,15 +237,57 @@ EOF
 
 -->This creates the resource directly in Kubernetes.
 
+-->Again run the command to check if the envoy gateway registerd itself: kubectl get gatewayclass
+
 <img width="1607" height="87" alt="image" src="https://github.com/user-attachments/assets/eab09e30-9435-4f64-911d-9a1b82199ed6" />
 
+-->This confirms Envoy Gateway is now the Gateway API controller for your cluster.
 
+Step 6: Check Whether Gateway API CRDs Exist: 
 
+-->kubectl get crd gateways.gateway.networking.k8s.io
 
+<img width="1611" height="102" alt="image" src="https://github.com/user-attachments/assets/46d2784a-f63c-4771-88e3-228cd92f0f25" />
 
+Step 7: Verify Gateway API Resources: 
 
+-->Check the installed Gateway API resources: kubectl api-resources | grep gateway
 
+<img width="1707" height="417" alt="image" src="https://github.com/user-attachments/assets/d382716c-daf2-4ba6-a260-f76e93b87775" />
 
+Step 9: Final Verification: 
+
+-->kubectl get pods -n envoy-gateway-system
+
+-->kubectl get gatewayclass
+
+-->kubectl get crd gateways.gateway.networking.k8s.io
+
+-->kubectl api-resources | grep gateway
+
+<img width="1681" height="575" alt="image" src="https://github.com/user-attachments/assets/c4d52905-da9a-4149-9013-ba91a7f84fe9" />
+
+-->So Envoy Gateway pod is Running, envoy-gateway GatewayClass exists, Gateway API CRDs are installed, Gateway resources appear in kubectl api-resources etc.
+
+**Common Issues:**
+
+1. helm: command not found: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+2. Kubernetes cluster unreachable:
+
+-->Check cubeconfig: kubectl config current-context
+
+-->kubectl get nodes
+
+-->For kind: kind get clusters
+
+3. GatewayClass Not Found: Sometimes the CRDs were installed after Envoy Gateway.
+
+Restart the deployment: kubectl rollout restart deployment -n envoy-gateway-system Then verify again: kubectl get gatewayclass
+
+-->Still if gatewayClass not found manually creare that as mentioned above.
+
+4. OCI Pull Errors: Authenticate with Docker Hub if rate-limited: docker login OR pull again after a few minutes.
 
 ---
 
