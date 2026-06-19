@@ -1,4 +1,4 @@
-# Day 82 -- EKS Networking with Gateway API and Persistent Storage
+<img width="1885" height="262" alt="image" src="https://github.com/user-attachments/assets/685fb416-f6f3-4e48-a494-be57228f1c17" /># Day 82 -- EKS Networking with Gateway API and Persistent Storage
 
 ## Task
 Your EKS cluster is running and the AI-BankApp deployed with raw manifests. But production needs proper ingress, HTTPS, session persistence, and reliable storage. The AI-BankApp project uses the Kubernetes Gateway API with Envoy Gateway instead of traditional Ingress -- the next generation of Kubernetes traffic management.
@@ -151,17 +151,98 @@ Step 1: Check Your Kubernetes Cluster: Before installing Envoy Gateway, verify t
 
 -->kubectl cluster-info
 
+**Issue Faced:**
+
+<img width="1912" height="440" alt="image" src="https://github.com/user-attachments/assets/3ebf5eac-dfa0-4114-9910-3840fbf30ff6" />
+
+-->So Earlier, your kubeconfig contained an old EKS endpoint: 971ACC79F2FCE0E88742C203EACE9B38.gr7.ap-south-1.eks.amazonaws.com
+
+-->But the current active cluster endpoint is: D4F866F4406116FB00BFB3515BD61E7C.gr7.ap-south-1.eks.amazonaws.com
+
+-->So the issue was a stale kubeconfig that pointed to a previous EKS endpoint. Running: To fix this run command: 
+
+-->aws eks update-kubeconfig --region ap-south-1 --name bankapp-eks [updated your kubeconfig with the correct endpoint]
+
+-->verify the created nodes: kubectl get nodes
+
+-->So then current status is EKS cluster exists, Cluster status is ACTIVE, kubeconfig is fixed, Worker nodes are Ready, kubectl connectivity is working etc.
+
 -->kubectl get nodes
+
+<img width="1885" height="262" alt="image" src="https://github.com/user-attachments/assets/00c0d742-446c-40fd-b4c5-46fafb59a502" />
 
 Step 2: Verify Helm Installation: 
 
 -->Check Helm version: helm version
+
+<img width="1781" height="82" alt="image" src="https://github.com/user-attachments/assets/b6e1a41c-4e7f-4ac4-a7a7-e7a47d62a820" />
 
 **Note:** If helm is not installed: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 Step 3: Install Envoy Gateway: 
 
 -->helm install envoy-gateway oci://docker.io/envoyproxy/gateway-helm --version v1.4.0 -n envoy-gateway-system --create-namespace --wait
+
+<img width="722" height="466" alt="image" src="https://github.com/user-attachments/assets/2a3b8fca-d166-4134-a0eb-e5e337a62ae1" />
+
+<img width="1917" height="747" alt="image" src="https://github.com/user-attachments/assets/e001ff9f-7c5f-4318-b1d0-ab00bb7cf452" />
+
+Step 4: Verify Pods: Check that Envoy Gateway components are running:
+
+-->kubectl get pods -n envoy-gateway-system
+
+<img width="1757" height="96" alt="image" src="https://github.com/user-attachments/assets/11db1049-b0bb-44a7-a8d7-2798eea6baa1" />
+
+**And If pods are not running then use below commands to verify:**
+
+-->kubectl describe pod -n envoy-gateway-system <pod-name>
+
+-->kubectl logs -n envoy-gateway-system <pod-name>
+
+Step 5: Verify GatewayClass: Check whether Envoy Gateway registered itself:
+
+-->kubectl get gatewayclass
+
+Note: This confirms Envoy Gateway is now the Gateway API controller for your cluster.
+
+Issue faced: 
+
+<img width="1830" height="45" alt="image" src="https://github.com/user-attachments/assets/39002559-8cf0-4c7a-92b9-20f8f172c6fa" />
+
+-->This means Envoy Gateway is running correctly, Gateway API CRDs are installed, But there is no GatewayClass resource for Envoy Gateway to manage. 
+
+-->To fix this use Option 1: To create file **vi gatewayclass.yaml**
+
+<img width="626" height="256" alt="image" src="https://github.com/user-attachments/assets/27c38d04-7c37-401e-820f-f077f8ac1ba8" />
+
+-->Then automate: kubectl apply -f gatewayclass.yaml
+
+-->Option 2: Is directly create it from the terminal for that use below command:
+
+cat <<EOF | kubectl apply -f -
+
+apiVersion: gateway.networking.k8s.io/v1
+
+kind: GatewayClass
+
+metadata:
+
+  name: envoy-gateway
+
+spec:
+
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+EOF
+
+-->This creates the resource directly in Kubernetes.
+
+<img width="1607" height="87" alt="image" src="https://github.com/user-attachments/assets/eab09e30-9435-4f64-911d-9a1b82199ed6" />
+
+
+
+
+
 
 
 
