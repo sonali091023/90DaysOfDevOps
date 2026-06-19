@@ -673,6 +673,7 @@ Step 7: Watch Certificate Issuance: kubectl get certificate -n bankapp
 
 
 
+
 ---
 
 ### Task 5: Understand EBS Persistent Storage in Action
