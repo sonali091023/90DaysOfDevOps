@@ -374,6 +374,67 @@ spec:
           port: 8080
 ```
 
+**Steps to floow:**
+
+-->Great! Before applying the Gateway resources, let's verify the prerequisites and understand what each resource is doing.
+
+Step 1: Verify AI-BankApp is Running: kubectl get pods -n bankapp
+
+-->Also verify services: kubectl get svc -n bankapp
+
+-->So AI-BankApp is not deployed yet to this EKS cluster yet, Thats why we cant see any resource yet
+
+<img width="1297" height="287" alt="image" src="https://github.com/user-attachments/assets/34fbbde2-18b0-48c2-bb1f-21e4019b42ee" />
+
+-->Command used: cd AI-BankApp-DevOps && kubectl apply -f k8s/namespace.yml && kubectl apply -f k8s/pv.yml && kubectl apply -f k8s/pvc.yml && kubectl apply -f k8s/configmap.yml && kubectl apply -f k8s/secrets.yml && kubectl apply -f k8s/mysql-deployment.yml && kubectl apply -f k8s/service.yml && kubectl apply -f k8s/ollama-deployment.yml && kubectl apply -f k8s/bankapp-deployment.yml && kubectl apply -f k8s/hpa.yml
+
+<img width="1895" height="337" alt="image" src="https://github.com/user-attachments/assets/d7ced32c-2dd4-4524-9cd7-ef871cd67a62" />
+
+<img width="1397" height="277" alt="image" src="https://github.com/user-attachments/assets/d4331e90-cf12-4cf3-9cb0-1742af748504" />
+
+Step 2: Verify GatewayClass Exists: kubectl get gatewayclass
+
+Step 3: Examine the Gateway Resource: The Gateway acts like an Ingress Controller entry point.
+
+<img width="422" height="690" alt="image" src="https://github.com/user-attachments/assets/b51daa51-3458-403a-b82a-2a1670ef2aaf" />
+
+<img width="632" height="460" alt="image" src="https://github.com/user-attachments/assets/dab9a7ef-b3ce-4cf8-85d0-b2889bd81cd4" />
+
+Step 4: About hostname: <your-ip>.nip.io: You'll need the Load Balancer IP/hostname later.
+
+<img width="776" height="405" alt="image" src="https://github.com/user-attachments/assets/89db4102-5559-4350-abcb-4dd150ec590c" />
+
+Step 5: Understand HTTPRoute: The HTTPRoute replaces traditional Ingress rules.
+
+<img width="570" height="546" alt="image" src="https://github.com/user-attachments/assets/3b970818-4e04-4c69-b683-b9fd86582378" />
+
+-->sends traffic to: kubectl get svc bankapp-service -n bankapp
+
+-->Verify that the service really exposes port 8080: kubectl describe svc bankapp-service -n bankapp
+
+<img width="1350" height="486" alt="image" src="https://github.com/user-attachments/assets/9e37d50b-ec71-4d00-8841-578e36b8920f" />
+
+Step 6: Apply the Gateway Resources: 
+
+-->First inspect the file: cat k8s/gateway.yml
+
+<img width="705" height="486" alt="image" src="https://github.com/user-attachments/assets/87ef541f-f191-4292-aee9-eb9e4ece286e" />
+
+<img width="1427" height="981" alt="image" src="https://github.com/user-attachments/assets/f3b2a9a7-556a-45e6-a649-2aa23af91531" />
+
+<img width="1372" height="890" alt="image" src="https://github.com/user-attachments/assets/90e498b9-4fa7-49b1-a7ee-7e672c103a98" />
+
+Step 7: Verify Resources: kubectl get gateway -n bankapp
+
+
+
+
+
+
+
+
+
+
 **4. BackendTrafficPolicy** -- session persistence via cookies:
 ```yaml
 apiVersion: gateway.envoyproxy.io/v1alpha1
