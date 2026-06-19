@@ -513,7 +513,19 @@ Step 12: Get the External Address: Run below any of the commands in terminal:
 
 Step 13: Test Connectivity: In terminal run command: curl http://$GATEWAY_IP OR curl -I http://$GATEWAY_IP
 
+**If the Gateway Stays Unprogrammed:**
 
+-->kubectl describe gateway bankapp-gateway -n bankapp
+
+<img width="1585" height="975" alt="image" src="https://github.com/user-attachments/assets/e29e40f7-cebb-41e9-b8f6-6d3053296854" />
+
+-->kubectl logs -n envoy-gateway-system deployment/envoy-gateway --tail=100
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/d3e9d938-632e-4969-9e77-ac2c99a27ed2" />
+
+-->kubectl get pods -n bankapp
+
+<img width="1552" height="137" alt="image" src="https://github.com/user-attachments/assets/634e75c8-b306-41f8-8980-2ab4d57dc3a1" />
 
 ---
 
@@ -577,6 +589,89 @@ Update the Gateway hostname and apply:
 # For learning: you can skip TLS and just use HTTP
 # For production: update gateway.yml with your hostname and apply cert-manager.yml
 ```
+
+**Steps to follow:**
+
+-->Great, you've already completed the hard parts (EKS, Envoy Gateway, Gateway API, NLB). Now let's set up cert-manager + Let's Encrypt TLS for the AI-BankApp.
+
+Step 1: Install cert-manager: Add the Helm repository:
+
+-->helm repo add jetstack https://charts.jetstack.io
+
+-->helm repo update
+
+**Install cert-manager and its CRDs:**
+
+-->helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --set crds.enabled=true --wait
+
+-->As cert-manager is already installed due to that we are facing above issue
+
+<img width="1662" height="487" alt="image" src="https://github.com/user-attachments/assets/bd59820c-7ea5-4718-8d8f-ebbff72a8cb6" />
+
+Step 2: Verify Installation: 
+
+-->Check the pods: kubectl get pods -n cert-manager
+
+-->Verify CRDs: kubectl get crd | grep cert-manager
+
+<img width="1492" height="277" alt="image" src="https://github.com/user-attachments/assets/a2839f23-fd18-4fc5-9f60-5b0af965bf86" />
+
+Step 3: Determine Your Hostname: 
+
+-->We already have gateway created: kubectl get gateway -n bankapp
+
+-->Export it: export GATEWAY_IP=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
+
+-->then to check: echo $GATEWAY_IP
+
+-->Create the nip.io hostname: export HOSTNAME="${GATEWAY_IP}.nip.io"
+
+-->then check: echo $HOSTNAME
+
+<img width="1462" height="501" alt="image" src="https://github.com/user-attachments/assets/50c8989e-155c-470c-ad21-238bb2b8446a" />
+
+Step 4: Create the ClusterIssuer: 
+
+-->Open the cert-manager manifest: vi k8s/cert-manager.yml In this file Replace: email: your-email@example.com with your actual email address.
+
+<img width="592" height="237" alt="image" src="https://github.com/user-attachments/assets/8d661965-4d58-4cad-8292-bf9f060dacfc" />
+
+<img width="1296" height="142" alt="image" src="https://github.com/user-attachments/assets/bb3a0aed-2d17-4a6b-885c-26937973b478" />
+
+Step 5: Create a Certificate Resource: The ClusterIssuer only defines how certificates are obtained. You also need a Certificate resource.
+
+-->vi k8s/certificate.yml
+
+<img width="472" height="712" alt="image" src="https://github.com/user-attachments/assets/bd4ce696-b163-4785-9250-0fe9753a969a" />
+
+-->kubectl apply -f k8s/certificate.yml
+
+<img width="1401" height="125" alt="image" src="https://github.com/user-attachments/assets/9636917f-ce64-47e8-8ccc-3974bcbe254d" />
+
+Step 6: Update the Gateway: Your current Gateway probably contains:
+
+-->Open file: vi k8s/gateway.yml In this file Look for the HTTPS listener section. It will look similar to:
+
+-->First get the Gateway address: export GATEWAY_IP=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
+
+-->echo $GATEWAY_IP
+
+<img width="660" height="666" alt="image" src="https://github.com/user-attachments/assets/710f487d-e643-46a3-9fd5-52d63740e54b" />
+
+-->kubectl apply -f k8s/gateway.yml
+
+<img width="710" height="712" alt="image" src="https://github.com/user-attachments/assets/e828c1d9-de8b-4008-bf5e-b50c935364fc" />
+
+<img width="1351" height="147" alt="image" src="https://github.com/user-attachments/assets/d81ea90c-5bff-4653-ae0f-92f9a8c81525" />
+
+Step 7: Watch Certificate Issuance: kubectl get certificate -n bankapp
+
+
+
+
+
+
+
 
 ---
 
