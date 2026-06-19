@@ -688,7 +688,12 @@ Step 9: Test HTTPS:
 
 -->curl -I https://$HOSTNAME
 
+<img width="1200" height="62" alt="image" src="https://github.com/user-attachments/assets/99d9f11d-d7e4-4edd-a97c-269390a5a86e" />
+
 -->OR open in the browser: https://15.207.9.148.nip.io
+
+<img width="1917" height="956" alt="image" src="https://github.com/user-attachments/assets/36a3ca99-d1ea-4f0b-bb77-25d136fc5389" />
+
 
 ---
 
