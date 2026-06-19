@@ -1,9 +1,0 @@
--->Absolutely. This was actually a very realistic troubleshooting journey involving Gateway API + Envoy Gateway + cert-manager + Let's Encrypt + AWS NLB + DNS hostname matching.
-
-Architecture Overview: Your traffic flow is: 
-
-
-
-
-
-
