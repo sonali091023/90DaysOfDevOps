@@ -694,7 +694,6 @@ Step 9: Test HTTPS:
 
 <img width="1917" height="956" alt="image" src="https://github.com/user-attachments/assets/36a3ca99-d1ea-4f0b-bb77-25d136fc5389" />
 
-
 ---
 
 ### Task 5: Understand EBS Persistent Storage in Action
@@ -751,6 +750,158 @@ kubectl exec -n bankapp deploy/mysql -- mysql -uroot -pTest@123 -e "SHOW DATABAS
 
 The database is intact because the EBS volume persists independently of the pod.
 
+**Steps to follow:**
+
+-->This task is designed to help you understand how Kubernetes Persistent Volumes (PVs), Persistent Volume Claims (PVCs), AWS EBS, and the EBS CSI Driver work together in EKS. Since you're working on the AI-BankApp project, here's a detailed walkthrough.
+
+<img width="640" height="780" alt="image" src="https://github.com/user-attachments/assets/87c9b05d-4d95-464c-9767-faba1357468a" />
+
+Step 1: Check StorageClass: kubectl get storageclass gp3
+
+-->To see complete details: kubectl describe storageclass gp3
+
+<img width="662" height="797" alt="image" src="https://github.com/user-attachments/assets/11b03cab-d484-4abc-9d0c-11efb0a5cb39" />
+
+<img width="660" height="557" alt="image" src="https://github.com/user-attachments/assets/0924c1ea-b010-4263-93c5-c45553e06ed4" />
+
+<img width="1917" height="442" alt="image" src="https://github.com/user-attachments/assets/57f48db7-4b67-4d9e-ab94-f8a4139bb6ae" />
+
+Step 2: Check PVCs: kubectl get pvc -n bankapp
+
+-->Detailed view: kubectl describe pvc mysql-pvc -n bankapp
+
+<img width="620" height="442" alt="image" src="https://github.com/user-attachments/assets/e05a03ae-5a77-427c-b36f-e685d1dd226a" />
+
+<img width="1877" height="551" alt="image" src="https://github.com/user-attachments/assets/88450e7e-e1a3-4b70-b52a-573573bd962b" />
+
+Step 3: Check PVs: kubectl get pv
+
+-->Detailed: kubectl describe pv pvc-654bbb3b-6c1e-44af-a7a4-4397bc8f8b90
+
+<img width="826" height="246" alt="image" src="https://github.com/user-attachments/assets/fcbf3117-1d77-46d7-b9b4-111c8d99517a" />
+
+<img width="1887" height="611" alt="image" src="https://github.com/user-attachments/assets/5df67d88-9615-4e19-ba60-648e7f079b70" />
+
+Step 4: Find Actual EBS Volumes: 
+
+-->aws ec2 describe-volumes --query "Volumes[*].[VolumeId,Size,AvailabilityZone,State]" --output table --region ap-south-1
+
+<img width="1217" height="247" alt="image" src="https://github.com/user-attachments/assets/c2fa6215-ff6d-4ac6-b896-88b54e1d71fa" />
+
+-->To see Kubernetes-created volumes only: aws ec2 describe-volumes --filters "Name=tag:kubernetes.io/created-for/pvc/name,Values=*" --region ap-south-1
+
+<img width="1562" height="892" alt="image" src="https://github.com/user-attachments/assets/dbd5dc75-fd61-4c7d-aa63-e98ca0af8ce7" />
+
+Step 5: Match PV with AWS EBS: 
+
+-->Get PV details: kubectl describe pv pvc-654bbb3b-6c1e-44af-a7a4-4397bc8f8b90
+
+<img width="1825" height="606" alt="image" src="https://github.com/user-attachments/assets/4995feb6-e458-4543-9b28-6cfa7a048b49" />
+
+-->aws ec2 describe-volumes --volume-ids vol-01abcd --region ap-south-1
+
+<img width="1917" height="962" alt="image" src="https://github.com/user-attachments/assets/b2248a65-112d-4a8f-a588-9a4ae0445017" />
+
+<img width="627" height="205" alt="image" src="https://github.com/user-attachments/assets/c83983f4-78bc-486d-85b5-2dd17d417310" />
+
+**Understanding ReadWriteOnce (RWO):**
+
+-->kubectl describe pvc mysql-pvc -n bankapp
+
+<img width="1457" height="511" alt="image" src="https://github.com/user-attachments/assets/0fa842fd-b487-45a4-9545-83d4536b798e" />
+
+<img width="755" height="707" alt="image" src="https://github.com/user-attachments/assets/193920bc-fbf3-423a-90df-ff175336c1c0" />
+
+**Why MySQL Uses Recreate Strategy Because of RWO:**
+
+<img width="705" height="767" alt="image" src="https://github.com/user-attachments/assets/6ccc7617-4cea-4b77-8a00-eeca8bb961c0" />
+
+**Understanding Volume Expansion:**
+
+<img width="660" height="582" alt="image" src="https://github.com/user-attachments/assets/3e34065a-5443-4028-94e9-14908f9fca17" />
+
+<img width="660" height="582" alt="image" src="https://github.com/user-attachments/assets/bd4a7153-33fe-434e-847e-14b1fc2ad3d8" />
+
+Step 6: Test Persistence: 
+
+-->Check databases: kubectl exec -n bankapp deploy/mysql -- mysql -uroot -pTest@123 -e "SHOW DATABASES;"
+
+-->Delete MySQL Pod: kubectl delete pod -n bankapp -l app=mysql
+
+-->Watch recreation: kubectl get pods -n bankapp -l app=mysql -w
+
+<img width="707" height="611" alt="image" src="https://github.com/user-attachments/assets/e2cfcdca-6b29-4604-8fee-4877a2b6cf39" />
+
+<img width="687" height="671" alt="image" src="https://github.com/user-attachments/assets/3923863f-f468-47c9-9de9-55ffe8282f15" />
+
+<img width="1917" height="887" alt="image" src="https://github.com/user-attachments/assets/441db292-5924-4cc9-92da-a1db236a9ae8" />
+
+**What Actually Happened?**
+
+<img width="647" height="451" alt="image" src="https://github.com/user-attachments/assets/dfe83d82-40ad-4b3c-b482-1300e57b5b3c" />
+
+**Commands Summary:**
+
+# StorageClass
+
+-->kubectl get storageclass gp3
+
+-->kubectl describe storageclass gp3
+
+# PVCs
+
+-->kubectl get pvc -n bankapp
+
+-->kubectl describe pvc mysql-pvc -n bankapp
+
+# PVs
+
+-->kubectl get pv
+
+-->kubectl describe pv <pv-name>
+
+# AWS Volumes
+
+-->aws ec2 describe-volumes --region ap-south-1
+
+# MySQL Data Check
+
+-->kubectl exec -n bankapp deploy/mysql -- \
+
+-->mysql -uroot -pTest@123 -e "SHOW DATABASES;"
+
+# Delete MySQL Pod
+
+-->kubectl delete pod -n bankapp -l app=mysql
+
+# Watch Recreate
+
+-->kubectl get pods -n bankapp -l app=mysql -w
+
+# Verify Persistence
+
+-->kubectl exec -n bankapp deploy/mysql -- \
+
+-->mysql -uroot -pTest@123 -e "SHOW DATABASES;"
+
+**Key Learning Outcome:**
+
+**By completing this task, you'll understand:**
+
+-->PVC = request for storage.
+
+-->PV = Kubernetes storage object.
+
+-->EBS Volume = actual AWS disk.
+
+-->WaitForFirstConsumer = creates volume in the correct AZ.
+
+-->ReadWriteOnce = one node can attach the volume at a time.
+
+-->gp3 = modern AWS SSD storage.
+
+-->Data survives pod deletion because EBS exists independently of the pod.
+
 ---
 
 ### Task 6: Explore HPA and Node Capacity
@@ -793,6 +944,12 @@ kubectl delete -f k8s/pvc.yml
 kubectl delete -f k8s/pv.yml
 kubectl delete -f k8s/namespace.yml
 ```
+
+**Steps to follow:**
+
+Task 6 is about understanding how Kubernetes Horizontal Pod Autoscaler (HPA) works, how much capacity your EKS nodes have, and whether your AI-BankApp can fit within the available resources.
+
+Step 1: Check HPA
 
 ---
 
