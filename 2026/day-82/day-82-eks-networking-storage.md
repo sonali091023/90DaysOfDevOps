@@ -1035,11 +1035,13 @@ Step 10: Cleanup for Day 83:
 
 -->run: terraform destroy: So Terraform will delete: EKS Cluster, Managed Node Groups, VPC, Public/Private Subnets,NAT Gateway, Internet Gateway, Security Groups, IAM Roles, Route Tables etc.
 
+-->aws eks list-clusters
+
+-->aws eks delete-cluster --name bankapp-eks --region ap-south-1
+
+-->aws eks describe-cluster --name bankapp-eks --region ap-south-1
+
  <img width="787" height="537" alt="image" src="https://github.com/user-attachments/assets/afe471eb-6f24-4da4-81e3-aceedd84cd1e" />
-
-
-
-
 
 ---
 
