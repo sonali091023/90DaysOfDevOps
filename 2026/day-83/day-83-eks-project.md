@@ -1,4 +1,4 @@
-<img width="632" height="586" alt="image" src="https://github.com/user-attachments/assets/961e84ad-34d8-42b7-8cc2-8f8228168ad8" /># Day 83 -- EKS Project: Production Deployment of AI-BankApp
+# Day 83 -- EKS Project: Production Deployment of AI-BankApp
 
 ## Task
 Three days of EKS -- cluster provisioning with Terraform, Gateway API networking, EBS storage, and TLS. Today you put it all together and deploy the AI-BankApp as a production-grade application on EKS. Full stack: Spring Boot app with MySQL and Ollama AI, persistent storage, autoscaling, monitoring, and the complete end-to-end validation.
@@ -88,16 +88,17 @@ quickly instead of applying everything at once.
 
 Phase 1: Verify EKS Cluster: Check whether your cluster exists and nodes are ready: kubectl get nodes
 
-
-
 -->& If this fails: cd terraform && terraform apply && aws eks update-kubeconfig --region us-west-2 --name bankapp-eks
 
 -->Then verify: kubectl cluster-info && kubectl get nodes
+
+<img width="1511" height="190" alt="image" src="https://github.com/user-attachments/assets/6d663823-2912-482e-8ddd-10002b867eba" />
 
 Phase 2: Deploy Namespace: kubectl apply -f k8s/namespace.yml
 
 -->& then to verify: kubectl get ns
 
+<img width="1465" height="312" alt="image" src="https://github.com/user-attachments/assets/39884005-b03d-4134-a214-e4a4817ceb21" />
 
 Phase 3: Deploy Storage: Create Persistent Volume and Persistent Volume Claims.
 
@@ -114,7 +115,6 @@ Phase 3: Deploy Storage: Create Persistent Volume and Persistent Volume Claims.
 -->kubectl describe pvc ollama-pvc -n bankapp
 
 <img width="642" height="752" alt="image" src="https://github.com/user-attachments/assets/ddb62a0b-bafe-4e89-89e7-9c39a107571a" />
-
 
 Phase 4: Deploy Configurations: Create ConfigMap and Secrets.
 
