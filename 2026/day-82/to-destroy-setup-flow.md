@@ -1,3 +1,71 @@
+
+Build Everything Again:
+
+Step 1: Create Infrastructure: terraform apply -auto-approve
+
+Step 2: Configure kubectl: aws eks update-kubeconfig --region ap-south-1 --name bankapp-eks & To verify: kubectl get nodes
+
+Step 3: Install Envoy Gateway: helm install envoy-gateway oci://docker.io/envoyproxy/gateway-helm --version v1.4.0 -n envoy-gateway-system --create-namespace --wait & then to verify: kubectl get 
+pods -n envoy-gateway-system
+
+Step 4: Install Gateway API CRDs: kubectl get crd | grep gateway
+
+Step 5: Install cert-manager: helm repo add jetstack https://charts.jetstack.io & To update: helm repo update
+
+-->Then install: helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --set crds.enabled=true --wait
+
+-->then verify: kubectl get pods -n cert-manager
+
+Step 6: Deploy AI-BankApp: kubectl apply -f k8s/namespace.yml && kubectl apply -f k8s/pv.yml && kubectl apply -f k8s/pvc.yml && kubectl apply -f k8s/configmap.yml && kubectl apply -f k8s/secrets.yml && kubectl apply -f k8s/mysql-deployment.yml && kubectl apply -f k8s/service.yml && kubectl apply -f k8s/ollama-deployment.yml && kubectl apply -f k8s/bankapp-deployment.yml && kubectl apply -f k8s/hpa.yml && kubectl apply -f k8s/gateway.yml
+
+Step 7: Verify Pods: kubectl get pods -n bankapp
+
+Step 8: Verify Gateway: kubectl get gateway -n bankapp
+
+Step 9: Verify Certificate: kubectl get certificate -n bankapp -w
+
+Step 10: Access Application: 
+
+-->Get LoadBalancer address: kubectl get gateway -n bankapp
+
+-->Open in browser: https://<your-domain-or-nip.io-hostname> 
+
+===========================
+Cleanup the setup:
+
+-->This removes the BankApp workload but keeps the EKS cluster.
+
+-->kubectl delete -f k8s/gateway.yml 2>/dev/null && kubectl delete -f k8s/hpa.yml && kubectl delete -f k8s/bankapp-deployment.yml &&kubectl delete -f k8s/ollama-deployment.yml && kubectl delete -f k8s/mysql-deployment.yml && kubectl delete -f k8s/service.yml && kubectl delete -f k8s/secrets.yml && kubectl delete -f k8s/configmap.yml && kubectl delete -f k8s/pvc.yml && kubectl delete -f k8s/pv.yml && kubectl delete -f k8s/namespace.yml
+
+-->kubectl get all -A
+
+-->kubectl get ns
+
+-->kubectl delete ns argocd
+
+-->kubectl delete ns bankapp
+
+-->kubectl delete ns cert-manager
+
+-->kubectl delete ns envoy-gateway-system
+
+-->Once again verify: kubectl get ns
+
+-->kubectl get pods -A
+
+-->kubectl get svc -A
+
+-->Then go inside terraform dir: cd terraform & terraform state list: You should see resources such as: VPC, Subnets, Internet Gateway, NAT Gateway, Route Tables, EKS Cluster, Node Groups etc.
+
+-->run: terraform destroy: So Terraform will delete: EKS Cluster, Managed Node Groups, VPC, Public/Private Subnets,NAT Gateway, Internet Gateway, Security Groups, IAM Roles, Route Tables etc.
+
+-->aws eks list-clusters
+
+-->aws eks delete-cluster --name bankapp-eks --region ap-south-1
+
+-->aws eks describe-cluster --name bankapp-eks --region ap-south-1
+
+======================================
 If you want to completely destroy the Day-82 AI-BankApp setup on EKS, do it in the reverse order of creation.
 
 1. Delete Application Resources
