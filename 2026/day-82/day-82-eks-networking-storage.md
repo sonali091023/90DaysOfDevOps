@@ -836,6 +836,8 @@ Step 6: Test Persistence:
 
 <img width="1917" height="887" alt="image" src="https://github.com/user-attachments/assets/441db292-5924-4cc9-92da-a1db236a9ae8" />
 
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/15b3fd22-f0a5-43a0-840c-075f736a8672" />
+
 **What Actually Happened?**
 
 <img width="647" height="451" alt="image" src="https://github.com/user-attachments/assets/dfe83d82-40ad-4b3c-b482-1300e57b5b3c" />
@@ -949,7 +951,95 @@ kubectl delete -f k8s/namespace.yml
 
 Task 6 is about understanding how Kubernetes Horizontal Pod Autoscaler (HPA) works, how much capacity your EKS nodes have, and whether your AI-BankApp can fit within the available resources.
 
-Step 1: Check HPA
+Step 1: Check HPA: kubectl get hpa -n bankapp
+
+-->Understand the HPA Configuration: Inspect it: kubectl describe hpa -n bankapp
+
+<img width="1917" height="820" alt="image" src="https://github.com/user-attachments/assets/ff6d5d2a-09f2-4d05-8219-a64f88afeef6" />
+
+<img width="641" height="750" alt="image" src="https://github.com/user-attachments/assets/0cf6297b-418d-404d-b9cf-8cc3b4fb8f9f" />
+
+Step 2: Check Node Capacity: kubectl top nodes
+
+<img width="1457" height="147" alt="image" src="https://github.com/user-attachments/assets/d5f19f50-407d-4db5-9873-c48dead2e3f0" />
+
+<img width="702" height="820" alt="image" src="https://github.com/user-attachments/assets/99ca5dc0-5bd0-4eb7-a95b-0dc60747e227" />
+
+Step 3: Check Pod Usage: kubectl top pods -n bankapp
+
+<img width="1661" height="207" alt="image" src="https://github.com/user-attachments/assets/f9a996e0-0d35-41c7-8edb-c602ba527c1c" />
+
+Step 4: Understand Resource Requests: 
+
+-->Check BankApp deployment: kubectl describe deployment bankapp -n bankapp
+
+<img width="660" height="772" alt="image" src="https://github.com/user-attachments/assets/827bf68a-bd7c-4ecc-88b1-c6ddef5ce763" />
+
+<img width="1617" height="972" alt="image" src="https://github.com/user-attachments/assets/f9f98ba7-931f-44b5-a706-331c4b2a15e4" />
+
+Step 5: Calculate Total Resource Budget: 
+
+<img width="611" height="692" alt="image" src="https://github.com/user-attachments/assets/4f5d9894-0a2e-4813-b1ff-877484640790" />
+
+<img width="642" height="742" alt="image" src="https://github.com/user-attachments/assets/b25d612e-8503-4183-be24-6d2e4b31d261" />
+
+Step 6: Compare With Cluster Capacity: 
+
+<img width="675" height="821" alt="image" src="https://github.com/user-attachments/assets/b2731531-5714-4eff-9fdc-873501d752a9" />
+
+Step 7: See Actual Requests: 
+
+-->kubectl top nodes OR kubectl get nodes
+
+-->Very useful command: kubectl describe node <node-name>
+
+<img width="1771" height="982" alt="image" src="https://github.com/user-attachments/assets/a087896e-558e-46dd-af19-2ccdb7690fa8" />
+
+<img width="591" height="510" alt="image" src="https://github.com/user-attachments/assets/8b53f533-2f9a-415b-bbd1-449189161da0" />
+
+Step 8: Understand Scaling Scenario: 
+
+<img width="672" height="627" alt="image" src="https://github.com/user-attachments/assets/8275aee6-f8ad-44d6-afb7-eca057baf604" />
+
+Step 9: Observe HPA Live: 
+
+<img width="1327" height="305" alt="image" src="https://github.com/user-attachments/assets/95b5db18-9418-40b5-884f-a7904a022a6f" />
+
+<img width="1470" height="227" alt="image" src="https://github.com/user-attachments/assets/85bddd8e-b9f6-4f07-b434-cb4fdb3fa707" />
+
+Step 10: Cleanup for Day 83:
+
+-->This removes the BankApp workload but keeps the EKS cluster.
+
+-->kubectl delete -f k8s/gateway.yml 2>/dev/null && kubectl delete -f k8s/hpa.yml && kubectl delete -f k8s/bankapp-deployment.yml &&kubectl delete -f k8s/ollama-deployment.yml && kubectl delete -f k8s/mysql-deployment.yml && kubectl delete -f k8s/service.yml && kubectl delete -f k8s/secrets.yml && kubectl delete -f k8s/configmap.yml && kubectl delete -f k8s/pvc.yml && kubectl delete -f k8s/pv.yml && kubectl delete -f k8s/namespace.yml
+
+-->kubectl get all -A
+
+-->kubectl get ns
+
+-->kubectl delete ns argocd
+
+-->kubectl delete ns bankapp
+
+-->kubectl delete ns cert-manager
+
+-->kubectl delete ns envoy-gateway-system
+
+-->Once again verify: kubectl get ns
+
+-->kubectl get pods -A
+
+-->kubectl get svc -A
+
+-->Then go inside terraform dir: cd terraform & terraform state list: You should see resources such as: VPC, Subnets, Internet Gateway, NAT Gateway, Route Tables, EKS Cluster, Node Groups etc.
+
+-->run: terraform destroy: So Terraform will delete: EKS Cluster, Managed Node Groups, VPC, Public/Private Subnets,NAT Gateway, Internet Gateway, Security Groups, IAM Roles, Route Tables etc.
+
+ <img width="787" height="537" alt="image" src="https://github.com/user-attachments/assets/afe471eb-6f24-4da4-81e3-aceedd84cd1e" />
+
+
+
+
 
 ---
 
