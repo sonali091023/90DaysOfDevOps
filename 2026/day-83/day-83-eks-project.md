@@ -109,7 +109,105 @@ Phase 3: Deploy Storage: Create Persistent Volume and Persistent Volume Claims.
 
 -->kubectl get pvc -n bankapp
 
+-->& if PVC remains Pending: kubectl describe pvc mysql-pvc -n bankapp
+
+-->kubectl describe pvc ollama-pvc -n bankapp
+
 <img width="642" height="752" alt="image" src="https://github.com/user-attachments/assets/ddb62a0b-bafe-4e89-89e7-9c39a107571a" />
+
+
+Phase 4: Deploy Configurations: Create ConfigMap and Secrets.
+
+-->kubectl apply -f k8s/configmap.yml
+
+-->kubectl apply -f k8s/secrets.yml
+
+-->Verify: kubectl get configmap -n bankapp
+
+-->kubectl get secrets -n bankapp
+
+Phase 5: Deploy MySQL: Deploy database.
+
+-->kubectl apply -f k8s/mysql-deployment.yml
+
+-->kubectl apply -f k8s/service.yml
+
+-->Verify: kubectl get pods -n bankapp
+
+Wait until MySQL is ready: kubectl wait --for=condition=ready pod -l app=mysql -n bankapp --timeout=120s
+
+Check logs: kubectl logs -l app=mysql -n bankapp
+
+If MySQL doesn't start: kubectl describe pod -l app=mysql -n bankapp
+
+Phase 6: Deploy Ollama: Deploy AI service: kubectl apply -f k8s/ollama-deployment.yml
+
+-->Then check: kubectl get pods -n bankapp
+
+-->Wait for sometime: kubectl wait --for=condition=ready pod -l app=ollama -n bankapp --timeout=600s
+
+-->Monitor progress: kubectl logs -f -l app=ollama -n bankapp
+
+**Important:** The first startup may take 2–5 minutes because Ollama downloads the model.
+
+-->Check storage: kubectl get pvc -n bankapp
+
+Phase 7: Deploy BankApp: Once MySQL and Ollama are healthy: 
+
+-->kubectl apply -f k8s/bankapp-deployment.yml
+
+-->kubectl apply -f k8s/hpa.yml
+
+-->Wait for readiness: kubectl wait --for=condition=ready pod -l app=bankapp -n bankapp --timeout=300s
+
+-->Verify: kubectl get pods -n bankapp
+
+Phase 8: Verify HPA: Check autoscaler: kubectl get hpa -n bankapp
+
+-->If metrics show: unknown/80% then verify Metrics Server: kubectl get deployment metrics-server -n kube-system
+
+Phase 9: Final Validation: kubectl get all -n bankapp
+
+<img width="485" height="787" alt="image" src="https://github.com/user-attachments/assets/d2c243d4-5064-4422-9359-7fc790b6fa63" />
+
+Phase 10: Check Storage: kubectl get pvc -n bankapp
+
+**Troubleshooting Commands:** If something isn't working, these commands usually reveal the issue:
+
+-->kubectl get events -n bankapp --sort-by=.metadata.creationTimestamp
+
+-->kubectl describe pod <pod-name> -n bankapp
+
+-->kubectl logs <pod-name> -n bankapp
+
+-->kubectl get pvc -n bankapp
+
+-->kubectl describe pvc <pvc-name> -n bankapp
+
+**For a quick health check after deployment:**
+
+-->kubectl get all -n bankapp
+
+-->kubectl get pvc -n bankapp
+
+-->kubectl get hpa -n bankapp
+
+-->kubectl top pods -n bankapp
+
+-->kubectl top nodes
+
+<img width="707" height="376" alt="image" src="https://github.com/user-attachments/assets/ce07c76a-0517-484b-98a2-ec8c56b97ad5" />
+
+**If you hit an error during any phase, share the output of:**
+
+-->kubectl get all -n bankapp
+
+-->kubectl get pvc -n bankapp
+
+-->kubectl get events -n bankapp --sort-by=.metadata.creationTimestamp
+
+
+
 
 
 
