@@ -1,4 +1,4 @@
-# Day 83 -- EKS Project: Production Deployment of AI-BankApp
+<img width="632" height="586" alt="image" src="https://github.com/user-attachments/assets/961e84ad-34d8-42b7-8cc2-8f8228168ad8" /># Day 83 -- EKS Project: Production Deployment of AI-BankApp
 
 ## Task
 Three days of EKS -- cluster provisioning with Terraform, Gateway API networking, EBS storage, and TLS. Today you put it all together and deploy the AI-BankApp as a production-grade application on EKS. Full stack: Spring Boot app with MySQL and Ollama AI, persistent storage, autoscaling, monitoring, and the complete end-to-end validation.
@@ -172,6 +172,8 @@ Phase 9: Final Validation: kubectl get all -n bankapp
 
 Phase 10: Check Storage: kubectl get pvc -n bankapp
 
+
+
 **Troubleshooting Commands:** If something isn't working, these commands usually reveal the issue:
 
 -->kubectl get events -n bankapp --sort-by=.metadata.creationTimestamp
@@ -205,12 +207,6 @@ Phase 10: Check Storage: kubectl get pvc -n bankapp
 -->kubectl get pvc -n bankapp
 
 -->kubectl get events -n bankapp --sort-by=.metadata.creationTimestamp
-
-
-
-
-
-
 
 ---
 
@@ -256,6 +252,147 @@ Open `http://$APP_URL` in your browser:
 5. Toggle dark/light mode
 
 **The full stack is running on EKS:** Spring Boot serves the UI, MySQL stores accounts and transactions, Ollama's TinyLlama model powers the AI chatbot -- all on managed Kubernetes with persistent storage and autoscaling.
+
+**Steps to follow:**
+
+-->This task is about exposing your AI-BankApp to the internet through Gateway API + Envoy Gateway + AWS Network Load Balancer (NLB) and verifying that all components (Spring Boot, MySQL, Ollama) are working together.
+
+Step 1: Verify the Application Stack First: 
+
+-->Before exposing the app, confirm all workloads are healthy: kubectl get all -n bankapp
+
+-->Verify services: kubectl get svc -n bankapp
+
+
+Step 2: Verify Envoy Gateway Installation: 
+
+-->Check whether Envoy Gateway is already installed: kubectl get pods -n envoy-gateway-system
+
+-->If the namespace does not exist, install Envoy Gateway: helm install envoy-gateway oci://docker.io/envoyproxy/gateway-helm --version v1.4.0 -n envoy-gateway-system --create-namespace \
+  --wait
+
+-->Verify: kubectl get pods -n envoy-gateway-system
+
+
+Step 3: Verify Gateway API CRDs: 
+
+-->Ensure Gateway API resources exist: kubectl api-resources | grep gateway
+
+-->Also check: kubectl get gatewayclass
+
+<img width="617" height="587" alt="image" src="https://github.com/user-attachments/assets/df79422f-6018-4568-bb0a-6ddbd145b74c" />
+
+
+
+Step 4: Deploy Gateway Configuration:
+
+-->Apply the Gateway resource: kubectl apply -f k8s/gateway.yml
+
+-->Verify: kubectl get gateway -n bankapp [This is normal while AWS provisions the load balancer.]
+
+<img width="632" height="586" alt="image" src="https://github.com/user-attachments/assets/dced4fc7-a302-4f08-8faf-32b456280a29" />
+
+
+
+Step 5: Watch Gateway Status: 
+
+-->Monitor the gateway: kubectl get gateway -n bankapp -w   [Provisioning usually takes: 2–5 minutes, Sometimes up to 10 minutes]
+
+
+
+Step 6: Verify Gateway Conditions: 
+
+-->If ADDRESS never appears: kubectl describe gateway bankapp-gateway -n bankapp
+
+-->& if Programmed=False, inspect Envoy Gateway: kubectl logs -n envoy-gateway-system deployment/envoy-gateway
+
+<img width="605" height="437" alt="image" src="https://github.com/user-attachments/assets/62471c97-ebdc-4dff-9622-1cdd44af2de0" />
+
+
+
+Step 7: Obtain the Public URL: 
+
+-->Extract the NLB hostname: export APP_URL=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
+
+-->To verify: echo $APP_URL
+
+-->Display it: echo "AI-BankApp URL: http://$APP_URL"
+
+<img width="587" height="532" alt="image" src="https://github.com/user-attachments/assets/35291a5a-d218-47ee-abf8-5decb2f77445" />
+
+
+Step 8: Test Connectivity: 
+
+-->Health Endpoint: curl http://$APP_URL/actuator/health
+
+-->curl -s http://$APP_URL/actuator/health | python3 -m json.tool
+
+<img width="710" height="636" alt="image" src="https://github.com/user-attachments/assets/4e6cbf43-7acd-4dc0-8004-a8462aaa42bd" />
+
+-->Home Page Test: curl -s -o /dev/null -w "%{http_code}" http://$APP_URL
+
+<img width="762" height="282" alt="image" src="https://github.com/user-attachments/assets/334f6869-02ff-40d2-b3a2-a2a86a587436" />
+
+Step 9: If You Get 503: 
+
+-->Check route: kubectl get httproute -n bankapp
+
+-->Check service: kubectl get svc -n bankapp
+
+-->Check endpoints: kubectl get endpoints -n bankapp
+
+-->If endpoints are empty: kubectl describe svc bankapp-service -n bankapp
+
+-->kubectl get pods --show-labels -n bankapp  [Here Likely a selector mismatch.]
+
+Step 10: Access Through Browser: 
+
+-->Open: http://<NLB-DNS-NAME> Ex: http://a1b2c3d4e5f6.us-west-2.elb.amazonaws.com
+
+Step 11: Functional Testing: 
+
+<img width="652" height="656" alt="image" src="https://github.com/user-attachments/assets/a359374b-1b3d-4f81-af10-734f23cbd11f" />
+
+<img width="625" height="432" alt="image" src="https://github.com/user-attachments/assets/cc75b8b7-8351-4499-a840-f769bf4fca6d" />
+
+<img width="707" height="372" alt="image" src="https://github.com/user-attachments/assets/7bc45d8c-7c71-4c49-ba44-2c75643d0605" />
+
+Step 12: Verify Backend Connectivity: Watch logs while testing:
+
+-->BankApp: kubectl logs -f deployment/bankapp -n bankapp
+
+-->Ollama: kubectl logs -f deployment/ollama -n bankapp
+
+-->MySQL: kubectl logs -f deployment/mysql -n bankapp
+
+-->You should see: BankApp serving requests, MySQL queries executing, Ollama generating responses etc.
+
+Step 13: Confirm AWS Resources: 
+
+-->Check the Envoy service created by Gateway API: kubectl get svc -A
+
+-->You can also verify directly in AWS: aws elbv2 describe-load-balancers --region us-west-2 [You should see an AWS Network Load Balancer associated with Envoy Gateway.]
+
+**Final Validation Checklist:**
+
+-->kubectl get gateway -n bankapp
+
+-->kubectl get httproute -n bankapp
+
+-->kubectl get all -n bankapp
+
+-->curl http://$APP_URL/actuator/health
+
+<img width="631" height="357" alt="image" src="https://github.com/user-attachments/assets/3fb920c0-a87e-4fa3-866f-9ee6863f3054" />
+
+-->kubectl get gateway -n bankapp -o yaml
+
+-->kubectl get gatewayclass
+
+-->kubectl get pods -n envoy-gateway-system
+
+kubectl logs -n envoy-gateway-system deployment/envoy-gateway
+
 
 ---
 
