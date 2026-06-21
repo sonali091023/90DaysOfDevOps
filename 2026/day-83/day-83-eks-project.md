@@ -284,6 +284,54 @@ Step 3: Verify Gateway API CRDs:
 
 
 
+Step 4: Deploy Gateway Configuration: 
+
+-->Apply the Gateway resource: kubectl apply -f k8s/gateway.yml
+
+-->Verify: kubectl get gateway -n bankapp [This is normal while AWS provisions the load balancer.]
+
+
+
+Step 5: Watch Gateway Status: 
+
+-->Monitor the gateway: kubectl get gateway -n bankapp -w
+
+<img width="717" height="710" alt="image" src="https://github.com/user-attachments/assets/8646139a-01a0-4e64-a699-8bc385af3902" />
+
+
+Step 6: Verify Gateway Conditions: 
+
+-->If ADDRESS never appears: kubectl describe gateway bankapp-gateway -n bankapp
+
+-->And If Programmed=False, inspect Envoy Gateway: kubectl logs -n envoy-gateway-system deployment/envoy-gateway
+
+<img width="702" height="432" alt="image" src="https://github.com/user-attachments/assets/f27ff03c-84bd-432f-8937-7997a04a408c" />
+
+
+
+Step 7: Obtain the Public URL: 
+
+-->Extract the NLB hostname: export APP_URL=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
+
+-->To verify: echo $APP_URL
+
+-->Display it: echo "AI-BankApp URL: http://$APP_URL"
+
+<img width="647" height="582" alt="image" src="https://github.com/user-attachments/assets/b92201f1-60c4-48f7-9b86-9135e8199202" />
+
+Step 8: Test Connectivity: 
+
+-->Health Endpoint: curl http://$APP_URL/actuator/health
+
+-->Pretty print: curl -s http://$APP_URL/actuator/health | python3 -m json.tool
+
+
+
+
+
+
+
+
 Step 4: Deploy Gateway Configuration:
 
 -->Apply the Gateway resource: kubectl apply -f k8s/gateway.yml
