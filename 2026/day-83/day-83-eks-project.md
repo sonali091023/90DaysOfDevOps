@@ -475,6 +475,94 @@ Explore the pre-built Grafana dashboards:
 - **Kubernetes / Compute Resources / Pod** -- drill into individual pods
 - **Node Exporter / Nodes** -- EKS worker node health
 
+**Steps to follow:**
+
+-->This task adds a full observability stack to your EKS cluster using Prometheus + Grafana + kube-state-metrics + node-exporter + Alertmanager via the kube-prometheus-stack Helm chart.
+
+<img width="652" height="675" alt="image" src="https://github.com/user-attachments/assets/bcee80ff-f99d-45f4-8de0-8bddd549e32c" />
+
+Step 1: Verify Cluster Capacity: 
+
+-->Before installing monitoring, check available resources: kubectl top nodes
+
+-->Also verify nodes: kubectl get nodes
+
+
+
+Step 2: Add Helm Repository: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+-->helm repo update
+
+-->Verify: helm repo list
+
+
+
+Step 3: Install kube-prometheus-stack: Deploy the monitoring stack: 
+
+-->helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring --create-namespace --set grafana.adminPassword=admin123 --set prometheus.prometheusSpec.retention=3d --set prometheus.prometheusSpec.resources.requests.memory=256Mi --set prometheus.prometheusSpec.resources.requests.cpu=100m --wait --timeout 600s
+
+Note: This may take: 5–10 minutes because many CRDs and pods are created.
+
+
+Step 4: Verify Installation: 
+
+-->Check Helm release: helm list -n monitoring
+
+
+
+Step 5: Verify Monitoring Pods: kubectl get pods -n monitoring [Here all pods should be running]
+
+
+
+Step 6: Verify CRDs: Prometheus Operator should install CRDs automatically: kubectl get crds | grep monitoring.coreos.com
+
+
+Step 7: Access Grafana: 
+
+-->Forward the Grafana service: kubectl port-forward svc/monitoring-grafana -n monitoring 3000:80 [Keep this terminal open]
+
+-->Open: http://localhost:3000  [login with Username: admin Password: admin123]
+
+
+Step 8: Verify Grafana Datasource: 
+
+-->kubectl get secret monitoring-grafana -n monitoring   [and inspect Grafana logs]
+
+<img width="581" height="431" alt="image" src="https://github.com/user-attachments/assets/20ee4826-bf69-4c85-a333-2528461945f8" />
+
+
+
+Step 9: Verify BankApp Metrics Endpoint: Before creating a ServiceMonitor, ensure metrics are exposed:
+
+-->Find the service: kubectl get svc -n bankapp
+
+-->Then test: kubectl port-forward svc/bankapp-service -n bankapp 8080:8080
+
+-->In another terminal: curl http://localhost:8080/actuator/prometheus
+
+-->Verify by running following query: management.endpoints.web.exposure.include=*
+
+-->management.endpoint.prometheus.enabled=true
+
+Step 10: Create ServiceMonitor: 
+
+-->Create: vi bankapp-servicemonitor.yaml   [Paste the above given code]
+
+-->kubectl apply -f bankapp-servicemonitor.yaml
+
+-->Verify: kubectl get servicemonitor -n monitoring   [Expected: bankapp-monitor]
+
+Step 11: Verify Service Labels: The most common issue is label mismatch:
+
+-->Check the BankApp service: kubectl get svc bankapp-service -n bankapp --show-labels
+
+
+
+
+
+
+
+
 ---
 
 ### Task 4: End-to-End Validation Checklist
