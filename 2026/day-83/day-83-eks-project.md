@@ -321,9 +321,67 @@ Step 7: Obtain the Public URL:
 
 Step 8: Test Connectivity: 
 
--->Health Endpoint: curl http://$APP_URL/actuator/health
+-->**Health Endpoint:** curl http://$APP_URL/actuator/health
 
 -->Pretty print: curl -s http://$APP_URL/actuator/health | python3 -m json.tool
+
+<img width="727" height="595" alt="image" src="https://github.com/user-attachments/assets/77ba91f5-b58b-4124-99d4-badf52710b55" />
+
+-->**Home Page Test:**  curl -s -o /dev/null -w "%{http_code}" http://$APP_URL
+
+<img width="696" height="412" alt="image" src="https://github.com/user-attachments/assets/57fdb893-d230-40b4-a90a-230c800401bf" />
+
+Step 9: If You Get 503: 
+
+-->Check route: kubectl get httproute -n bankapp
+
+-->Check service: kubectl get svc -n bankapp
+
+-->Check endpoints: kubectl get endpoints -n bankapp
+
+-->If endpoints are empty: kubectl describe svc bankapp-service -n bankapp
+
+-->kubectl get pods --show-labels -n bankapp   [Likely a selector mismatch.]
+
+Step 10: Access Through Browser: 
+
+-->Open: http://<NLB-DNS-NAME> Ex: http://a1b2c3d4e5f6.us-west-2.elb.amazonaws.com
+
+Step 11: Functional Testing: 
+
+<img width="562" height="656" alt="image" src="https://github.com/user-attachments/assets/344deda2-ac31-495a-b217-22ae1a9802b0" />
+
+<img width="405" height="812" alt="image" src="https://github.com/user-attachments/assets/031ada68-06da-4dfd-b935-a7bbe2dd6e49" />
+
+Step 12: Verify Backend Connectivity: Watch logs while testing:
+
+-->BankApp: kubectl logs -f deployment/bankapp -n bankapp
+
+-->Ollama: kubectl logs -f deployment/ollama -n bankapp
+
+-->MySQL: kubectl logs -f deployment/mysql -n bankapp
+
+-->**You should see:** BankApp serving requests, MySQL queries executing, Ollama generating responses
+
+Step 13: Confirm AWS Resources: 
+
+-->Check the Envoy service created by Gateway API: kubectl get svc -A
+
+-->You can also verify directly in AWS: aws elbv2 describe-load-balancers --region us-west-2 [You should see an AWS Network Load Balancer associated with Envoy Gateway.]
+
+<img width="672" height="592" alt="image" src="https://github.com/user-attachments/assets/242f74a6-752e-4c2e-bd35-574857aacbf1" />
+
+**Final Validation Checklist:**
+
+-->kubectl get gateway -n bankapp
+
+-->kubectl get httproute -n bankapp
+kubectl get all -n bankapp
+curl http://$APP_URL/actuator/health
+
+
+
+
 
 
 
