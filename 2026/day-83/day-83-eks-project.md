@@ -88,7 +88,7 @@ quickly instead of applying everything at once.
 
 Phase 1: Verify EKS Cluster: Check whether your cluster exists and nodes are ready: kubectl get nodes
 
--->& If this fails: cd terraform && terraform apply && aws eks update-kubeconfig --region us-west-2 --name bankapp-eks
+-->**& If this fails:** cd terraform && terraform apply && aws eks update-kubeconfig --region ap-south-1 --name bankapp-eks
 
 -->Then verify: kubectl cluster-info && kubectl get nodes
 
@@ -110,11 +110,13 @@ Phase 3: Deploy Storage: Create Persistent Volume and Persistent Volume Claims.
 
 -->kubectl get pvc -n bankapp
 
--->& if PVC remains Pending: kubectl describe pvc mysql-pvc -n bankapp
+-->**& if PVC remains Pending:** kubectl describe pvc mysql-pvc -n bankapp
 
 -->kubectl describe pvc ollama-pvc -n bankapp
 
 <img width="642" height="752" alt="image" src="https://github.com/user-attachments/assets/ddb62a0b-bafe-4e89-89e7-9c39a107571a" />
+
+<img width="1896" height="307" alt="image" src="https://github.com/user-attachments/assets/e2783b95-e994-4820-87d6-3dd7e34d9244" />
 
 Phase 4: Deploy Configurations: Create ConfigMap and Secrets.
 
@@ -125,6 +127,8 @@ Phase 4: Deploy Configurations: Create ConfigMap and Secrets.
 -->Verify: kubectl get configmap -n bankapp
 
 -->kubectl get secrets -n bankapp
+
+<img width="1637" height="282" alt="image" src="https://github.com/user-attachments/assets/310e407e-4122-446f-bf86-db3000b76a60" />
 
 Phase 5: Deploy MySQL: Deploy database.
 
@@ -140,6 +144,8 @@ Check logs: kubectl logs -l app=mysql -n bankapp
 
 If MySQL doesn't start: kubectl describe pod -l app=mysql -n bankapp
 
+<img width="1917" height="687" alt="image" src="https://github.com/user-attachments/assets/ae07cd41-f107-4a70-8552-96b2dc35a758" />
+
 Phase 6: Deploy Ollama: Deploy AI service: kubectl apply -f k8s/ollama-deployment.yml
 
 -->Then check: kubectl get pods -n bankapp
@@ -152,6 +158,8 @@ Phase 6: Deploy Ollama: Deploy AI service: kubectl apply -f k8s/ollama-deploymen
 
 -->Check storage: kubectl get pvc -n bankapp
 
+<img width="1917" height="631" alt="image" src="https://github.com/user-attachments/assets/b49f3142-b755-4c1f-b798-2f4064989ab9" />
+
 Phase 7: Deploy BankApp: Once MySQL and Ollama are healthy: 
 
 -->kubectl apply -f k8s/bankapp-deployment.yml
@@ -162,17 +170,23 @@ Phase 7: Deploy BankApp: Once MySQL and Ollama are healthy:
 
 -->Verify: kubectl get pods -n bankapp
 
+<img width="1907" height="747" alt="image" src="https://github.com/user-attachments/assets/63898acb-ae86-42db-ab18-90b1cb8db930" />
+
 Phase 8: Verify HPA: Check autoscaler: kubectl get hpa -n bankapp
 
 -->If metrics show: unknown/80% then verify Metrics Server: kubectl get deployment metrics-server -n kube-system
+
+<img width="1607" height="102" alt="image" src="https://github.com/user-attachments/assets/fc14c460-4cb8-487c-bef1-a63becd7b049" />
 
 Phase 9: Final Validation: kubectl get all -n bankapp
 
 <img width="485" height="787" alt="image" src="https://github.com/user-attachments/assets/d2c243d4-5064-4422-9359-7fc790b6fa63" />
 
+<img width="1557" height="587" alt="image" src="https://github.com/user-attachments/assets/72d51bd6-dca7-43dc-8605-8e0d9c4dba6c" />
+
 Phase 10: Check Storage: kubectl get pvc -n bankapp
 
-
+<img width="1735" height="135" alt="image" src="https://github.com/user-attachments/assets/1fe77941-6348-467d-8677-da30fe1684f1" />
 
 **Troubleshooting Commands:** If something isn't working, these commands usually reveal the issue:
 
@@ -376,16 +390,13 @@ Step 13: Confirm AWS Resources:
 -->kubectl get gateway -n bankapp
 
 -->kubectl get httproute -n bankapp
-kubectl get all -n bankapp
-curl http://$APP_URL/actuator/health
 
+-->kubectl get all -n bankapp
 
+-->curl http://$APP_URL/actuator/health
 
-
-
-
-
-
+**Success criteria:** Envoy Gateway running, Gateway Programmed=True, NLB hostname assigned, /actuator/health returns UP, Homepage returns HTTP 200, User registration works
+, Banking operations work, Ollama chatbot responds, MySQL persists data, HPA remains active
 
 
 
@@ -498,7 +509,6 @@ Step 13: Confirm AWS Resources:
 -->kubectl get pods -n envoy-gateway-system
 
 kubectl logs -n envoy-gateway-system deployment/envoy-gateway
-
 
 ---
 
