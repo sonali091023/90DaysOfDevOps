@@ -414,6 +414,8 @@ Step 13: Confirm AWS Resources:
 
 <img width="672" height="592" alt="image" src="https://github.com/user-attachments/assets/242f74a6-752e-4c2e-bd35-574857aacbf1" />
 
+<img width="1917" height="816" alt="image" src="https://github.com/user-attachments/assets/69334313-e155-4251-9330-264f30c1f81b" />
+
 **Success criteria:** Envoy Gateway running, Gateway Programmed=True, NLB hostname assigned, /actuator/health returns UP, Homepage returns HTTP 200, User registration works, Banking operations work, Ollama chatbot responds, MySQL persists data, HPA remains active
 
 **Final Validation Checklist:**
@@ -529,7 +531,7 @@ Step 1: Verify Cluster Capacity:
 
 -->Also verify nodes: kubectl get nodes
 
-
+<img width="1187" height="237" alt="image" src="https://github.com/user-attachments/assets/2b50ca26-fbc3-4008-8666-e53fc94b1a89" />
 
 Step 2: Add Helm Repository: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
@@ -537,27 +539,29 @@ Step 2: Add Helm Repository: helm repo add prometheus-community https://promethe
 
 -->Verify: helm repo list
 
-
+<img width="1675" height="312" alt="image" src="https://github.com/user-attachments/assets/dcd95a7f-c690-4b29-86b4-0a41b5244115" />
 
 Step 3: Install kube-prometheus-stack: Deploy the monitoring stack: 
 
 -->helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring --create-namespace --set grafana.adminPassword=admin123 --set prometheus.prometheusSpec.retention=3d --set prometheus.prometheusSpec.resources.requests.memory=256Mi --set prometheus.prometheusSpec.resources.requests.cpu=100m --wait --timeout 600s
 
-Note: This may take: 5–10 minutes because many CRDs and pods are created.
+**Note:** This may take: 5–10 minutes because many CRDs and pods are created.
 
+<img width="1917" height="567" alt="image" src="https://github.com/user-attachments/assets/ca09eb37-873c-4615-8714-ae6aed6be3e8" />
 
 Step 4: Verify Installation: 
 
 -->Check Helm release: helm list -n monitoring
 
-
+<img width="1767" height="97" alt="image" src="https://github.com/user-attachments/assets/c89030fb-5541-4315-a28f-b6226f7547fe" />
 
 Step 5: Verify Monitoring Pods: kubectl get pods -n monitoring [Here all pods should be running]
 
-
+<img width="1445" height="222" alt="image" src="https://github.com/user-attachments/assets/ebccaba6-e833-4792-bee2-8237ac4ddc77" />
 
 Step 6: Verify CRDs: Prometheus Operator should install CRDs automatically: kubectl get crds | grep monitoring.coreos.com
 
+<img width="1492" height="236" alt="image" src="https://github.com/user-attachments/assets/aaca8ff5-198a-47d8-adea-d900f397b4ef" />
 
 Step 7: Access Grafana: 
 
@@ -565,6 +569,9 @@ Step 7: Access Grafana:
 
 -->Open: http://localhost:3000  [login with Username: admin Password: admin123]
 
+<img width="1606" height="210" alt="image" src="https://github.com/user-attachments/assets/4c64595d-85f3-46e3-bf1e-b939e4b94428" />
+
+<img width="1917" height="962" alt="image" src="https://github.com/user-attachments/assets/d89837f5-5445-4b55-a6ee-d777ca537f91" />
 
 Step 8: Verify Grafana Datasource: 
 
@@ -572,7 +579,7 @@ Step 8: Verify Grafana Datasource:
 
 <img width="581" height="431" alt="image" src="https://github.com/user-attachments/assets/20ee4826-bf69-4c85-a333-2528461945f8" />
 
-
+<img width="1446" height="95" alt="image" src="https://github.com/user-attachments/assets/b55faec5-3277-4c4c-9a09-c8cb93db748c" />
 
 Step 9: Verify BankApp Metrics Endpoint: Before creating a ServiceMonitor, ensure metrics are exposed:
 
