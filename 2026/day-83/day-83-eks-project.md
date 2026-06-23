@@ -277,16 +277,17 @@ Step 1: Verify the Application Stack First:
 
 -->Verify services: kubectl get svc -n bankapp
 
+<img width="1482" height="710" alt="image" src="https://github.com/user-attachments/assets/6e68e881-22c9-4ae4-9d28-ea5ca8ffa853" />
 
 Step 2: Verify Envoy Gateway Installation: 
 
 -->Check whether Envoy Gateway is already installed: kubectl get pods -n envoy-gateway-system
 
--->If the namespace does not exist, install Envoy Gateway: helm install envoy-gateway oci://docker.io/envoyproxy/gateway-helm --version v1.4.0 -n envoy-gateway-system --create-namespace \
-  --wait
+-->If the namespace does not exist, install Envoy Gateway: helm install envoy-gateway oci://docker.io/envoyproxy/gateway-helm --version v1.4.0 -n envoy-gateway-system --create-namespace --wait
 
 -->Verify: kubectl get pods -n envoy-gateway-system
 
+<img width="1472" height="127" alt="image" src="https://github.com/user-attachments/assets/13ef0927-ffaa-48c2-b646-956779603b87" />
 
 Step 3: Verify Gateway API CRDs: 
 
@@ -296,7 +297,7 @@ Step 3: Verify Gateway API CRDs:
 
 <img width="617" height="587" alt="image" src="https://github.com/user-attachments/assets/df79422f-6018-4568-bb0a-6ddbd145b74c" />
 
-
+<img width="1767" height="577" alt="image" src="https://github.com/user-attachments/assets/8396f495-74e9-4d5c-84b1-e07d948d792a" />
 
 Step 4: Deploy Gateway Configuration: 
 
@@ -304,7 +305,7 @@ Step 4: Deploy Gateway Configuration:
 
 -->Verify: kubectl get gateway -n bankapp [This is normal while AWS provisions the load balancer.]
 
-
+<img width="1626" height="211" alt="image" src="https://github.com/user-attachments/assets/764ffbaf-e440-467b-bb11-046e4070d80d" />
 
 Step 5: Watch Gateway Status: 
 
@@ -312,6 +313,7 @@ Step 5: Watch Gateway Status:
 
 <img width="717" height="710" alt="image" src="https://github.com/user-attachments/assets/8646139a-01a0-4e64-a699-8bc385af3902" />
 
+<img width="1641" height="122" alt="image" src="https://github.com/user-attachments/assets/fe66d84a-155d-40b7-9022-c788118ed1c5" />
 
 Step 6: Verify Gateway Conditions: 
 
@@ -321,7 +323,7 @@ Step 6: Verify Gateway Conditions:
 
 <img width="702" height="432" alt="image" src="https://github.com/user-attachments/assets/f27ff03c-84bd-432f-8937-7997a04a408c" />
 
-
+<img width="1647" height="972" alt="image" src="https://github.com/user-attachments/assets/21327eaa-72a9-4d51-adaa-6970c5dbf6d2" />
 
 Step 7: Obtain the Public URL: 
 
@@ -332,6 +334,8 @@ Step 7: Obtain the Public URL:
 -->Display it: echo "AI-BankApp URL: http://$APP_URL"
 
 <img width="647" height="582" alt="image" src="https://github.com/user-attachments/assets/b92201f1-60c4-48f7-9b86-9135e8199202" />
+
+<img width="1912" height="227" alt="image" src="https://github.com/user-attachments/assets/9648a09f-aeec-43e7-83a9-0eb253f95548" />
 
 Step 8: Test Connectivity: 
 
