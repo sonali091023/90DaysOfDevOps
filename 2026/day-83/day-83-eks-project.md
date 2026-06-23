@@ -339,15 +339,20 @@ Step 7: Obtain the Public URL:
 
 Step 8: Test Connectivity: 
 
--->**Health Endpoint:** curl http://$APP_URL/actuator/health
+-->**Health Endpoint:** curl -v http://3.111.185.30.nip.io/actuator/health
 
--->Pretty print: curl -s http://$APP_URL/actuator/health | python3 -m json.tool
+-->Pretty print: curl -s http://3.111.185.30.nip.io/actuator/health | python3 -m json.tool
 
 <img width="727" height="595" alt="image" src="https://github.com/user-attachments/assets/77ba91f5-b58b-4124-99d4-badf52710b55" />
 
 -->**Home Page Test:**  curl -s -o /dev/null -w "%{http_code}" http://$APP_URL
 
 <img width="696" height="412" alt="image" src="https://github.com/user-attachments/assets/57fdb893-d230-40b4-a90a-230c800401bf" />
+
+<img width="1912" height="925" alt="image" src="https://github.com/user-attachments/assets/f574ef1c-1255-4aa2-9389-de819b8047fe" />
+
+-->As getting 302 in return then That's actually a very good sign: A 302 response means: NLB is working, Envoy Gateway is working, HTTPRoute matched correctly
+, Request reached your Spring Boot application, The application is responding etc.
 
 Step 9: If You Get 503: 
 
@@ -361,15 +366,29 @@ Step 9: If You Get 503:
 
 -->kubectl get pods --show-labels -n bankapp   [Likely a selector mismatch.]
 
+<img width="1917" height="747" alt="image" src="https://github.com/user-attachments/assets/683fd678-f2dc-4151-ac97-67fa414c087a" />
+
 Step 10: Access Through Browser: 
 
 -->Open: http://<NLB-DNS-NAME> Ex: http://a1b2c3d4e5f6.us-west-2.elb.amazonaws.com
+
+<img width="1917" height="566" alt="image" src="https://github.com/user-attachments/assets/af2944b5-c6e6-41e8-a81e-5ff6d7a81f04" />
 
 Step 11: Functional Testing: 
 
 <img width="562" height="656" alt="image" src="https://github.com/user-attachments/assets/344deda2-ac31-495a-b217-22ae1a9802b0" />
 
 <img width="405" height="812" alt="image" src="https://github.com/user-attachments/assets/031ada68-06da-4dfd-b935-a7bbe2dd6e49" />
+
+<img width="1912" height="955" alt="image" src="https://github.com/user-attachments/assets/c47526e6-2cf8-492a-af5d-e53a01500e62" />
+
+<img width="1907" height="960" alt="image" src="https://github.com/user-attachments/assets/739d040c-35fb-4207-9b1e-3541e84df973" />
+
+<img width="1912" height="946" alt="image" src="https://github.com/user-attachments/assets/76f19c7a-589f-4ea9-9d85-49bf60052baa" />
+
+<img width="1906" height="956" alt="image" src="https://github.com/user-attachments/assets/8a3e2186-8d5d-493d-8c02-9dc32350daef" />
+
+<img width="1896" height="957" alt="image" src="https://github.com/user-attachments/assets/63ded9db-754f-4ab3-b072-ae02bbc49c01" />
 
 Step 12: Verify Backend Connectivity: Watch logs while testing:
 
@@ -381,118 +400,21 @@ Step 12: Verify Backend Connectivity: Watch logs while testing:
 
 -->**You should see:** BankApp serving requests, MySQL queries executing, Ollama generating responses
 
+<img width="1917" height="951" alt="image" src="https://github.com/user-attachments/assets/cf75f7eb-60d5-483c-971d-e2cd695f742b" />
+
+<img width="1572" height="962" alt="image" src="https://github.com/user-attachments/assets/e05449f4-de41-4c27-89fe-283f57b1b65b" />
+
+<img width="1905" height="977" alt="image" src="https://github.com/user-attachments/assets/ba648959-d09c-4ea4-8157-a844f69b3bd3" />
+
 Step 13: Confirm AWS Resources: 
 
 -->Check the Envoy service created by Gateway API: kubectl get svc -A
 
--->You can also verify directly in AWS: aws elbv2 describe-load-balancers --region us-west-2 [You should see an AWS Network Load Balancer associated with Envoy Gateway.]
+-->You can also verify directly in AWS: aws elbv2 describe-load-balancers --region ap-south-1 [You should see an AWS Network Load Balancer associated with Envoy Gateway.]
 
 <img width="672" height="592" alt="image" src="https://github.com/user-attachments/assets/242f74a6-752e-4c2e-bd35-574857aacbf1" />
 
-**Final Validation Checklist:**
-
--->kubectl get gateway -n bankapp
-
--->kubectl get httproute -n bankapp
-
--->kubectl get all -n bankapp
-
--->curl http://$APP_URL/actuator/health
-
-**Success criteria:** Envoy Gateway running, Gateway Programmed=True, NLB hostname assigned, /actuator/health returns UP, Homepage returns HTTP 200, User registration works
-, Banking operations work, Ollama chatbot responds, MySQL persists data, HPA remains active
-
-
-
-
-Step 4: Deploy Gateway Configuration:
-
--->Apply the Gateway resource: kubectl apply -f k8s/gateway.yml
-
--->Verify: kubectl get gateway -n bankapp [This is normal while AWS provisions the load balancer.]
-
-<img width="632" height="586" alt="image" src="https://github.com/user-attachments/assets/dced4fc7-a302-4f08-8faf-32b456280a29" />
-
-
-
-Step 5: Watch Gateway Status: 
-
--->Monitor the gateway: kubectl get gateway -n bankapp -w   [Provisioning usually takes: 2–5 minutes, Sometimes up to 10 minutes]
-
-
-
-Step 6: Verify Gateway Conditions: 
-
--->If ADDRESS never appears: kubectl describe gateway bankapp-gateway -n bankapp
-
--->& if Programmed=False, inspect Envoy Gateway: kubectl logs -n envoy-gateway-system deployment/envoy-gateway
-
-<img width="605" height="437" alt="image" src="https://github.com/user-attachments/assets/62471c97-ebdc-4dff-9622-1cdd44af2de0" />
-
-
-
-Step 7: Obtain the Public URL: 
-
--->Extract the NLB hostname: export APP_URL=$(kubectl get gateway bankapp-gateway -n bankapp -o jsonpath='{.status.addresses[0].value}')
-
--->To verify: echo $APP_URL
-
--->Display it: echo "AI-BankApp URL: http://$APP_URL"
-
-<img width="587" height="532" alt="image" src="https://github.com/user-attachments/assets/35291a5a-d218-47ee-abf8-5decb2f77445" />
-
-
-Step 8: Test Connectivity: 
-
--->Health Endpoint: curl http://$APP_URL/actuator/health
-
--->curl -s http://$APP_URL/actuator/health | python3 -m json.tool
-
-<img width="710" height="636" alt="image" src="https://github.com/user-attachments/assets/4e6cbf43-7acd-4dc0-8004-a8462aaa42bd" />
-
--->Home Page Test: curl -s -o /dev/null -w "%{http_code}" http://$APP_URL
-
-<img width="762" height="282" alt="image" src="https://github.com/user-attachments/assets/334f6869-02ff-40d2-b3a2-a2a86a587436" />
-
-Step 9: If You Get 503: 
-
--->Check route: kubectl get httproute -n bankapp
-
--->Check service: kubectl get svc -n bankapp
-
--->Check endpoints: kubectl get endpoints -n bankapp
-
--->If endpoints are empty: kubectl describe svc bankapp-service -n bankapp
-
--->kubectl get pods --show-labels -n bankapp  [Here Likely a selector mismatch.]
-
-Step 10: Access Through Browser: 
-
--->Open: http://<NLB-DNS-NAME> Ex: http://a1b2c3d4e5f6.us-west-2.elb.amazonaws.com
-
-Step 11: Functional Testing: 
-
-<img width="652" height="656" alt="image" src="https://github.com/user-attachments/assets/a359374b-1b3d-4f81-af10-734f23cbd11f" />
-
-<img width="625" height="432" alt="image" src="https://github.com/user-attachments/assets/cc75b8b7-8351-4499-a840-f769bf4fca6d" />
-
-<img width="707" height="372" alt="image" src="https://github.com/user-attachments/assets/7bc45d8c-7c71-4c49-ba44-2c75643d0605" />
-
-Step 12: Verify Backend Connectivity: Watch logs while testing:
-
--->BankApp: kubectl logs -f deployment/bankapp -n bankapp
-
--->Ollama: kubectl logs -f deployment/ollama -n bankapp
-
--->MySQL: kubectl logs -f deployment/mysql -n bankapp
-
--->You should see: BankApp serving requests, MySQL queries executing, Ollama generating responses etc.
-
-Step 13: Confirm AWS Resources: 
-
--->Check the Envoy service created by Gateway API: kubectl get svc -A
-
--->You can also verify directly in AWS: aws elbv2 describe-load-balancers --region us-west-2 [You should see an AWS Network Load Balancer associated with Envoy Gateway.]
+**Success criteria:** Envoy Gateway running, Gateway Programmed=True, NLB hostname assigned, /actuator/health returns UP, Homepage returns HTTP 200, User registration works, Banking operations work, Ollama chatbot responds, MySQL persists data, HPA remains active
 
 **Final Validation Checklist:**
 
