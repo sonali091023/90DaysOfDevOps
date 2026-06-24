@@ -609,9 +609,6 @@ Step 11: Verify Service Labels: The most common issue is label mismatch:
 
 
 
-
-
-
 ---
 
 ### Task 4: End-to-End Validation Checklist
@@ -672,6 +669,69 @@ kubectl exec -n bankapp deploy/bankapp -- whoami
 # Secrets are not exposed in environment
 kubectl get secret bankapp-secret -n bankapp -o yaml | grep -c "MYSQL_ROOT_PASSWORD"
 ```
+**Steps to follow:**
+-->This task is your final production readiness validation. The goal is to prove that all four layers are working together:
+
+<img width="562" height="272" alt="image" src="https://github.com/user-attachments/assets/0a6b06b2-f832-4e04-bc5a-03e1b87e7ce9" />
+
+-->Since we already discovered that application is accessible through: **http://3.111.185.30.nip.io** So we will use that hostname instead of the raw ELB hostname for all application tests.
+
+Step 1. Application Layer Validation:
+
+-->**Verify Pods:** kubectl get pods -n bankapp [Check: STATUS = Running & READY = 1/1]
+
+-->**Health Endpoint:** So Since your route requires the nip.io hostname: curl -L http://3.111.185.30.nip.io/actuator/health [Expected: Status: Up]
+
+-->And if still see redirects: curl -IL http://3.111.185.30.nip.io/actuator/health
+
+-->**HPA Verification:** kubectl get hpa -n bankapp [Healthy signs are current replicas between 2 and 4]
+
+-->**Metrics Endpoint:** curl -L http://3.111.185.30.nip.io/actuator/prometheus | head
+
+<img width="692" height="221" alt="image" src="https://github.com/user-attachments/assets/962ddc6a-6204-416f-8dcc-63ce168a7a26" />
+
+Step 2. Data Layer Validation: 
+
+-->**Verify MySQL:** kubectl exec -n bankapp deploy/mysql -- mysqladmin ping -h localhost -uroot -pTest@123 [Expected: mysqld is alive]
+
+-->**Verify Persistent Storage:** kubectl get pvc -n bankapp [Expected both mysql-pvc & ollama-pvc status should be bound, That means EBS volumes are attached correctly]
+
+-->Verify Ollama Model: kubectl exec -n bankapp deploy/ollama -- ollama list 
+
+-->Expected: tinyllama:latest OR whichever model your deployment loads & If the list is empty: kubectl logs deployment/ollama -n bankapp
+
+Step 3. Infrastructure Layer Validation:
+
+-->**Verify Nodes:** kubectl get nodes [Expected STATUS = Ready for all nodes]
+
+-->**Resource Usage:** kubectl top nodes [Expected CPU%, MEMORY% showing normal utilization & if that fails error: Metrics API not available then verify Metrics Server]
+
+-->**Verify Gateway:** kubectl get gateway -n bankapp 
+
+-->**Verify Monitoring Stack:** kubectl get pods -n monitoring
+
+<img width="585" height="205" alt="image" src="https://github.com/user-attachments/assets/3e921895-57ec-4150-b4c9-a45e9668703f" />
+
+Step: 4. Security Layer Validation:
+
+-->**Verify Non-Root User:** kubectl exec -n bankapp deploy/bankapp -- whoami 
+
+-->Expected: devsecops OR another non-root user & If you see: root then the container security context needs improvement.
+
+-->**Verify Secrets:** kubectl get secret bankapp-secret -n bankapp -o yaml | grep -c "MYSQL_ROOT_PASSWORD"
+
+-->We can also inspect: kubectl get secret bankapp-secret -n bankapp
+
+<img width="826" height="420" alt="image" src="https://github.com/user-attachments/assets/a9ae922b-2d5c-49c2-9dbd-57a9b0a8f60b" />
+
+-->**Bonus Validation: Direct Service Check:** Verify the application internally: kubectl port-forward svc/bankapp-service -n bankapp 8080:8080
+
+-->& In another terminal run command: curl http://localhost:8080/actuator/health [Expected: status: Up So This confirms Spring Boot is healthy independently of Gateway.] 
+
+-->**Final Success Criteria:**
+
+<img width="726" height="647" alt="image" src="https://github.com/user-attachments/assets/ba44b786-b952-4f84-b66d-de997fb1d55c" />
+
 
 ---
 
@@ -706,6 +766,10 @@ Map each concept to the day you learned it:
 - Database backups (automated MySQL dumps to S3)
 - Log aggregation with Loki (you built this on Day 75)
 - Multi-environment clusters (dev + prod)
+
+**Steps to follow:**
+
+-->Task 5 is more of a knowledge consolidation exercise. The goal is to connect everything you've built across Days 81–83 and understand how the AI-BankApp uses those concepts in a real-world Kubernetes platform.
 
 ---
 
