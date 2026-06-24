@@ -583,15 +583,27 @@ Step 8: Verify Grafana Datasource:
 
 Step 9: Verify BankApp Metrics Endpoint: Before creating a ServiceMonitor, ensure metrics are exposed:
 
--->Find the service: kubectl get svc -n bankapp
+-->Find the service: kubectl get svc -n monitoring
 
--->Then test: kubectl port-forward svc/bankapp-service -n bankapp 8080:8080
+-->Then test: kubectl kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 9090:90909
 
--->In another terminal: curl http://localhost:8080/actuator/prometheus
+-->In another terminal: curl http://localhost:9090/-/healthy [Expected: Prometheus server is healthy]
 
--->Verify by running following query: management.endpoints.web.exposure.include=*
+-->Verify by running following query: 
 
--->management.endpoint.prometheus.enabled=true
+-->up
+
+-->prometheus_build_info
+
+-->application_ready_time_seconds
+
+-->application_started_time_seconds
+
+-->disk_free_bytes
+
+<img width="1912" height="966" alt="image" src="https://github.com/user-attachments/assets/a0503c9b-f66c-4170-a789-b92f99788fb4" />
+
+<img width="1917" height="772" alt="image" src="https://github.com/user-attachments/assets/978c1580-7d85-493a-8919-b8a3a49449fb" />
 
 Step 10: Create ServiceMonitor: 
 
@@ -601,13 +613,27 @@ Step 10: Create ServiceMonitor:
 
 -->Verify: kubectl get servicemonitor -n monitoring   [Expected: bankapp-monitor]
 
+<img width="1656" height="506" alt="image" src="https://github.com/user-attachments/assets/fe2ed42a-81d2-4d6e-a91e-af11bf43fff1" />
+
 Step 11: Verify Service Labels: The most common issue is label mismatch:
 
 -->Check the BankApp service: kubectl get svc bankapp-service -n bankapp --show-labels
 
+<img width="1762" height="112" alt="image" src="https://github.com/user-attachments/assets/05bb1ad8-7db9-48ab-b7f9-ca569121e882" />
 
+Step 12: Run PromQL Queries: 
 
+-->JVM Memory Usage: jvm_memory_used_bytes{namespace="bankapp"}   [Expected: Heap memory, Metaspace, Code cache]
 
+-->HTTP Request Rate: rate(http_server_requests_seconds_count{namespace="bankapp"}[5m])  [it shows Requests per second]
+
+-->HTTP Latency (95th Percentile): histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{namespace="bankapp"}[5m]))  [It shows 95th percentile response time]
+
+Step 13: Explore Grafana Dashboards: [So Grafana comes with prebuilt dashboards]:
+
+-->Navigate to Dashboard
+
+<img width="562" height="815" alt="image" src="https://github.com/user-attachments/assets/1ea69036-d414-4d7a-a546-5b8f42c9600e" />
 
 ---
 
@@ -678,17 +704,25 @@ kubectl get secret bankapp-secret -n bankapp -o yaml | grep -c "MYSQL_ROOT_PASSW
 
 Step 1. Application Layer Validation:
 
--->**Verify Pods:** kubectl get pods -n bankapp [Check: STATUS = Running & READY = 1/1]
+-->**Check all BankApp components:** kubectl get pods -n bankapp -o wide [Check: STATUS = Running & READY = 1/1]
 
--->**Health Endpoint:** So Since your route requires the nip.io hostname: curl -L http://3.111.185.30.nip.io/actuator/health [Expected: Status: Up]
+-->**Verify application internally:** Since Gateway access is currently inconsistent, test directly through the service: 
 
--->And if still see redirects: curl -IL http://3.111.185.30.nip.io/actuator/health
+-->So run the following command in terminal 1: kubectl port-forward svc/bankapp-service -n bankapp 8080:8080
 
--->**HPA Verification:** kubectl get hpa -n bankapp [Healthy signs are current replicas between 2 and 4]
+-->& in other terminal run command: curl http://localhost:8080/actuator/health [Expected: {"status":"UP"}]
 
--->**Metrics Endpoint:** curl -L http://3.111.185.30.nip.io/actuator/prometheus | head
+<img width="1817" height="190" alt="image" src="https://github.com/user-attachments/assets/2ba0cbcc-1d50-4c71-ba81-64dca736f7cd" />
+
+<img width="1816" height="57" alt="image" src="https://github.com/user-attachments/assets/2ba0a5ab-d5f5-4e8f-b47a-e9626dfdf4eb" />
+
+-->Check HPA: kubectl get hpa -n bankapp
+
+<img width="1521" height="127" alt="image" src="https://github.com/user-attachments/assets/aa59e61b-ce36-40e2-84bf-9c5f1a25ef1c" />
 
 <img width="692" height="221" alt="image" src="https://github.com/user-attachments/assets/962ddc6a-6204-416f-8dcc-63ce168a7a26" />
+
+-->**Verify Prometheus Metrics:**
 
 Step 2. Data Layer Validation: 
 
