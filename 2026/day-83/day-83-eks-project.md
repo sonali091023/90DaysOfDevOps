@@ -585,7 +585,7 @@ Step 9: Verify BankApp Metrics Endpoint: Before creating a ServiceMonitor, ensur
 
 -->Find the service: kubectl get svc -n monitoring
 
--->Then test: kubectl kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 9090:90909
+-->Then test: kubectl kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 9090:9090
 
 -->In another terminal: curl http://localhost:9090/-/healthy [Expected: Prometheus server is healthy]
 
@@ -734,6 +734,8 @@ Step 2. Data Layer Validation:
 
 -->Expected: tinyllama:latest OR whichever model your deployment loads & If the list is empty: kubectl logs deployment/ollama -n bankapp
 
+<img width="1917" height="632" alt="image" src="https://github.com/user-attachments/assets/acdc1958-b9dc-4e47-b6b9-679db4572bb2" />
+
 Step 3. Infrastructure Layer Validation:
 
 -->**Verify Nodes:** kubectl get nodes [Expected STATUS = Ready for all nodes]
@@ -745,6 +747,8 @@ Step 3. Infrastructure Layer Validation:
 -->**Verify Monitoring Stack:** kubectl get pods -n monitoring
 
 <img width="585" height="205" alt="image" src="https://github.com/user-attachments/assets/3e921895-57ec-4150-b4c9-a45e9668703f" />
+
+<img width="1767" height="650" alt="image" src="https://github.com/user-attachments/assets/f5696f32-6f54-4aca-acf1-051b91127636" />
 
 Step: 4. Security Layer Validation:
 
@@ -766,6 +770,9 @@ Step: 4. Security Layer Validation:
 
 <img width="726" height="647" alt="image" src="https://github.com/user-attachments/assets/ba44b786-b952-4f84-b66d-de997fb1d55c" />
 
+<img width="1917" height="282" alt="image" src="https://github.com/user-attachments/assets/e8983d7b-2bc8-4ac6-b8ef-0efa6cb15f8f" />
+
+<img width="1906" height="125" alt="image" src="https://github.com/user-attachments/assets/b3c98232-ac77-4b28-bc8c-fcdfb11e7d20" />
 
 ---
 
@@ -804,6 +811,30 @@ Map each concept to the day you learned it:
 **Steps to follow:**
 
 -->Task 5 is more of a knowledge consolidation exercise. The goal is to connect everything you've built across Days 81–83 and understand how the AI-BankApp uses those concepts in a real-world Kubernetes platform.
+
+**Day 81 – EKS Cluster Provisioning:**
+<img width="866" height="601" alt="image" src="https://github.com/user-attachments/assets/deab2343-1661-4631-aee4-fbc122e2f7bb" />
+
+**Day 82 – Networking, Storage and Security:**
+<img width="866" height="601" alt="image" src="https://github.com/user-attachments/assets/d9d06bc7-7b5c-4231-ad80-16b167fa8669" />
+
+**Day 83 – Production Deployment and Observability:**
+<img width="657" height="737" alt="image" src="https://github.com/user-attachments/assets/432de9f9-db84-49b9-a671-f06466bc7605" />
+
+**Complete AI-BankApp Architecture**
+<img width="647" height="682" alt="image" src="https://github.com/user-attachments/assets/1922802a-0c40-42bb-9043-338197890131" />
+
+<img width="652" height="332" alt="image" src="https://github.com/user-attachments/assets/1403f38f-eb5f-411b-9aee-cf19055cb759" />
+
+<img width="752" height="477" alt="image" src="https://github.com/user-attachments/assets/b42198ed-d3b8-4bc8-bced-89fd8ffb0189" />
+
+<img width="772" height="710" alt="image" src="https://github.com/user-attachments/assets/c6539e11-9f01-4de6-99f7-e40a88d838e0" />
+
+<img width="737" height="327" alt="image" src="https://github.com/user-attachments/assets/9d627c3d-0f2a-45e5-9f3f-8049c84f55a1" />
+
+**Overall architecture:**
+
+<img width="717" height="702" alt="image" src="https://github.com/user-attachments/assets/1fff5e7b-ac5e-49e8-80b1-85a5ad366dbc" />
 
 ---
 
@@ -871,6 +902,14 @@ This takes 10-15 minutes. It deletes:
 **Check your AWS bill** in the Billing Dashboard. All charges should stop within the hour.
 
 **Cost for this 3-day lab (approximate):** $15-25 depending on how long you kept the cluster running.
+
+**Steps to follow:**
+
+-->This is the most important task because EKS resources continue to incur AWS charges until they are deleted. Follow the steps in order and verify each stage before moving on.
+
+Step 1: Verify the cluster is still accessible: Before deleting anything, make sure you're connected to the cluster: kubectl get nodes
+
+Step 2: Delete the Monitoring Stack: 
 
 ---
 
