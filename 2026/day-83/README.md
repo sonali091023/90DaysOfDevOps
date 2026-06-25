@@ -369,6 +369,92 @@ This takes 10-15 minutes. It deletes:
 
 **Cost for this 3-day lab (approximate):** $15-25 depending on how long you kept the cluster running.
 
+**Steps to follow:**
+
+Step 1: Verify the cluster is still accessible: Before deleting anything, make sure you're connected to the cluster: kubectl get nodes
+
+Step 2: Delete the Monitoring Stack: If you installed Prometheus and Grafana using Helm: helm uninstall monitoring -n monitoring
+
+-->& then verify: helm list -A  [Expected: monitoring should no longer appear.]
+
+Step 3: Delete the Gateway Resources: Delete the Gateway first so AWS can start removing the Network Load Balancer:
+
+-->kubectl delete -f k8s/gateway.yml
+
+-->& if If you have a separate HTTPRoute file, delete it as well: kubectl delete -f k8s/httproute.yml
+
+-->& then verify: kubectl get gateway -A
+
+kubectl get httproute -A
+
+<img width="1917" height="792" alt="image" src="https://github.com/user-attachments/assets/5e421e27-00d5-4e56-9a82-6944809f9787" />
+
+Step 4: Delete the AI-BankApp Resources: Delete resources in the following order: kubectl delete -f k8s/hpa.yml
+
+-->kubectl delete -f k8s/bankapp-deployment.yml
+
+-->kubectl delete -f k8s/ollama-deployment.yml
+
+-->kubectl delete -f k8s/mysql-deployment.yml
+
+-->kubectl delete -f k8s/service.yml
+
+-->kubectl delete -f k8s/secrets.yml
+
+-->kubectl delete -f k8s/configmap.yml
+
+-->kubectl delete -f k8s/pvc.yml
+
+-->kubectl delete -f k8s/pv.yml
+
+-->kubectl delete -f k8s/namespace.yml
+
+-->& then verify: kubectl get all -A    [Expected: You should only see system components.]
+
+Step 5: Remove Envoy Gateway: helm uninstall envoy-gateway -n envoy-gateway-system
+
+-->& then verify: helm list -A
+
+Step 6: Remove cert-manager: helm uninstall cert-manager -n cert-manager
+
+-->& then verify: helm list -A
+
+Step 7: Delete the Namespaces: kubectl delete namespace monitoring
+
+-->kubectl delete namespace envoy-gateway-system
+
+-->& then to verify: kubectl get ns
+
+Step 8: Ensure AWS Resources Are Released: Check for LoadBalancer Services: kubectl get svc -A
+
+-->There should be no services with: TYPE = LoadBalancer & If any remain, wait a few minutes for AWS to delete them.
+
+-->Check Persistent Volume Claims: kubectl get pvc -A
+
+-->Check Persistent Volumes: kubectl get pv
+
+Step 9: Destroy the Infrastructure: Navigate to your Terraform directory: cd terraform && terraform destroy --auto-destroy
+
+<img width="717" height="480" alt="image" src="https://github.com/user-attachments/assets/c5bed215-a2d4-4312-8ff4-ef52e54363f3" />
+
+Step 10: Verify Terraform Finished: The final output should look similar to: 
+
+<img width="717" height="480" alt="image" src="https://github.com/user-attachments/assets/ab08a0e7-bdd0-41aa-a548-f6b3e3fdd99d" />
+
+Step 11: Verify in AWS: 
+
+<img width="857" height="597" alt="image" src="https://github.com/user-attachments/assets/06d84eed-d88d-4009-9af5-61e4457a13d7" />
+
+Step 12: Check AWS Billing: Within an hour, the resources should no longer generate charges. Review the Billing Dashboard to confirm there are no unexpected running resources.
+
+<img width="1086" height="292" alt="image" src="https://github.com/user-attachments/assets/7e134d35-3a2a-4a61-b404-73b0f395a94f" />
+
+Final Validation Checklist: Run these commands before leaving the lab: kubectl get nodes:
+
+-->So above command should fail after the cluster is destroyed because the Kubernetes API is no longer available: terraform destroy
+
+<img width="952" height="377" alt="image" src="https://github.com/user-attachments/assets/909fa5cc-3509-497b-921e-1afc91bec5ce" />
+
 ---
 
 ## Hints
