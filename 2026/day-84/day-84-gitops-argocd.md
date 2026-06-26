@@ -548,9 +548,13 @@ Step 4: Ensure the feat/gitops Branch Exists:
 
 -->If you don't have feat/gitops, fetch everything: git fetch --all
 
--->Create a local branch: git checkout -b feat/gitops origin/feat/gitops
+-->Create a local branch: git checkout -b feat/gitops 
 
 -->To verify: git branch  [Expected: * feat/gitops]
+
+-->Now push it to your fork: git push -u origin feat/gitops
+
+-->So After that, your ArgoCD Application manifest can use: targetRevision: feat/gitops
 
 
 
