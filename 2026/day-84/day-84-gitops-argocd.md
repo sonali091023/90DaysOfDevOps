@@ -366,7 +366,64 @@ spec:
 
 **Steps to follow:**
 
+Step 1: Open the Manifest: Navigate to your AI-BankApp project: cd ~/trainwithshubham/90DaysOfDevOps/2026/day-84/AI-BankApp-DevOps
 
+-->To read the file content use cat command: cat argocd/application.yml OR vi argocd/application.yml
+
+<img width="767" height="712" alt="image" src="https://github.com/user-attachments/assets/36d2e326-31d8-4026-bbb4-622d656880bb" />
+
+Understanding the Manifest: Think of an ArgoCD Application as a deployment instruction for ArgoCD: What should I deploy?, Where should I deploy it? &
+How should I keep it synchronized?
+
+<img width="747" height="792" alt="image" src="https://github.com/user-attachments/assets/37702279-663d-4bdd-b27a-3c8245f82088" />
+
+<img width="656" height="826" alt="image" src="https://github.com/user-attachments/assets/fc3fcd0d-f5a2-4e89-b1c5-adda337b004f" />
+
+<img width="735" height="657" alt="image" src="https://github.com/user-attachments/assets/cd062887-73d2-4138-b95e-237ff79cb8cb" />
+
+<img width="702" height="597" alt="image" src="https://github.com/user-attachments/assets/cc67a998-41ba-47a7-aaac-d7bdb6e46a17" />
+<img width="761" height="726" alt="image" src="https://github.com/user-attachments/assets/f5856540-e9a7-4c13-8422-af94234dc4b7" />
+<img width="717" height="420" alt="image" src="https://github.com/user-attachments/assets/34450e6e-659f-40bb-88cc-85b026c1f827" />
+
+Section 6: Destination: This tells ArgoCD where to deploy the manifests: This tells ArgoCD where to deploy the manifests
+
+<img width="722" height="597" alt="image" src="https://github.com/user-attachments/assets/91a5e871-d110-4a59-82e0-65aa359165de" />
+
+<img width="692" height="506" alt="image" src="https://github.com/user-attachments/assets/9cb506fc-2b55-4109-8184-5920034ac3fe" />
+
+Section 7: Sync Policy: 
+
+<img width="721" height="792" alt="image" src="https://github.com/user-attachments/assets/2bfede34-a0ba-45d5-b76e-2b2d2bf51139" />
+
+<img width="802" height="496" alt="image" src="https://github.com/user-attachments/assets/4dfca7d2-5894-49fe-b931-af17ae0c811c" />
+
+selfHeal: true:
+
+<img width="652" height="825" alt="image" src="https://github.com/user-attachments/assets/c153ecd6-476f-4322-8fe3-90a109a58811" />
+
+Section 8: Sync Options:
+
+<img width="732" height="762" alt="image" src="https://github.com/user-attachments/assets/51c74561-8941-4a07-9bc4-f0c6a56c31a6" />
+<img width="770" height="390" alt="image" src="https://github.com/user-attachments/assets/c7f76817-07a0-4484-b774-18d45d051b09" />
+
+Complete Flow:
+
+<img width="697" height="815" alt="image" src="https://github.com/user-attachments/assets/7ec3cc0d-aa25-4853-9a14-2c1527cc2796" />
+
+Summary Table:
+
+<img width="1062" height="720" alt="image" src="https://github.com/user-attachments/assets/0d3493c1-6963-48bb-a473-cf70f53c6515" />
+<img width="1032" height="527" alt="image" src="https://github.com/user-attachments/assets/486ab189-2360-4fe8-9ea4-08013353e26d" />
+
+Key Takeaway: This application.yml file is the heart of the GitOps workflow. It tells ArgoCD:
+
+-->What to deploy (the k8s/ manifests from the Git repository),
+
+-->Which version to watch (the feat/gitops branch),
+
+-->Where to deploy (the bankapp namespace in the in-cluster Kubernetes API),
+
+-->How to manage deployments (automatic sync, pruning deleted resources, self-healing drift, automatic namespace creation, and server-side apply).
 
 ---
 
