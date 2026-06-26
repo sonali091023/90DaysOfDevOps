@@ -404,8 +404,7 @@ How should I keep it synchronized?
 <img width="761" height="726" alt="image" src="https://github.com/user-attachments/assets/f5856540-e9a7-4c13-8422-af94234dc4b7" />
 <img width="717" height="420" alt="image" src="https://github.com/user-attachments/assets/34450e6e-659f-40bb-88cc-85b026c1f827" />
 
-Section 6: Destination: This tells ArgoCD where to deploy the manifests: This tells ArgoCD where to deploy the manifests
-
+Section 6: Destination: This tells ArgoCD where to deploy the manifests: 
 <img width="722" height="597" alt="image" src="https://github.com/user-attachments/assets/91a5e871-d110-4a59-82e0-65aa359165de" />
 
 <img width="692" height="506" alt="image" src="https://github.com/user-attachments/assets/9cb506fc-2b55-4109-8184-5920034ac3fe" />
@@ -508,6 +507,58 @@ argocd app get bankapp
 ```
 
 Status should show: `Health: Healthy`, `Sync: Synced`.
+
+**Steps to follow:**
+
+Step 0: Verify Prerequisites: Before starting, make sure:
+
+-->EKS cluster is running.
+
+-->ArgoCD pods are running.
+
+-->You can access the ArgoCD UI or CLI.
+
+-->Your kubeconfig points to the EKS cluster.
+
+-->To verify run commands: kubectl get nodes && kubectl get pods -n argocd
+
+<img width="1847" height="337" alt="image" src="https://github.com/user-attachments/assets/9c29e2e8-b154-4f6c-88fa-c0a19857d47b" />
+
+Step 1: Delete the Existing BankApp Namespace: This gives you a clean environment:
+
+-->Delete existing bankapp namespace: kubectl delete namespace bankapp
+
+-->To verify: kubectl get ns   [Expected: You should not see the bankapp namespace]
+
+<img width="1720" height="496" alt="image" src="https://github.com/user-attachments/assets/8acef55f-38a9-42da-9bd6-064ce60c71d4" />
+
+Step 2: Fork the Repository: 
+
+<img width="900" height="401" alt="image" src="https://github.com/user-attachments/assets/0c1c2b2d-f7dc-49ee-ad45-25d88916e367" />
+
+**Note:** Do not use the original repository URL because later GitHub Actions will need permission to push image tag updates, which requires your own fork.
+
+Step 3: Clone Your Fork: git clone https://github.com/sonali091023/AI-BankApp-DevOps.git
+
+-->Enter inside project: cd AI-BankApp-DevOps
+
+Step 4: Ensure the feat/gitops Branch Exists: 
+
+->Check available branches: git branch -a
+
+-->If you don't have feat/gitops, fetch everything: git fetch --all
+
+-->Create a local branch: git checkout -b feat/gitops origin/feat/gitops
+
+-->To verify: git branch  [Expected: * feat/gitops]
+
+
+
+
+
+
+
+
 
 ---
 
