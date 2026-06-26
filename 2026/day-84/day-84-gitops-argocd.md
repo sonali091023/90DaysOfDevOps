@@ -237,6 +237,8 @@ Step 2: Verify ArgoCD Pods: kubectl get pods -n argocd
 
 <img width="966" height="527" alt="image" src="https://github.com/user-attachments/assets/587497d9-fffd-425a-827c-a4944f1cdf88" />
 
+<img width="1602" height="462" alt="image" src="https://github.com/user-attachments/assets/72768ae7-4b21-4ea5-9276-3b9e3ee5ef5a" />
+
 -->If any pod is Pending or CrashLoopBackOff, check: kubectl describe pod <pod-name> -n argocd OR kubectl logs <pod-name> -n argocd
 
 Step 3: Get the Admin Password: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo 
@@ -247,22 +249,29 @@ Step 3: Get the Admin Password: kubectl -n argocd get secret argocd-initial-admi
 
 -->echo $ARGOCD_PASSWORD
 
-Step 4: Check How ArgoCD Is Exposed: kubectl get svc -n argocd
+<img width="1917" height="182" alt="image" src="https://github.com/user-attachments/assets/96f55d39-8199-4011-90f7-382a2fee56f0" />
+
+Step 4: Check How ArgoCD Is Exposed: kubectl get svc -n argocd [Look at the TYPE column.]
 
 <img width="820" height="237" alt="image" src="https://github.com/user-attachments/assets/ab11994f-4aa4-412d-9679-f02369c28065" />
 
--->**& if you see Type = LoadBalancer, then execute:** 
+-->**Case 1: If you see Service Type = LoadBalancer:** 
 export ARGOCD_URL=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
--->& then to check run command: echo $ARGOCD_URL [Expected: a123456789.us-west-2.elb.amazonaws.com then open in the browser: https://a123456789.us-west-2.elb.amazonaws.com]
+-->& then to check run command: echo $ARGOCD_URL [Expected: a123456789.us-west-2.elb.amazonaws.com then open in the browser: http://a123456789.us-west-2.elb.amazonaws.com]
+
+**Note:** If the instructions mention http://, try https:// first because ArgoCD serves HTTPS by default. [tried with http and ArgoCD got launched]
 
 <img width="842" height="747" alt="image" src="https://github.com/user-attachments/assets/1085bd82-2196-44fb-a89f-2e43b5f60380" />
 
 <img width="712" height="770" alt="image" src="https://github.com/user-attachments/assets/c0fe022c-93b1-4d19-adbc-56e7073f4a03" />
 
--->If you see: TYPE = ClusterIP use port forwarding for that Run: kubectl port-forward svc/argocd-server -n argocd 8443:443
+<img width="1917" height="417" alt="image" src="https://github.com/user-attachments/assets/e3d166aa-c414-43d7-ab3c-819b0df6e8a7" />
 
--->Now run the following in the browser: https://localhost:8443 [Your browser will warn that the certificate isn't trusted.]
+-->If you see Case 2 No LoadBalancer: Service TYPE = ClusterIP use port forwarding for that Run in seperate terminal & leave it running: kubectl port-forward svc/argocd-server -n argocd 8443:443 
+
+-->Now run the following in the browser: https://localhost:8443 [Your browser will warn that the certificate isn't trusted, So Choose: Advanced & then 
+Proceed to localhost, This is expected because ArgoCD uses a self-signed certificate by default.]
 
 Step 5: Login to the UI: 
 
@@ -272,21 +281,27 @@ Step 6: Install the ArgoCD CLI (Ubuntu/Linux):
 
 -->Download ArgoCD CLI: curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 
+**Note:** If in case Already any dir or file is exists with name argocd then either rename the file or remove the old one and download new one.
+
 -->Make it executable: chmod +x argocd
 
 -->Then move it to bin dir: sudo mv argocd /usr/local/bin/
 
 -->Now verify: argocd version --client
 
+<img width="1552" height="667" alt="image" src="https://github.com/user-attachments/assets/4f286622-b6fa-431a-9de7-e8ddfe5c0049" />
+
 Step 7: Login from the CLI: 
 
 -->If using the LoadBalancer: argocd login $ARGOCD_URL --username admin --password $ARGOCD_PASSWORD --insecure
 
--->Or, if you didn't save the password: argocd login $ARGOCD_URL --username admin --password YOUR_PASSWORD --insecure
+-->Or, if you didn't save the password: argocd login $ARGOCD_URL --username admin --password YOUR_PASSWORD --insecure [Expected: 'admin:login' logged in successfully]
 
 -->If using Port Forward: Keep the port-forward terminal running and execute: argocd login localhost:8443 --username admin --password $ARGOCD_PASSWORD --insecure
 
 <img width="672" height="752" alt="image" src="https://github.com/user-attachments/assets/8e7bd4e4-b4be-494a-ad5c-05ad7059a6b0" />
+
+<img width="1840" height="116" alt="image" src="https://github.com/user-attachments/assets/7b899bcb-b319-4ae7-a0a8-001c1bb0cedb" />
 
 Step 8: Verify the CLI Connection: 
 
@@ -295,6 +310,8 @@ Step 8: Verify the CLI Connection:
 -->argocd version
 
 <img width="702" height="506" alt="image" src="https://github.com/user-attachments/assets/dd4ce5cc-afa1-4096-a819-235e5902e848" />
+
+<img width="1427" height="572" alt="image" src="https://github.com/user-attachments/assets/aace461b-f094-4c93-9e4b-e8e95c2ef00b" />
 
 Step 9: Explore the UI: 
 
@@ -319,6 +336,8 @@ Step 10: Useful CLI Commands:
 -->kubectl get secrets -n argocd
 
 -->kubectl config current-context
+
+<img width="1917" height="952" alt="image" src="https://github.com/user-attachments/assets/06a2d952-c8d2-43b4-8d99-f1d43d8e1330" />
 
 ---
 
