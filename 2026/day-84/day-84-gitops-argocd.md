@@ -227,6 +227,99 @@ argocd login localhost:8443 --username admin --password <your-password> --insecu
 - **Settings > Repositories** -- Git repos ArgoCD can access
 - **Settings > Clusters** -- Kubernetes clusters ArgoCD manages (your EKS cluster is the default `in-cluster`)
 
+**Steps to follow:**
+
+Step 1: Verify the ArgoCD Namespace Exists: kubectl get ns
+
+<img width="977" height="347" alt="image" src="https://github.com/user-attachments/assets/beb1cef4-24d6-4f61-bd34-4932c5667b88" />
+
+Step 2: Verify ArgoCD Pods: kubectl get pods -n argocd
+
+<img width="966" height="527" alt="image" src="https://github.com/user-attachments/assets/587497d9-fffd-425a-827c-a4944f1cdf88" />
+
+-->If any pod is Pending or CrashLoopBackOff, check: kubectl describe pod <pod-name> -n argocd OR kubectl logs <pod-name> -n argocd
+
+Step 3: Get the Admin Password: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo 
+
+-->[Expected: Hj7kLm9Qw2Ab So Save it because you'll need it to log in.]
+
+-->**You can also save it to a variable:** export ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+
+-->echo $ARGOCD_PASSWORD
+
+Step 4: Check How ArgoCD Is Exposed: kubectl get svc -n argocd
+
+<img width="820" height="237" alt="image" src="https://github.com/user-attachments/assets/ab11994f-4aa4-412d-9679-f02369c28065" />
+
+-->**& if you see Type = LoadBalancer, then execute:** 
+export ARGOCD_URL=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+-->& then to check run command: echo $ARGOCD_URL [Expected: a123456789.us-west-2.elb.amazonaws.com then open in the browser: https://a123456789.us-west-2.elb.amazonaws.com]
+
+<img width="842" height="747" alt="image" src="https://github.com/user-attachments/assets/1085bd82-2196-44fb-a89f-2e43b5f60380" />
+
+<img width="712" height="770" alt="image" src="https://github.com/user-attachments/assets/c0fe022c-93b1-4d19-adbc-56e7073f4a03" />
+
+-->If you see: TYPE = ClusterIP use port forwarding for that Run: kubectl port-forward svc/argocd-server -n argocd 8443:443
+
+-->Now run the following in the browser: https://localhost:8443 [Your browser will warn that the certificate isn't trusted.]
+
+Step 5: Login to the UI: 
+
+<img width="652" height="261" alt="image" src="https://github.com/user-attachments/assets/57042c94-3dba-411f-b6aa-c38a93d10114" />
+
+Step 6: Install the ArgoCD CLI (Ubuntu/Linux): 
+
+-->Download ArgoCD CLI: curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+
+-->Make it executable: chmod +x argocd
+
+-->Then move it to bin dir: sudo mv argocd /usr/local/bin/
+
+-->Now verify: argocd version --client
+
+Step 7: Login from the CLI: 
+
+-->If using the LoadBalancer: argocd login $ARGOCD_URL --username admin --password $ARGOCD_PASSWORD --insecure
+
+-->Or, if you didn't save the password: argocd login $ARGOCD_URL --username admin --password YOUR_PASSWORD --insecure
+
+-->If using Port Forward: Keep the port-forward terminal running and execute: argocd login localhost:8443 --username admin --password $ARGOCD_PASSWORD --insecure
+
+<img width="672" height="752" alt="image" src="https://github.com/user-attachments/assets/8e7bd4e4-b4be-494a-ad5c-05ad7059a6b0" />
+
+Step 8: Verify the CLI Connection: 
+
+-->argocd account get-user-info
+
+-->argocd version
+
+<img width="702" height="506" alt="image" src="https://github.com/user-attachments/assets/dd4ce5cc-afa1-4096-a819-235e5902e848" />
+
+Step 9: Explore the UI: 
+
+<img width="810" height="630" alt="image" src="https://github.com/user-attachments/assets/62b2dc1b-fd27-4760-920d-2d16f21c8961" />
+
+Step 10: Useful CLI Commands:
+
+-->List applications: argocd app list [Expected: No applications found]
+
+-->List clusters: argocd cluster list [Expected: Server details]
+
+-->List repositories: argocd repo list [This may be empty until you add a Git repository]
+
+<img width="1112" height="495" alt="image" src="https://github.com/user-attachments/assets/8b04d4fd-22c7-412e-8966-05aefb213018" />
+
+**If you run into any issues, share the outputs of these commands:**
+
+-->kubectl get pods -n argocd
+
+-->kubectl get svc -n argocd
+
+-->kubectl get secrets -n argocd
+
+-->kubectl config current-context
+
 ---
 
 ### Task 3: Study the AI-BankApp's ArgoCD Application Manifest
@@ -270,6 +363,10 @@ spec:
 | `selfHeal: true` | enabled | Revert manual changes made directly to the cluster |
 | `CreateNamespace=true` | enabled | Create the `bankapp` namespace if it does not exist |
 | `ServerSideApply=true` | enabled | Use server-side apply for better conflict handling |
+
+**Steps to follow:**
+
+
 
 ---
 
