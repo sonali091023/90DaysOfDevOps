@@ -94,7 +94,77 @@ continuously monitors the repository and automatically synchronizes the Kubernet
 
 **Example:** Suppose your deployment YAML specifies:
 
+<img width="802" height="660" alt="image" src="https://github.com/user-attachments/assets/6457278e-a6a5-4a66-8502-817b7113bc9c" />
 
+**Why GitOps?** GitOps provides several important benefits:
+
+-->Git becomes the single source of truth.
+
+-->Every change is version-controlled.
+
+-->Easy rollback using Git.
+
+-->Automatic deployments.
+
+-->Automatic drift detection.
+
+-->Better security.
+
+-->Complete audit history.
+
+<img width="797" height="742" alt="image" src="https://github.com/user-attachments/assets/34f39747-aced-40e5-8444-74a82626b376" />
+
+**Traditional CI/CD Flow:** Developer --> Git Push --> GitHub Actions --> kubectl apply --> Kubernetes Cluster
+
+**Problems:** 
+
+-->CI pipeline needs cluster credentials.
+
+-->Manual changes can remain unnoticed.
+
+-->No automatic drift correction.
+
+-->Rollback usually requires another deployment.
+
+**GitOps Flow:** Developer --> Git Push --> GitHub Actions --> Update Kubernetes YAML --> Git Repository --> ArgoCD --> Kubernetes Cluster
+
+**Advantages:**
+
+-->CI never directly talks to Kubernetes.
+
+-->Git stores the desired state.
+
+-->Automatic synchronization.
+
+-->Automatic rollback.
+
+-->Self-healing.
+
+**AI-BankApp GitOps Flow:** The AI-BankApp project follows a complete GitOps workflow: Developer pushes code --> Feature Branch (feat/gitops) --> GitHub Actions CI
+
+<img width="617" height="756" alt="image" src="https://github.com/user-attachments/assets/0acbcf01-13ed-4eb4-82ea-78080a962320" />
+
+<img width="612" height="812" alt="image" src="https://github.com/user-attachments/assets/f449ae15-9e56-4cff-97fd-66914c0068ee" />
+
+<img width="572" height="806" alt="image" src="https://github.com/user-attachments/assets/79dc7b49-8a5c-4a11-b1f3-4f65538f2a8e" />
+
+<img width="625" height="336" alt="image" src="https://github.com/user-attachments/assets/0a62fd90-69e3-4ba9-92c2-bf074cbe4f09" />
+
+**Final Workflow: Result:** Once the developer pushes code, the entire build and deployment process happens automatically with zero human intervention.
+
+<img width="860" height="642" alt="image" src="https://github.com/user-attachments/assets/d50f5e91-5cc0-4d60-b1dc-cadda20e6ce3" />
+
+**Four GitOps Principles (OpenGitOps):** 
+
+<img width="982" height="452" alt="image" src="https://github.com/user-attachments/assets/99ad42a4-dd1a-4957-a9d4-af6686b0050d" />
+
+<img width="911" height="702" alt="image" src="https://github.com/user-attachments/assets/09bc7d94-930b-4ea9-a1ea-2553c18ce627" />
+
+<img width="917" height="632" alt="image" src="https://github.com/user-attachments/assets/b138aeb5-6834-408f-b0c8-2fbc76226e08" />
+
+<img width="927" height="666" alt="image" src="https://github.com/user-attachments/assets/79eb3015-bdf2-40f1-8d4e-18f6d65bdf64" />
+
+<img width="972" height="382" alt="image" src="https://github.com/user-attachments/assets/c35c45ee-da6c-42ff-a5cc-38e61c98f3f6" />
 
 ---
 
