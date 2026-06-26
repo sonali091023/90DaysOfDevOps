@@ -301,6 +301,10 @@ Example:
 
 ```text
 52.66.56.118.nip.io
+
+-->Updatre the same in the /k8sgateway.yml file for http & https infront of hostname: 52.66.56.118.nip.io
+
+-->& then reconfigure the file: kubectl apply -f k8s/gateway.yml Once it gets completed to confirm run command: kubectl get httproute -n bankapp
 ```
 
 ---
@@ -326,6 +330,58 @@ curl -I http://52.66.56.118.nip.io
 curl -k -I https://52.66.56.118.nip.io
 ```
 
+```bash
+Deploy Prometheus and Grafana to monitor the AI-BankApp on EKS:
+
+-->helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+-->helm repo update
+
+-->helm install monitoring prometheus-community/kube-prometheus-stack \
+  -n monitoring --create-namespace \
+  --set grafana.adminPassword=admin123 \
+  --set prometheus.prometheusSpec.retention=3d \
+  --set prometheus.prometheusSpec.resources.requests.memory=256Mi \
+  --set prometheus.prometheusSpec.resources.requests.cpu=100m \
+  --wait --timeout 600s
+
+-->Verify: kubectl get pods -n monitoring
+
+-->Access Grafana: In one terminal run: kubectl port-forward svc/monitoring-grafana -n monitoring 3000:80 & in Browser run: http://localhost:3000 [Login creds: admin/admin123]
+
+-->Create a ServiceMonitor to scrape the BankApp:
+
+```yaml
+# bankapp-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: bankapp-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - bankapp
+  selector:
+    matchLabels:
+      app: bankapp
+  endpoints:
+    - port: "8080"
+      path: /actuator/prometheus
+      interval: 15s
+```
+
+```bash
+kubectl apply -f bankapp-servicemonitor.yaml
+```
+
+**Access Prometheus:**
+```bash
+kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 9090:9090 & in Browser run: http://localhost:9090
+
+```
 ---
 
 ## Final Validation
