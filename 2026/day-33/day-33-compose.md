@@ -30,6 +30,8 @@ Yesterday you manually created networks and volumes and ran containers one by on
 
 -->**sudo curl -L "https://github.com/docker/compose/releases/download/${LATEST}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose**
 
+-->OR Simply run command: sudo apt install docker-compose -y
+
 -->**sudo chmod +x /usr/local/bin/docker-compose**
 
 2. Verify the version
