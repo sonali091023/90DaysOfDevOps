@@ -510,52 +510,15 @@ Status should show: `Health: Healthy`, `Sync: Synced`.
 
 **Steps to follow:**
 
-Step 0: Verify Prerequisites: Before starting, make sure:
+-->Great! This is where GitOps comes to life. Instead of running kubectl apply -f k8s/, you'll tell ArgoCD to watch your Git repository, and it will deploy everything automatically.
 
--->EKS cluster is running.
+Step 1: Make sure ArgoCD is running: Verify that the ArgoCD pods are healthy: kubectl get pods -n argocd [Expected: All pods should be running]
 
--->ArgoCD pods are running.
+Step 2: Verify the ArgoCD CLI can connect: argocd version   [Expected: Client & Server should be display]
 
--->You can access the ArgoCD UI or CLI.
+-->& If only the client appears, log in again: argocd login localhost:8080 --username admin --password <ARGO_PASSWORD> --insecure   
 
--->Your kubeconfig points to the EKS cluster.
-
--->To verify run commands: kubectl get nodes && kubectl get pods -n argocd
-
-<img width="1847" height="337" alt="image" src="https://github.com/user-attachments/assets/9c29e2e8-b154-4f6c-88fa-c0a19857d47b" />
-
-Step 1: Delete the Existing BankApp Namespace: This gives you a clean environment:
-
--->Delete existing bankapp namespace: kubectl delete namespace bankapp
-
--->To verify: kubectl get ns   [Expected: You should not see the bankapp namespace]
-
-<img width="1720" height="496" alt="image" src="https://github.com/user-attachments/assets/8acef55f-38a9-42da-9bd6-064ce60c71d4" />
-
-Step 2: Fork the Repository: 
-
-<img width="900" height="401" alt="image" src="https://github.com/user-attachments/assets/0c1c2b2d-f7dc-49ee-ad45-25d88916e367" />
-
-**Note:** Do not use the original repository URL because later GitHub Actions will need permission to push image tag updates, which requires your own fork.
-
-Step 3: Clone Your Fork: git clone https://github.com/sonali091023/AI-BankApp-DevOps.git
-
--->Enter inside project: cd AI-BankApp-DevOps
-
-Step 4: Ensure the feat/gitops Branch Exists: 
-
-->Check available branches: git branch -a
-
--->If you don't have feat/gitops, fetch everything: git fetch --all
-
--->Create a local branch: git checkout -b feat/gitops 
-
--->To verify: git branch  [Expected: * feat/gitops]
-
--->Now push it to your fork: git push -u origin feat/gitops
-
--->So After that, your ArgoCD Application manifest can use: targetRevision: feat/gitops
-
+<img width="1457" height="507" alt="image" src="https://github.com/user-attachments/assets/3c7c4cbd-c05a-4ab4-99f7-20fbb404c590" />
 
 
 
