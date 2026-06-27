@@ -520,6 +520,7 @@ Step 2: Verify the ArgoCD CLI can connect: argocd version   [Expected: Client & 
 
 <img width="1457" height="507" alt="image" src="https://github.com/user-attachments/assets/3c7c4cbd-c05a-4ab4-99f7-20fbb404c590" />
 
+Step 3: Delete the existing BankApp namespace: 
 
 
 
