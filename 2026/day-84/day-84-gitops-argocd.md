@@ -582,14 +582,27 @@ Step 4 – Watch the Deployment:
 
 -->Check the application: argocd app get bankapp
 
+-->argocd app wait bankapp [This command blocks until the application becomes healthy or times out.]
+
 <img width="686" height="482" alt="image" src="https://github.com/user-attachments/assets/2d42afdc-b733-4e94-9b15-a8e2a6f60481" />
 
+<img width="1917" height="947" alt="image" src="https://github.com/user-attachments/assets/c33494c7-6679-4c45-bb79-8e979b7bc717" />
 
+<img width="1917" height="951" alt="image" src="https://github.com/user-attachments/assets/ce27499a-504e-4051-a77d-40931ffbf8d7" />
 
+Step 5 – Watch the Pods: kubectl get pods -n bankapp -w
 
+<img width="711" height="762" alt="image" src="https://github.com/user-attachments/assets/255d4927-63e9-4fc7-8a9a-3cc95f66787b" />
 
+<img width="1410" height="165" alt="image" src="https://github.com/user-attachments/assets/068653cc-b73c-4c56-80bd-39120f843b76" />
 
+Step 6 – Verify Success: argocd app get bankapp
 
+<img width="690" height="635" alt="image" src="https://github.com/user-attachments/assets/6b823fc2-6f35-40a6-a537-17360923396a" />
+
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/1f8b567c-cbaa-40f7-bd99-1dd558a77500" />
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/89bf6b98-b2bb-421f-90aa-d6266d8fb0b9" />
 
 ---
 
@@ -633,6 +646,56 @@ argocd app history bankapp
 
 This shows every revision that was synced, when, and the commit SHA.
 
+**Steps to follow:**
+
+-->Great! 🎉 You've successfully deployed the AI-BankApp. Now you're moving to one of the most important parts of GitOps—understanding how Argo CD visualizes and manages your Kubernetes resources.
+
+This task is about observing rather than creating. Think of it as learning to use the Argo CD dashboard to monitor and troubleshoot applications.
+
+What is the Argo CD Live View?
+
+-->When you open the bankapp application in the Argo CD UI, you're looking at a live representation of your application's current state in Kubernetes.
+
+-->So Instead of running multiple commands like: Argo CD displays everything in one graphical view. Think of it like a live architecture diagram that updates automatically.
+
+- kubectl get deployments
+
+- kubectl get pods
+
+- kubectl get services
+
+- kubectl get pvc
+
+- kubectl get configmaps
+
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/1f8b567c-cbaa-40f7-bd99-1dd558a77500" />
+
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/89bf6b98-b2bb-421f-90aa-d6266d8fb0b9" />
+
+<img width="707" height="586" alt="image" src="https://github.com/user-attachments/assets/fa6376c5-0c9e-4ae4-9852-a1c78d4af811" />
+
+<img width="685" height="827" alt="image" src="https://github.com/user-attachments/assets/ec07fb8c-2c99-4ff6-80f0-52a3ab4f8c93" />
+
+<img width="631" height="777" alt="image" src="https://github.com/user-attachments/assets/9817b0ca-2df2-45ce-ac9a-78f2667d43c8" />
+
+<img width="687" height="787" alt="image" src="https://github.com/user-attachments/assets/8f443262-6aa4-448d-a551-a024d12c583b" />
+
+<img width="617" height="507" alt="image" src="https://github.com/user-attachments/assets/71c2f328-007b-4f6b-9586-26b97ae85e0f" />
+
+<img width="582" height="772" alt="image" src="https://github.com/user-attachments/assets/27965f16-bace-4f46-98de-3084fbd6108b" />
+
+<img width="632" height="637" alt="image" src="https://github.com/user-attachments/assets/ca521d8d-4259-4389-9cb7-424cdbe9a78e" />
+
+<img width="581" height="671" alt="image" src="https://github.com/user-attachments/assets/c6907cf5-20ff-4ad8-8765-c72c060a086c" />
+
+<img width="630" height="825" alt="image" src="https://github.com/user-attachments/assets/448ca868-3a7e-4eb5-ab7f-9eaa82acb451" />
+
+<img width="717" height="592" alt="image" src="https://github.com/user-attachments/assets/8bcd5c37-2567-41fc-ba47-6b1789cb0d2b" />
+
+<img width="712" height="762" alt="image" src="https://github.com/user-attachments/assets/a5526913-6912-469c-b0dd-b2b3fbd0b1d2" />
+
+<img width="687" height="637" alt="image" src="https://github.com/user-attachments/assets/dd068f16-bf86-415d-8d1c-e5e3a0f46e73" />
+
 ---
 
 ### Task 6: Test Self-Healing
@@ -668,6 +731,80 @@ ArgoCD will overwrite your change with the value from Git.
 **This is the core GitOps promise:** The cluster always matches Git. Manual changes do not survive. All changes must go through Git (pull requests, review, merge).
 
 **Document:** What happened during each self-healing test? How quickly did ArgoCD revert the changes?
+
+**Stesp to follow:**
+
+-->Excellent! This is one of the most important tasks in your DevOps journey because it demonstrates the core GitOps principle: Git is the single source of truth.
+
+-->Before starting, let's understand why you're doing these tests.
+
+-->Normally, anyone with Kubernetes access can modify the cluster: kubectl edit deployment bankapp OR kubectl scale deployment bankapp --replicas=10
+
+<img width="667" height="752" alt="image" src="https://github.com/user-attachments/assets/bbbb1206-06cb-47c2-9fa9-8774e0b92d75" />
+
+<img width="702" height="477" alt="image" src="https://github.com/user-attachments/assets/1e38e215-1c3d-4fff-961a-f7b0ec181425" />
+
+-->Step 1: Check the current replicas: kubectl get deployment bankapp -n bankapp [This means Git currently wants 4 replicas.]
+
+-->Step 2: Scale it manually: kubectl scale deployment bankapp -n bankapp --replicas=1
+
+<img width="652" height="657" alt="image" src="https://github.com/user-attachments/assets/1e774139-f0e3-40c6-8217-a771555a7683" />
+
+<img width="697" height="516" alt="image" src="https://github.com/user-attachments/assets/c09d4a83-095a-4697-b6d0-6b4f6c591770" />
+
+<img width="1912" height="976" alt="image" src="https://github.com/user-attachments/assets/6c13fddc-9c21-40eb-8637-dc4981f9c0f3" />
+
+<img width="1617" height="540" alt="image" src="https://github.com/user-attachments/assets/de9c70fa-7b3c-4164-b55a-ea592c42ba12" />
+
+<img width="740" height="641" alt="image" src="https://github.com/user-attachments/assets/05d87f8a-3da5-42e1-8b84-fb575262da27" />
+
+<img width="677" height="486" alt="image" src="https://github.com/user-attachments/assets/afd4a95a-711e-4853-b10e-90028941947e" />
+
+<img width="687" height="571" alt="image" src="https://github.com/user-attachments/assets/65c1735f-f6dc-483c-9a12-2a21138ebbc3" />
+
+-->kubectl get pods -n bankapp -w
+
+-->argocd app get bankapp
+
+<img width="732" height="637" alt="image" src="https://github.com/user-attachments/assets/841e5c34-d805-450a-b602-e3b56bc254ef" />
+
+<img width="1847" height="972" alt="image" src="https://github.com/user-attachments/assets/7b4e6bd4-90e4-4384-ad5c-725801c06faf" />
+
+Test 2 – Delete the ConfigMap
+
+-->kubectl get configmap -n bankapp
+
+-->kubectl delete configmap bankapp-config -n bankapp
+
+<img width="696" height="482" alt="image" src="https://github.com/user-attachments/assets/202d3897-e8f8-47d4-8d05-0190a819e877" />
+
+<img width="692" height="567" alt="image" src="https://github.com/user-attachments/assets/05676939-0eb9-4c30-bf5c-a175d6afee1e" />
+
+<img width="1072" height="135" alt="image" src="https://github.com/user-attachments/assets/2cde8261-1135-4cb8-80a7-6c7e29c1a43e" />
+
+Test 3 – Edit the ConfigMap: kubectl edit configmap bankapp-config -n bankapp
+
+-->Make some chnage like follow: Previously it was: MYSQL_DATABASE: bankappdb & now chnage it to MYSQL_DATABASE: wrongdatabase
+
+-->To verify: kubectl get configmap bankapp-config -n bankapp -o yaml  
+
+-->So Again, Argo CD detects drift. Within a short time it overwrites your change and restores the value from Git.
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/3e0c4600-b32c-4644-b8a6-814a515d0756" />
+
+<img width="1251" height="966" alt="image" src="https://github.com/user-attachments/assets/7b338438-5649-4763-b503-20d01b381b07" />
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/b3e189cf-f8a1-457e-9186-d041a617ae7a" />
+
+<img width="661" height="447" alt="image" src="https://github.com/user-attachments/assets/4aaecbdf-83d2-416a-94ad-81576ebbb77c" />
+
+<img width="672" height="630" alt="image" src="https://github.com/user-attachments/assets/8224bb96-85e9-4d97-b1f8-e672a36679a8" />
+
+<img width="686" height="331" alt="image" src="https://github.com/user-attachments/assets/14327821-33a8-4e23-90c1-fdf065188075" />
+
+<img width="682" height="657" alt="image" src="https://github.com/user-attachments/assets/7649b487-043f-49a5-abbc-53d5de83de48" />
+
+<img width="780" height="372" alt="image" src="https://github.com/user-attachments/assets/40e16ad5-89f2-46b5-b6c8-a53aa74e663a" />
 
 ---
 
