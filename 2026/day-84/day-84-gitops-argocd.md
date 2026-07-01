@@ -564,6 +564,31 @@ Step 3 – Create the Argo CD Application:
 
 <img width="702" height="420" alt="image" src="https://github.com/user-attachments/assets/0dd4f126-d561-4193-ac09-ffd4dfb6a939" />
 
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bankapp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/<your-username>/AI-BankApp-DevOps.git
+    targetRevision: feat/gitops
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bankapp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+EOF
+```
 <img width="1156" height="577" alt="image" src="https://github.com/user-attachments/assets/7d348b84-1ee3-472a-ac4b-2db2d355a39f" />
 
 <img width="682" height="397" alt="image" src="https://github.com/user-attachments/assets/d7f9e3dd-9b14-4a7c-9609-a8b22746d006" />
