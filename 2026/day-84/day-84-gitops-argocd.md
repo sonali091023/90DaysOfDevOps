@@ -578,7 +578,12 @@ Understanding the YAML:
 
 <img width="742" height="812" alt="image" src="https://github.com/user-attachments/assets/9e7719b1-6e47-40c9-8777-f99b2bf44517" />
 
-Step 4 – Watch the Deployment
+Step 4 – Watch the Deployment:
+
+-->Check the application: argocd app get bankapp
+
+<img width="686" height="482" alt="image" src="https://github.com/user-attachments/assets/2d42afdc-b733-4e94-9b15-a8e2a6f60481" />
+
 
 
 
