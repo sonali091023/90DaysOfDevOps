@@ -279,7 +279,9 @@ Step 5: Login to the UI:
 
 Step 6: Install the ArgoCD CLI (Ubuntu/Linux): 
 
--->Download ArgoCD CLI: curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+-->Download ArgoCD CLI: curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 OR 
+
+-->use following command: curl -L -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 
 **Note:** If in case Already any dir or file is exists with name argocd then either rename the file or remove the old one and download new one.
 
@@ -289,6 +291,12 @@ Step 6: Install the ArgoCD CLI (Ubuntu/Linux):
 
 -->Now verify: argocd version --client
 
+<img width="742" height="782" alt="image" src="https://github.com/user-attachments/assets/d072c17d-34cd-41ee-ba89-ed6024e595df" />
+<img width="725" height="442" alt="image" src="https://github.com/user-attachments/assets/8cde3f8f-e7a0-4b9b-b0b0-063c00409495" />
+<img width="691" height="737" alt="image" src="https://github.com/user-attachments/assets/16b698ed-dd9b-4d55-bbcd-ff08e9903e17" />
+<img width="667" height="816" alt="image" src="https://github.com/user-attachments/assets/dcf667c6-953c-4ba0-a63d-01808dc2f643" />
+<img width="786" height="835" alt="image" src="https://github.com/user-attachments/assets/289c6d75-96c0-47ff-a3aa-e679666faae1" />
+
 <img width="1552" height="667" alt="image" src="https://github.com/user-attachments/assets/4f286622-b6fa-431a-9de7-e8ddfe5c0049" />
 
 Step 7: Login from the CLI: 
@@ -297,11 +305,37 @@ Step 7: Login from the CLI:
 
 -->Or, if you didn't save the password: argocd login $ARGOCD_URL --username admin --password YOUR_PASSWORD --insecure [Expected: 'admin:login' logged in successfully]
 
--->If using Port Forward: Keep the port-forward terminal running and execute: argocd login localhost:8443 --username admin --password $ARGOCD_PASSWORD --insecure
+-->If using Port Forward: Keep the port-forward terminal running and execute: argocd login a33da2317b9304d68b4c681fe271897f-1613371817.ap-south-1.elb.amazonaws.com --username admin --password $ARGOCD_PASSWORD --insecure
 
 <img width="672" height="752" alt="image" src="https://github.com/user-attachments/assets/8e7bd4e4-b4be-494a-ad5c-05ad7059a6b0" />
 
 <img width="1840" height="116" alt="image" src="https://github.com/user-attachments/assets/7b899bcb-b319-4ae7-a0a8-001c1bb0cedb" />
+
+OR By using Load Balancer:
+
+<img width="1722" height="200" alt="image" src="https://github.com/user-attachments/assets/5fb6153e-8e97-442a-af3c-5b41605efca8" />
+
+<img width="750" height="507" alt="image" src="https://github.com/user-attachments/assets/23d76731-f81c-4d1b-9a51-2033ad1ad795" />
+
+<img width="712" height="446" alt="image" src="https://github.com/user-attachments/assets/b766d58e-f801-4740-8863-e79d0afc2e4a" />
+
+<img width="667" height="697" alt="image" src="https://github.com/user-attachments/assets/8687a523-f37b-4bc9-987b-1192aeefe319" />
+
+<img width="737" height="827" alt="image" src="https://github.com/user-attachments/assets/abfb17b2-3e4a-4855-a293-6fef482f7193" />
+
+<img width="682" height="657" alt="image" src="https://github.com/user-attachments/assets/23c8fb0c-2039-43ee-b8fb-6a83602116bf" />
+
+<img width="702" height="577" alt="image" src="https://github.com/user-attachments/assets/8870fc91-e817-46cb-854d-01462dd0c3da" />
+
+<img width="801" height="527" alt="image" src="https://github.com/user-attachments/assets/aa9f723e-aca7-46aa-99e7-cdcba893c034" />
+
+<img width="721" height="577" alt="image" src="https://github.com/user-attachments/assets/7fd39c4e-0125-49b8-be43-a2a9d7b49245" />
+
+<img width="737" height="731" alt="image" src="https://github.com/user-attachments/assets/e2ecbbc4-4fe0-4288-8c65-0cddc91ed9c3" />
+
+<img width="802" height="827" alt="image" src="https://github.com/user-attachments/assets/96d9b3b5-a25c-4083-b29a-1ba473a543b1" />
+
+<img width="751" height="651" alt="image" src="https://github.com/user-attachments/assets/e926b4e4-77a7-4c86-85bd-514066f7cbb1" />
 
 Step 8: Verify the CLI Connection: 
 
@@ -510,17 +544,41 @@ Status should show: `Health: Healthy`, `Sync: Synced`.
 
 **Steps to follow:**
 
--->Great! This is where GitOps comes to life. Instead of running kubectl apply -f k8s/, you'll tell ArgoCD to watch your Git repository, and it will deploy everything automatically.
+-->The goal is to let Argo CD automatically deploy your AI-BankApp from your GitHub repository into your EKS cluster. This is the essence of GitOps. Instead of running: kubectl apply -f deployment.yaml yourself, you'll tell Argo CD: "Here is my Git repository. Watch it continuously. Whatever is in Git should be deployed to Kubernetes."
 
-Step 1: Make sure ArgoCD is running: Verify that the ArgoCD pods are healthy: kubectl get pods -n argocd [Expected: All pods should be running]
+Overall Flow:
 
-Step 2: Verify the ArgoCD CLI can connect: argocd version   [Expected: Client & Server should be display]
+<img width="762" height="427" alt="image" src="https://github.com/user-attachments/assets/3ef8dd95-9fd8-4265-9496-b9f73abbe9b6" />
 
--->& If only the client appears, log in again: argocd login localhost:8080 --username admin --password <ARGO_PASSWORD> --insecure   
+Step 1 – Delete the Existing Namespace: kubectl delete namespace bankapp 2>/dev/null
 
-<img width="1457" height="507" alt="image" src="https://github.com/user-attachments/assets/3c7c4cbd-c05a-4ab4-99f7-20fbb404c590" />
+<img width="802" height="752" alt="image" src="https://github.com/user-attachments/assets/7583f962-470d-48d8-a363-c4df7450ebdf" />
 
-Step 3: Delete the existing BankApp namespace: 
+<img width="1515" height="352" alt="image" src="https://github.com/user-attachments/assets/4840d849-9ecc-414a-871f-dde4697aab74" />
+
+Step 2 – Fork the Repository: Go to: https://github.com/TrainWithShubham/AI-BankApp-DevOps Click Fork.You'll get: https://github.com/sonali091023/AI-BankApp-DevOps
+
+**Why fork?** --> So Argo CD will deploy from your repository. Later, when you make changes (for example, updating the Docker image tag), you'll push to your fork, and Argo CD will automatically detect those commits and synchronize your cluster.
+
+Step 3 – Create the Argo CD Application: 
+
+<img width="702" height="420" alt="image" src="https://github.com/user-attachments/assets/0dd4f126-d561-4193-ac09-ffd4dfb6a939" />
+
+<img width="1156" height="577" alt="image" src="https://github.com/user-attachments/assets/7d348b84-1ee3-472a-ac4b-2db2d355a39f" />
+
+<img width="682" height="397" alt="image" src="https://github.com/user-attachments/assets/d7f9e3dd-9b14-4a7c-9609-a8b22746d006" />
+
+Understanding the YAML: 
+
+<img width="742" height="472" alt="image" src="https://github.com/user-attachments/assets/788b2461-b123-4aa7-b7a2-4d26695d1256" />
+
+<img width="682" height="817" alt="image" src="https://github.com/user-attachments/assets/c6a45c21-1974-4c96-8ced-521bb9354459" />
+
+<img width="737" height="796" alt="image" src="https://github.com/user-attachments/assets/50b40979-58c1-4283-91c1-adee39b8a0a7" />
+
+<img width="742" height="812" alt="image" src="https://github.com/user-attachments/assets/9e7719b1-6e47-40c9-8777-f99b2bf44517" />
+
+Step 4 – Watch the Deployment
 
 
 
