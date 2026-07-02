@@ -23,9 +23,9 @@ Research and write short notes on:
 
 **- What is a container and why do we need them?**
 
--->A container is a lightweight, portable unit that packages an application together with everything it needs to run—such as code, runtime, libraries,
+-->A container is a lightweight, portable unit that packages an application together with everything it needs to run—such as Application code, runtime, libraries,
 
-  and system dependencies—so it can run consistently across different environments.
+  Configuration files, and system dependencie etc. So it can run consistently across different environments.
 
   -->We needs container because, Different environments cause issues (Windows vs Linux, missing dependencies, version conflicts). Containers ensure consistent 
   
@@ -33,9 +33,7 @@ Research and write short notes on:
 
 **- Containers vs Virtual Machines — what's the real difference?**
 
--->A **container** is a lightweight isolated environment that shares the host OS kernel. Docker is the common platform for the container, containers can be Orchestrated at scale using:
-
-by using Kubernetes, Containers do NOT include a full OS
+-->A **container** is a lightweight isolated environment that shares the host OS kernel. Docker is the common platform for the container, containers can be Orchestrated at scale using: by using Kubernetes, Containers do NOT include a full OS.
 
 -->A **Virtual Machine** is a full computer inside your computer, It runs using a hypervisor like: VMware, VirtualBox, Hyper-V, KVM (Kernel-based Virtual Machine)
 
@@ -45,33 +43,35 @@ Each VM has its own complete operating system
 
 -->**Docker follows a client–server architecture**. It is made up of five main building blocks: Docker Client, Docker Daemon, Images, Containers, and Registry etc. 
 
--->We interact with the **Docker client** [This is kind of Remote control of Docker who Sends commands to the Docker Daemon, Uses REST API under the hood]
+-->**1. Docker client** [This is kind of Remote control of Docker who Sends commands to the Docker Daemon, Uses REST API under the hood]
 
--->**Docker deamon** is the brain of Docker, Responsibilities oc the docker deamons are to Builds images, Runs containers, Manages networks and volumes, 
+-->**2. Docker deamon** is the brain of Docker, Responsibilities of the docker deamon are to Builds images, Runs containers, Manages networks and volumes, Talks to registry, Handles container lifecycle. Docker deamon runs at the background on the host system. Its like the Engine that does all the work.
 
-Talks to registry, Handles container lifecycle. Docker runs at the background on the host system. Its like the Engine that does all the work.
+-->**3. Docker image** is a read-only blueprint of an application, Which contains Application code, Runtime (Python, NodeJS, Java, etc.), Dependencies, Configurations etc. , Images are used to create containers.
 
--->A **Docker image** is a read-only blueprint of an application, Which contains Application code, Runtime (Python, Node, Java, etc.), Dependencies, Configurations, 
-
-Images are used to create containers.
-
--->A **container** is a running instance of an image, In the container Image becomes a live process, Runs in isolated environment, Has its own filesystem, 
-
+-->**4.container** is a running instance of an image, In the container Image becomes a live process, Runs in isolated environment, Has its own filesystem, 
 network, processes etc.
 
--->So overall its like image is the Recipe and Container is like cooked dish
+-->So overall its like **image is the Recipe** and **Container is like cooked dish.**
 
--->A **Docker registry** is a storage system for Docker images. here dockerhub is the public registory we used to Stores images, it lets you push/pull images etc
+-->**5. Docker registry** is a storage system for Docker images. here dockerhub is the public registory we used to Stores images, it lets you push/pull images etc
 
 -->Other options available such as AWS ECR, Google Container Registry, Private registries etc.
 
-**Draw or describe the Docker architecture in your own words.**
+**Draw or describe the Docker architecture in your own words:**
 
--->**Docker architecture is a client-server system** where the client sends requests, the daemon manages images and containers, images are pulled from a registry, 
+1. The developer types a Docker command using the Docker Client.
 
-and containers are the running instances of those images.
+2. The Docker Client sends the request to the Docker Daemon.
 
-<img width="438" height="552" alt="image" src="https://github.com/user-attachments/assets/cfeaec55-1dbc-48d4-9e83-3fecddc9f145" />
+3. The Docker Daemon checks whether the required Docker image exists locally.
+
+4. If the image is missing, the daemon downloads it from a Docker Registry (such as Docker Hub).
+
+5. Using the image, the daemon creates and starts a Docker Container.
+
+6. The running container executes the application in an isolated environment while sharing the host operating system kernel.
+<img width="745" height="795" alt="image" src="https://github.com/user-attachments/assets/191ac668-52f9-4191-9c9f-0ce2dacd86a3" />
 
 ---
 
