@@ -79,19 +79,33 @@ network, processes etc.
 
 1. Install Docker on your machine (or use a cloud instance) -->**sudo apt update**, **sudo apt install docker.io -y**
 
-2. Verify the installation -->**docker --version**
+2. sudo systemctl start docker
 
-<img width="1907" height="453" alt="image" src="https://github.com/user-attachments/assets/2d5ca088-1b0e-4176-9913-0f4cd25c1c20" />
+3. sudo systemctl enable docker
 
-3. Run the `hello-world` container --> **docker run hello-world**
+4. sudo systemctl status docker
 
-<img width="837" height="663" alt="image" src="https://github.com/user-attachments/assets/32d0f3da-2737-4c13-986b-038b658654fe" />
+5. Verify the installation -->**docker --version**
 
-**6. Read the output carefully — it explains what just happened**
+6. **docker info**: This displays details about: Docker Engine, Storage Driver, Containers, Images, CPU and Memory, Docker Root Directory
+
+7. Run the `hello-world` container --> **docker run hello-world**
+
+8. docker images
+
+9. docker ps -a
+
+<img width="1672" height="972" alt="image" src="https://github.com/user-attachments/assets/df54fbb6-deb2-4451-b1a9-f5cedc3b1a67" />
+
+<img width="1500" height="972" alt="image" src="https://github.com/user-attachments/assets/a2dc0d9a-06c8-4cf9-b17b-80c97af4b60d" />
+
+<img width="1725" height="866" alt="image" src="https://github.com/user-attachments/assets/f3da55f3-b0c4-4d17-a174-43e53e3f1c39" />
+
+**Read the output carefully — it explains what just happened**
 
 -->Docker first checks your local machine for the image. It wasn't there, so it went to the internet.
 
--->Docker downloaded the hello-world image from Docker Hub (Docker's public image registry).
+-->Docker downloaded the hello-world image from Docker Hub (From Docker's public image registry).
 
 -->Think of an image as a recipe and a container as the dish made from it. Docker used the image to spin up a live, running container.
 
