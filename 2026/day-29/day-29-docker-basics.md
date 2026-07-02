@@ -194,30 +194,57 @@ Bonuse commands:
 ---
 
 ### Task 4: Explore
-1. Run a container in **detached mode** — what's different? --> **docker run -d nginx**
 
-<img width="688" height="72" alt="image" src="https://github.com/user-attachments/assets/bc894395-0a02-45b7-b2d7-9afc572f91c5" />
+-->This task focuses on learning the most commonly used Docker commands in real-world DevOps work. Follow the steps below.
+1. Run a container in **detached mode** — what's different? --> **docker run -d --name nginx-detached -p 8080:80 nginx**
 
+<img width="767" height="622" alt="image" src="https://github.com/user-attachments/assets/bba91878-a648-4fad-86fe-1a741789a356" />
 
-2. Give a container a custom **name** --> **docker run -d --name nginx-container nginx**
+<img width="1787" height="142" alt="image" src="https://github.com/user-attachments/assets/86bbd329-bdaf-476d-8082-a41da327345a" />
 
-<img width="1211" height="146" alt="image" src="https://github.com/user-attachments/assets/459a5535-e87e-4f37-8d07-ebdc8b317e04" />
+2. Give a container a custom **name** --> **docker run -d --name my-web-server -p 8081:80 nginx**
 
+<img width="696" height="636" alt="image" src="https://github.com/user-attachments/assets/a4010845-ebfb-4226-9066-00d35526b896" />
 
-3. Map a **port** from the container to your host --> **docker run -d --name new-nginx-cont -p 8080:80 nginx**
+<img width="1527" height="151" alt="image" src="https://github.com/user-attachments/assets/08463a15-3003-422a-bd56-2f4bd5562c6c" />
 
-<img width="1472" height="177" alt="image" src="https://github.com/user-attachments/assets/0d1f8a62-9a6a-4533-b0ba-0f3a858a648f" />
+<img width="1907" height="782" alt="image" src="https://github.com/user-attachments/assets/c32a4bf2-b181-4cc3-8d4a-a171b7e3672a" />
 
-<img width="1782" height="537" alt="image" src="https://github.com/user-attachments/assets/a5e13122-5c21-45bf-b090-2b3cee421ea7" />
+3. Map a **port** from the container to your host --> **docker run -d --name nginx-port -p 9090:80 nginx**
 
-5. Check **logs** of a running container --> **docker logs <container id>**
+<img width="755" height="456" alt="image" src="https://github.com/user-attachments/assets/68378912-3b99-4335-92b5-5770117445ae" />
 
-<img width="997" height="565" alt="image" src="https://github.com/user-attachments/assets/55b2043a-c392-4c19-942f-6f87bf20e055" />
+<img width="1715" height="172" alt="image" src="https://github.com/user-attachments/assets/50249783-1a31-4bd5-87e1-eac80045f3f9" />
 
-6. Run a command **inside** a running container -->**docker exec -it <container id> bash**
+<img width="1912" height="816" alt="image" src="https://github.com/user-attachments/assets/568985ea-a0e1-4f4c-9b33-b4a2705dec75" />
 
-<img width="1475" height="330" alt="image" src="https://github.com/user-attachments/assets/4709c8a1-6b11-49c8-a571-2e9337316ed5" />
+4. Check **logs** of a running container --> **docker logs <container id>**
 
+<img width="1905" height="772" alt="image" src="https://github.com/user-attachments/assets/4182ba6f-9836-40fb-8b53-acd0a13a3fc4" />
+
+-->Follow logs in real time: docker logs -f my-web-server
+
+<img width="711" height="545" alt="image" src="https://github.com/user-attachments/assets/f155fce0-08bb-47da-b888-188240898eac" />
+
+5. Run a command **inside** a running container -->**docker exec -it <container id> bash**
+
+<img width="1917" height="197" alt="image" src="https://github.com/user-attachments/assets/8db28459-2b29-4f6f-aff8-c1384f78a11a" />
+
+<img width="686" height="606" alt="image" src="https://github.com/user-attachments/assets/12107c8e-5582-4f06-bebc-431488838a53" />
+
+**After completing this task, you should be able to:**
+
+-->Explain the difference between foreground and detached (-d) container execution.
+
+-->Assign meaningful names to containers using --name.
+
+-->Expose container services to the host with port mapping (-p host_port:container_port).
+
+-->Inspect application output using docker logs and docker logs -f.
+
+-->Access and troubleshoot a running container using docker exec -it.
+
+-->Understand that exiting an interactive shell inside a container is different from stopping the container itself.
 
 ---
 
