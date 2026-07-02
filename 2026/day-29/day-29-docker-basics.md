@@ -117,28 +117,79 @@ network, processes etc.
 
 ### Task 3: Run Real Containers
 
-1. Run an **Nginx** container and access it in your browser --> **docker run -d -p 8080:80 nginx** 
+1. Run an **Nginx** container and access it in your browser --> **docker run -d --name my-nginx -p 8080:80 nginx**
 
-<img width="832" height="397" alt="image" src="https://github.com/user-attachments/assets/8d12a36a-1a50-4d35-9221-509a27233a5f" />
+<img width="761" height="327" alt="image" src="https://github.com/user-attachments/assets/be046399-9c23-48f4-b607-4047ccc809ae" />
 
-<img width="1745" height="677" alt="image" src="https://github.com/user-attachments/assets/a8e6a5c9-f963-4780-83d9-19d84943e636" />
+<img width="1917" height="387" alt="image" src="https://github.com/user-attachments/assets/92f3f64d-e5b1-4288-bc6c-25c40646c71d" />
+
+<img width="1912" height="876" alt="image" src="https://github.com/user-attachments/assets/745feda0-fc37-4c87-b25e-6a59eba4e72e" />
 
 2. Run an **Ubuntu** container in interactive mode — explore it like a mini Linux machine --> **docker run -it ubuntu**
 
-<img width="1100" height="605" alt="image" src="https://github.com/user-attachments/assets/4b0d1628-60cd-46f9-a921-23c68a25940a" />
+**Explore the Ubuntu Container For that use below commands:**
+
+-->To check present working dir:pwd
+
+-->To check the list: ls
+
+-->To check OS info: cat /etc/os-release
+
+-->To check the hostname: hostname
+
+-->To check the current user: whoami
+
+-->To check the kernel version: uname -a
+
+-->To create a file: touch test.txt
+
+-->ls
+
+-->To check dir & go inside: mkdir docker-demo && cd docker-demo 
+
+-->Create another file: echo "Hello Docker" > hello.txt
+
+-->Reat that file: cat hello.txt
+
+-->Exit from ububtu container: exit
+
+<img width="1902" height="827" alt="image" src="https://github.com/user-attachments/assets/eb0f57d8-a3e1-45ea-9e72-df113f4a543a" />
 
 3. List all running containers -->**docker ps**
 
-<img width="1692" height="170" alt="image" src="https://github.com/user-attachments/assets/7e3dde57-9671-4962-8193-b8a4342b367a" />
-
 4. List all containers (including stopped ones) -->**docker ps -a**
 
-<img width="1855" height="203" alt="image" src="https://github.com/user-attachments/assets/4920259e-dbde-4128-a463-91c2e2fdab22" />
+5. Stop and remove a container: docker stop my-nginx && docker rm my-nginx 
 
-5. Stop and remove a container
+<img width="1751" height="312" alt="image" src="https://github.com/user-attachments/assets/db287147-1c0b-4f89-9bb3-a642a702fdad" />
 
-<img width="1650" height="271" alt="image" src="https://github.com/user-attachments/assets/ca80b834-7668-4804-aa3f-a9e9ceb589b1" />
+Bonuse commands: 
 
+-->View downloaded images: docker images
+
+-->View container logs: docker logs my-nginx
+
+-->Inspect detailed container information: docker inspect my-nginx
+
+-->Check Docker resource usage: docker stats
+
+<img width="747" height="562" alt="image" src="https://github.com/user-attachments/assets/47bedb9e-d173-4612-9a9f-67f8e00ab505" />
+
+**By completing this task, you will understand how to:**
+
+-->Pull Docker images from a registry.
+
+-->Run containers in detached and interactive modes.
+
+-->Access a web application (Nginx) through a mapped host port.
+
+-->Explore a Linux environment inside an Ubuntu container.
+
+-->View running and stopped containers.
+
+-->Stop, remove, inspect, and monitor Docker containers.
+
+-->Understand the basic Docker container lifecycle from creation to removal.
 
 ---
 
