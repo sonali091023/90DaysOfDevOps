@@ -1,0 +1,20 @@
+#task 2
+#Uses lightweight nginx base image
+FROM nginx:alpine
+
+#Sets working directory inside container, This is where nginx serves files from
+WORKDIR /usr/share/nginx/html
+
+RUN rm -rf ./*
+
+#Copies your file into container, Here . means current WORKDIR
+COPY index.html .
+
+#Runs during build time, Creates a layer (for learning/demo)
+RUN echo "NGINX image built successfully!"
+
+#Documents that container uses port 80, Helps others understand usage
+EXPOSE 80
+
+#Starts nginx in foreground, Keeps container running
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,8 @@
+FROM ubuntu
+
+RUN apt update && apt install nginx -y
+
+RUN echo "Hello from my custom image!"
+
+CMD ["echo", "Container is running"]
+
