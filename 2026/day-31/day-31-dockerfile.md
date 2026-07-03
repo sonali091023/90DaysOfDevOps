@@ -139,83 +139,77 @@ ENTRYPOINT: specifies the main program that the container always executes
 
 ---
 
-### Task 3: CMD vs ENTRYPOINT
+### Task 3: CMD vs ENTRYPOINT: 
+
+**Steps to follow:**
+
+-->This task is meant to show the behavioral difference between CMD and ENTRYPOINT.
 
 1. Create an image with `CMD ["echo", "hello"]` — run it, then run it with a custom command. What happens?
 
-Dockerfile:
+-->Create dir: mkdir task-3 && cd task-3
 
-FROM alpine
+-->Create Dockerfile: vi Dockerfile.cmd
 
-CMD ["echo", "hello"]
+-->Create image based on Dockerfile: docker build -f Dockerfile.cmd -t cmd-demo:v1 .
 
--->Command to create image:  **docker build -t new-img .**
+-->Verify creatred image: docker images
 
--->**docker run new-img:latest** Now there is no need to creatre container we can directly run it normally, Because Docker runs the default: echo hello
+-->Now create container from image: docker run cmd-demo:v1
 
--->**docker run new-img:latest echo hi** We can Run with custom command as well and here CMD got overridden, So Docker replaces CMD with your new command.
+-->Now Create container while also run ls command: docker run cmd-demo:v1 ls
 
-**CMD = default command (can be overridden)**
+<img width="1840" height="972" alt="image" src="https://github.com/user-attachments/assets/715a3958-7cf3-4404-ab49-3cf29334f7d7" />
 
-<img width="952" height="722" alt="image" src="https://github.com/user-attachments/assets/7807b3c0-7a1e-4179-8173-55db01205934" />
+<img width="791" height="352" alt="image" src="https://github.com/user-attachments/assets/3609ad75-a831-4e6f-9e5d-58f6e1fca852" />
 
 2. Create an image with `ENTRYPOINT ["echo"]` — run it, then run it with additional arguments. What happens?
 
-Dockerfile:
+-->Create dir: mkdir task-3 && cd task-3
 
-FROM alpine
+-->Create Dockerfile: vi Dockerfile.entrypoint
 
-ENTRYPOINT ["echo"]
+-->Create image based on Dockerfile: docker build -f Dockerfile.entrypoint -t entrypoint-demo:v1 .
 
-Command to create image: **docker build -t entrypoint-img .**
+-->Verify creatred image: docker images
 
-**docker run entrypoint-img** So Nothing prints just empty line, that is because ENTRYPOINT = echo No arguments passed → echo prints nothing
+-->Now create container from image: docker run entrypoint-demo:v1 [Created container without argument]
 
--->**docker run entrypoint-img hello-world** if we Run with arguments we can see the output hello world, So Docker did NOT replace ENTRYPOINT It appended your 
+-->Verify created container: docker ps -a
 
-arguments to it, **So ENTRYPOINT = fixed command**
+-->Now Create container while also run ls command: docker run entrypoint-demo:v1 [Created Container with argument]
 
-3. Write in your notes: When would you use CMD vs ENTRYPOINT?
+-->Verify created container: docker ps -a
 
--->**CMD:** You want to provide a default command that can be easily overridden
+<img width="1912" height="716" alt="image" src="https://github.com/user-attachments/assets/2dbddb0c-231c-439b-86b0-d3ea198672f0" />
 
-**Use cases such as:**
+<img width="692" height="371" alt="image" src="https://github.com/user-attachments/assets/3d44ebb2-0b68-4405-9c46-95ac23b7836b" />
 
-Running different scripts in same container
+Write in your notes: When would you use CMD vs ENTRYPOINT?
 
-Testing / debugging containers
+-->Create dir: mkdir task-3 && cd task-3
 
-Flexible containers for multiple purposes
+-->Create Dockerfile: vi Dockerfile.both
 
-Eg: CMD ["echo", "hello"]
+-->Create image based on Dockerfile: docker build -f Dockerfile.both -t entrypoint-demo:v1 .
 
-docker run myimage → hello
+-->Verify creatred image: docker images
 
-docker run myimage echo hi → hi So user can replace the command completely 
+-->Now create container from image: docker run both-demo:v1 Docker rocks! [Created Container with argument]
 
--->**ENTRYPOINT:** You want to define a fixed main command
+-->Verify created container: docker ps -a
 
-**Use cases such as:**
+<img width="1917" height="917" alt="image" src="https://github.com/user-attachments/assets/c6ae94d2-9a2b-42ef-82d5-9764fb299a9d" />
 
-Container behaves like a tool/program
+<img width="707" height="782" alt="image" src="https://github.com/user-attachments/assets/6388213a-5b9f-4dc3-8dfe-4909c7097b18" />
 
-You always want a specific executable to run
+<img width="797" height="821" alt="image" src="https://github.com/user-attachments/assets/384f3702-78d5-4a23-80a0-109470884af2" />
 
-Restrict users from changing core behavior
+**Easy trick to remember:**
 
-Eg: ENTRYPOINT ["echo"]
+-->CMD = Default → "Use this command unless I tell you otherwise."
 
-docker run myimage hello → hello So here echo always runs, User only passes arguments
-
--->Best Practice is we can use the ENTRYPOINT and CMD together
-
-ENTRYPOINT ["python"]
-
-CMD ["app.py"]
-
--->**ENTRYPOINT:** docker run myimage → python app.py [ENTRYPOINT = fixed command]
-
--->**CMD:** docker run myimage test.py → python test.py [CMD = default argument (can change)]
+-->ENTRYPOINT = Fixed → "Always start with this executable."
 
 ---
 
