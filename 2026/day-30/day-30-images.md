@@ -28,61 +28,71 @@ You will:
 
 **docker pull alpine**
 
-**2. List all images on your machine — note the sizes**
+**2. List all images to do this run command: docker images --> on your machine — note the sizes**
 
-<img width="1901" height="675" alt="image" src="https://github.com/user-attachments/assets/73d1a478-f0ac-4040-8f19-2077308b6c20" />
+<img width="1862" height="947" alt="image" src="https://github.com/user-attachments/assets/9035b13e-c378-47c6-b5be-ee63d9d420ca" />
+
+-->**Note:** Notice how Alpine is dramatically smaller.
 
 **3. Compare `ubuntu` vs `alpine` — why is one much smaller?**
 
 -->**ubuntu:** Ubuntu includes full GNU utilities and **glibc-->larger, feature-rich**, making it heavier but more compatible 
 
 -->**alpine:** Alpine is smaller because it uses **musl libc-->lightweight, simpler**, BusyBox, and a minimal package set, It removes everything that’s not
-
 strictly needed, Alpine is designed specifically for containers
+
+<img width="790" height="737" alt="image" src="https://github.com/user-attachments/assets/27d16476-d7d4-4982-86f0-4bf1167e1860" />
+
+<img width="547" height="456" alt="image" src="https://github.com/user-attachments/assets/0c0cf2c5-ca13-4aa0-b18e-cd857a70ba73" />
 
 **4. Inspect an image — what information can you see?**
 
-<img width="1916" height="968" alt="image" src="https://github.com/user-attachments/assets/31ec1836-f4f6-4768-874c-60e2091d0469" />
+<img width="1912" height="982" alt="image" src="https://github.com/user-attachments/assets/c74cdc4c-7619-4819-bb67-d6e2ecaac917" />
 
-Image ID: sha256:341bf0f3ce6c...
+**Useful information you can find:** Image ID, Creation date, Operating system, CPU architecture, Environment variables, Default command (CMD)
+Entrypoint, Labels, Layers, Exposed ports, Working directory, Image size etc.
 
-Image: nginx:latest
+-->Find only the image size: docker image inspect nginx --format='{{.Size}}'
 
-Exposed Port: 80/tcp (HTTP)
+-->Find the OS: docker image inspect nginx --format='{{.Os}}'
 
-Repository: docker.io/library/nginx
+-->Find the default command: docker image inspect nginx --format='{{.Config.Cmd}}'
 
-Environment variable
-
-NGINX Version: 1.29.5
-
-ENTRYPOINT
-
-CMD
-
-Lables,maintainer
-
-Filesystem | Uses layered filesystem | 7 layers
+<img width="1512" height="142" alt="image" src="https://github.com/user-attachments/assets/ee33f2e3-f6d6-4679-9ae9-b3fda96bc0b8" />
 
 **5. Remove an image you no longer need -->**docker rmi <image id>****
 
-<img width="1503" height="346" alt="image" src="https://github.com/user-attachments/assets/1f5bce28-e888-47fb-a95d-e9e104ff18a2" />
+<img width="681" height="707" alt="image" src="https://github.com/user-attachments/assets/7cac2e47-bb40-4b9c-855d-d8a5d004e91b" />
+
+Bonuse Commands:
+
+-->Remove dangling images: docker image prune
+
+-->Remove all unused images: docker image prune -a
+
+-->Check disk usage: docker system df
+
+<img width="847" height="712" alt="image" src="https://github.com/user-attachments/assets/30ed805b-ea20-4770-9ea9-55fcb819d9f2" />
 
 ---
 
-### Task 2: Image Layers
+### Task 2: Image Layers:
 
-**1. Run `docker image history nginx` — what do you see?**
+-->Excellent! This task teaches one of Docker's most important concepts: image layers. Understanding layers helps explain why Docker images build quickly, reuse data efficiently, and consume less storage.
+
+**1. Run `docker image history nginx` OR `docker image nginx` — what do you see?**
 
 -->A list of instructions used to build the nginx image (e.g., CMD, EXPOSE, ENTRYPOINT, COPY, RUN, ENV, LABEL) Each instruction corresponds to a layer
 
-<img width="1335" height="497" alt="image" src="https://github.com/user-attachments/assets/86d397ad-8cd4-4edc-96e9-4f2f52d75574" />
+<img width="1587" height="802" alt="image" src="https://github.com/user-attachments/assets/7da08174-d5b4-4947-bfb0-2b6c5c16290d" />
 
 **2. Each line is a **layer**. Note how some layers show sizes and some show 0B**
 
 -->Layers with a size (MB or kB) were created by instructions that modify the filesystem,such as RUN, COPY, or ADD.
 
 Layers showing 0B were created by instructions that only change metadata, such as ENV, CMD, EXPOSE, LABEL, or ENTRYPOINT.These do not change the filesystem.
+
+<img width="845" height="555" alt="image" src="https://github.com/user-attachments/assets/83cf598e-f694-4607-90bc-45b3ce0f6a03" />
 
 **3. Write in your notes: What are layers and why does Docker use them?**
 
