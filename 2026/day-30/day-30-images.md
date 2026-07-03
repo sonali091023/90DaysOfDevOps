@@ -1,4 +1,4 @@
-# Day 30 – Docker Images & Container Lifecycle
+<img width="686" height="477" alt="image" src="https://github.com/user-attachments/assets/03b4f1a6-a5f5-4b4f-b145-134443f4b719" /># Day 30 – Docker Images & Container Lifecycle
 
 ## Task
 Today's goal is to **understand how images and containers actually work**.
@@ -94,6 +94,8 @@ Layers showing 0B were created by instructions that only change metadata, such a
 
 <img width="845" height="555" alt="image" src="https://github.com/user-attachments/assets/83cf598e-f694-4607-90bc-45b3ce0f6a03" />
 
+<img width="866" height="590" alt="image" src="https://github.com/user-attachments/assets/e3061b0e-bd46-49d9-981a-7cf96f9ba7d0" />
+
 **3. Write in your notes: What are layers and why does Docker use them?**
 
 -->Docker layers are read-only filesystem snapshots created by each instruction in a Dockerfile.
@@ -106,55 +108,171 @@ They allow images to share common layers (saves storage).
 
 They make image downloads faster (only new layers are pulled)
 
+**Docker Layers:**
+
+<img width="787" height="827" alt="image" src="https://github.com/user-attachments/assets/adbccf3f-9e8f-4f04-b862-07255694b0bf" />
+
+<img width="742" height="812" alt="image" src="https://github.com/user-attachments/assets/d5c4d4d8-fa84-44af-9d94-ec4d013812c2" />
+
+<img width="792" height="392" alt="image" src="https://github.com/user-attachments/assets/df00cca3-e322-466f-8e29-2527a9ac134c" />
+
+**Notes for your assignment:**
+
+**What are Docker layers?** --> Docker images are made up of multiple read-only layers. Each layer represents a change made during image creation, such as installing software, copying files, or configuring the image. These layers are stacked together to form the final image.
+
+**Why does Docker use layers?**
+
+-->Layers allow Docker to reuse common parts between images.
+
+-->They enable build caching, making image builds much faster.
+
+-->Shared layers reduce disk space usage.
+
+-->Only new or changed layers are downloaded when pulling images, improving download speed.
+
+<img width="770" height="597" alt="image" src="https://github.com/user-attachments/assets/79a9ac7a-b441-41f9-9add-1437b3d7337e" />
+
 ---
 
-### Task 3: Container Lifecycle
-Practice the full lifecycle on one container:
-1. **Create** a container (without starting it) --> **docker run -d --name samplecont nginx**
-2. **Start** the container --> **docker run -d --name samplecont nginx**
-3. **Pause** it and check status --> **docker pause samplecont**
-4. **Unpause** it --> **docker unpause samplecont**
-5. **Stop** it -->**docker stop samplecont**
-6. **Restart** it -->**docker restart samplecont**
-7. **Kill** it -->**docker kill samplecont**
-8. **Remove** it **docker rm samplecont**
+### Task 3: Container Lifecycle:
 
-Check `docker ps -a` after each step — observe the state changes.
+-->This task helps you understand the Docker Container Lifecycle—the different states a container goes through from creation to deletion.
 
-<img width="1393" height="912" alt="image" src="https://github.com/user-attachments/assets/2df732ab-63c0-42fe-8cd0-34dce27a4b6a" />
+**Practice the full lifecycle on one container:**
 
-<img width="1420" height="343" alt="image" src="https://github.com/user-attachments/assets/b22cd9bc-5b65-4d58-89e8-b66ffa47e75f" />
+1. **Create** a container (without starting it) --> docker create --name myubuntu ubuntu sleep 300
+
+<img width="701" height="601" alt="image" src="https://github.com/user-attachments/assets/46966a3f-a591-4773-80a4-a35f4b3cdaaa" />
+
+<img width="1621" height="162" alt="image" src="https://github.com/user-attachments/assets/04298add-799a-413e-bbb5-5e7a09667fcd" />
+
+2. **Start** the container --> docker run -d --name samplecont nginx
+
+<img width="712" height="472" alt="image" src="https://github.com/user-attachments/assets/9326d6c9-b5e2-45ab-a8a2-283e2a65a592" />
+
+<img width="1387" height="187" alt="image" src="https://github.com/user-attachments/assets/ebe046c5-4ed7-4a2c-827a-a092142b32ba" />
+
+3. **Pause** it and check status --> docker pause samplecont
+
+<img width="686" height="477" alt="image" src="https://github.com/user-attachments/assets/d45c66a1-f6e2-4a1c-bd16-3e1898cf80ab" />
+
+<img width="1302" height="180" alt="image" src="https://github.com/user-attachments/assets/e60e192a-8801-4799-8186-dbda1f7f3244" />
+
+4. **Unpause** it --> docker unpause samplecont
+
+<img width="712" height="477" alt="image" src="https://github.com/user-attachments/assets/752538b9-b531-46a4-99c5-086348987451" />
+
+<img width="1356" height="181" alt="image" src="https://github.com/user-attachments/assets/93f0dcae-17c4-4bb3-89c8-a7b0d9ce8db7" />
+
+5. **Stop** it -->docker stop samplecont
+
+<img width="675" height="467" alt="image" src="https://github.com/user-attachments/assets/6a028cef-4f35-4242-bba5-b6020649b8fe" />
+
+<img width="1477" height="162" alt="image" src="https://github.com/user-attachments/assets/52e11d77-a802-4122-8447-cfa9351c8086" />
+
+6. **Restart** it -->docker restart samplecont
+
+<img width="677" height="472" alt="image" src="https://github.com/user-attachments/assets/6e6686f8-d572-4521-a7d0-3f65941a0879" />
+
+<img width="1316" height="177" alt="image" src="https://github.com/user-attachments/assets/1c5e2b49-8a72-4f09-9570-b0075edacb28" />
+
+7. **Kill** it -->docker kill samplecont
+
+<img width="730" height="510" alt="image" src="https://github.com/user-attachments/assets/fb255820-c1ef-440e-996e-acc35396c202" />
+
+<img width="1347" height="167" alt="image" src="https://github.com/user-attachments/assets/76e47c69-18f0-41c3-a1ba-347f949427fa" />
+
+8. **Remove** it -->docker rm samplecont
+
+<img width="702" height="356" alt="image" src="https://github.com/user-attachments/assets/85e63d8d-ec87-4e79-801b-d3126269dc24" />
+
+<img width="1322" height="142" alt="image" src="https://github.com/user-attachments/assets/db1180ff-fc7d-40f4-8400-b0a86ae23910" />
+
+<img width="737" height="597" alt="image" src="https://github.com/user-attachments/assets/ebb0faed-a545-4bd6-b917-0e2c895ba6d9" />
+
+<img width="805" height="696" alt="image" src="https://github.com/user-attachments/assets/aab1fe76-08e1-41ec-9eaf-f63fcdc85ea4" />
+
+<img width="917" height="336" alt="image" src="https://github.com/user-attachments/assets/b7f3b8dc-37b5-457d-bb00-7dabc71865c7" />
+
+<img width="845" height="587" alt="image" src="https://github.com/user-attachments/assets/8afa2cf4-2d54-4d06-a60d-10e0bae7f1fa" />
 
 ---
 
-### Task 4: Working with Running Containers
-1. Run an Nginx container in detached mode --> **docker run -d --name nginx-container nginx**
+### Task 4: Working with Running Containers:
 
-<img width="1302" height="208" alt="image" src="https://github.com/user-attachments/assets/06ff3e56-fc4c-47f2-b338-c0de91ebcf8b" />
+-->Great! This task teaches you how to work with running containers, inspect them, and interact with them. We'll use an Nginx container.
 
-2. View its **logs** -->**docker logs nginx-container**
+1. Run an Nginx container in detached mode --> docker run -d --name mynginx -p 8080:80 nginx
 
-<img width="1170" height="680" alt="image" src="https://github.com/user-attachments/assets/45cbd42c-97c9-4455-ba40-1ed418bd08a4" />
+<img width="1917" height="237" alt="image" src="https://github.com/user-attachments/assets/bc17e1cc-eaec-4523-9667-ae546a564e5d" />
 
-3. View **real-time logs** (follow mode) --> **docker logs -f nginx-container**
+<img width="727" height="767" alt="image" src="https://github.com/user-attachments/assets/364106f3-715b-4b18-8dc4-e93e9cb3aa89" />
 
-<img width="1176" height="650" alt="image" src="https://github.com/user-attachments/assets/07b2cd51-0f3a-4256-81cc-7acfe566c94e" />
+2. Verify in your browser: http://localhost:8080 [You should see the Welcome to nginx! page.]
 
-4. **Exec** into the container and look around the filesystem --> **docker exec -it 7b4e98176a29 bash**
+<img width="1912" height="727" alt="image" src="https://github.com/user-attachments/assets/a9023c51-d66a-4a8a-a523-4cfdeed73925" />
 
-<img width="1763" height="880" alt="image" src="https://github.com/user-attachments/assets/8238f24d-d995-4010-900f-aec228bf5a47" />
+4. View its **logs** -->docker logs mynginx
 
-5. Run a single command inside the container without entering it --> **docker exec nginx-container ls /**
+-->Logs contain everything the application's main process writes to standard output (stdout) and standard error (stderr).
 
-<img width="656" height="507" alt="image" src="https://github.com/user-attachments/assets/98cd0268-1260-4ccb-b061-46652e24e716" />
+<img width="1917" height="637" alt="image" src="https://github.com/user-attachments/assets/a7959509-994d-4575-b5d7-2b1809410793" />
 
-7. **Inspect** the container — find its IP address, port mappings, and mounts -->**docker inspect nginx-container**
+3. View **real-time logs** (follow mode) --> docker logs -f mynginx
 
-<img width="1126" height="447" alt="image" src="https://github.com/user-attachments/assets/1612e253-5b64-44b9-bee5-314bf7fd0869" />
+-->Now refresh http://localhost:8080 in your browser. You'll see access log entries appear, for example:
 
-<img width="500" height="368" alt="image" src="https://github.com/user-attachments/assets/735db477-c205-4da9-bbdf-e6c0da78b850" />
+<img width="1917" height="682" alt="image" src="https://github.com/user-attachments/assets/de7f614b-f5a2-4d8e-86ca-dd4a5da48cb1" />
 
-<img width="808" height="461" alt="image" src="https://github.com/user-attachments/assets/0558e78a-30d2-4253-a877-d16e1708298e" />
+5. **Exec** into the container and look around the filesystem --> docker exec -it mynginx /bin/bash
+
+**Note:** If /bin/bash isn't available, use: docker exec -it mynginx /bin/sh
+
+-->Check your current directory: pwd
+
+-->List files: ls
+
+-->List the Nginx configuration: ls /etc/nginx
+
+-->View the web page files: ls /usr/share/nginx/html
+
+-->View the default web page: cat /usr/share/nginx/html/index.html
+
+-->exit
+
+<img width="1837" height="776" alt="image" src="https://github.com/user-attachments/assets/3f97ba50-4781-465a-bdde-e6a2bb9e38a5" />
+
+5. Run a single command inside the container without entering it --> docker exec mynginx ls /usr/share/nginx/html
+
+-->docker exec mynginx hostname
+
+-->Check nginx version: docker exec mynginx nginx -v
+
+<img width="1437" height="165" alt="image" src="https://github.com/user-attachments/assets/54c0a4bf-afd6-4686-b412-03177126d0ab" />
+
+7. **Inspect** the container — find its IP address, port mappings, and mounts -->docker inspect mynginx [This returns detailed JSON metadata about the container.]
+
+-->Find the container IP address: docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mynginx
+
+-->Find the port mapping: docker port mynginx OR Use: docker inspect -f '{{json .NetworkSettings.Ports}}' mynginx
+
+-->Find mounted volume: docker inspect -f '{{json .Mounts}}' mynginx
+
+<img width="1917" height="962" alt="image" src="https://github.com/user-attachments/assets/436f9961-a499-4726-b99a-5c3426761542" />
+
+<img width="1852" height="241" alt="image" src="https://github.com/user-attachments/assets/b97bd6f3-ae96-491c-a896-2712c5b8b243" />
+
+**Useful inspection fields:**
+
+-->Container name: docker inspect -f '{{.Name}}' mynginx
+
+-->Container status: docker inspect -f '{{.State.Status}}' mynginx
+
+-->Image used: docker inspect -f '{{.Config.Image}}' mynginx
+
+-->Hostname: docker inspect -f '{{.Config.Hostname}}' mynginx
+
+<img width="1547" height="217" alt="image" src="https://github.com/user-attachments/assets/c8031777-b5c1-4d20-a590-8da7f30cba59" />
 
 ---
 
