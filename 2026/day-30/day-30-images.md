@@ -276,12 +276,21 @@ They make image downloads faster (only new layers are pulled)
 
 ---
 
-### Task 5: Cleanup
-1. Stop all running containers in one command --> **docker stop $(docker ps -q)**
+### Task 5: Cleanup:
 
-<img width="1342" height="256" alt="image" src="https://github.com/user-attachments/assets/d0fb95e6-2779-4dd6-8972-72400a176a89" />
+-->Excellent! This task focuses on Docker cleanup, which is an important practice to free up disk space and keep your Docker environment organized.
 
-3. Remove all stopped containers in one command
+-->Check running containers first: docker ps
+
+1. Stop all running containers in one command --> docker stop $(docker ps -q)
+
+<img width="702" height="652" alt="image" src="https://github.com/user-attachments/assets/3d540811-82bc-4131-a225-74e5acc13317" />
+
+<img width="1745" height="186" alt="image" src="https://github.com/user-attachments/assets/1be031be-2e6b-4958-bbf1-c2acbb4218ab" />
+
+3. Remove all stopped containers in one command:
+
+<img width="687" height="797" alt="image" src="https://github.com/user-attachments/assets/a150da29-35ee-4b3e-aa65-31fe1a4f041e" />
 
 -->**docker container prune** This will ask for confirmation to delete the stopped container
 
@@ -289,19 +298,23 @@ They make image downloads faster (only new layers are pulled)
 
 -->**docker rm $(docker ps -aq -f status=exited)** This will delete the exited status containers
 
-<img width="1448" height="397" alt="image" src="https://github.com/user-attachments/assets/f6df5e52-78b3-49c1-99b2-9276cb9b5322" />
+6. Remove unused images --> **docker rmi <img-id> OR docker image prune**
 
-6. Remove unused images --> **docker rmi <img-id>**
+-->Remove all unused images: docker image prune -a & if wanted to skip the confirmation: docker image prune -a -f
 
-<img width="1130" height="143" alt="image" src="https://github.com/user-attachments/assets/fba63baa-fd76-41ee-90a0-b762495bab70" />
+Note: This deletes any image that isn't currently used by a container. If you need an image again later, Docker will download it when you run or pull it.
 
-7. Check how much disk space Docker is using -->
+8. Check how much disk space Docker is using -->
 
 **docker system df** This is used to check the docker disk usage
 
 **docker system df -v:** We can get the detailed information about container and image etc.
 
-<img width="1341" height="237" alt="image" src="https://github.com/user-attachments/assets/30150d6c-1d64-440e-a4f2-b3b3df5da769" />
+<img width="1852" height="982" alt="image" src="https://github.com/user-attachments/assets/df86dff4-c439-43aa-8734-eccf6ff3edb6" />
+
+<img width="772" height="342" alt="image" src="https://github.com/user-attachments/assets/d63e6c15-59d0-48ce-a8b9-06d695232554" />
+
+<img width="857" height="382" alt="image" src="https://github.com/user-attachments/assets/9f2e39dc-e48d-42c3-91ae-ee63903243ca" />
 
 ---
 
