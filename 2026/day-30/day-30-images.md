@@ -212,13 +212,13 @@ They make image downloads faster (only new layers are pulled)
 
 <img width="1912" height="727" alt="image" src="https://github.com/user-attachments/assets/a9023c51-d66a-4a8a-a523-4cfdeed73925" />
 
-4. View its **logs** -->docker logs mynginx
+3. View its **logs** -->docker logs mynginx
 
 -->Logs contain everything the application's main process writes to standard output (stdout) and standard error (stderr).
 
 <img width="1917" height="637" alt="image" src="https://github.com/user-attachments/assets/a7959509-994d-4575-b5d7-2b1809410793" />
 
-3. View **real-time logs** (follow mode) --> docker logs -f mynginx
+4. View **real-time logs** (follow mode) --> docker logs -f mynginx
 
 -->Now refresh http://localhost:8080 in your browser. You'll see access log entries appear, for example:
 
@@ -242,7 +242,7 @@ They make image downloads faster (only new layers are pulled)
 
 <img width="1837" height="776" alt="image" src="https://github.com/user-attachments/assets/3f97ba50-4781-465a-bdde-e6a2bb9e38a5" />
 
-5. Run a single command inside the container without entering it --> docker exec mynginx ls /usr/share/nginx/html
+6. Run a single command inside the container without entering it --> docker exec mynginx ls /usr/share/nginx/html
 
 -->docker exec mynginx hostname
 
@@ -288,7 +288,7 @@ They make image downloads faster (only new layers are pulled)
 
 <img width="1745" height="186" alt="image" src="https://github.com/user-attachments/assets/1be031be-2e6b-4958-bbf1-c2acbb4218ab" />
 
-3. Remove all stopped containers in one command:
+2. Remove all stopped containers in one command:
 
 <img width="687" height="797" alt="image" src="https://github.com/user-attachments/assets/a150da29-35ee-4b3e-aa65-31fe1a4f041e" />
 
@@ -298,13 +298,13 @@ They make image downloads faster (only new layers are pulled)
 
 -->**docker rm $(docker ps -aq -f status=exited)** This will delete the exited status containers
 
-6. Remove unused images --> **docker rmi <img-id> OR docker image prune**
+3. Remove unused images --> **docker rmi <img-id> OR docker image prune**
 
 -->Remove all unused images: docker image prune -a & if wanted to skip the confirmation: docker image prune -a -f
 
 Note: This deletes any image that isn't currently used by a container. If you need an image again later, Docker will download it when you run or pull it.
 
-8. Check how much disk space Docker is using -->
+4. Check how much disk space Docker is using:
 
 **docker system df** This is used to check the docker disk usage
 
