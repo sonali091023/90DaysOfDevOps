@@ -1,4 +1,4 @@
-<img width="686" height="477" alt="image" src="https://github.com/user-attachments/assets/03b4f1a6-a5f5-4b4f-b145-134443f4b719" /># Day 30 – Docker Images & Container Lifecycle
+# Day 30 – Docker Images & Container Lifecycle
 
 ## Task
 Today's goal is to **understand how images and containers actually work**.
