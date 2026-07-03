@@ -221,11 +221,35 @@ Write in your notes: When would you use CMD vs ENTRYPOINT?
 3. Build and tag it `my-website:v1`
 4. Run it with port mapping and access it in your browser
 
-<img width="1082" height="828" alt="image" src="https://github.com/user-attachments/assets/fee5804c-d8e3-4610-b812-d6c55499a869" />
+**Steps to follow:**
 
-<img width="1897" height="323" alt="image" src="https://github.com/user-attachments/assets/522cf453-25ce-42b7-afe2-134de9ada7f2" />
+-->Create dir: mkdir my-website && cd my-website
 
-<img width="1898" height="967" alt="image" src="https://github.com/user-attachments/assets/0e6ba415-c2fb-4da6-91db-a147dd714917" />
+-->Create Dockerfile: vi Dockerfile
+
+-->Create index file: vi index.html
+
+<img width="607" height="552" alt="image" src="https://github.com/user-attachments/assets/c2676d71-0844-438a-ad36-c3a6310a5755" />
+
+-->Create image based on Dockerfile: docker build -t my-website:v1 .
+
+-->Verify creatred image: docker images
+
+-->Now create container from image: docker run -d -p 8080:80 --name my-web my-website:v1
+
+-->Verify created container: docker ps 
+
+<img width="1381" height="962" alt="image" src="https://github.com/user-attachments/assets/22936c8a-4734-4239-9ce1-7b03640e8395" />
+
+<img width="1917" height="922" alt="image" src="https://github.com/user-attachments/assets/6fe1b4b8-1bd2-43a2-a351-0e0f6dd57f38" />
+
+-->Now lets verify the web application: http://localhost:8080
+
+<img width="1911" height="630" alt="image" src="https://github.com/user-attachments/assets/13865cd1-6f9f-4835-9535-fdc1f55f156b" />
+
+<img width="795" height="166" alt="image" src="https://github.com/user-attachments/assets/0508c90b-1b96-4116-b5f9-ebc3c6fc90ed" />
+
+-->**Note:** Here cncepts learned Build a Docker image, serve a static website with Nginx, copy files into an image, map ports (8080:80), and access the app in a browser. 
 
 ---
 
@@ -234,23 +258,31 @@ Write in your notes: When would you use CMD vs ENTRYPOINT?
 2. Add entries for: `node_modules`, `.git`, `*.md`, `.env`
 3. Build the image — verify that ignored files are not included
 
-<img width="1848" height="868" alt="image" src="https://github.com/user-attachments/assets/6bbb58cc-4a52-4342-bdd9-64c4a7697812" />
+**Steps to follow:**
 
-<img width="997" height="236" alt="image" src="https://github.com/user-attachments/assets/dd910cc2-6061-48bd-b800-44e0a4e25753" />
+-->1. Create a .dockerignore file: vi .dockerignore & then add following file extentions,
 
-Command used to create image: **docker build -t my-nginx-img .**
+<img width="665" height="371" alt="image" src="https://github.com/user-attachments/assets/77896269-4023-4316-9f3d-cf8d53b6edec" />
 
-Command used to remove unnecessary files: **docker run --rm website:latest ls /usr/share/nginx/html**
+-->Then build the image: docker build -t my-app:v1 .
 
-**Explaination of above command What this means**
+-->Create the container: docker run -it --rm my-app:v1 OR docker run -it --rm my-app:v1 sh [Here dont need to exec to container we can directly go inside it]
 
---> docker run → start a container from the image
+-->docker exec -it <docker-id> sh
 
---> --rm → automatically remove container after it exits
+-->ls
 
---> website:latest → your Docker image name
+-->Search for README file: find / -name "README.md" 2>/dev/null
 
---> ls /usr/share/nginx/html → list files inside Nginx web root folder
+-->Search for .env file: find / -name ".env" 2>/dev/null
+
+-->Search for node_module dir: find / -name "node_modules" 2>/dev/null
+
+<img width="1917" height="617" alt="image" src="https://github.com/user-attachments/assets/8c2b6e27-74ab-4735-99eb-f6641ffb4a0e" />
+
+<img width="702" height="347" alt="image" src="https://github.com/user-attachments/assets/2b8e91e0-4c5d-4c78-80a4-e81c7a873bc2" />
+
+**Note:** Concept learned .dockerignore works like .gitignore, but for Docker builds. Files listed in it are not sent to the Docker daemon, so they cannot be copied into the image with COPY or ADD.
 
 ---
 
