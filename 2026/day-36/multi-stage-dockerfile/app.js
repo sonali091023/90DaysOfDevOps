@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 });
 
 /* API */
-app.get("/api", (req, res) => {                                #this is industry standards
+app.get("/api", (req, res) => {                                
   res.json({ message: "Hello from backend" });
 });
 

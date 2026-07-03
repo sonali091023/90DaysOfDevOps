@@ -1,20 +1,79 @@
+version: "3.9"
+
 services:
   app:
-    build: .      #Go to current folder (.) and find a Dockerfile It finds your Dockerfile Starts executing it
+    #build: .                  If you leave build: . in place, Compose will rebuild the image locally instead of pulling it from Docker Hub.
+    image: sonali0910/nginx-backend-api-app:v1                     
     container_name: node_app
-    volumes:
-      - ./app:/app        # live reload (important) it means whatever chnages we do in the index.html file that will get reflect in the webpage
-      - /app/node_modules
+
     ports:
-      - "3000:3000"
+      - "3001:3000"
+
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+
     command: npm run dev
+
+    env_file:
+      - .env
+
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+    networks:
+      - app-network
 
   nginx:
     image: nginx:alpine
     container_name: nginx_proxy
+
     ports:
       - "8080:80"
+
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
     depends_on:
       - app
+
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:7
+
+    container_name: mongodb
+
+    restart: always
+
+    env_file:
+      - .env
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo-data:/data/db
+
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+    networks:
+      - app-network
+
+volumes:
+  mongo-data:
+
+networks:
+  app-network:
+    driver: bridge

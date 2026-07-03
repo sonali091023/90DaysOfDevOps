@@ -3,211 +3,363 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kanban Task Manager</title>
+<title>Job Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f3;
-    --text-primary: #1a1a18;
-    --text-secondary: #6b6b67;
-    --text-tertiary: #a0a09a;
-    --border-light: rgba(0,0,0,0.10);
-    --border-mid: rgba(0,0,0,0.18);
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --font: system-ui, -apple-system, sans-serif;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg-primary: #1c1c1a;
-      --bg-secondary: #252523;
-      --text-primary: #f0ede8;
-      --text-secondary: #999992;
-      --text-tertiary: #666660;
-      --border-light: rgba(255,255,255,0.08);
-      --border-mid: rgba(255,255,255,0.15);
-    }
+    --bg-board:     #262f39;
+    --bg-panel:     #2f3a45;
+    --bg-column:    #2b3540;
+    --paper:        #f3eee0;
+    --paper-dim:    #e9e1c9;
+    --ink:          #221e16;
+    --ink-soft:     #746c59;
+    --ink-faint:    #a89f8a;
+    --line-dark:    rgba(255,255,255,0.09);
+    --line-mid:     rgba(255,255,255,0.16);
+    --line-paper:   rgba(34,30,22,0.16);
+    --stamp-red:    #b33a2e;
+    --stamp-teal:   #2c7a6d;
+    --stamp-mustard:#c08a2e;
+    --stamp-blue:   #3f6fa3;
+    --stamp-purple: #7a5a94;
+    --font-display: 'Oswald', sans-serif;
+    --font-mono:    'IBM Plex Mono', monospace;
+    --font-body:    'Inter', sans-serif;
+    --radius: 3px;
   }
 
   body {
-    font-family: var(--font);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
+    font-family: var(--font-body);
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.025) 32px),
+      repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.025) 32px),
+      var(--bg-board);
+    color: var(--paper);
     min-height: 100vh;
-    padding: 2rem 1.5rem;
+    padding: 2rem 2rem 3rem;
   }
 
   /* ── Top bar ── */
   .topbar {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
-    gap: 12px;
+    gap: 20px;
     flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--line-mid);
   }
-  .title { font-size: 18px; font-weight: 600; }
+  .brand { display: flex; flex-direction: column; gap: 2px; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    color: var(--stamp-mustard);
+    text-transform: uppercase;
+  }
+  .title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
   input[type="text"], input[type="date"], select, textarea {
     width: 100%;
-    font-family: var(--font);
-    font-size: 13px;
-    padding: 7px 10px;
-    border: 0.5px solid var(--border-mid);
-    border-radius: var(--radius-md);
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border: 1px solid var(--line-mid);
+    border-radius: var(--radius);
+    background: var(--bg-panel);
+    color: var(--paper);
     outline: none;
     transition: border-color 0.15s;
   }
   input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
-    border-color: var(--text-secondary);
+    border-color: var(--stamp-mustard);
   }
+  ::placeholder { color: var(--ink-faint); }
 
-  .search-wrap { flex: 1; max-width: 280px; }
+  .search-wrap { position: relative; width: 220px; }
+  .search-wrap::before {
+    content: '№';
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint);
+    pointer-events: none;
+  }
+  .search-wrap input { padding-left: 26px; }
 
   /* ── Filters ── */
   .filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .filter-btn {
-    font-size: 12px; padding: 4px 12px;
-    border: 0.5px solid var(--border-mid);
-    border-radius: 99px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 11px;
+    border: 1px solid var(--line-mid);
+    border-radius: var(--radius);
     background: transparent;
-    color: var(--text-secondary);
+    color: var(--ink-faint);
     cursor: pointer;
     transition: all 0.15s;
   }
   .filter-btn.active, .filter-btn:hover {
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    border-color: var(--text-secondary);
+    background: var(--stamp-mustard);
+    color: #211a0c;
+    border-color: var(--stamp-mustard);
   }
 
-  /* ── Stats ── */
+  /* ── Stats / control panel ── */
   .stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 1.5rem;
+    gap: 1px;
+    background: var(--line-dark);
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+    margin-bottom: 1.75rem;
+    overflow: hidden;
   }
   .stat {
-    background: var(--bg-primary);
-    border: 0.5px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 10px 14px;
+    background: var(--bg-panel);
+    padding: 14px 18px;
+    position: relative;
   }
-  .stat-val { font-size: 22px; font-weight: 600; }
-  .stat-lbl { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
-  .progress-bar { height: 4px; background: var(--border-light); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--text-primary); border-radius: 99px; transition: width 0.4s; }
+  .stat-val {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--paper);
+  }
+  .stat-lbl {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+  .progress-bar { height: 3px; background: var(--line-mid); margin-top: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--stamp-teal); transition: width 0.4s; }
 
   /* ── Board ── */
-  .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
   .column {
-    background: var(--bg-secondary);
-    border: 0.5px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 1rem;
-    min-height: 420px;
+    background: var(--bg-column);
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+    padding: 0 0 1rem;
+    min-height: 440px;
+    transition: border-color 0.15s, background 0.15s;
   }
-  .column.drag-target { border-color: var(--border-mid); }
-  .col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .col-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.07em; }
+  .column.drag-target { border-color: var(--stamp-mustard); background: #303c48; }
+
+  .col-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px 12px;
+    border-bottom: 1px dashed var(--line-mid);
+    margin-bottom: 12px;
+  }
+  .col-title-wrap { display: flex; align-items: baseline; gap: 8px; }
+  .col-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stamp-mustard);
+  }
+  .col-title {
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
   .col-count {
-    font-size: 11px; color: var(--text-tertiary);
-    background: var(--bg-primary);
-    border: 0.5px solid var(--border-light);
-    border-radius: 99px; padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 10.5px; color: var(--ink-faint);
+    border: 1px solid var(--line-mid);
+    border-radius: 99px; padding: 1px 8px;
   }
+  .col-header-right { display: flex; align-items: center; gap: 8px; }
   .add-btn {
-    font-size: 18px; line-height: 1; color: var(--text-tertiary);
-    background: none; border: none; cursor: pointer; padding: 0 4px;
-    transition: color 0.15s;
+    font-family: var(--font-mono);
+    font-size: 15px; line-height: 1; color: var(--ink-faint);
+    background: none; border: 1px solid var(--line-mid); border-radius: var(--radius);
+    cursor: pointer; padding: 2px 7px;
+    transition: color 0.15s, border-color 0.15s;
   }
-  .add-btn:hover { color: var(--text-primary); }
+  .add-btn:hover { color: var(--stamp-mustard); border-color: var(--stamp-mustard); }
 
   /* ── Task cards ── */
-  .task-list { display: flex; flex-direction: column; gap: 8px; min-height: 48px; }
+  .task-list { display: flex; flex-direction: column; gap: 10px; min-height: 48px; padding: 0 12px; }
+
   .task-card {
-    background: var(--bg-primary);
-    border: 0.5px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 12px;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
     cursor: pointer;
-    transition: border-color 0.15s, opacity 0.15s, transform 0.1s;
     user-select: none;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.18);
+    transition: box-shadow 0.15s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
   }
-  .task-card:hover { border-color: var(--border-mid); }
+  .task-card:hover { box-shadow: 0 1px 0 rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.3); }
   .task-card.dragging { opacity: 0.35; }
-  .task-card.drag-over { transform: translateY(-3px); border-color: #378ADD; }
-  .task-title { font-size: 14px; font-weight: 500; margin-bottom: 8px; line-height: 1.4; }
-  .task-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-  .tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
-  .tag-design    { background: #EEEDFE; color: #3C3489; }
-  .tag-dev       { background: #E1F5EE; color: #085041; }
-  .tag-research  { background: #FAEEDA; color: #633806; }
-  .tag-marketing { background: #FAECE7; color: #4A1B0C; }
-  .tag-bug       { background: #FCEBEB; color: #501313; }
-  .due { font-size: 11px; color: var(--text-tertiary); }
-  .due.overdue   { color: #E24B4A; }
-  .priority-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .p-high { background: #E24B4A; }
-  .p-mid  { background: #EF9F27; }
-  .p-low  { background: #639922; }
-  .avatar {
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 9px; font-weight: 600;
+  .task-card.drag-over { transform: translateY(-3px); }
+
+  .ticket-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 10px 6px;
+    border-bottom: 1px dashed var(--line-paper);
+    background: var(--paper-dim);
   }
-  .a-1 { background: #EEEDFE; color: #3C3489; }
-  .a-2 { background: #E1F5EE; color: #085041; }
-  .a-3 { background: #FAEEDA; color: #633806; }
-  .a-4 { background: #E6F1FB; color: #0C447C; }
-  .empty-state { font-size: 13px; color: var(--text-tertiary); text-align: center; padding: 28px 0; }
+  .ticket-no {
+    font-family: var(--font-mono); font-size: 10px; color: var(--ink-soft);
+    letter-spacing: 0.03em;
+  }
+  .stamp {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 1px 6px;
+    border-radius: 2px;
+    border: 1.5px solid currentColor;
+    transform: rotate(-3deg);
+    text-transform: uppercase;
+  }
+  .stamp-high { color: var(--stamp-red); }
+  .stamp-mid  { color: var(--stamp-mustard); }
+  .stamp-low  { color: var(--stamp-teal); }
+
+  .task-body { padding: 10px 12px 12px; }
+  .task-title { font-family: var(--font-body); font-size: 13.5px; font-weight: 500; line-height: 1.4; margin-bottom: 10px; }
+
+  .task-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.05em;
+    padding: 2px 7px 2px 8px;
+    border-left: 3px solid;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.03);
+  }
+  .tag-design    { color: var(--stamp-blue);    border-color: var(--stamp-blue); }
+  .tag-dev       { color: var(--stamp-teal);    border-color: var(--stamp-teal); }
+  .tag-research  { color: var(--stamp-mustard); border-color: var(--stamp-mustard); }
+  .tag-marketing { color: var(--stamp-purple);  border-color: var(--stamp-purple); }
+  .tag-bug       { color: var(--stamp-red);     border-color: var(--stamp-red); }
+
+  .meta-right { display: flex; align-items: center; gap: 8px; }
+  .due { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); }
+  .due.overdue { color: var(--stamp-red); font-weight: 600; }
+  .avatar {
+    width: 21px; height: 21px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 8.5px; font-weight: 600;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    background: transparent;
+    flex-shrink: 0;
+  }
+
+  .empty-state {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--ink-faint); text-align: center; padding: 30px 0;
+    border: 1px dashed var(--line-mid); border-radius: var(--radius); margin: 0 0;
+  }
 
   /* ── Modal ── */
   .modal-backdrop {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(10,12,15,0.6);
     display: flex; align-items: center; justify-content: center;
     z-index: 100;
   }
   .modal {
-    background: var(--bg-primary);
-    border: 0.5px solid var(--border-mid);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem; width: 360px; max-width: 92vw;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 3px;
+    padding: 0; width: 380px; max-width: 92vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    overflow: hidden;
   }
-  .modal h2 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
-  .field { margin-bottom: 12px; }
-  .field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+  .modal-head {
+    padding: 16px 22px;
+    background: var(--paper-dim);
+    border-bottom: 1px dashed var(--line-paper);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal h2 {
+    font-family: var(--font-display); font-size: 15px; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .modal-head span {
+    font-family: var(--font-mono); font-size: 10px; color: var(--ink-soft);
+  }
+  .modal-body { padding: 18px 22px 4px; }
+  .field { margin-bottom: 13px; }
+  .field label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-soft); display: block; margin-bottom: 5px;
+  }
   .field textarea { height: 72px; resize: vertical; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
-  .btn { font-family: var(--font); font-size: 13px; padding: 6px 16px; border-radius: var(--radius-md); cursor: pointer; border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-secondary); transition: background 0.15s; }
-  .btn:hover { background: var(--bg-secondary); }
-  .btn-primary { background: var(--text-primary); color: var(--bg-primary); border-color: transparent; }
-  .btn-primary:hover { opacity: 0.85; background: var(--text-primary); }
-  .btn-danger { color: #E24B4A; border-color: #E24B4A; }
-  .btn-danger:hover { background: #FCEBEB; }
+  .modal input, .modal select { background: #fffdf8; color: var(--ink); border-color: var(--line-paper); }
+  .modal input:focus, .modal select:focus { border-color: var(--stamp-mustard); }
+
+  .modal-actions {
+    display: flex; gap: 8px; justify-content: flex-end;
+    padding: 16px 22px 20px;
+  }
+  .btn {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 8px 16px; border-radius: 2px; cursor: pointer;
+    border: 1px solid var(--ink); background: transparent; color: var(--ink);
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn:hover { background: rgba(0,0,0,0.06); }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover { opacity: 0.85; background: var(--ink); }
+  .btn-danger { color: var(--stamp-red); border-color: var(--stamp-red); }
+  .btn-danger:hover { background: rgba(179,58,46,0.08); }
 
   @media (max-width: 640px) {
+    body { padding: 1.25rem 1rem 2rem; }
     .board { grid-template-columns: 1fr; }
     .stats { grid-template-columns: repeat(2, 1fr); }
+    .search-wrap { width: 100%; }
   }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="title">Project board</div>
-  <div class="search-wrap">
-    <input type="text" id="search" placeholder="Search tasks…" oninput="render()" />
+  <div class="brand">
+    <span class="eyebrow">Shop floor · Routing sheet</span>
+    <div class="title">Job Board</div>
   </div>
-  <div class="filters" id="filters"></div>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="search jobs…" oninput="render()" />
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
 </div>
 
 <div class="stats" id="stats"></div>
@@ -218,7 +370,7 @@
 /* ── Data ── */
 const TAGS     = ['design','dev','research','marketing','bug'];
 const AVATARS  = [{id:'a-1',label:'AM'},{id:'a-2',label:'JK'},{id:'a-3',label:'RS'},{id:'a-4',label:'PL'}];
-const COLS     = [{id:'todo',label:'To do'},{id:'in-progress',label:'In progress'},{id:'done',label:'Done'}];
+const COLS     = [{id:'todo',label:'To do',num:'01'},{id:'in-progress',label:'In progress',num:'02'},{id:'done',label:'Done',num:'03'}];
 
 let nextId = 10;
 let activeTag = 'all';
@@ -239,6 +391,7 @@ let tasks = [
 /* ── Helpers ── */
 function today() { return new Date().toISOString().slice(0,10); }
 function isOverdue(t) { return t.col !== 'done' && t.due && t.due <= today(); }
+function jobNo(id) { return 'NO. ' + String(id).padStart(4, '0'); }
 
 function getFiltered() {
   const q = document.getElementById('search').value.toLowerCase();
@@ -271,14 +424,14 @@ function renderStats() {
   document.getElementById('stats').innerHTML = `
     <div class="stat">
       <div class="stat-val">${total}</div>
-      <div class="stat-lbl">total tasks</div>
+      <div class="stat-lbl">Jobs on the board</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     </div>
-    <div class="stat"><div class="stat-val">${done}</div><div class="stat-lbl">completed</div></div>
-    <div class="stat"><div class="stat-val">${high}</div><div class="stat-lbl">high priority</div></div>
+    <div class="stat"><div class="stat-val">${done}</div><div class="stat-lbl">Completed · ${pct}%</div></div>
+    <div class="stat"><div class="stat-val" style="${high?'color:var(--stamp-red)':''}">${high}</div><div class="stat-lbl">Rush priority, open</div></div>
     <div class="stat">
-      <div class="stat-val" style="${overdue ? 'color:#E24B4A' : ''}">${overdue}</div>
-      <div class="stat-lbl">overdue</div>
+      <div class="stat-val" style="${overdue ? 'color:var(--stamp-red)' : ''}">${overdue}</div>
+      <div class="stat-lbl">Past due date</div>
     </div>`;
 }
 
@@ -293,25 +446,29 @@ function renderBoard() {
            ondragleave="onColDragLeave('${col.id}')"
            ondrop="onDrop(event,'${col.id}')">
         <div class="col-header">
-          <span class="col-title">${col.label}</span>
-          <span style="display:flex;gap:8px;align-items:center;">
+          <div class="col-title-wrap">
+            <span class="col-num">${col.num}</span>
+            <span class="col-title">${col.label}</span>
+          </div>
+          <div class="col-header-right">
             <span class="col-count">${colTasks.length}</span>
-            <button class="add-btn" onclick="openModal(null,'${col.id}')" title="Add task">+</button>
-          </span>
+            <button class="add-btn" onclick="openModal(null,'${col.id}')" title="Add job">+</button>
+          </div>
         </div>
         <div class="task-list">
           ${colTasks.length
             ? colTasks.map(taskCard).join('')
-            : '<div class="empty-state">Drop tasks here</div>'}
+            : '<div class="empty-state">No jobs routed here</div>'}
         </div>
       </div>`;
   }).join('');
 }
 
 function taskCard(t) {
-  const pClass = {high:'p-high',mid:'p-mid',low:'p-low'}[t.priority];
+  const stampClass = {high:'stamp-high',mid:'stamp-mid',low:'stamp-low'}[t.priority];
+  const stampLabel = {high:'Rush',mid:'Standard',low:'Low'}[t.priority];
   const av     = AVATARS.find(a => a.id === t.assignee) || AVATARS[0];
-  const dueFmt = t.due ? t.due.slice(5).replace('-','/') : '';
+  const dueFmt = t.due ? t.due.slice(5).replace('-','/') : '—';
   const over   = isOverdue(t);
   return `
     <div class="task-card" draggable="true" id="task-${t.id}"
@@ -320,12 +477,19 @@ function taskCard(t) {
          ondragover="onCardDragOver(event)"
          ondragleave="onCardDragLeave(event)"
          onclick="openModal(${t.id})">
-      <div class="task-title">${t.title}</div>
-      <div class="task-meta">
-        <span class="tag tag-${t.tag}">${t.tag}</span>
-        <span class="due${over?' overdue':''}">${dueFmt}</span>
-        <div class="priority-dot ${pClass}"></div>
-        <div class="avatar ${av.id}">${av.label}</div>
+      <div class="ticket-strip">
+        <span class="ticket-no">${jobNo(t.id)}</span>
+        <span class="stamp ${stampClass}">${stampLabel}</span>
+      </div>
+      <div class="task-body">
+        <div class="task-title">${t.title}</div>
+        <div class="task-meta">
+          <span class="tag tag-${t.tag}">${t.tag}</span>
+          <div class="meta-right">
+            <span class="due${over?' overdue':''}">${over ? 'late ' : 'due '}${dueFmt}</span>
+            <div class="avatar">${av.label}</div>
+          </div>
+        </div>
       </div>
     </div>`;
 }
@@ -379,45 +543,50 @@ function openModal(id, defaultCol = 'todo') {
   document.getElementById('modal-root').innerHTML = `
     <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
       <div class="modal">
-        <h2>${t ? 'Edit task' : 'New task'}</h2>
-        <div class="field">
-          <label>Title</label>
-          <input type="text" id="m-title" value="${t ? t.title : ''}" placeholder="Task title…" />
+        <div class="modal-head">
+          <h2>${t ? 'Edit job' : 'New job'}</h2>
+          <span>${t ? jobNo(t.id) : 'unassigned no.'}</span>
         </div>
-        <div class="field">
-          <label>Tag</label>
-          <select id="m-tag">
-            ${TAGS.map(tg => `<option value="${tg}"${t && t.tag === tg ? ' selected' : ''}>${tg}</option>`).join('')}
-          </select>
-        </div>
-        <div class="field">
-          <label>Priority</label>
-          <select id="m-priority">
-            <option value="high"${t && t.priority === 'high' ? ' selected' : ''}>High</option>
-            <option value="mid"${t && t.priority === 'mid'  ? ' selected' : ''}>Mid</option>
-            <option value="low"${t && t.priority === 'low'  ? ' selected' : ''}>Low</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Due date</label>
-          <input type="date" id="m-due" value="${t ? t.due : ''}" />
-        </div>
-        <div class="field">
-          <label>Assignee</label>
-          <select id="m-assignee">
-            ${AVATARS.map(a => `<option value="${a.id}"${t && t.assignee === a.id ? ' selected' : ''}>${a.label}</option>`).join('')}
-          </select>
-        </div>
-        <div class="field">
-          <label>Status</label>
-          <select id="m-col">
-            ${COLS.map(c => `<option value="${c.id}"${(t ? t.col : defaultCol) === c.id ? ' selected' : ''}>${c.label}</option>`).join('')}
-          </select>
+        <div class="modal-body">
+          <div class="field">
+            <label>Title</label>
+            <input type="text" id="m-title" value="${t ? t.title : ''}" placeholder="Job title…" />
+          </div>
+          <div class="field">
+            <label>Tag</label>
+            <select id="m-tag">
+              ${TAGS.map(tg => `<option value="${tg}"${t && t.tag === tg ? ' selected' : ''}>${tg}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Priority</label>
+            <select id="m-priority">
+              <option value="high"${t && t.priority === 'high' ? ' selected' : ''}>Rush</option>
+              <option value="mid"${t && t.priority === 'mid'  ? ' selected' : ''}>Standard</option>
+              <option value="low"${t && t.priority === 'low'  ? ' selected' : ''}>Low</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Due date</label>
+            <input type="date" id="m-due" value="${t ? t.due : ''}" />
+          </div>
+          <div class="field">
+            <label>Assignee</label>
+            <select id="m-assignee">
+              ${AVATARS.map(a => `<option value="${a.id}"${t && t.assignee === a.id ? ' selected' : ''}>${a.label}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Station</label>
+            <select id="m-col">
+              ${COLS.map(c => `<option value="${c.id}"${(t ? t.col : defaultCol) === c.id ? ' selected' : ''}>${c.label}</option>`).join('')}
+            </select>
+          </div>
         </div>
         <div class="modal-actions">
           ${t ? `<button class="btn btn-danger" onclick="deleteTask(${t.id})">Delete</button>` : ''}
           <button class="btn" onclick="closeModal()">Cancel</button>
-          <button class="btn btn-primary" onclick="saveTask(${id || 'null'})">${t ? 'Save changes' : 'Add task'}</button>
+          <button class="btn btn-primary" onclick="saveTask(${id || 'null'})">${t ? 'Save changes' : 'Add job'}</button>
         </div>
       </div>
     </div>`;
@@ -463,3 +632,4 @@ render();
 </script>
 </body>
 </html>
+
