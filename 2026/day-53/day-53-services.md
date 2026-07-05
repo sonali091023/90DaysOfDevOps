@@ -29,8 +29,6 @@ A Service solves both problems. It provides:
                                    --> [Pod 3]
 ```
 
----
-
 ## Challenge Tasks
 
 ### Task 1: Deploy the Application
@@ -69,9 +67,9 @@ Note the individual Pod IPs. These will change if pods restart — that is the p
 
 **Verify:** Are all 3 pods running? Note down their IP addresses.
 
--->All the 3 pods are running and each have different ip address as follow, 10.244.0.35, 10.244.0.36 and 10.244.0.37
+-->All the 3 pods are running and each have different ip address as follow, 10.244.2.12, 10.244.2.13 and 10.244.1.11
 
-<img width="1578" height="313" alt="image" src="https://github.com/user-attachments/assets/94e1790a-ae4e-47dd-abbd-8b4ffa4c83c3" />
+<img width="1882" height="701" alt="image" src="https://github.com/user-attachments/assets/b1f8c3d0-2257-4cca-9199-aacb2dafda93" />
 
 ---
 
@@ -104,7 +102,8 @@ kubectl apply -f clusterip-service.yaml
 kubectl get services
 ```
 You should see `web-app-clusterip` with a CLUSTER-IP address. This IP is stable — it will not change even if Pods restart.
-<img width="1308" height="132" alt="image" src="https://github.com/user-attachments/assets/ace632ec-7d63-4c58-a9b1-94d513ecdcfd" />
+
+<img width="1602" height="232" alt="image" src="https://github.com/user-attachments/assets/4d431c0e-f54f-464c-a8be-758727f93b78" />
 
 Now test it from inside the cluster:
 ```bash
@@ -118,8 +117,9 @@ exit
 
 You should see the Nginx welcome page. The Service load-balanced your request to one of the 3 Pods.
 
-<img width="1496" height="463" alt="image" src="https://github.com/user-attachments/assets/2ca8ee20-a5c3-4cc9-991c-e849d71ebc4b" />
-<img width="728" height="406" alt="image" src="https://github.com/user-attachments/assets/ce4e93c8-1cb3-4570-be46-353ed6bc1b4a" />
+<img width="1751" height="787" alt="image" src="https://github.com/user-attachments/assets/87736b1d-bf3b-438f-9b8e-189b8abf9707" />
+
+![Uploading image.png…]()
 
 **Verify:** Does the Service respond? Try running the wget command multiple times — the Service distributes traffic across all healthy Pods.
 
@@ -135,7 +135,6 @@ You should see the Nginx welcome page. The Service load-balanced your request to
 
 -->Executed in each pod by using command: **wget -qO- 10.244.0.35** [Prerequisit: need to install wget]
 <img width="717" height="948" alt="image" src="https://github.com/user-attachments/assets/b4c89c0e-23a1-4b43-baf5-9e63fa0f71d3" />
-
 
 ---
 
@@ -173,6 +172,12 @@ exit
 Both the short name and the full DNS name resolve to the same ClusterIP. In practice, you use the short name when communicating within the same namespace and the full name when reaching across namespaces.
 
 **Verify:** What IP does `nslookup` return? Does it match the CLUSTER-IP from `kubectl get services`?
+
+**Steps to follow:**
+
+Step 1: Make sure your Service exists: kubectl get svc
+
+
 
 -->wget -qO- http://web-app-clusterip [used short dns name here]
 <img width="1918" height="820" alt="image" src="https://github.com/user-attachments/assets/db19a4f6-211e-4169-923e-b8752686cabc" />
