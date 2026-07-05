@@ -21,62 +21,63 @@ Containers are ephemeral — they lose data when removed. And by default, contai
 3. Stop and remove the container
 4. Run a new one — is your data still there?
 
-Command to create postgres container: **docker run -d --name my-postgres -e POSTGRES_PASSWORD=test@123 -e POSTGRES_USER=admin -e POSTGRES_DB=testdb postgres**
+Write what happened and why.
 
-**docker images**
+**Steps to follow:**
 
-**docker ps**
+-->This task is designed to show you why Docker volumes are needed. By default, a container's writable layer is temporary. When you remove the container, everything stored inside it is deleted unless you've mounted a volume.
 
-To go inside container: **docker exec -it my-postgres psql -U admin -d testdb**
+Step 1: Pull the PostgreSQL Image: docker pull postgres:17
 
-**docker ps**
+-->Once pulled verify: docker images
 
-**docker stop a11ffb2e364e**
+Step 2: Run a PostgreSQL Container (Without a Volume): 
 
-**docker rm a11ffb2e364e**
+-->docker run -d --name postgres-demo -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin123 -e POSTGRES_DB=testdb -p 5432:5432 postgres:17
 
-**docker ps**
+<img width="811" height="455" alt="image" src="https://github.com/user-attachments/assets/d443c521-c6ad-4f09-aa06-cf950a8d446a" />
 
-**docker run -d --name my-postgres2 -e POSTGRES_PASSWORD=test@123 -e POSTGRES_USER=admin -e POSTGRES_DB=testdb postgres**
+-->Once the container gets create verify it: docker ps
 
-**docker ps**
+Step 3: Connect to PostgreSQL: To connect to PostgreSQL Open a shell inside the container: docker exec -it postgres-demo psql -U admin -d testdb
 
-**docker exec -it my-postgres2 psql -U admin -d testdb**
+<img width="747" height="152" alt="image" src="https://github.com/user-attachments/assets/b18a26a0-fa44-4870-bfd2-57ac8e0629d5" />
 
-<img width="1917" height="675" alt="image" src="https://github.com/user-attachments/assets/ace9b349-4b30-4654-9d03-e97a224b7986" />
+Step 4: Create a Table: CREATE TABLE students (id SERIAL PRIMARY KEY,name VARCHAR(100),city VARCHAR(100));
 
-<img width="1066" height="477" alt="image" src="https://github.com/user-attachments/assets/f076f25f-4c26-4ca7-8b42-ecb8b71c143b" />
+-->Once table gets create insert some data: INSERT INTO students(name, city) VALUES('Alice','Delhi'),('Bob','Mumbai'),('Charlie','Pune');
 
-<img width="1856" height="577" alt="image" src="https://github.com/user-attachments/assets/9d1185de-929d-47f1-ab36-b7f20d9baed1" />
+-->Nove once the records insert to verify: SELECT * FROM students;
+
+-->Noe exit from the container
+
+Step 5: Stop the Container: docker stop postgres-demo
+
+Step 6: Remove the Container: docker rm postgres-demo [Now the container is gone.]
+
+Step 7: Run a New PostgreSQL Container Again Here use the same command: 
+
+-->docker run -d --name postgres-demo -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin123 -e POSTGRES_DB=testdb -p 5432:5432 postgres:17
+
+Step 8: Check for the Table: docker exec -it postgres-demo psql -U admin -d testdb
+
+-->Then to check created table run command: SELECT * FROM students; [Here expected: ERROR: relation "students" does not exist, This is because the database was recreated from scratch.]
+
+<img width="1902" height="912" alt="image" src="https://github.com/user-attachments/assets/36733c62-d175-427d-ab23-df42c4490e5c" />
+
+<img width="1911" height="510" alt="image" src="https://github.com/user-attachments/assets/d0da9751-5a7a-48f7-883f-abd4da7fcfcc" />
+
+<img width="707" height="677" alt="image" src="https://github.com/user-attachments/assets/bbe621f0-9dee-4e7a-9544-0fbb6469d5df" />
 
 **Write what happened and why?**
 
--->So Data is lost when a container is removed because containers are ephemeral and do not persist data by default.
+-->So Data is lost when a container is removed because containers are ephemeral and do not persist data by default. The PostgreSQL data directory was stored inside the container. Removing the container deleted its writable layer. Since no Docker volume was attached, all database files were lost. A new container creates a new, empty database.
 
-**PV**
+**Key Takeaway:**
 
--->**Now lest create persistent volume while container creation and check this time is data stays or get lose**
+-->Without a volume: Data is lost when the container is removed.
 
--->Command to create PV container: **docker run -d --name pg-persistent -e POSTGRES_PASSWORD=test@123 -e POSTGRES_USER=admin -e POSTGRES_DB=testdb -v pgdata:/var
-/lib/postgresql/data postgres:16**
-
--->**docker ps**
-
--->To go inside container: **docker exec -it pg-persistent psql -U admin -d testdb**
-
--->Create table inside container: **CREATE TABLE users ( id SERIAL PRIMARY KEY,name TEXT );**
-
--->**INSERT INTO users (name) VALUES ('Sonali'), ('DevOps');**    #insert multiple values   
-
--->Now inside container run the command **SELECT * FROM users;**
-
-<img width="1897" height="723" alt="image" src="https://github.com/user-attachments/assets/d3e41c5a-093f-4798-8adf-a40473df009a" />
-
-<img width="1918" height="581" alt="image" src="https://github.com/user-attachments/assets/aa524b46-02e4-4419-b177-c7206d2e38e2" />
-
-<img width="1902" height="427" alt="image" src="https://github.com/user-attachments/assets/cb330af0-59bb-4d61-93cc-c0a77c1dbaa2" />
-
--->**Note:** So Docker volumes make container data persistent by storing it outside the container lifecycle.
+-->With a volume: Data persists even if the container is stopped or deleted.
 
 ---
 
