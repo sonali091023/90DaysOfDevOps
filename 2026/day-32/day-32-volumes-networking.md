@@ -1,4 +1,4 @@
-<img width="1671" height="667" alt="image" src="https://github.com/user-attachments/assets/c22e906d-134b-4574-8cf8-50fd5dd5cdbf" /># Day 32 – Docker Volumes & Networking
+# Day 32 – Docker Volumes & Networking
 
 ## Task
 Today's goal is to **solve two real problems: data persistence and container communication**.
