@@ -157,7 +157,7 @@ Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
 
 -->Then to use created database use following container: USE testdb;
 
--->Now create table: **CREATE TABLE test_data (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));**
+-->Now create table: CREATE TABLE test_data (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));
 
 -->Insert data into that table: INSERT INTO test_data (name) VALUES ('Alice'), ('Bob');
 
@@ -173,7 +173,7 @@ Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
 
 -->Check Running Container: docker ps
 
--->Recreate Container with SAME Volume: docker run -d --name persistent -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql
+-->Recreate Container with SAME Volume: docker run -d --name sql-volume -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql
 
 -->Check Running Container: docker ps
 
@@ -206,6 +206,12 @@ is safe.
 
 <img width="1697" height="290" alt="image" src="https://github.com/user-attachments/assets/0c5a20f3-4d3a-4a4b-8cd2-5efadbc85376" />
 
+<img width="741" height="750" alt="image" src="https://github.com/user-attachments/assets/c79d6012-11a4-4bd8-8df5-e411406d9ae1" />
+
+<img width="786" height="212" alt="image" src="https://github.com/user-attachments/assets/20a9d0a1-0457-4b7c-a07a-2505e2cf3e21" />
+
+-->Any database files written to /var/lib/mysql are actually stored in the mysqldata volume. If you delete the container and create a new one with the same volume, the data is still available.
+
 ---
 
 ### Task 3: Bind Mounts
@@ -214,44 +220,31 @@ is safe.
 3. Access the page in your browser
 4. Edit the `index.html` on your host — refresh the browser
 
+**Steps to follow:**
 
+-->Learn how Bind Mounts work. A bind mount directly links a folder on your host machine to a folder inside a container. Any changes made on the host are reflected immediately in the container.
 
+Step 1: Create a Folder on Your Host: mkdir nginx-bind && cd nginx-bind
 
+-->Create an index.html file: echo "<h1>Hello from Bind Mount!</h1>" > index.html then verify ls [Expected: index.html file should be display]
 
-**Commands Used:** 
+Step 2: Run an Nginx Container with a Bind Mount: docker run -d --name nginx-bind -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx
 
--->Create folder: **mkdir nginx-bind**
+<img width="851" height="407" alt="image" src="https://github.com/user-attachments/assets/3284b372-3163-461f-818c-c5b9fd3c97d6" />
 
---> Go inside folder: **cd nginx-bind/**
+Step 3: Access the Website: http://localhost:8080  [Expected: We should see Hello from Bind Mount!]
 
---> Create file: **vi index.html**
+Step 4: Edit index.html on Your Host: echo "<h1>Docker Bind Mount Updated!</h1>" > index.html OR edit it with vim editor
 
---> Run Nginx Container with Bind Mount: **docker run -d --name nginx-bind-container -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx:alpine**
+Step 5: Refresh the Browser: http://localhost:8080 [Expected: You'll immediately see the updated content]
 
---> Verify the created container: **docker ps**
+<img width="785" height="752" alt="image" src="https://github.com/user-attachments/assets/6942912f-881f-40bc-a652-d70d3d1a25dc" />
 
--->Verify the content of the file: **cat index.html**
+**Key Takeaway:**
 
+-->Bind Mount: Shares a host directory with a container. Changes are visible immediately.
 
--->Edit the content of the file: **vi index.html**
-
--->Verify the updated content of the file: **cat index.html**
-
--->Access in Browser: **http://localhost:8080** 
-
-**Note:** Output will update without restarting container.
-
--->If in case this doesnt work **-v $(pwd):/usr/share/nginx/html** use full path as follows **-v /home/ubuntu/nginx-bind:/usr/share/nginx/html**
-
-<img width="1810" height="473" alt="image" src="https://github.com/user-attachments/assets/c3afd936-829a-4308-93a4-fd183b526c47" />
-
-<img width="637" height="430" alt="image" src="https://github.com/user-attachments/assets/d6c06b90-c652-48f0-80df-1807361be249" />
-
-Write in your notes: What is the difference between a named volume and a bind mount?
-
--->**Volumes:** Managed by Docker, Stored in a part of the host filesystem which is managed by Docker, Preferred method for data persistence.
-
--->**Bind Mounts:** Maps a file or directory on the host to a file or directory in the container, More complex but provides flexibility to interact with the host system.
+-->Named Volume: Stores persistent data managed by Docker, commonly used for databases.
 
 ---
 
