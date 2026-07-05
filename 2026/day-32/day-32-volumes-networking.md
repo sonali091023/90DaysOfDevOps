@@ -88,9 +88,52 @@ Step 8: Check for the Table: docker exec -it postgres-demo psql -U admin -d test
 4. Run a brand new container with the **same volume**
 5. Is the data still there?
 
--->Yes, all previous data, Tables and rows are still there, To verify use following commands docker volume ls, docker volume inspect.
+Verify: docker volume ls, docker volume inspect
 
-**Commands used:**
+**Steps to follow:**
+
+ -->Store your PostgreSQL data in a Docker named volume so it survives even if the container is deleted.
+
+ Step 1: Create a Named Volume: docker volume create postgres-data 
+
+ -->To verify created volume: docker volume ls
+
+ Step 2: Run PostgreSQL with the Volume Attached: 
+
+ -->docker run -d --name postgres-db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin123 -e POSTGRES_DB=testdb -v postgres-data:/var/lib/postgresql/data -p 5432:5432 postgres:17
+
+ <img width="717" height="241" alt="image" src="https://github.com/user-attachments/assets/c4d87ede-107b-437c-b2ea-5ddbeb9d32fc" />
+
+Step 3: Create Some Data: First go inside container: docker exec -it postgres-db psql -U admin -d testdb
+
+-->Create a table and insert data: CREATE TABLE students (id SERIAL PRIMARY KEY, name VARCHAR(50));
+
+-->INSERT INTO students(name)VALUES ('Alice'), ('Bob');
+
+-->SELECT * FROM students;
+
+-->To exit use command: \q
+
+Step 4: Stop and Remove the Container: docker stop postgres-db && docker rm postgres-db [**Note:** The container is deleted, but the volume still exists.]
+
+Step 5: Run a New Container with the Same Volume: docker run -d --name postgres-db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin123 -e POSTGRES_DB=testdb -v postgres-data:/var/lib/postgresql/data -p 5432:5432 postgres:17
+
+Step 6: Connect again & Verify the Data :   
+
+-->Run SELECT * FROM students; [**Note:** The table and data are still there because they were stored in the named volume]
+
+-->To exit use command: \q
+
+Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
+
+-->Inspect the volume: docker volume inspect postgres-data
+
+<img width="836" height="492" alt="image" src="https://github.com/user-attachments/assets/b34bf764-6dbc-43a8-b077-b622c483c099" />
+
+<img width="1917" height="862" alt="image" src="https://github.com/user-attachments/assets/49b77e1a-e6b0-42ac-814b-8599d0b533c2" />
+
+<img width="1917" height="811" alt="image" src="https://github.com/user-attachments/assets/21a1d71d-f9cf-48e4-9e82-c36541ff89ab" />
+
 
 -->Create named volume: **docker volume create my-db-volume**
 
@@ -145,18 +188,8 @@ Step 8: Check for the Table: docker exec -it postgres-demo psql -U admin -d test
 -->**Verify:** `docker volume ls`, docker volume inspect: **docker volume inspect mysqldata**
 
 **Note:** Container = Ephemeral (temporary) & Volume = Persistent (data stays even if container is deleted), So As long as you use the same volume name, your data 
-
 is safe.
 
-<img width="1572" height="722" alt="image" src="https://github.com/user-attachments/assets/3ab835c0-e1cc-49ce-bb38-a99c6cf93b19" />
-
-<img width="1493" height="887" alt="image" src="https://github.com/user-attachments/assets/8d476058-ab22-48de-b49c-54886d8d37cd" />
-
-<img width="1890" height="553" alt="image" src="https://github.com/user-attachments/assets/c333c8c5-5379-4450-983e-5341440cdce6" />
-
-<img width="1588" height="912" alt="image" src="https://github.com/user-attachments/assets/f54777fd-5cd1-4ef9-a63e-53d8b43edc5b" />
-
-<img width="952" height="857" alt="image" src="https://github.com/user-attachments/assets/36b6722c-134b-4234-b61d-c4c3b2734def" />
 
 ---
 
