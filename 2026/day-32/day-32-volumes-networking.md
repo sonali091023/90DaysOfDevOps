@@ -153,7 +153,6 @@ Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
 
 <img width="556" height="147" alt="image" src="https://github.com/user-attachments/assets/9f6ee8e1-e285-43e6-9e14-babbfc8c5d3b" />
 
-
 -->Create database inside container: CREATE DATABASE testdb;
 
 -->Then to use created database use following container: USE testdb;
@@ -186,17 +185,26 @@ Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
 
 -->Now to use the same database use command: use testdb;
 
--->**SELECT * FROM test_data;
+-->SELECT * FROM test_data;
 
 -->exit
 
+Verify: docker volume ls, docker volume inspect:
+
 -->docker volume ls
 
--->**Verify:** `docker volume ls`, docker volume inspect: **docker volume inspect mysqldata**
+-->**Verify:** `docker volume ls`, docker volume inspect: docker volume inspect mysqldata
 
 **Note:** Container = Ephemeral (temporary) & Volume = Persistent (data stays even if container is deleted), So As long as you use the same volume name, your data 
 is safe.
 
+<img width="1785" height="971" alt="image" src="https://github.com/user-attachments/assets/05e3008c-db2e-467c-8b84-c0be59df95bf" />
+
+<img width="1830" height="967" alt="image" src="https://github.com/user-attachments/assets/9690de09-422d-4764-86b5-366f0e3a7bda" />
+
+<img width="1667" height="870" alt="image" src="https://github.com/user-attachments/assets/c801d4b4-d5d0-4943-9270-9094e5953f84" />
+
+<img width="1697" height="290" alt="image" src="https://github.com/user-attachments/assets/0c5a20f3-4d3a-4a4b-8cd2-5efadbc85376" />
 
 ---
 
@@ -205,6 +213,10 @@ is safe.
 2. Run an Nginx container and **bind mount** your folder to the Nginx web directory
 3. Access the page in your browser
 4. Edit the `index.html` on your host — refresh the browser
+
+
+
+
 
 **Commands Used:** 
 
