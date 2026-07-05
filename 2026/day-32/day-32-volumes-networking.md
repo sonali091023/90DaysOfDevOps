@@ -135,55 +135,62 @@ Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
 <img width="1917" height="811" alt="image" src="https://github.com/user-attachments/assets/21a1d71d-f9cf-48e4-9e82-c36541ff89ab" />
 
 
--->Create named volume: **docker volume create my-db-volume**
+-->Create named volume: docker volume create mysqldata
 
--->To check the volume list: **docker volume ls**
+-->To check the volume list: docker volume ls
 
--->Run MySQL Container with Volume: **docker run -d --name sql-volume -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql**
+-->veriy if any container is running: docker ps
 
--->Check Running Container: **docker ps**
+-->Run MySQL Container with Volume: docker run -d --name sql-volume -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql
 
--->Access MySQL by going inside container: **docker exec -it sql-volume mysql -u root -p**  
+<img width="807" height="420" alt="image" src="https://github.com/user-attachments/assets/ee73ec4c-4b18-41d8-ae38-f94b655adb5c" />
 
--->Enter Password and get loggedin to the mysql and then perform following steps:
+-->Check Running Container: docker ps
 
--->**CREATE DATABASE testdb;**
+-->Access MySQL by going inside container: docker exec -it sql-volume mysql -u root -p
 
--->**USE testdb;**
+<img width="786" height="401" alt="image" src="https://github.com/user-attachments/assets/55a7c917-7628-4d75-8198-2e1130b03bb1" />
 
--->**CREATE TABLE test_data (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));**
+<img width="556" height="147" alt="image" src="https://github.com/user-attachments/assets/9f6ee8e1-e285-43e6-9e14-babbfc8c5d3b" />
 
--->**INSERT INTO test_data (name) VALUES ('Alice'), ('Bob');**
 
--->**SELECT * FROM test_data;**
+-->Create database inside container: CREATE DATABASE testdb;
 
--->**show databases;**
+-->Then to use created database use following container: USE testdb;
 
--->**exit**
+-->Now create table: **CREATE TABLE test_data (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));**
 
--->Check Running Container: **docker ps**
+-->Insert data into that table: INSERT INTO test_data (name) VALUES ('Alice'), ('Bob');
 
--->Stop & Remove Container: **docker stop 831da080f31c && docker rm 831da080f31c**
+-->Now check the records in the table: SELECT * FROM test_data;
 
--->Check Running Container: **docker ps**
+-->Again check the database: show databases;
 
--->Recreate Container with SAME Volume: **docker run -d --name persistent -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql**
+-->Once done exit from the container: exit
 
--->Check Running Container: **docker ps**
+-->Check Running Container: docker ps
 
--->**docker exec -it persistent mysql -u root -p**  
+-->Stop & Remove Container: docker stop 831da080f31c && docker rm 831da080f31c
+
+-->Check Running Container: docker ps
+
+-->Recreate Container with SAME Volume: docker run -d --name persistent -e MYSQL_ROOT_PASSWORD=test@123 -v mysqldata:/var/lib/mysql mysql
+
+-->Check Running Container: docker ps
+
+-->Now again go insode recreated container: docker exec -it sql-volume mysql -u root -p
 
 -->Enter Password and get loggedin to the mysql and Verify Data Persistence:
 
--->**show databases;**
+-->Now check the previously created database: show databases;
 
--->**use testdb**
+-->Now to use the same database use command: use testdb;
 
--->**SELECT * FROM test_data;**
+-->**SELECT * FROM test_data;
 
--->**exit**
+-->exit
 
--->**docker volume ls**
+-->docker volume ls
 
 -->**Verify:** `docker volume ls`, docker volume inspect: **docker volume inspect mysqldata**
 
