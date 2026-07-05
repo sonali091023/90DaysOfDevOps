@@ -1,4 +1,4 @@
-# Day 32 – Docker Volumes & Networking
+<img width="1671" height="667" alt="image" src="https://github.com/user-attachments/assets/c22e906d-134b-4574-8cf8-50fd5dd5cdbf" /># Day 32 – Docker Volumes & Networking
 
 ## Task
 Today's goal is to **solve two real problems: data persistence and container communication**.
@@ -134,7 +134,6 @@ Step 7: Verify the Volume: docker volume ls [we will get List all volumes]
 
 <img width="1917" height="811" alt="image" src="https://github.com/user-attachments/assets/21a1d71d-f9cf-48e4-9e82-c36541ff89ab" />
 
-
 -->Create named volume: docker volume create mysqldata
 
 -->To check the volume list: docker volume ls
@@ -226,19 +225,27 @@ is safe.
 
 Step 1: Create a Folder on Your Host: mkdir nginx-bind && cd nginx-bind
 
--->Create an index.html file: echo "<h1>Hello from Bind Mount!</h1>" > index.html then verify ls [Expected: index.html file should be display]
+-->Create an index.html file: echo '<h1>Hello from Bind Mount!</h1>' > index.html then verify ls [Expected: index.html file should be display]
 
 Step 2: Run an Nginx Container with a Bind Mount: docker run -d --name nginx-bind -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx
 
-<img width="851" height="407" alt="image" src="https://github.com/user-attachments/assets/3284b372-3163-461f-818c-c5b9fd3c97d6" />
+<img width="702" height="287" alt="image" src="https://github.com/user-attachments/assets/f517c7b8-bfa1-46f5-a643-28c39f443da0" />
+
+-->docker ps:
+
+<img width="1917" height="806" alt="image" src="https://github.com/user-attachments/assets/b4fdf9c5-81a4-4eb2-882b-bf5dbad8885f" />
 
 Step 3: Access the Website: http://localhost:8080  [Expected: We should see Hello from Bind Mount!]
+
+<img width="1917" height="705" alt="image" src="https://github.com/user-attachments/assets/0654801e-b0e2-4a0a-9e29-fe685033eb8d" />
 
 Step 4: Edit index.html on Your Host: echo "<h1>Docker Bind Mount Updated!</h1>" > index.html OR edit it with vim editor
 
 Step 5: Refresh the Browser: http://localhost:8080 [Expected: You'll immediately see the updated content]
 
-<img width="785" height="752" alt="image" src="https://github.com/user-attachments/assets/6942912f-881f-40bc-a652-d70d3d1a25dc" />
+<img width="1917" height="740" alt="image" src="https://github.com/user-attachments/assets/3a22ac59-c65a-42ee-972d-35b771bb16ea" />
+
+<img width="792" height="785" alt="image" src="https://github.com/user-attachments/assets/383db209-4737-4899-be70-a3ecf69d5275" />
 
 **Key Takeaway:**
 
@@ -249,57 +256,69 @@ Step 5: Refresh the Browser: http://localhost:8080 [Expected: You'll immediately
 ---
 
 ### Task 4: Docker Networking Basics
-1. List all Docker networks on your machine -->**docker network ls**
 
--->So bdidge is the default docker network.
+List all Docker networks on your machine
+Inspect the default bridge network
+Run two containers on the default bridge — can they ping each other by name?
+Run two containers on the default bridge — can they ping each other by IP?
 
-<img width="520" height="171" alt="image" src="https://github.com/user-attachments/assets/99b4804f-ee17-402f-bc37-ccc5bec41a2d" />
+**Steps to follow:**
 
-2. Inspect the default `bridge` network -->**docker network inspect bridge**
+-->Understand how Docker's default bridge network works and how containers communicate.
 
-<img width="828" height="966" alt="image" src="https://github.com/user-attachments/assets/3968efe5-fd80-4c26-ad40-eb5a948f3fbf" />
+Step 1: List All Docker Networks: docker network ls 
 
-3. Run two containers on the default bridge — can they ping each other by **name**?
+<img width="632" height="137" alt="image" src="https://github.com/user-attachments/assets/5aec9158-fd4b-4847-987b-854809578398" />
 
--->No on the default bridge network by using container name, 2 differnt containers cant communicate with eachother.
+<img width="1331" height="215" alt="image" src="https://github.com/user-attachments/assets/222a85ba-b602-4e98-91ca-3eb6a0d480ee" />
 
--->container1: **docker run -it --name container1 busybox sh**
+Note: Here in the network list bridge is the default network
 
--->**docker exec -it container1 sh**
+Step 2: Inspect the Default Bridge Network: docker network inspect bridge
 
--->**ping container1**
+<img width="742" height="191" alt="image" src="https://github.com/user-attachments/assets/ace0f811-29a8-4aae-9a42-fdc6c6b1b0e6" />
 
--->container2: **docker run -it --name container2 busybox sh**
+<img width="1560" height="972" alt="image" src="https://github.com/user-attachments/assets/31fd5141-1361-4fbd-a0c6-d3326b5e956c" />
 
--->**docker exec -it container2 sh**
+Step 3: Run Two Containers on the Default Bridge: 
 
--->**ping container2**
+-->Container 1: docker run -dit --name container1 alpine sh
 
-<img width="992" height="437" alt="image" src="https://github.com/user-attachments/assets/efedab7e-2228-4dd7-a199-77a06a154c35" />
+-->Container 2: docker run -dit --name container2 alpine sh
 
-4. Run two containers on the default bridge — can they ping each other by **IP**?
+-->To verify: docker ps
 
--->Yes on the default bridge network by using ip address, 2 differnt containers can communicate with eachother.
+Step 4: Install ping (Alpine Image): The Alpine image doesn't include ping by default, Go inside container1: docker exec -it container1 sh
 
--->Container1: **docker run -it --name container1 busybox sh**
+-->& then install ping: apk update && apk add iputils
 
--->**docker exec -it container1 sh**
+Step 5: Can They Ping by Name?: To verify run command inside container 1: ping container2
 
--->**ip addr**
+<img width="732" height="332" alt="image" src="https://github.com/user-attachments/assets/d6e0a7ed-bd89-4e8d-8def-dc042c45b531" />
 
--->**ping 172.18.0.2**
+<img width="1671" height="667" alt="image" src="https://github.com/user-attachments/assets/6aadb685-3a4b-4fb5-bac9-94d8b198ca72" />
 
-<img width="1511" height="710" alt="image" src="https://github.com/user-attachments/assets/82f99acb-3690-4b5d-869c-7b989325b185" />
+-->ping: bad address 'container2' It will get fail, because The default bridge network does not provide automatic DNS-based name resolution between containers.
 
--->container2: **docker run -it --name container2 busybox sh**
+Step 6: Find the IP of container2: So first exit from the container 1: exit & then run command: docker inspect container2 OR run below command:
 
--->**docker exec -it container2 sh**
+-->docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container2 [Expected: ip address will get]
 
--->**ip addr**
+<img width="1727" height="925" alt="image" src="https://github.com/user-attachments/assets/8e23aa09-485e-4149-8a0a-38ad6e4a1e5a" />
 
--->**ping 172.18.0.3**
+Step 7: Ping by IP: Go back into container1: docker exec -it container1 sh
 
-<img width="1250" height="731" alt="image" src="https://github.com/user-attachments/assets/290f1256-d2da-4276-8e2d-a5e16e577170" />
+-->ping 172.17.0.3 [Expected: it succeeds]
+
+<img width="1825" height="215" alt="image" src="https://github.com/user-attachments/assets/b6955e14-71a6-4639-94c5-c2600c555ceb" />
+
+<img width="786" height="642" alt="image" src="https://github.com/user-attachments/assets/b9e5f2ad-e23c-432c-be13-18d22eb17fac" />
+
+**Key Takeaway:**
+
+-->Default bridge network: Communication works by IP, not by container name.
+
+-->User-defined bridge network: Communication works by both IP and container name, thanks to Docker's built-in DNS.
 
 ---
 
