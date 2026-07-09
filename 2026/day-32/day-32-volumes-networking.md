@@ -323,70 +323,94 @@ Step 7: Ping by IP: Go back into container1: docker exec -it container1 sh
 ---
 
 ### Task 5: Custom Networks
-1. Create a custom bridge network called `my-app-net` -->**docker network create my-app-net**
+Create a custom bridge network called my-app-net
+Run two containers on my-app-net
+Can they ping each other by name now?
+Write in your notes: Why does custom networking allow name-based communication but the default bridge doesn't?
 
-2. Run two containers on `my-app-net`
+**Steps to follow:**
 
--->**docker run -dit --name container1 --network my-app-net alpine sh**
+-->This task is meant to teach you how Docker networking and DNS work.
 
--->**docker run -dit --name container2 --network my-app-net alpine sh**
+Step 1: Create a custom bridge network: docker network create my-app-net
 
--->**docker ps**
+-->To Verify it: docker network ls
 
-3. Can they ping each other by **name** now?
- 
--->Go inside container1: **docker exec -it e4401baf0b82 sh**
+Step 2: Run two containers on the custom network: 
 
--->**ping container2**
+-->docker run -dit --name container1 --network my-app-net alpine sh
 
--->Go inside container2: **docker exec -it e4401baf0b82 sh**  
+-->docker run -dit --name container2 --network my-app-net alpine sh
 
--->**ping container1**
+-->docker ps
 
-4. Write in your notes: Why does custom networking allow name-based communication but the default bridge doesn't?
+Step 3: Install ping (Alpine doesn't include it): Before this go insode container: 
 
--->Default Docker bridge network does not have built-in DNS,so containers cannot resolve each other by name.they need IPs.
+-->docker exec -it container1 sh
 
--->User-defined networks have embedded DNS, so containers can communicate using their names.
+-->then install ping: apk update && apk add iputils
 
--->**Note:** Custom Docker networks enable name-based communication because they include an internal DNS server, while the default bridge network lacks this 
+-->Now ping to the second container from one container by its name: ping container2 [Expected: pinging output should be display and to break it ctrl + c]
 
-feature and only supports IP-based communication.
+-->You can also test from the second container, to do this first go insode containre two: docker exec -it container2 sh
+
+-->Now install and ping as well to container one: apk update && apk add iputils && ping container1
+
+Step 4: Inspect the network: docker network inspect my-app-net [expected: You'll see both containers attached to the network.]
+
+<img width="747" height="780" alt="image" src="https://github.com/user-attachments/assets/53ae7412-deca-413b-89e3-499d681de077" />
+
+<img width="827" height="351" alt="image" src="https://github.com/user-attachments/assets/a62f2284-138a-45af-871b-9730a64112fc" />
+
+<img width="1825" height="966" alt="image" src="https://github.com/user-attachments/assets/98ccc7cd-9e38-4bbc-af26-771b939c0fd5" />
+
+<img width="1725" height="677" alt="image" src="https://github.com/user-attachments/assets/08031d46-cef1-413a-acb9-744de060f3d8" />
 
 ---
 
 ### Task 6: Put It Together
-1. Create a custom network  --> **docker network create my-app-net**
+Create a custom network
+Run a database container (MySQL/Postgres) on that network with a volume for data
+Run an app container (use any image) on the same network
+Verify the app container can reach the database by container name
 
-2. Run a **database container** (MySQL/Postgres) on that network with a volume for data
+**Steps to follow:**
 
--->Run a database container (PostgreSQL + volume): **docker run -d --name my-db --network my-app-net -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=test@123 -e POSTGRES_DB=mydb -v pgdata:/var/lib/postgresql/data postgres:16**
+-->This task combines Docker Networks + Volumes + Containers into a simple multi-container setup.
 
--->Here above command Creates DB container my-db, Attaches to my-app-net this is custom network, Adds persistent volume (pgdata), Sets username/password/db
+Step 1: Create a custom network: docker network create my-app-net
 
-3. Run an **app container** (use any image) on the same network
+-->Then to verify: docker network ls
 
--->**docker run -dit --name my-app --network my-app-net alpine sh**
+Step 2: Create a volume for database persistence: docker volume create postgres-data
 
-4. Verify the app container can reach the database by container name
+-->To verify: docker volume ls
 
--->Yse based on container name they can talk with each other due to DNS Resolution. 
+Step 3: Run the PostgreSQL container(PostgreSQL + volume): docker run -d --name postgres-db --network my-app-net -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -e POSTGRES_DB=mydb -v postgres-data:/var/lib/postgresql/data postgres:16-alpine
 
--->To go inside app container: **docker exec -it my-app sh**
+-->Check that it is running: docker ps
 
--->ping db container from app container: **ping my-db**
+Step 4: Run an application container: For this task, use an Alpine container as a simple client: docker run -dit --name app-container --network my-app-net alpine sh
 
--->Check DB port: **nc -zv my-db 5432**  
+Step 5: Verify the app container can reach the database for that go inside container first: docker exec -it app-container sh
 
--->PostgreSQL server listens on port 5432 inside the container, Check if service is running on port 5432 of my-db, So no IP needed, No port mapping needed 
+-->Install networking tools: apk update && apk add iputils bind-tools
 
-(internal communication will happen)
+-->Ping the PostgreSQL container by its container name: ping postgres-db [Expected: Pinging output should be display]
 
--->**Note:** This proves app can reach DB service, So my-db is resolved via Docker DNS, No need to use IP address, Both containers communicate over my-app-net 
+-->You can also verify DNS resolution: nslookup postgres-db
 
-which is custom network it has DNS resolution which default network dont have which is bridge network.
+-->exit from the container: exit
 
-<img width="1862" height="971" alt="image" src="https://github.com/user-attachments/assets/766aed7c-b891-4f03-8d72-15e0fbc5f356" />
+-->Verify the volume is attached: Inspect the PostgreSQL container: docker inspect postgres-db
+
+<img width="557" height="197" alt="image" src="https://github.com/user-attachments/assets/d82cdd70-91be-49c4-8871-dd81919a5216" />
+
+-->Verify the network: docker network inspect my-app-net [Expected: Both containers should be displayed connected postgres-db & app-container]
+
+<img width="820" height="321" alt="image" src="https://github.com/user-attachments/assets/4dbb169f-98aa-490c-9b6b-3d01388b7472" />
+
+
 
 -->**Note:** Containers on the same custom Docker network can communicate using container names because Docker provides an internal DNS service. This allows 
 
