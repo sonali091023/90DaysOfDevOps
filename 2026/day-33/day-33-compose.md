@@ -166,6 +166,10 @@ Step 10: Confirm the Volume Exists: docker volume ls [Expected: volume wordpress
 
 <img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/cc185872-7d76-4d71-8098-28fd44ef9923" />
 
+<img width="1917" height="262" alt="image" src="https://github.com/user-attachments/assets/9f1db0af-6a34-467f-9a3c-081e32436849" />
+
+<img width="1896" height="167" alt="image" src="https://github.com/user-attachments/assets/8f15bdc1-763c-4169-bfd4-e7a37e2663ea" />
+
 ---
 
 ### Task 4: Compose Commands
