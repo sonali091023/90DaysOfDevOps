@@ -72,63 +72,99 @@ Step 6: Stop and remove everything: docker-compose down
 
 ---
 
-### Task 3: Two-Container Setup
+### Task 3: Two-Container Setup:
 
-Write a `docker-compose.yml` that runs:   -->**mkdir wordpress-app && cd wordpress-app**
+Write a docker-compose.yml that runs:
 
-Create below both containers in **vi docker-compose.yml**
-
-- A **WordPress** container
-
-- A **MySQL** container
-
--->**docker-compose up -d**
-
+A WordPress container
+A MySQL container
 They should:
 
-- Be on the same network (Compose does this automatically)
-
--->This network **wordpress-app_default** was automatically created by Docker Compose — we didn't have to do anything, When we run **docker-compose up -d** Docker 
-
-Compose automatically:
-
--->**Read your docker-compose.yml**
-
--->**Created a default network named projectfolder_default==wordpress-app_default**
-
--->**Attached all containers in the file to that network**
-
--->That's why containers can talk to each other, WordPress can reach MySQL just by using service name db — because both containers are on the same network wordpress-app_default.
-
-WORDPRESS_DB_HOST: db:3306
-
--->Verify containers are on same network: **docker network inspect wordpress-app_default**
-
--->One docker-compose up -d creates everything automatically
-
--->To see the docker network list: **docker network ls**
-
-<img width="677" height="201" alt="image" src="https://github.com/user-attachments/assets/676070cc-6281-4c45-b030-ada2d3d083e5" />
-
--->Verify containers are on same network: **docker network inspect wordpress-app_default**
-
-<img width="1150" height="971" alt="image" src="https://github.com/user-attachments/assets/af8a57fc-6490-4064-9ebc-fc51033f80b4" />
-
-- MySQL should have a named volume for data persistence
-
-- WordPress should connect to MySQL using the service name
-
+Be on the same network (Compose does this automatically)
+MySQL should have a named volume for data persistence
+WordPress should connect to MySQL using the service name
 Start it, access WordPress in your browser, and set it up.
 
-**Verify:** Stop and restart with `docker compose down` and `docker compose up` — is your WordPress data still there?
+Verify: Stop and restart with docker compose down and docker compose up — is your WordPress data still there?
 
-<img width="1921" height="894" alt="image" src="https://github.com/user-attachments/assets/2e6aa1a5-f4f8-4d89-bcdb-908684b9622c" />
+**Steps to follow:**
 
-<img width="866" height="557" alt="image" src="https://github.com/user-attachments/assets/e55df36a-ee01-4fa8-bcde-dfecc25027eb" />
+-->This is one of the most important Docker Compose exercises because it introduces the core concepts of multi-container applications, networking, volumes, environment variables, and service dependencies.
 
-<img width="1431" height="757" alt="image" src="https://github.com/user-attachments/assets/6299f8cf-9829-4ab7-a444-de0b90c2805a" />
+-->Steps 1: Create new directroy and go inside it: mkdir wordpress-compose && cd wordpress-compose
 
-<img width="1905" height="970" alt="image" src="https://github.com/user-attachments/assets/1a6e10f8-8364-413c-8669-849d8ef31741" />
+-->Step 2: Create a compose file: touch docker-compose.yml
+
+<img width="667" height="732" alt="image" src="https://github.com/user-attachments/assets/224d9427-5944-4c55-aa69-f48bfede9275" />
+
+-->In the above docker-compose file, There are two different sets of credentials involved here:
+
+<img width="731" height="522" alt="image" src="https://github.com/user-attachments/assets/1f8541dd-1f80-4b04-8dd5-7572b4002455" />
+
+<img width="712" height="765" alt="image" src="https://github.com/user-attachments/assets/7b5f43cd-da8d-4059-ac39-945348598d50" />
+
+<img width="807" height="257" alt="image" src="https://github.com/user-attachments/assets/716cb285-6447-4c9d-964f-f53e2e28b71e" />
+
+Step 3: Understand the Compose File: 
+
+<img width="682" height="762" alt="image" src="https://github.com/user-attachments/assets/20dac678-9fc0-46d3-964f-d1340c85f9fb" />
+<img width="672" height="462" alt="image" src="https://github.com/user-attachments/assets/f0037cb7-a929-4cd7-80c3-02e974b768a3" />
+
+<img width="702" height="407" alt="image" src="https://github.com/user-attachments/assets/e658d8de-bef1-4f4e-ac85-2cc2663d97e1" />
+
+<img width="677" height="456" alt="image" src="https://github.com/user-attachments/assets/19b8e54c-0fd9-4314-8990-448dd305dc88" />
+
+<img width="670" height="557" alt="image" src="https://github.com/user-attachments/assets/80d248c8-0cb3-4ca8-9fdf-3938d52739d7" />
+
+<img width="707" height="457" alt="image" src="https://github.com/user-attachments/assets/a32c1288-613b-4285-bb09-5f17fcf96042" />
+
+**Note:** docker Compose automatically creates a network like: **wordpress-compose_default** So to verify it run command: docker network ls
+
+Step 4: Start Everything: docker-compose up -d
+
+Step 5: Verify Containers: docker ps [Expected: 2 containers wordpress-app & wordpress-db should be running]
+
+Step 6: Check the Network: docker network ls
+
+-->then inspect the created network: docker network inspect wordpress-compose_default
+
+Step 7: Open WordPress: For that on browser run the url: http://localhost:8080
+
+<img width="676" height="385" alt="image" src="https://github.com/user-attachments/assets/c8e03c6a-ed1c-4787-b65d-cb5ae4b6ed42" />
+
+Step 7: Verify the Volume: docker volume ls [Expected: wordpress-compose_mysql_data]
+
+-->Then inspect the docker volume: docker volume inspect wordpress-compose_mysql_data
+
+Step 8: Stop Everything: docker-compose down [Expected: Created containers will get remove, But the volume is not removed.]
+
+Step 9: Start Again: docker-compose up -d 
+
+-->And then open url in the browser: http://localhost:8080
+
+[Expected Result: You should not see the WordPress installation page again. Instead, you'll see your existing WordPress login page and all your site content because the MySQL data persisted in the named volume.]
+
+Step 10: Confirm the Volume Exists: docker volume ls [Expected: volume wordpress-compose_mysql_data should be display]
+
+<img width="765" height="707" alt="image" src="https://github.com/user-attachments/assets/ff2fb667-f337-4e13-ad90-00993945f52d" />
+
+<img width="1917" height="330" alt="image" src="https://github.com/user-attachments/assets/a4638462-b53d-419b-9408-18815a3ece22" />
+
+<img width="1866" height="185" alt="image" src="https://github.com/user-attachments/assets/4825f20f-88d9-4971-9d53-237181f1ff51" />
+
+<img width="1647" height="972" alt="image" src="https://github.com/user-attachments/assets/d3ba99b0-71cf-4473-a2bb-455cdfb0e4ff" />
+
+<img width="1917" height="971" alt="image" src="https://github.com/user-attachments/assets/9fb841ad-89c8-4295-9304-5431df413eb8" />
+
+<img width="1910" height="966" alt="image" src="https://github.com/user-attachments/assets/11cb0b64-c95c-4118-8060-1eba7620f427" />
+
+<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/c05b01cb-d14b-4d51-b15a-e7c3fd083369" />
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/cc185872-7d76-4d71-8098-28fd44ef9923" />
+
+<img width="741" height="822" alt="image" src="https://github.com/user-attachments/assets/5eb85649-1b33-4171-baf6-bde714bca13f" />
+
+<img width="737" height="452" alt="image" src="https://github.com/user-attachments/assets/afa90137-a8cd-40d6-b72c-3ef57e50c1a2" />
 
 ---
 
