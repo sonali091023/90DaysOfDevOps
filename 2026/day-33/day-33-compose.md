@@ -170,6 +170,12 @@ Step 10: Confirm the Volume Exists: docker volume ls [Expected: volume wordpress
 
 <img width="1896" height="167" alt="image" src="https://github.com/user-attachments/assets/8f15bdc1-763c-4169-bfd4-e7a37e2663ea" />
 
+<img width="1912" height="867" alt="image" src="https://github.com/user-attachments/assets/806a3a58-2771-4b69-8c3b-db38639bc9e6" />
+
+<img width="1917" height="980" alt="image" src="https://github.com/user-attachments/assets/805c87af-866a-437a-b9bf-a562cf686bd9" />
+
+-->If you see the WordPress login page (instead of the installation wizard) and your test post is still there after logging in, then your named MySQL volume is working correctly, and you've successfully completed the persistence requirement.
+
 ---
 
 ### Task 4: Compose Commands
