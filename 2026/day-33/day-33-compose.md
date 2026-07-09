@@ -180,35 +180,56 @@ Step 10: Confirm the Volume Exists: docker volume ls [Expected: volume wordpress
 
 ### Task 4: Compose Commands
 Practice and document these:
-1. Start services in **detached mode** -->**docker-compose up -d**
 
-<img width="1566" height="258" alt="image" src="https://github.com/user-attachments/assets/ee9f9ee3-a808-43b2-bf72-ba5b51d783dc" />
+Start services in detached mode
+View running services
+View logs of all services
+View logs of a specific service
+Stop services without removing
+Remove everything (containers, networks)
+Rebuild images if you make a change
 
-2. View running services -->**docker-compose ps**
+**Steps to follow:**
 
-<img width="1897" height="162" alt="image" src="https://github.com/user-attachments/assets/d531e7a0-950a-441a-8ae0-8ea8a7ce7694" />
+-->This task is about learning the most commonly used Docker Compose commands. Since your WordPress + MySQL application is already running, you can practice these commands directly.
 
-3. View **logs** of all services -->**docker-compose logs -f** --> Both containers are healthy.
+-->Make sure you're inside your project directory: cd wordpress-compose
 
-<img width="1901" height="622" alt="image" src="https://github.com/user-attachments/assets/aabc9630-a8a7-442c-b3cb-f2dc0908759e" />
+-->1. Start services in detached mode: Detached mode runs the containers in the background: docker compose up -d
 
-4. View logs of a **specific** service -->**docker-compose logs -f db**, **docker-compose logs -f wordpress**
+-->To verify run command: docker ps OR docker ps -a
 
-<img width="1907" height="440" alt="image" src="https://github.com/user-attachments/assets/a5412776-0ae9-4bb5-a28d-7865e1686f42" />
+-->View running services: docker-compose ps [Note: Docker Compose provides a summary of the services in the project.]
 
-5. **Stop** services without removing -->**docker-compose stop**
+-->View logs of all services: To see logs from both WordPress and MySQL: docker-compose logs OR To see live logs use command: docker compose logs -f & then to break it use ctrl + c
 
-<img width="633" height="128" alt="image" src="https://github.com/user-attachments/assets/de16a85e-c977-439a-9ede-6d9aa51ebad4" />
+-->View logs of a specific service [For the WordPress service:]: docker-compose logs wordpress OR to check live logs use command: docker compose logs -f wordpress
 
-6. **Remove** everything (containers, networks) -->**docker-compose down**
+-->Also check for mysql service use command: docker-compose logs db OR docker-compose logs -f db [**Note:** Use the service names (wordpress and db) from your docker-compose.yml, not the container names.]
 
-<img width="636" height="162" alt="image" src="https://github.com/user-attachments/assets/f25f7f8a-91f9-4a48-ad6c-42c1372e528d" />
+-->Stop services without removing them: This stops the containers but keeps them available to restart later: docker-compose stop && docker-compose ps [Now You'll see the services are stopped, To start them again: docker compose start
 
-7. **Rebuild** images if you make a change -->docker-compose up -d --build
+-->Remove everything (containers and networks): This stops and removes the containers and the project network: docker-compose down & then verify: docker-compose ps [Expected: No services should be running]
 
--->**Note:** Forces a rebuild of images before starting. Useful after editing a Dockerfile or application code.
+**Important:** This command does not remove named volumes, So your MySQL data remains, If you also wanted to remove the volumes (not required for this task), you would use:
 
-<img width="771" height="152" alt="image" src="https://github.com/user-attachments/assets/9ad33a30-d658-410e-a4db-e6b5871f34a8" />
+-->To delete the database data: docker compose down -v
+
+-->Rebuild images after making changes: If you modify a Dockerfile or build configuration: docker-compose up --build OR in detached mode: docker-compose up --build -d
+
+-->If you only want to rebuild without starting: docker-compose build
+
+<img width="766" height="571" alt="image" src="https://github.com/user-attachments/assets/9fa4605e-073a-4d93-9bef-621b62f0bfce" />
+
+<img width="751" height="227" alt="image" src="https://github.com/user-attachments/assets/16ec8de5-6f43-47f2-a327-f891b6a032bd" />
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/7bd9780b-15f2-47a8-8882-8a73294a1b70" />
+
+<img width="1917" height="971" alt="image" src="https://github.com/user-attachments/assets/42fc0676-595c-4df0-926e-36b368b4daff" />
+
+<img width="1917" height="895" alt="image" src="https://github.com/user-attachments/assets/e85e01ba-cefd-4ac8-a45c-6023cac661ee" />
+
+<img width="1905" height="222" alt="image" src="https://github.com/user-attachments/assets/970131e3-e4c6-4665-ab4d-aa7a5213a2b2" />
 
 ---
 
