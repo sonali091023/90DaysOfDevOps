@@ -42,19 +42,33 @@ Step 3: Verify Docker is running: docker info && docker ps
 ---
 
 ### Task 2: Your First Compose File
-1. Create a folder `compose-basics` -->**mkdir compose-basics** 
-2. Write a `docker-compose.yml` that runs a single **Nginx** container with port mapping -->**vi docker-compose.yml**
-4. Start it with `docker compose up` -->**docker-compose up -d**
-5. Access it in your browser -->**localhost:8080**
-6. Stop it with `docker compose down` -->**docker-compose down**
+1. Create a folder `compose-basics` 
+2. Write a `docker-compose.yml` that runs a single **Nginx** container with port mapping 
+4. Start it with `docker compose up` 
+5. Access it in your browser 
+6. Stop it with `docker compose down` 
 
-<img width="1410" height="237" alt="image" src="https://github.com/user-attachments/assets/2cd16216-6841-4afe-a2fa-be0bd3ab3ae8" />
+**Steps to follow:**
 
-<img width="660" height="88" alt="image" src="https://github.com/user-attachments/assets/67c97f5e-63f1-4e42-b0a7-15458a1f93ea" />
+Step 1: Create the project directory: mkdir compose-basics && cd compose-basics
 
-<img width="717" height="378" alt="image" src="https://github.com/user-attachments/assets/4922d27d-76dc-4981-a48d-4f2a8a487b15" />
+Step 2: Create docker-compose.yml: Create a file named docker-compose.yml: vi docker-compose.yml
 
-<img width="635" height="125" alt="image" src="https://github.com/user-attachments/assets/f68cbea1-6418-4d55-8ae8-c37c7030bf5f" />
+<img width="595" height="300" alt="image" src="https://github.com/user-attachments/assets/4a452ac4-ca53-480a-bb7a-cf464d9031a7" />
+
+Step 3: Start the container: docker-compose up -d
+
+Step 4: Verify the container: Check that it is running: docker ps
+
+Step 5: Access it in your browser: http://localhost:8080 ALSO check in your terminal: curl http://localhost:8080 [Expected: You should see the Welcome to nginx! page.]
+
+Step 6: Stop and remove everything: docker-compose down
+
+-->Now Verify cleanup: docker ps  OR docker ps -a [Expected: The nginx-compose container should no longer appear.]
+
+<img width="1907" height="915" alt="image" src="https://github.com/user-attachments/assets/e969357d-019a-4b70-a8c3-d56cd22776bd" />
+
+<img width="1917" height="772" alt="image" src="https://github.com/user-attachments/assets/e0a3e797-4032-406c-a840-e836d15f45aa" />
 
 ---
 
