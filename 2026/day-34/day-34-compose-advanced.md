@@ -23,11 +23,45 @@ Create a `docker-compose.yml` for a 3-service stack:
 
 Write a simple Dockerfile for the web app. The app doesn't need to be complex — even a "Hello World" that connects to the database is enough.
 
-Command used: **docker-compose up --build**
+**Steps to follow:**
 
-<img width="1050" height="935" alt="image" src="https://github.com/user-attachments/assets/37459060-6fff-4bc6-a135-fafeaa4628f3" />
+-->Since you've already worked with Node.js, Docker, and Docker Compose, let's build a realistic 3-tier application.
 
-<img width="641" height="366" alt="image" src="https://github.com/user-attachments/assets/1a122fa7-81f5-42a5-839b-4723b2a67925" />
+Step 1: Create the Node.js App: mkdir app && cd app & then inside it create file package.json & add below line of code:
+
+<img width="670" height="352" alt="image" src="https://github.com/user-attachments/assets/63f0daa0-57d3-4aed-ba20-8a2150bd9eb7" />
+
+-->app/server.js
+
+<img width="722" height="772" alt="image" src="https://github.com/user-attachments/assets/d3c64840-499a-4fce-adfe-bbf18a47b664" />
+<img width="732" height="215" alt="image" src="https://github.com/user-attachments/assets/7a61f309-743a-4df9-b01b-4869bd3472db" />
+
+Step 2: Dockerfile: Also create Dockerfile under app dir: 
+
+<img width="691" height="321" alt="image" src="https://github.com/user-attachments/assets/ef2d9af0-9064-4369-a25e-35f79febb80e" />
+
+Step 3: docker-compose.yml:
+
+<img width="755" height="777" alt="image" src="https://github.com/user-attachments/assets/24b496fc-d8d0-46cf-b795-a28fd8aa2282" />
+<img width="750" height="402" alt="image" src="https://github.com/user-attachments/assets/53bc4d7e-4e5a-4f38-9f54-5ae9b0044975" />
+
+Step 4: Optional .env
+
+<img width="667" height="322" alt="image" src="https://github.com/user-attachments/assets/d041e7c6-14d0-48e2-8369-c8932f4a86ef" />
+
+Step 5: Run the Stack: docker compose up --build
+
+-->Verify Containers: docker ps [Expected: following containers should be display node-app, postgres-db, redis-cache]
+
+-->Now to Test the Application run the URl in the browser: http://localhost:3000
+
+<img width="681" height="245" alt="image" src="https://github.com/user-attachments/assets/1df33eee-f7df-46c2-bfca-afad6779ed4c" />
+
+<img width="697" height="547" alt="image" src="https://github.com/user-attachments/assets/67ca1c19-8e9e-451e-a6b3-f42432ee0097" />
+
+<img width="652" height="517" alt="image" src="https://github.com/user-attachments/assets/ca2f33cb-a7d5-4003-9fc1-b5b07d728444" />
+
+<img width="776" height="555" alt="image" src="https://github.com/user-attachments/assets/994c62c9-5a62-4f39-b05d-510464f9faf1" />
 
 ---
 
