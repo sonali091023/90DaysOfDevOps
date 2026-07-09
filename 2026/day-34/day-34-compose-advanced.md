@@ -73,9 +73,15 @@ Step 5: Run the Stack: docker compose up --build
 
 <img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/c6cf5b4f-4ae3-4e23-8f2d-7e3975b6dc27" />
 
+<img width="882" height="762" alt="image" src="https://github.com/user-attachments/assets/dd5b07a6-7619-4084-907a-ca3216c7b61b" />
+
 <img width="1917" height="966" alt="image" src="https://github.com/user-attachments/assets/e78cc68d-b768-43f0-a831-05ecb4062dcf" />
 
 <img width="1897" height="886" alt="image" src="https://github.com/user-attachments/assets/327bf4bc-1ead-433a-90a6-faa0a9b46d4c" />
+
+<img width="1917" height="851" alt="image" src="https://github.com/user-attachments/assets/e2ba3349-614d-4579-9f16-e0c36907b02d" />
+
+<img width="1917" height="851" alt="image" src="https://github.com/user-attachments/assets/4df99aa2-1cf6-416e-a99c-7128f6b8b40a" />
 
 ---
 
