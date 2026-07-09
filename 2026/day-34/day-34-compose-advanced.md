@@ -25,7 +25,13 @@ Write a simple Dockerfile for the web app. The app doesn't need to be complex â€
 
 **Steps to follow:**
 
--->Since you've already worked with Node.js, Docker, and Docker Compose, let's build a realistic 3-tier application.
+-->Since you've already worked with Node.js, PostgreSQL, Dockerfiles, and Docker Compose, let's build a 3-service Docker Compose stack using:
+
+Web App: Node.js + Express
+
+Database: PostgreSQL
+
+Cache: Redis
 
 Step 1: Create the Node.js App: mkdir app && cd app & then inside it create file package.json & add below line of code:
 
@@ -62,6 +68,14 @@ Step 5: Run the Stack: docker compose up --build
 <img width="652" height="517" alt="image" src="https://github.com/user-attachments/assets/ca2f33cb-a7d5-4003-9fc1-b5b07d728444" />
 
 <img width="776" height="555" alt="image" src="https://github.com/user-attachments/assets/994c62c9-5a62-4f39-b05d-510464f9faf1" />
+
+<img width="1902" height="930" alt="image" src="https://github.com/user-attachments/assets/0db3c221-f6ee-4f0e-bb10-18dcc2f67ec6" />
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/c6cf5b4f-4ae3-4e23-8f2d-7e3975b6dc27" />
+
+<img width="1917" height="966" alt="image" src="https://github.com/user-attachments/assets/e78cc68d-b768-43f0-a831-05ecb4062dcf" />
+
+<img width="1897" height="886" alt="image" src="https://github.com/user-attachments/assets/327bf4bc-1ead-433a-90a6-faa0a9b46d4c" />
 
 ---
 
