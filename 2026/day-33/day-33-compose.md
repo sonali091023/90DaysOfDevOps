@@ -158,13 +158,13 @@ Step 10: Confirm the Volume Exists: docker volume ls [Expected: volume wordpress
 
 <img width="1910" height="966" alt="image" src="https://github.com/user-attachments/assets/11cb0b64-c95c-4118-8060-1eba7620f427" />
 
-<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/c05b01cb-d14b-4d51-b15a-e7c3fd083369" />
-
-<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/cc185872-7d76-4d71-8098-28fd44ef9923" />
-
 <img width="741" height="822" alt="image" src="https://github.com/user-attachments/assets/5eb85649-1b33-4171-baf6-bde714bca13f" />
 
 <img width="737" height="452" alt="image" src="https://github.com/user-attachments/assets/afa90137-a8cd-40d6-b72c-3ef57e50c1a2" />
+
+<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/c05b01cb-d14b-4d51-b15a-e7c3fd083369" />
+
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/cc185872-7d76-4d71-8098-28fd44ef9923" />
 
 ---
 
