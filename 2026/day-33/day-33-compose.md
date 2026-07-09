@@ -19,54 +19,25 @@ Yesterday you manually created networks and volumes and ran containers one by on
 
 **Steps to follow:**
 
+-->Update and install docker: sudo apt-get update && sudo apt install -y docker.io
+
+-->Install docker compose: sudo apt install docker-compose -y
+
+-->Start the docker and enable it: sudo systemctl start docker && sudo systemctl enable docker
+
 Step 1: Check if Docker Compose is installed: docker-compose version [If Docker Compose is installed, you'll see output similar to:]
 
 **Note:** Modern Docker uses docker compose (with a space). The older standalone command docker-compose (with a hyphen) is deprecated, although it may still work on some systems.
 
--->If docker compose doesn't work, you can also check: docker-compose --version
+Step 2: Verify Docker Engine: Also verify that Docker itself is installed: docker --version
 
-Step 2: Verify the Docker Engine version:
+Step 3: Verify Docker is running: docker info && docker ps
 
--->Although the task only asks for Docker Compose, it's a good practice to verify Docker as well: docker --version
+<img width="1896" height="882" alt="t1i1" src="https://github.com/user-attachments/assets/eeb2ccaa-09e4-4e94-9c5f-03f082473b7a" />
 
-Step 3: Verify Docker is running: docker info OR docker ps [If Docker is running, you'll see information about the Docker daemon or a list of running containers.]
+<img width="1811" height="977" alt="image" src="https://github.com/user-attachments/assets/b601f389-d764-4cdf-846f-7fedaf934254" />
 
-<img width="677" height="212" alt="image" src="https://github.com/user-attachments/assets/b88b26f4-eed1-4ce6-b92d-8204f3131cdc" />
-
-
-
-
-
-
-
-
-
-
-
-
-1. Check if Docker Compose is available on your machine
-
--->**sudo apt-get update**
-
--->**sudo apt install -y docker.io**
-
--->**sudo systemctl start docker**
-
--->**sudo systemctl enable docker**
-
--->**LATEST=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep '"tag_name"' | cut -d'"' -f4)**
-
--->**sudo curl -L "https://github.com/docker/compose/releases/download/${LATEST}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose**
-
--->OR Simply run command: sudo apt install docker-compose -y
-
--->**sudo chmod +x /usr/local/bin/docker-compose**
-
-2. Verify the version
-
--->**docker-compose --version**: v5.1.2
-
-<img width="508" height="52" alt="image" src="https://github.com/user-attachments/assets/ee7177fa-ce76-4932-9a49-50aae1dc49f2" />
+<img width="1812" height="391" alt="image" src="https://github.com/user-attachments/assets/47be79ea-efd6-4942-87b6-293f7e8dec9e" />
 
 ---
 
