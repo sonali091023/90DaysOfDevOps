@@ -234,6 +234,9 @@ Rebuild images if you make a change
 ---
 
 ### Task 5: Environment Variables
+1. Add environment variables directly in your docker-compose.yml
+2. Create a .env file and reference variables from it in your compose file
+3. Verify the variables are being picked up
 
 1. Add environment variables directly in your `docker-compose.yml`
 
@@ -255,13 +258,21 @@ services:
       
       MYSQL_PASSWORD: wppass
 
-2. Create a `.env` file and reference variables from it in your compose file -->**vi .env**
+2. Create a `.env` file and reference variables from it in your compose file -->vi .env
 
-<img width="467" height="218" alt="image" src="https://github.com/user-attachments/assets/0dfb8b91-ee37-4e42-ac0d-23d394398137" />
+<img width="747" height="606" alt="image" src="https://github.com/user-attachments/assets/6185b012-7181-4040-b61b-ecd134d4356a" />
 
-3. Verify the variables are being picked up-->**docker-compose config**
+3. Verify the variables are being picked up-->docker-compose config
 
-<img width="540" height="980" alt="image" src="https://github.com/user-attachments/assets/17ae5771-6637-4966-be83-b66d5f5924a1" />
+<img width="1697" height="780" alt="image" src="https://github.com/user-attachments/assets/be651136-08aa-4b45-b575-e641dde1a1f3" />
+
+<img width="700" height="560" alt="image" src="https://github.com/user-attachments/assets/6aae427e-322d-48ca-a229-0d5222470a8f" />
+
+-->The output of docker compose config (or docker-compose config) shows that Docker Compose successfully read your .env file and substituted the variables, means the variable substitution worked perfectly.
+
+<img width="687" height="682" alt="image" src="https://github.com/user-attachments/assets/07546e23-9f83-496b-bddb-2d7f6ffd143b" />
+
+<img width="762" height="306" alt="image" src="https://github.com/user-attachments/assets/c3288e78-265d-4a4d-a3ed-f8318593ca67" />
 
 ---
 
