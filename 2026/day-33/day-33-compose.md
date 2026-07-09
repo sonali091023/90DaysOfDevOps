@@ -16,6 +16,34 @@ Yesterday you manually created networks and volumes and ran containers one by on
 ## Challenge Tasks
 
 ### Task 1: Install & Verify
+
+**Steps to follow:**
+
+Step 1: Check if Docker Compose is installed: docker-compose version [If Docker Compose is installed, you'll see output similar to:]
+
+**Note:** Modern Docker uses docker compose (with a space). The older standalone command docker-compose (with a hyphen) is deprecated, although it may still work on some systems.
+
+-->If docker compose doesn't work, you can also check: docker-compose --version
+
+Step 2: Verify the Docker Engine version:
+
+-->Although the task only asks for Docker Compose, it's a good practice to verify Docker as well: docker --version
+
+Step 3: Verify Docker is running: docker info OR docker ps [If Docker is running, you'll see information about the Docker daemon or a list of running containers.]
+
+<img width="677" height="212" alt="image" src="https://github.com/user-attachments/assets/b88b26f4-eed1-4ce6-b92d-8204f3131cdc" />
+
+
+
+
+
+
+
+
+
+
+
+
 1. Check if Docker Compose is available on your machine
 
 -->**sudo apt-get update**
