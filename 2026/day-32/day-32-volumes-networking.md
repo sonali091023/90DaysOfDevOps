@@ -410,7 +410,15 @@ Step 5: Verify the app container can reach the database for that go inside conta
 
 <img width="820" height="321" alt="image" src="https://github.com/user-attachments/assets/4dbb169f-98aa-490c-9b6b-3d01388b7472" />
 
+<img width="1720" height="772" alt="image" src="https://github.com/user-attachments/assets/d88c3430-ce00-44f2-b22c-5e76362b674e" />
 
+<img width="1697" height="967" alt="image" src="https://github.com/user-attachments/assets/5e3e9ff3-3bec-412d-81e5-5cb58023891f" />
+
+<img width="1917" height="966" alt="image" src="https://github.com/user-attachments/assets/347ed00d-a22e-492d-b34a-b436b1666de6" />
+
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/f27e0a5e-fe3a-4a21-bfdd-c68dc9f1983e" />
+
+<img width="1902" height="977" alt="image" src="https://github.com/user-attachments/assets/4b445fc6-2219-4beb-ba9c-93e42a0f72ea" />
 
 -->**Note:** Containers on the same custom Docker network can communicate using container names because Docker provides an internal DNS service. This allows 
 
