@@ -81,8 +81,6 @@ Step 5: Run the Stack: docker compose up --build
 
 <img width="1917" height="851" alt="image" src="https://github.com/user-attachments/assets/e2ba3349-614d-4579-9f16-e0c36907b02d" />
 
-<img width="1917" height="851" alt="image" src="https://github.com/user-attachments/assets/4df99aa2-1cf6-416e-a99c-7128f6b8b40a" />
-
 ---
 
 ### Task 2: depends_on & Healthchecks
@@ -92,17 +90,54 @@ Step 5: Run the Stack: docker compose up --build
 
 **Test:** Bring everything down and up — does the app wait for the DB?
 
--->1. Start db container
+**Steps to follow:**
 
--->2. Start redis container
+-->This task is about making sure your application waits until the database is actually ready before starting. Without a health check, Docker Compose only waits for the database container to start—not for PostgreSQL to finish initializing.
 
--->3. Check healthcheck of db & redis
+Step 1: Update docker-compose.yml: 
 
--->4. Only when BOTH are healthy → start web container
+<img width="712" height="677" alt="image" src="https://github.com/user-attachments/assets/c082d211-9297-467e-a814-a3baea19a1c2" />
+<img width="702" height="555" alt="image" src="https://github.com/user-attachments/assets/fd140fbc-728a-4d57-bbb9-ccb698458a8e" />
 
-**Note:** depends_on with condition: service_healthy ensures that a service starts only after its dependent services are fully ready and healthy, not just started.
+<img width="897" height="717" alt="image" src="https://github.com/user-attachments/assets/c730d6d6-0949-4905-aeb9-15a5da2ecfdd" />
 
-<img width="1893" height="978" alt="image" src="https://github.com/user-attachments/assets/f1e45c56-73bc-4dbe-8e59-1d3bcd2ccbb1" />
+<img width="880" height="486" alt="image" src="https://github.com/user-attachments/assets/01970d1b-1a28-432f-b4f4-c44fe855b3a7" />
+
+<img width="767" height="500" alt="image" src="https://github.com/user-attachments/assets/10827c5c-fea7-4d0f-a2c6-717c3b1844ff" />
+
+<img width="852" height="767" alt="image" src="https://github.com/user-attachments/assets/64ae02f5-33b1-44c0-87c8-5009745b865f" />
+
+<img width="847" height="352" alt="image" src="https://github.com/user-attachments/assets/674ec41b-2e3d-4f30-bb7c-d8775b3ba3f3" />
+
+Step 2: What the Healthcheck Does: 
+
+<img width="810" height="711" alt="image" src="https://github.com/user-attachments/assets/f9ff9082-1fb2-4065-943a-19de6872c5ec" />
+
+Step 3: How depends_on Works: 
+
+<img width="897" height="447" alt="image" src="https://github.com/user-attachments/assets/1e907d8a-24f3-46c2-beb4-b74f58da0eb7" />
+
+Step 4: Bring Everything Down: 
+
+<img width="692" height="262" alt="image" src="https://github.com/user-attachments/assets/7b9d8c35-cb9e-4def-9552-4b1023a968cd" />
+
+Step 5: Start the Stack: docker-compose up --build -d [Expected: Notice that the Node.js application starts only after the database health check succeeds.]
+
+Step 6: Verify the Health Status: List the running containers: docker-compose ps
+
+-->You can also inspect the health status directly: docker inspect postgres-db
+
+-->Or filter just the health information: docker inspect --format='{{json .State.Health}}' postgres-db
+
+<img width="857" height="632" alt="image" src="https://github.com/user-attachments/assets/9292075d-c70e-4442-a6a2-be941b880ec8" />
+
+<img width="1897" height="975" alt="image" src="https://github.com/user-attachments/assets/6961fde8-a9c0-4b42-ba78-560c001a3f89" />
+
+<img width="1912" height="972" alt="image" src="https://github.com/user-attachments/assets/41dc8643-39af-486c-80f3-719c198394f6" />
+
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/e5045624-6f44-490c-b87f-39aeb360d073" />
+
+<img width="1917" height="980" alt="image" src="https://github.com/user-attachments/assets/b59282d9-1d26-475f-87dd-054493335adc" />
 
 ---
 
