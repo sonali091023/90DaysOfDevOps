@@ -142,6 +142,29 @@ Step 6: Verify the Health Status: List the running containers: docker-compose ps
 ---
 
 ### Task 3: Restart Policies
+Add restart: always to your database service
+Manually kill the database container — does it come back?
+Try restart: on-failure — how is it different?
+Write in your notes: When would you use each restart policy?
+
+**Steps to follow:**
+
+-->This task helps you understand how Docker automatically restarts containers under different conditions.
+
+Step 1: Add restart: always
+
+<img width="802" height="760" alt="image" src="https://github.com/user-attachments/assets/a2352c87-953a-491a-9ab8-d4ac0434b384" />
+
+Step 2: Start the stack: docker compose up -d
+
+-->Verify the containers: docker ps
+
+Step 3: Manually kill the database container: Kill the PostgreSQL container: docker kill postgres-db
+
+-->Now Immediately check: docker ps
+
+
+
 1. Add `restart: always` to your database service
 2. Manually kill the database container — does it come back?
 
