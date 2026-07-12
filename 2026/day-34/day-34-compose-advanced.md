@@ -155,7 +155,7 @@ Step 1: Add restart: always
 
 <img width="802" height="760" alt="image" src="https://github.com/user-attachments/assets/a2352c87-953a-491a-9ab8-d4ac0434b384" />
 
-Step 2: Start the stack: docker compose up -d
+Step 2: Start the stack/container: docker-compose up -d
 
 -->Verify the containers: docker ps
 
@@ -163,7 +163,27 @@ Step 3: Manually kill the database container: Kill the PostgreSQL container: doc
 
 -->Now Immediately check: docker ps
 
+Step 4: Check if it restarts automatically: docker ps [Expected: Notice the container is running again.]
 
+-->we can also verify by using command: docker inspect postgres-db --format='{{.RestartCount}}' [Expected: So here The restart count increases each time Docker restarts it.]
+
+Step 5: Change to on-failure: 
+
+<img width="717" height="377" alt="image" src="https://github.com/user-attachments/assets/1170a2bc-2368-4739-83bc-33ba517e2df4" />
+
+Step 6: Test on-failure: 
+
+-->Test 1 – Kill the container: docker kill postgres-db
+
+-->Then to verify: docker ps [Expected: The container may restart because docker kill causes the process to exit with a non-zero status (failure), which matches the on-failure policy.]
+
+Test 2 – Stop the container gracefully: docker stop postgres-db
+
+-->Noe to verify: docker ps -a [Expected: It does not restart because it exited successfully with status code 0.]
+
+<img width="1040" height="796" alt="image" src="https://github.com/user-attachments/assets/dcbc84a6-314e-4812-a36c-434582e78e9f" />
+
+<img width="911" height="775" alt="image" src="https://github.com/user-attachments/assets/ebda4297-8d18-411c-976f-9479e5d1fc85" />
 
 1. Add `restart: always` to your database service
 2. Manually kill the database container — does it come back?
@@ -173,8 +193,6 @@ Step 3: Manually kill the database container: Kill the PostgreSQL container: doc
 in that case container will et restart, But when we do manually docker stop at the time it Stops temporarily, And when we do Docker daemon restart/system 
 
 reboot at the time container starts again
-
-<img width="1552" height="623" alt="image" src="https://github.com/user-attachments/assets/98d07cd5-251d-4ff4-b3cb-c4292a8a52b6" />
 
 3. Try `restart: on-failure` — how is it different?
 
@@ -208,7 +226,7 @@ at the time container will not restart
 
 -->**Using build:** in docker-compose allows us to build custom images from a Dockerfile, and docker compose up --build rebuilds and restarts containers with updated code.
 
-<img width="628" height="308" alt="image" src="https://github.com/user-attachments/assets/d70ccaa5-8d3e-4fe8-96fa-8b82831ebdbf" />
+<img width="911" height="775" alt="image" src="https://github.com/user-attachments/assets/86457d45-9f6a-4cf4-8923-1531f16dbe6d" />
 
 <img width="857" height="790" alt="image" src="https://github.com/user-attachments/assets/cf80391a-3adf-4388-9fc0-33c4468ba1a5" />
 
