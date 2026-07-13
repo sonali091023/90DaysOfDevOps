@@ -141,22 +141,59 @@ The result is a leaner image that downloads faster, starts quicker, consumes les
 ---
 
 ### Task 3: Push to Docker Hub
-1. Create a free account on [Docker Hub](https://hub.docker.com) (if you don't have one)
-2. Log in from your terminal -->docker login -u <usernmae> & then provide Private access token and you will login to Dockerhub acc successfully
-3. Tag your image properly: `yourusername/image-name:tag`
--->To avoid separate tagging for any image use following format while image creation: **docker build -t <dockerhub-username>/<image name>:latest .**
-4. Push it to Docker Hub -->**docker push <dockerhub-username>/<image name>:latest**
-5. Pull it on a different machine (or after removing locally) to verify --> **docker pull <dockerhub-username>/<image name>:latest**
+Create a free account on Docker Hub (if you don't have one)
+Log in from your terminal
+Tag your image properly: yourusername/image-name:tag
+Push it to Docker Hub
+Pull it on a different machine (or after removing locally) to verify
 
-<img width="1890" height="192" alt="image" src="https://github.com/user-attachments/assets/bec1591b-353c-4796-9741-463e760ebe22" />
+Step 1: Create a Docker Hub Account:
 
-<img width="1907" height="207" alt="image" src="https://github.com/user-attachments/assets/84e98a33-3ecd-446f-855d-3e5e2d9ac8de" />
+-->Go to https://hub.docker.com & Sign up for a free account (skip if you already have one).
 
-<img width="1157" height="42" alt="image" src="https://github.com/user-attachments/assets/457f7989-492b-470e-9820-d2a8b13b25c9" />
+Step 2: Log in from the Terminal:
 
-<img width="1070" height="75" alt="image" src="https://github.com/user-attachments/assets/7078d89e-abfa-400d-bca2-cef65521734c" />
+-->docker login -u <usernmae> & then provide Private access token and you will login to Dockerhub acc successfully
 
-<img width="1906" height="408" alt="image" src="https://github.com/user-attachments/assets/92ed2196-d17a-4ac5-bee5-ee126eaff85c" />
+-->Once configured to verify: docker info
+
+Step 3: Tag Your Image: 
+
+-->Check your local images: docker images: multi-stage-image:latest
+
+-->Tag it using your Docker Hub username: docker tag multi-stage-image:latest sonali0910/multi-stage-image:latest
+
+**Note:** To avoid separate tagging for any image use following format while image creation: docker build -t <dockerhub-username>/<image name>:latest .
+
+-->once tagging complete to verify: docker images
+
+4. Push it to Docker Hub:
+
+-->docker push sonali0910/multi-stage-image:latest
+
+<img width="1712" height="975" alt="image" src="https://github.com/user-attachments/assets/aae99148-bacb-4006-bbea-75df97fe8305" />
+
+<img width="1895" height="720" alt="image" src="https://github.com/user-attachments/assets/42b424ac-e13d-49eb-852b-3c6c6ae29335" />
+
+<img width="1911" height="952" alt="image" src="https://github.com/user-attachments/assets/2b53fe0e-c959-4448-86e8-4096d8ed1e01" />
+
+5. Pull it on a different machine (or after removing locally) to verify --> docker pull sonali0910/multi-stage-image:latest
+
+-->docker images
+
+-->docker ps
+
+-->docker run -itd --name multi-stage-container -p 3000:3000 sonali0910/multi-stage-image:latest
+
+-->docker ps
+
+-->YTo test: curl http://localhost:3000
+
+-->To test the same on browser: http://localhost:3000
+
+<img width="1917" height="501" alt="image" src="https://github.com/user-attachments/assets/1cbd042d-a279-4907-8f10-4006924a50f5" />
+
+<img width="1912" height="726" alt="image" src="https://github.com/user-attachments/assets/4883bdea-dd2e-4868-9fbd-7a56c041744e" />
 
 ---
 
