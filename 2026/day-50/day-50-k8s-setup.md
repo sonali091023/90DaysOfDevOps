@@ -17,66 +17,127 @@ This is where things get real.
 ## Challenge Tasks
 
 ### Task 1: Recall the Kubernetes Story
+
 Before touching a terminal, write down from memory:
 
 1. Why was Kubernetes created? What problem does it solve that Docker alone cannot?
-
--->Kubernetes wasn’t created to replace Docker—it was created to solve the problems that appear after you start using Docker at scale.
-
--->Docker made it easy to Package applications into containers, Run them consistently across environments, But once companies started running dozens or hundreds of containers, things got messy.
-
--->Like How do you manage them across multiple servers?, What if a container crashes?, How do you scale when traffic increases?
-
--->And That’s where Kubernetes comes in, It was originally developed at Google based on their internal system (Name as Borg) to manage large-scale distributed systems.
-
--->So in docker container we can run the contaner manually, But No automatic restart if it crashes, No built-in load balancing, No easy scaling (you manually run more containers), No cluster-level management (multiple machines = pain),
-No service discovery, No rolling updates etc.
-
--->But Kubernetes solves all of that automatically:
-
-**a. Orchestration:** Manages containers across multiple machines (cluster)
-
-**b. Self-healing:** If a container dies → Kubernetes restarts it
-
-**c. Auto-scaling:** Increase/decrease pods based on traffic
-
-**d. Load balancing:** Distributes traffic across containers
-
-**e. Rolling updates & rollbacks:** Deploy new versions without downtime
-
-**f. Service discovery:** Containers find each other via DNS
-
 2. Who created Kubernetes and what was it inspired by?
-
-4. What does the name "Kubernetes" mean?
-
+3. What does the name "Kubernetes" mean?
 Do not look anything up yet. Write what you remember from the session, then verify against the official docs.
+
+**Steps to follow:**
+
+-->Kubernetes was created to solve the challenges of running containers at scale. It was not created to replace Docker, but to manage and orchestrate containers when applications grow.
+
+-->Docker makes it easy to package applications into containers and run them consistently across environments. However, when organizations start running dozens or hundreds of containers across multiple servers, management becomes difficult.
+
+**Some common challenges with Docker alone are:**
+
+1. Managing containers across multiple machines.
+
+2. Manually restarting crashed containers.
+
+3. Manually scaling applications when traffic increases.
+
+4. No built-in load balancing.
+
+5. No cluster-level management.
+
+6. No service discovery.
+
+7. No rolling updates or easy rollbacks.
+
+-->Kubernetes, originally developed at Google and inspired by its internal system Borg, solves these problems by automating container management. It provides:
+
+**Orchestration:** Manages containers across a cluster of machines.
+
+**Self-healing:** Automatically restarts failed containers.
+
+**Auto-scaling:** Increases or decreases application instances based on demand.
+
+**Load balancing:** Distributes traffic across multiple containers.
+
+**Rolling updates & rollbacks:** Deploys new versions with little or no downtime and can revert if needed.
+
+**Service discovery:** Allows containers to communicate with each other using DNS.
+
+**In short:** Docker is used to build, package, and run containers, while Kubernetes automates the deployment, scaling, networking, and management of containerized applications across a cluster.
 
 **Simple analogy:** **Docker** = “I can run one app in a box” & **Kubernetes** = “I can manage 1,000 boxes across 50 servers automatically”
 
-2. Who created Kubernetes and what was it inspired by?
+**2. Who created Kubernetes and what was it inspired by?**
 
--->Kubernetes was originally created by engineers [Joe Beda, Brendan Burns, Craig McLuckie] at Google.
+-->Kubernetes was originally created at Google by engineers Joe Beda, Brendan Burns, and Craig McLuckie. They designed it to manage containerized applications at massive scale based on Google's real-world experience.
 
--->They designed Kubernetes to handle containerized applications at massive scale, based on Google’s internal experience.
+-->It was inspired by Google's internal cluster management systems, Borg (and later Omega), which had been used for years to manage Google's large-scale infrastructure and billions of containers.
 
--->Kubernetes was inspired by Google’s internal system called Borg, Later, Google also developed Omega, These systems had been running Google’s infrastructure for years, managing billions of containers.
+-->Kubernetes brought these proven ideas—such as container orchestration, automated scheduling across clusters, and self-healing distributed systems—to the open-source community. Today, Kubernetes is an open-source project maintained by the Cloud Native Computing Foundation (CNCF).
 
--->This matters because Before Kubernetes, most companies didn’t have Proven large-scale container orchestration, Automated scheduling across clusters, Self-healing distributed systems etc.
+**3. What does the name "Kubernetes" mean?**
 
-**What does the name "Kubernetes" mean?**
+-->The name Kubernetes comes from the Greek word "κυβερνήτης (kubernetes)", which means "helmsman" or "pilot"—a person who steers a ship.
 
--->The name Kubernetes comes from the Greek word “κυβερνήτης (kubernetes)”, which means “helmsman” or “pilot”
-
--->It’s symbolic: Like **Containers** (like those from Docker) = ships & **Kubernetes** = the captain that navigates and manages them
-
--->So Kubernetes “steers” your containers: Decides where they run, Keeps them on course (healthy), Adjusts based on conditions (traffic, failures)
-
-Do not look anything up yet. Write what you remember from the session, then verify against the official docs.
+-->The name is symbolic because containers are like ships, and Kubernetes is the captain that steers and manages them. Just as a helmsman keeps a ship on course, Kubernetes decides where containers run, keeps them healthy, and automatically adjusts to changes such as increased traffic or container failures. In short, the name reflects Kubernetes' role of steering and managing containerized applications.
 
 ---
 
 ### Task 2: Draw the Kubernetes Architecture
+
+From memory, draw or describe the Kubernetes architecture. Your diagram should include:
+
+Control Plane (Master Node):
+
+API Server — the front door to the cluster, every command goes through it
+etcd — the database that stores all cluster state
+Scheduler — decides which node a new pod should run on
+Controller Manager — watches the cluster and makes sure the desired state matches reality
+Worker Node:
+
+kubelet — the agent on each node that talks to the API server and manages pods
+kube-proxy — handles networking rules so pods can communicate
+Container Runtime — the engine that actually runs containers (containerd, CRI-O)
+After drawing, verify your understanding:
+
+What happens when you run kubectl apply -f pod.yaml? Trace the request through each component.
+What happens if the API server goes down?
+What happens if a worker node goes down?
+
+**Steps to follow:**
+
+-->This is one of the most important Kubernetes exercises. Don't worry about making a perfect diagram—the goal is to understand how the components work together.
+
+Step 1: Draw the Architecture from Memory: 
+
+
+Step 2: Understand Every Component: Instead of memorizing names, understand each component's responsibility:
+
+Step 3: Trace What Happens When You Run: kubectl apply -f pod.yaml
+
+<img width="742" height="756" alt="image" src="https://github.com/user-attachments/assets/17699917-ed90-4efa-903c-a5407609203a" />
+
+<img width="725" height="805" alt="image" src="https://github.com/user-attachments/assets/ac4ab667-ecf6-4515-811e-da5c8b525dfc" />
+
+<img width="735" height="666" alt="image" src="https://github.com/user-attachments/assets/b0e1f120-d215-4da4-b521-77d8c470d25f" />
+
+**Entire Flow:**
+
+<img width="617" height="392" alt="image" src="https://github.com/user-attachments/assets/4b44a278-fc6b-45b8-b0dd-10eef3492eb6" />
+
+Step 4: What if the API Server Goes Down?
+
+-->The API Server is the entry point to the cluster.
+
+<img width="660" height="795" alt="image" src="https://github.com/user-attachments/assets/d4849b08-c29c-42ba-8665-b4815975135f" />
+
+
+
+Step 5: What if a Worker Node Goes Down?
+
+
+
+
+
+
 From memory, draw or describe the Kubernetes architecture. Your diagram should include:
 
 **Control Plane (Master Node):**
