@@ -10,10 +10,7 @@ hello-node-single
 
 Image Size: 1.1GB
 
-```
 <img width="1521" height="157" alt="image" src="https://github.com/user-attachments/assets/5b578913-d57e-46e3-b254-f9189de3ace0" />
-
-```
 
 Observation:
 
