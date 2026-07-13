@@ -21,6 +21,58 @@ Multi-stage builds are how real teams ship small, secure images. Docker Hub is h
 2. Create a Dockerfile that builds and runs it in a **single stage**
 3. Build the image and check its **size**
 
+**Steps to follow:**
+
+-->This task is designed to show why single-stage Docker builds often produce unnecessarily large images. Later, you'll optimize the image using multi-stage builds and compare the results.
+
+Step 1: Create the Project: mkdir day-35-task1 && cd day-35-task1
+
+Step 2: Create app.js: vi app.js
+
+<img width="687" height="262" alt="image" src="https://github.com/user-attachments/assets/0f36a0cf-ef08-4f01-acd4-cde894d51cf8" />
+
+Step 3: Create package.json: vi package.json
+
+<img width="701" height="316" alt="image" src="https://github.com/user-attachments/assets/edb18786-157c-4a0c-b769-63f4e04994ee" />
+
+Step 4: Create a Single-Stage Dockerfile: vi Dockerfile
+
+<img width="747" height="602" alt="image" src="https://github.com/user-attachments/assets/2b50b280-b593-445f-a6e5-ac4c91573559" />
+
+Step 5: Build the Image: docker build -t hello-node-single .
+
+Step 6: Check Image Size: docker images 
+
+-->The exact size depends on the Node base image version and your Docker installation. We can also inspect it directly: docker image ls hello-node-single OR docker image inspect hello-node-single
+
+<img width="1797" height="972" alt="image" src="https://github.com/user-attachments/assets/23cb4030-2670-4225-98fa-723f7b93c7a7" />
+
+<img width="1917" height="951" alt="image" src="https://github.com/user-attachments/assets/1a00e74a-8cae-4c91-a3b2-ca3212b0589e" />
+
+<img width="1911" height="752" alt="image" src="https://github.com/user-attachments/assets/9e714e6c-1fab-4285-b80d-4ac2717b9d08" />
+
+
+Step 7: Run the Container: docker run -d -p 3000:3000 --name hello-app hello-node-single
+
+-->Now test it: curl http://localhost:3000 [Expected output: Hello from Docker!]
+
+-->To test the same on browser for that launch URL: http://localhost:3000
+
+<img width="1907" height="165" alt="image" src="https://github.com/user-attachments/assets/f40328e5-226d-4f1a-a64e-d59081d3d593" />
+
+<img width="1917" height="646" alt="image" src="https://github.com/user-attachments/assets/cfb7cdd3-0a0e-4960-a72f-e51891458b24" />
+
+Step 8: Why Is the Image Large?: 
+
+<img width="772" height="270" alt="image" src="https://github.com/user-attachments/assets/dc9e07e4-b406-4b33-8c24-df18431c5786" />
+
+Step 9: Record Your Results: 
+
+
+
+
+
+
 Commands used:
 
 -->**vi app.js**
