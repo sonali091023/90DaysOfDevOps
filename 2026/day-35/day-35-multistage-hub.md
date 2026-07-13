@@ -147,6 +147,8 @@ Tag your image properly: yourusername/image-name:tag
 Push it to Docker Hub
 Pull it on a different machine (or after removing locally) to verify
 
+**Steps to follow:**
+
 Step 1: Create a Docker Hub Account:
 
 -->Go to https://hub.docker.com & Sign up for a free account (skip if you already have one).
@@ -199,22 +201,41 @@ Step 3: Tag Your Image:
 
 ### Task 4: Docker Hub Repository
 1. Go to Docker Hub and check your pushed image
+2. Add a description to the repository
+3. Explore the tags tab — understand how versioning works
+4. Pull a specific tag vs latest — what happens?
 
-<img width="1507" height="240" alt="image" src="https://github.com/user-attachments/assets/29f74f3e-6c2a-4939-8baa-5e58dee1a68d" />
+**Steps to follow:**
 
-2. Add a **description** to the repository
+Step 1: Check Your Repository:
 
-<img width="805" height="301" alt="image" src="https://github.com/user-attachments/assets/3ae78ad3-309b-41ef-8fc9-d48b9afca43d" />
+<img width="696" height="147" alt="image" src="https://github.com/user-attachments/assets/9acffebd-efa9-4d26-9243-707897bb9d75" />
 
+Step 2: Add a Description:
 
-3. Explore the **tags** tab — understand how versioning works
+<img width="827" height="202" alt="image" src="https://github.com/user-attachments/assets/dab5eed7-8ede-4801-8d7f-95165be9f1ce" />
 
-<img width="1537" height="782" alt="image" src="https://github.com/user-attachments/assets/5b98448e-7c9b-4e6d-ba69-22cf16c5e31f" />
+Step 3: Explore the Tags Tab: 
 
+<img width="647" height="357" alt="image" src="https://github.com/user-attachments/assets/c9cd9169-6cfb-4339-ac23-0d2dde440804" />
 
-5. Pull a specific tag vs `latest` — what happens?
+Step 4: Pull a Specific Tag: 
 
--->By using following command and here used tag v1 instead of latest **docker pull sonali0910/node-multi-stage:v1** Now if the image is available with v1 tag imge will get pulled and if not manifest unknown error and if we dont mention any tag and use command like follow **docker pull sonali0910/node-multi-stage** Then in thsi case docker will use tag latest bydefault and pull that image i case available, And if not we may face issuemanifest unknown error.
+<img width="652" height="286" alt="image" src="https://github.com/user-attachments/assets/f75dac6c-a47c-44d2-b111-de7072ee7604" />
+
+Step 5: Pull the latest Tag: 
+
+<img width="732" height="667" alt="image" src="https://github.com/user-attachments/assets/1fadeebd-a14b-462d-b3dc-d3b6920d0c09" />
+
+**Notes:**
+
+-->A repository stores one application's images.
+
+-->A tag represents a specific version of that image.
+
+-->latest is just another tag—it is not automatically the newest image. It only points to whichever image was explicitly tagged and pushed as latest.
+
+-->Using versioned tags (e.g., 1.0, 1.1, 2.0) makes deployments reliable because you know exactly which image version you're running.
 
 ---
 
@@ -225,12 +246,51 @@ Apply these to one of your images and rebuild:
 3. Combine `RUN` commands to **reduce layers**
 4. Use **specific tags** for base images (not `latest`)
 
-Check the size before and after.
+**Steps to follow:**
 
--->By using docker minimal images alpine: node:18-alpine and ubuntu: node:18-slim based on that we can see the image size in below image,
+-->This task focuses on Docker image best practices. You can apply them to your existing Node.js Hello World application.
 
-<img width="1907" height="300" alt="image" src="https://github.com/user-attachments/assets/10b68707-6425-402a-862d-f748cafd1793" />
+-->Optimized Dockerfile:
 
+<img width="696" height="637" alt="image" src="https://github.com/user-attachments/assets/e35814fb-f32e-40dc-80d9-7c471bcc63cb" />
+
+-->Best Practices Applied:
+
+<img width="732" height="750" alt="image" src="https://github.com/user-attachments/assets/556f2536-6d1f-41ae-a43f-7ea567ed82b0" />
+
+<img width="747" height="442" alt="image" src="https://github.com/user-attachments/assets/13084310-0e47-4cb6-ab45-e71ccbc644ea" />
+
+<img width="712" height="587" alt="image" src="https://github.com/user-attachments/assets/5643db09-b75f-44ec-9c3b-ceeaaabe9632" />
+
+<img width="870" height="810" alt="image" src="https://github.com/user-attachments/assets/769402b9-3e6b-4653-9804-994fc84298bf" />
+
+<img width="842" height="722" alt="image" src="https://github.com/user-attachments/assets/d7f90a0f-af22-4b09-91bb-8b2fdf60784b" />
+
+-->Build the Optimized Image: docker build -t hello-node-optimized:1.0 .
+
+-->Compare Image Sizes: docker images
+
+-->Verify the Container: docker run -d -p 3000:3000 --name hello-node hello-node-optimized:1.0
+
+-->Test it: curl http://localhost:3000
+
+-->Test in browser: http://localhost:3000
+
+<img width="1917" height="960" alt="image" src="https://github.com/user-attachments/assets/17c194f7-b1d5-4ba2-85c2-f5c37e6178fb" />
+
+<img width="1907" height="152" alt="image" src="https://github.com/user-attachments/assets/42f20bb9-ab3b-4453-b6f2-cd992ffc5ea0" />
+
+<img width="1852" height="157" alt="image" src="https://github.com/user-attachments/assets/587a1c26-1117-4836-a8f7-c2bbde03cf6c" />
+
+<img width="1917" height="776" alt="image" src="https://github.com/user-attachments/assets/26f5933a-8d61-403f-bce5-765ac95ff2f6" />
+
+-->docker exec -it b9159a18fef2 sh
+
+-->whoami
+
+-->id
+
+<img width="1631" height="127" alt="image" src="https://github.com/user-attachments/assets/e3e292d4-b8ce-4b43-a033-5688193c26b2" />
 
 ---
 
