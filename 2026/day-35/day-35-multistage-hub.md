@@ -51,7 +51,6 @@ Step 6: Check Image Size: docker images
 
 <img width="1911" height="752" alt="image" src="https://github.com/user-attachments/assets/9e714e6c-1fab-4285-b80d-4ac2717b9d08" />
 
-
 Step 7: Run the Container: docker run -d -p 3000:3000 --name hello-app hello-node-single
 
 -->Now test it: curl http://localhost:3000 [Expected output: Hello from Docker!]
@@ -66,36 +65,14 @@ Step 8: Why Is the Image Large?:
 
 <img width="772" height="270" alt="image" src="https://github.com/user-attachments/assets/dc9e07e4-b406-4b33-8c24-df18431c5786" />
 
-Step 9: Record Your Results: 
+Observation:
 
+- Image contains the Node runtime and build tools.
+- All build dependencies remain in the final image.
+- Image is larger than necessary for a simple Hello World application.
+- This serves as the baseline for comparison with a multi-stage build.
 
-
-
-
-
-Commands used:
-
--->**vi app.js**
-
--->**npm init -y > touch package.json** 
-
--->**vi Dockerfile**
-
--->**docker build -t node-single-stage .**
- 
--->**docker images**
-
--->**docker run -d --name huge-img-cont -p 3000:3000 node-single-stage**
-
--->**docker ps**
-
--->Created image: node-single-stage size is 1.1GB because full Node image is heavy, It Contains unnecessary build tools.
-
-<img width="988" height="963" alt="image" src="https://github.com/user-attachments/assets/ea23bfa1-2170-48bf-a25b-b895ac33ae51" />
-
-<img width="1918" height="986" alt="image" src="https://github.com/user-attachments/assets/ec9fb862-b721-499c-8754-89dccb6c1a1a" />
-
-<img width="396" height="276" alt="image" src="https://github.com/user-attachments/assets/ae7259bc-3fac-447e-b7f4-e34258e031f5" />
+Step 9: Record Your Results: [notes.md](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-35/notes.md)
 
 ---
 
@@ -105,19 +82,61 @@ Commands used:
    - Stage 2: Copy only the built artifact into a minimal base image (`alpine`, `distroless`, or `scratch`)
 2. Build the image and check its size again
 3. Compare the two sizes
-
--->In below screenshot we can see the single-stage-img size and multi-stage-img size, As compare to single-stage-image size multi-stage image size is smaller.
-
--->A single-stage build relies on the full node:20 image and carries everything along — build tools, npm cache, and extra layers — none of which are needed to run the app, pushing the image size up to ~900MB–1GB.
-
-<img width="750" height="167" alt="image" src="https://github.com/user-attachments/assets/557d71b0-37f7-4156-a428-d8cb99966873" />
-
 Write in your notes: Why is the multi-stage image so much smaller?
 
-<img width="967" height="972" alt="image" src="https://github.com/user-attachments/assets/e414c5e0-7718-4fe3-97a0-3f5439de5602" />
+**Steps to follow:**
 
-<img width="1425" height="406" alt="image" src="https://github.com/user-attachments/assets/754343c3-562f-419a-a691-a0c9a836937d" />
+-->Great! This task demonstrates one of the biggest benefits of Docker: multi-stage builds. Since your Node.js app doesn't require compilation (it's plain JavaScript), the "build" stage will mainly install dependencies, and the final stage will contain only what is needed to run the application.
 
+<img width="1142" height="162" alt="image" src="https://github.com/user-attachments/assets/98453abe-6ba6-4b5d-8936-5197a1bdeb40" />
+
+Step 1: Create a Multi-Stage Dockerfile: vi Dockerfile
+
+<img width="695" height="586" alt="image" src="https://github.com/user-attachments/assets/d8bc6178-f008-41ae-8ae1-277fe1308ede" />
+
+**Dockerfile breakdown as follow:**
+
+<img width="721" height="756" alt="image" src="https://github.com/user-attachments/assets/d91cd63d-ae4b-421d-9a51-ea541f978d83" />
+
+<img width="712" height="707" alt="image" src="https://github.com/user-attachments/assets/abb2a594-63b6-4eba-b5ff-37c6c938a18f" />
+
+<img width="797" height="151" alt="image" src="https://github.com/user-attachments/assets/01c1888c-fc8c-47e2-a11b-22691c107452" />
+
+-->Step 2: Build the Image: docker build -t multi-stage-image .
+
+<img width="1806" height="962" alt="image" src="https://github.com/user-attachments/assets/396a31a6-89f6-490a-9d45-8384d37c0b02" />
+
+Step 3: Check Image Size: docker images
+
+<img width="1891" height="261" alt="image" src="https://github.com/user-attachments/assets/42a17b6e-db8c-4903-89e6-2596d7ba7eb1" />
+
+-->Now here the image size is: 136MB
+
+-->Step 4: Run the Container: docker run -itd --name multi-stage-container -p 3000:3000 multi-stage-image:latest
+
+-->Now test it: curl http://localhost:3000 [Expected output: Hello from Docker!]
+
+<img width="1890" height="126" alt="image" src="https://github.com/user-attachments/assets/81353b94-bf39-4a63-b164-e2dee011cef2" />
+
+-->To test the same on browser for that launch URL: http://localhost:3000
+
+<img width="1917" height="650" alt="image" src="https://github.com/user-attachments/assets/4865f7ce-5f4f-4b73-93f3-0f91e2deea29" />
+
+Step 5: Compare the Images: 
+
+<img width="891" height="292" alt="image" src="https://github.com/user-attachments/assets/ff4ef333-76d5-49ec-8062-ecf66ae9da79" />
+
+Q. Why is the multi-stage image so much smaller?
+-->A multi-stage build reduces image size because:
+
+The final image starts from a fresh base image instead of keeping all layers from the build stage.
+Build-time files, caches, and temporary artifacts are left behind in the builder stage.
+Only the files required to run the application are copied into the final image.
+Using node:20-alpine provides a much smaller base than the standard node:20 image.
+
+The result is a leaner image that downloads faster, starts quicker, consumes less storage, and has a smaller attack surface.
+
+[task2-notes.md](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-35/task2-notes.md)
 
 ---
 
