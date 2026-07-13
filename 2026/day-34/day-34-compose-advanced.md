@@ -299,9 +299,11 @@ Add labels to your services for better organization
 
 -->This is one of the most interesting Docker Compose tasks because it teaches an important limitation of Docker Compose compared to orchestration platforms like Kubernetes or Docker Swarm.
 
--->Command used: **docker-compose up --scale web=3**
+-->Command used: docker-compose up --scale web=3
 
 <img width="647" height="286" alt="image" src="https://github.com/user-attachments/assets/8364c5ef-b676-4fce-a89f-e6186d445b46" />
+
+<img width="1917" height="381" alt="image" src="https://github.com/user-attachments/assets/15b2eb3e-3818-4d4a-9f6c-4f1d3485586c" />
 
 Step 1: Check Your Current Compose File
 
