@@ -226,27 +226,67 @@ at the time container will not restart
 
 -->**Using build:** in docker-compose allows us to build custom images from a Dockerfile, and docker compose up --build rebuilds and restarts containers with updated code.
 
-<img width="911" height="775" alt="image" src="https://github.com/user-attachments/assets/86457d45-9f6a-4cf4-8923-1531f16dbe6d" />
+<img width="692" height="592" alt="image" src="https://github.com/user-attachments/assets/1f47c6ae-8995-4bbb-a61c-57dbdd049512" />
 
-<img width="857" height="790" alt="image" src="https://github.com/user-attachments/assets/cf80391a-3adf-4388-9fc0-33c4468ba1a5" />
+<img width="817" height="486" alt="image" src="https://github.com/user-attachments/assets/260b6925-93eb-4b4f-a5b3-f477d1ad95de" />
+
+<img width="840" height="497" alt="image" src="https://github.com/user-attachments/assets/d193f3c2-1ddf-4005-9135-99ec72ab982e" />
+
+<img width="692" height="761" alt="image" src="https://github.com/user-attachments/assets/9e5ca0ea-b511-4a1c-bc29-d777ba83423d" />
+<img width="880" height="736" alt="image" src="https://github.com/user-attachments/assets/455c447f-82dd-4e12-a907-6636b18db189" />
 
 ---
 
 ### Task 5: Named Networks & Volumes
+Define explicit networks in your compose file instead of relying on the default
+Define named volumes for database data
+Add labels to your services for better organization
+
+**Steps to follow:**
+
+-->This task is about adopting Docker Compose best practices. While Docker Compose automatically creates a default network and anonymous volumes if you don't specify them, explicitly defining networks, volumes, and labels makes your setup cleaner, easier to manage, and closer to production deployments.
 
 1. Define **explicit networks** in your compose file instead of relying on the default
 
 -->We have implemented Explicit Network it Isolates your app, Better control than default network, Clear architecture
 
-3. Define **named volumes** for database data
+2. Define **named volumes** for database data
 
 -->Also implemented Named Volume it Keeps DB data safe, Survives container deletion
 
-5. Add **labels** to your services for better organization
+3. Add **labels** to your services for better organization
 
 -->then implemented Labels it Helps in filtering/logging, Useful in monitoring tools (Prometheus, Grafana), Better organization 
 
 -->To check the labels use command: **docker inspect day-34-web-1**
+
+**Project Structure:**
+
+<img width="1210" height="242" alt="image" src="https://github.com/user-attachments/assets/ac4f4f21-85f1-450f-8624-c0c315157a45" />
+
+**Recommended docker-compose.yml:**
+
+<img width="710" height="812" alt="t5i2" src="https://github.com/user-attachments/assets/a98f9d66-59c3-49ac-a882-c8e331374238" />
+
+<img width="747" height="360" alt="image" src="https://github.com/user-attachments/assets/9b09f463-5d48-48ac-bfc7-d845da252059" />
+
+**Why each section is used:**
+
+<img width="717" height="650" alt="image" src="https://github.com/user-attachments/assets/4f5c98bd-b721-4b12-962b-78cd16e3e5fc" />
+
+<img width="735" height="502" alt="image" src="https://github.com/user-attachments/assets/4213db09-d2b3-422c-a47a-6fa4dd0f0556" />
+
+<img width="702" height="627" alt="image" src="https://github.com/user-attachments/assets/3f17206f-95ac-4a59-be65-296faac3228b" />
+
+<img width="706" height="466" alt="image" src="https://github.com/user-attachments/assets/1d4972b4-0b33-4f10-9a23-497a73ae7816" />
+
+<img width="761" height="425" alt="image" src="https://github.com/user-attachments/assets/dc1f0fa6-9c68-4194-b42f-087a642eae57" />
+
+<img width="717" height="522" alt="image" src="https://github.com/user-attachments/assets/e091cbf2-df8d-4d52-9685-7a58c6282ccb" />
+
+<img width="772" height="702" alt="image" src="https://github.com/user-attachments/assets/3d8b7026-8155-4d26-a78f-c168eb610d82" />
+
+<img width="802" height="297" alt="image" src="https://github.com/user-attachments/assets/af179bf9-c980-4fde-865e-f059b509907c" />
 
 ---
 
@@ -255,7 +295,21 @@ at the time container will not restart
 2. What happens? What breaks?
 3. Write in your notes: Why doesn't simple scaling work with port mapping?
 
+**Steps to follow:**
+
+-->This is one of the most interesting Docker Compose tasks because it teaches an important limitation of Docker Compose compared to orchestration platforms like Kubernetes or Docker Swarm.
+
 -->Command used: **docker-compose up --scale web=3**
+
+<img width="647" height="286" alt="image" src="https://github.com/user-attachments/assets/8364c5ef-b676-4fce-a89f-e6186d445b46" />
+
+Step 1: Check Your Current Compose File
+
+<img width="707" height="545" alt="image" src="https://github.com/user-attachments/assets/a79edd64-8f06-47fe-a4cd-ec3a45c6ff4b" />
+
+**Step 2: Scale the Service:** docker compose up --scale web=3 -d
+
+<img width="716" height="647" alt="image" src="https://github.com/user-attachments/assets/77037845-4e0f-420e-ac98-7adc37c4d362" />
 
 -->faced error: **Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint day-34-web-1 
 (307673a5303f37a218a32badc6a51cd5a706bf9f9e164287327c15951c723541): Bind for 0.0.0.0:8000 failed: port is already allocated**
@@ -272,7 +326,44 @@ bindings causes conflicts.
 
 with port mapping because multiple containers cannot bind to the same host port. A load balancer is required to distribute traffic.
 
-<img width="1892" height="557" alt="image" src="https://github.com/user-attachments/assets/3841d520-beb6-4876-8f05-50dc591ba375" />
+<img width="716" height="647" alt="image" src="https://github.com/user-attachments/assets/57270bf0-e1d8-4593-85ba-95a1cef19786" />
+
+<img width="706" height="605" alt="image" src="https://github.com/user-attachments/assets/7b48d33d-9be8-4b1e-aed1-71ac7850503e" />
+<img width="696" height="620" alt="image" src="https://github.com/user-attachments/assets/9261f417-5881-4c4d-bd5f-c6f998da681e" />
+
+<img width="802" height="675" alt="image" src="https://github.com/user-attachments/assets/aed3765f-0a4e-4a87-ab34-cf16fa8a189b" />
+
+<img width="795" height="607" alt="image" src="https://github.com/user-attachments/assets/a6799c60-7a65-47ba-aeb3-74b77b8e93cc" />
+
+**Useful Commands:**
+
+-->Scale up: docker compose-up --scale web=3 -d
+
+-->View running containers:: docker ps
+
+-->View logs from all replicas: docker-compose logs web
+
+-->Scale back down: docker compose up --scale web=1 -d
+
+-->Stop everything: docker-compose down
+
+**Note:**
+
+Command Used:
+docker compose up --scale web=3 -d
+
+Observation:
+- Docker Compose attempted to create three web containers.
+- Only one container could bind to host port 3000.
+- Additional replicas failed because the host port was already allocated.
+
+Reason:
+Host ports must be unique. Multiple containers cannot bind to the same host port simultaneously.
+
+How This Is Solved:
+In production, a reverse proxy or load balancer (such as Nginx, Traefik, Docker Swarm, or Kubernetes Services) exposes a single host port and distributes incoming requests across multiple application replicas.
+
+**Key takeaway:** Docker Compose can create multiple replicas, but simple scaling doesn't work with fixed host port mappings because the host cannot assign the same port (e.g., 3000) to more than one container. In real deployments, scaling is typically combined with a load balancer or an orchestrator like Kubernetes that routes traffic to multiple replicas.
 
 ---
 
