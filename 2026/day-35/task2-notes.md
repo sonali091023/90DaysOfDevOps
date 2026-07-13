@@ -4,8 +4,8 @@
 
 | Image | Size |
 |-------|------|
-| hello-node-single | ______ 1.1GB |
-| hello-node-multi | ______ 136MB |
+| hello-node-single |  1.1GB |
+| hello-node-multi  |  136MB |
 
 <img width="1912" height="125" alt="image" src="https://github.com/user-attachments/assets/f1ea8879-8e3a-47ae-b13a-a23192a9c857" />
 
