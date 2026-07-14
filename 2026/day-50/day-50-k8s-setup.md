@@ -4,7 +4,7 @@
 You have been building and shipping containers with Docker. But what happens when you need to run hundreds of containers across multiple servers? You need an orchestrator. Today you start your Kubernetes journey — understand the architecture, set up a local cluster, and run your first `kubectl` commands.
 
 This is where things get real.
-
+ 
 ---
 
 ## Expected Output
