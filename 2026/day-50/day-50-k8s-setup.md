@@ -537,6 +537,10 @@ Step 6: Explore the kube-system Namespace: kubectl get pods -n kube-system
 
 <img width="602" height="375" alt="image" src="https://github.com/user-attachments/assets/7cfad7ca-dfe4-4249-ae44-a6ec63c5bfef" />
 
+<img width="1691" height="971" alt="image" src="https://github.com/user-attachments/assets/64cd9e08-585c-442a-a0a0-c8cc31f7fbf0" />
+<img width="1792" height="985" alt="image" src="https://github.com/user-attachments/assets/1f2c0dfd-dd27-4b8b-88d9-8e58f4b6142f" />
+<img width="1665" height="592" alt="image" src="https://github.com/user-attachments/assets/5180e0d9-1ab9-463c-b33e-62181bcbc9e2" />
+
 **Match Each Pod to Your Architecture Diagram:**
 
 <img width="751" height="347" alt="image" src="https://github.com/user-attachments/assets/fb6ad24f-a3b8-457d-8ea8-8d02380679b5" />
@@ -630,6 +634,10 @@ Step 6: List All Contexts: kubectl config get-contexts
 Step 7: View the kubeconfig: kubectl config view
 
 <img width="681" height="462" alt="image" src="https://github.com/user-attachments/assets/0571bd2d-6ca3-4d5d-beba-8f69a13287e4" />
+
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/d8723440-e44a-4355-a2e5-0c41a8f2871c" />
+
+<img width="1505" height="960" alt="image" src="https://github.com/user-attachments/assets/50232286-d512-4213-9a71-dd8e60cc7c54" />
 
 **Understanding kubeconfig:** Think of kubeconfig as an address book for Kubernetes clusters. A kubeconfig is a configuration file used by kubectl to connect to Kubernetes clusters. It stores information about clusters, user credentials, contexts, and the currently selected context, allowing kubectl to know where to send requests and how to authenticate.
 
