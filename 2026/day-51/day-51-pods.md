@@ -84,12 +84,13 @@ kubectl exec -it nginx-pod -- /bin/bash
 curl localhost:80
 exit
 ```
-<img width="1507" height="282" alt="image" src="https://github.com/user-attachments/assets/ee533db2-d74a-4a9b-a821-22ea53070ec0" />
-<img width="1637" height="917" alt="image" src="https://github.com/user-attachments/assets/c83d185e-99f4-41da-8a2b-5eb67bcf0e78" />
-<img width="1082" height="592" alt="image" src="https://github.com/user-attachments/assets/d4143a8b-d51a-4a84-ad54-33abba70f65f" />
+<img width="1717" height="967" alt="image" src="https://github.com/user-attachments/assets/764f180f-fc16-4375-ae3c-b786ab9ad2da" />
+<img width="1915" height="967" alt="image" src="https://github.com/user-attachments/assets/2cee3fbc-dff7-40cf-a433-05f0cdab57bd" />
+<img width="1887" height="647" alt="image" src="https://github.com/user-attachments/assets/f4dde0de-9b48-43d9-8380-5428652803a1" />
+<img width="1810" height="712" alt="image" src="https://github.com/user-attachments/assets/d9f74b83-a26d-40f3-93b4-8da411357eae" />
 
 **Verify:** Can you see the Nginx welcome page when you curl from inside the pod?
-<img width="830" height="702" alt="image" src="https://github.com/user-attachments/assets/0ededbf1-90da-4d2e-b854-0cdd491ef056" />
+<img width="1917" height="877" alt="image" src="https://github.com/user-attachments/assets/efd09afa-7245-4a9f-9b9a-735e3f77bf1c" />
 
 ---
 
