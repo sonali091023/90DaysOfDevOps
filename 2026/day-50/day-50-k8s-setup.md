@@ -90,6 +90,9 @@ From memory, draw or describe the Kubernetes architecture. Your diagram should i
 
 -->API Server as the central communication hub. Almost every component communicates through the API Server, not directly with each other.
 
+**After drawing, verify your understanding:**
+Q. What happens when you run `kubectl apply -f pod.yaml`? Trace the request through each component?
+
 **Step-by-Step Communication:**
 
 Step 1: User sends a request:
@@ -120,15 +123,82 @@ Step 6: kubelet reports status back:
 
 <img width="671" height="402" alt="image" src="https://github.com/user-attachments/assets/87519e90-80d5-4b05-a784-231469b5c5c4" />
 
-**kube-proxy Communication:** 
+**kube-proxy Communication:** kube-proxy configures networking rules (using technologies like iptables, IPVS, or nftables depending on the environment) so traffic reaches the correct Pod.
 
+<img width="697" height="460" alt="image" src="https://github.com/user-attachments/assets/cb24581b-43e3-4d55-8c30-9d73a2d61ec5" />
 
+**CNI Communication:** Examples of CNI plugins include Calico, Cilium, Flannel, and Weave Net. They assign Pod IP addresses and provide pod-to-pod networking across nodes.
 
+<img width="682" height="575" alt="image" src="https://github.com/user-attachments/assets/c9ffc743-7d8c-4d29-9c28-9ea9700c85a5" />
 
+**Complete Communication Flow:**
 
-After drawing, verify your understanding:
-- What happens when you run `kubectl apply -f pod.yaml`? Trace the request through each component.
-- What happens if the API server goes down?
+<img width="677" height="712" alt="image" src="https://github.com/user-attachments/assets/b56406e8-7121-4aef-b3fc-7b5d9799d5b4" />
+
+**Key takeaway:** The easiest way to remember Kubernetes communication is this:
+- **API Server** is the central hub. Almost every control plane component (Scheduler, Controller Manager, kubelet) communicates with it rather than directly with each other.
+- **etcd** never talks directly to Worker Nodes; it is accessed through the API Server.
+- **Scheduler** decides where a Pod should run but does not start it.
+- **kubelet** on the chosen Worker Node watches the API Server, receives the assignment, and instructs the Container Runtime to create the Pod.
+- **kube-proxy** manages Service networking on each node.
+- The **CNI** plugin provides pod-to-pod communication across nodes by configuring the networking layer
+
+Q. What happens if the API server goes down?
+
+-->This is an excellent interview question because it tests whether you understand that the API Server is the heart of the Kubernetes control plane.
+
+-->If the API Server goes down, the Kubernetes cluster does not stop immediately, but it cannot be managed until the API Server is available again.
+
+**What Stops Working?** Since almost every component communicates through the API Server:
+
+<img width="682" height="645" alt="image" src="https://github.com/user-attachments/assets/68532ab7-20fa-4a4a-a95d-f91dbafd3881" />
+
+**What Happens to Existing Pods?**
+
+<img width="735" height="372" alt="image" src="https://github.com/user-attachments/assets/e5d245a0-6343-40ea-84e8-45f2875981d2" />
+
+**Q. What Does kubelet Do?**
+
+<img width="726" height="270" alt="image" src="https://github.com/user-attachments/assets/a23f1e91-efa1-4106-ab76-760479d3458a" />
+
+**Q. What About the Scheduler?**
+
+<img width="687" height="457" alt="image" src="https://github.com/user-attachments/assets/767fc939-f11f-463e-bec0-afa1d6e3dede" />
+
+**Q. What About the Controller Manager?**
+
+<img width="655" height="345" alt="image" src="https://github.com/user-attachments/assets/1f1b3bc5-7141-4645-a53b-0d1506d50897" />
+
+**Q. What About etcd?**
+
+<img width="720" height="205" alt="image" src="https://github.com/user-attachments/assets/c4033554-5789-45b0-bb53-2841348deac5" />
+
+**Q. What About Networking?**
+
+<img width="680" height="292" alt="image" src="https://github.com/user-attachments/assets/f8bcb0c0-0ab4-48c5-a597-c4596dfd7e4a" />
+
+**Complete Scenario:**
+
+<img width="692" height="711" alt="image" src="https://github.com/user-attachments/assets/1abc4df4-956d-43db-a22d-d887d0123e56" />
+
+<img width="765" height="221" alt="image" src="https://github.com/user-attachments/assets/a287dd08-8cc2-4398-827c-fa26b64cd255" />
+
+**Q. Why Do Production Clusters Use Multiple API Servers?**
+
+-->Production Kubernetes clusters avoid a single point of failure by running multiple API Server instances behind a load balancer.
+
+<img width="516" height="185" alt="image" src="https://github.com/user-attachments/assets/320584f7-c14b-46fb-a939-efc2f25b1031" />
+
+If one API Server instance fails:
+
+- The load balancer sends requests to another healthy API Server.
+
+- Users and cluster components continue to operate with minimal interruption.
+
+Interview Answer
+
+-->The API Server is the central communication point of the Kubernetes control plane. If it goes down, clients like kubectl and components such as the Scheduler and Controller Manager cannot manage the cluster or process new changes. However, existing Pods usually continue running because the kubelet and container runtime on each worker node keep managing them locally. Networking between existing Pods also continues to work. In production, Kubernetes avoids this single point of failure by running multiple API Server instances behind a load balancer.
+
 - What happens if a worker node goes down?
 
 ---
