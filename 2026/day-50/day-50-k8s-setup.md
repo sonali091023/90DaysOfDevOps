@@ -292,6 +292,11 @@ Step 1: Check if kubectl is already installed: kubectl version --client OR kubec
 
 <img width="650" height="285" alt="image" src="https://github.com/user-attachments/assets/f63523d6-24d5-455b-8a4d-31ebe0e1f11a" />
 
+<img width="1186" height="191" alt="image" src="https://github.com/user-attachments/assets/808837ef-bbba-4278-89f3-6336601f52b4" />
+
+**Note:** install kubectl from following link: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-binary-with-curl-on-linux
+OR use below steps:
+
 Step 2: Download the latest stable kubectl: 
 
 -->Download latest stable kubectl binary: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -394,7 +399,7 @@ Write down: Which one did you choose and why?
 
 **Steps to follow:**
 
-**Reasons to Kind Cluster:** Uses Docker containers as Kubernetes nodes.
+**Reasons to use Kind Cluster:** Uses Docker containers as Kubernetes nodes.
 - Lightweight and starts quickly.
 - Great for local development and learning.
 - No virtual machine required.
@@ -435,6 +440,8 @@ Step 5: Verify the Cluster: Check cluster information: kubectl cluster-info
 Step 6: View the Cluster: kind get clusters
 
 Step 7: Delete the Cluster (When Finished): kind delete cluster --name devops-cluster
+
+<img width="1806" height="971" alt="image" src="https://github.com/user-attachments/assets/11c74a1c-86f6-45d7-9442-7d6027e5d5e6" />
 
 **Q. What Happens Internally?**
 
@@ -497,7 +504,7 @@ This task is one of the most important because it connects the theory (Kubernete
 
 **Explore Your Kubernetes Cluster:**
 
-Step 1: Check Cluster Information: kubectl cluster-info:
+Step 1: Check Cluster Information: kubectl cluster-info
 
 **Q. What does this tell us?**
 - Kubernetes control plane → The API Server endpoint where kubectl sends requests.
