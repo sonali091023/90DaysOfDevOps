@@ -143,7 +143,7 @@ Step 6: kubelet reports status back:
 - **kube-proxy** manages Service networking on each node.
 - The **CNI** plugin provides pod-to-pod communication across nodes by configuring the networking layer
 
-Q. What happens if the API server goes down?
+**Q. What happens if the API server goes down?**
 
 -->This is an excellent interview question because it tests whether you understand that the API Server is the heart of the Kubernetes control plane.
 
@@ -195,11 +195,65 @@ If one API Server instance fails:
 
 - Users and cluster components continue to operate with minimal interruption.
 
-Interview Answer
+**Interview Answer:**
 
 -->The API Server is the central communication point of the Kubernetes control plane. If it goes down, clients like kubectl and components such as the Scheduler and Controller Manager cannot manage the cluster or process new changes. However, existing Pods usually continue running because the kubelet and container runtime on each worker node keep managing them locally. Networking between existing Pods also continues to work. In production, Kubernetes avoids this single point of failure by running multiple API Server instances behind a load balancer.
 
-- What happens if a worker node goes down?
+**Q. What happens if a worker node goes down?**
+
+-->If a Worker Node goes down, the Pods running on that node become unavailable. The Control Plane detects the node failure and, if possible, reschedules the affected Pods onto healthy Worker Nodes to maintain the desired state.
+
+**Let's Understand It Step by Step:**
+
+<img width="672" height="412" alt="image" src="https://github.com/user-attachments/assets/490566a0-3a20-4314-9467-31a2cbeac371" />
+
+Step 1: Worker Node 1 Crashes: Suppose Worker Node 1 loses power or the VM crashes.
+
+<img width="710" height="342" alt="image" src="https://github.com/user-attachments/assets/42a4853d-e040-450d-9685-216c8915c53f" />
+
+Step 2: API Server Stops Receiving Heartbeats: Each kubelet periodically sends a heartbeat to the API Server to indicate the node is healthy.
+
+<img width="692" height="587" alt="image" src="https://github.com/user-attachments/assets/6b88b004-7b41-4815-b1a9-bae14f73499a" />
+
+Step 3: Controller Manager Detects the Failure: The Node Controller (part of the Controller Manager) continuously watches node health.
+
+<img width="672" height="236" alt="image" src="https://github.com/user-attachments/assets/eb25bf05-c78e-4a91-8bb1-3e09358a555d" />
+
+Step 4: Scheduler Reschedules Pods: The Controller Manager sees that Pods on Worker Node 1 are no longer running. So tt creates replacement Pods. The Scheduler then chooses a healthy node.
+
+<img width="672" height="375" alt="image" src="https://github.com/user-attachments/assets/9e907464-27a0-4e28-8b25-da21636570cd" />
+
+Step 5: kubelet Starts the New Pods: 
+
+<img width="662" height="321" alt="image" src="https://github.com/user-attachments/assets/3bfa71de-9718-4392-8295-917a4332c206" />
+
+**Complete Recovery Flow:**
+
+<img width="672" height="446" alt="image" src="https://github.com/user-attachments/assets/cf4a5c34-72b5-493f-9f01-0a123ab89312" />
+
+**Important Scenarios:**
+
+Case 1: Deployment (Most Common): The Deployment ensures the desired number of replicas is maintained.
+
+<img width="655" height="507" alt="image" src="https://github.com/user-attachments/assets/aed1d4e4-7c6c-405c-8f1d-ee7ce6b3b27f" />
+
+Case 2: Standalone Pod (No Controller): Suppose you created a Pod directly:
+
+<img width="732" height="262" alt="image" src="https://github.com/user-attachments/assets/b7bcc731-8773-4bb5-b378-816a91f5dbb9" />
+
+Case 3: No Remaining Capacity:
+
+<img width="717" height="257" alt="image" src="https://github.com/user-attachments/assets/0d0ae459-1903-4486-b692-2b838bb680f7" />
+
+**Q. What About Networking?**
+
+-->The CNI plugin (such as Calico or Cilium) updates networking for the new Pods. Clients continue to access the application through the Service, which automatically routes traffic to healthy Pods. This is why applications usually remain accessible even though the underlying Pod IPs change.
+
+<img width="517" height="172" alt="image" src="https://github.com/user-attachments/assets/9b638a9a-bde8-4ee0-8532-409b3ba9f4c0" />
+
+**INterview Answer:**
+
+-->If a Worker Node goes down, the kubelet stops sending heartbeats to the API Server, which marks the node as NotReady. The Controller Manager detects that Pods on the failed node are no longer available and creates replacement Pods if they are managed by a controller such as a Deployment. The Scheduler assigns those replacement Pods to healthy Worker Nodes, and the kubelet on those nodes starts them using the container runtime. If no controller manages the Pods or there isn't enough cluster capacity, the workloads won't be automatically restored.
 
 ---
 
@@ -226,6 +280,75 @@ kubectl version --client
 ```
 
 ---
+
+**Steps to follow:**
+
+**Q. What is kubectl?**
+-->kubectl is the official Kubernetes command-line tool. It allows you to communicate with the Kubernetes API Server to deploy applications, inspect resources, and manage your cluster.
+
+<img width="662" height="412" alt="image" src="https://github.com/user-attachments/assets/9295a1e9-5eb1-4d93-92b8-489910d4ef0c" />
+
+Step 1: Check if kubectl is already installed: kubectl version --client OR kubectl version --client --output=yaml
+
+<img width="650" height="285" alt="image" src="https://github.com/user-attachments/assets/f63523d6-24d5-455b-8a4d-31ebe0e1f11a" />
+
+Step 2: Download the latest stable kubectl: 
+
+-->Download latest stable kubectl binary: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+Step 3: Make it executable: chmod +x kubectl
+
+-->And then to verify: ls -l kubectl [expected: You should see executable permissions, for example:]
+
+Step 4: Move it to your PATH: sudo mv kubectl /usr/local/bin/ [Expected: Now you can run kubectl from any directory.]
+
+Step 5: Verify the installation: kubectl version --client
+
+<img width="650" height="317" alt="image" src="https://github.com/user-attachments/assets/41af7560-2f5a-41df-89e7-8b2ab62235fa" />
+
+Step 6: Check the current Kubernetes context (optional): If you already have a cluster configured (Kind, Minikube, EKS, etc.), run:
+
+-->kubectl config current-context
+
+<img width="681" height="316" alt="image" src="https://github.com/user-attachments/assets/b263f5c9-8b57-4111-8ac9-9a49425c1620" />
+
+Step 7: View cluster information (optional): Once connected to a cluster, you can run:
+
+-->kubectl cluster-info
+
+<img width="607" height="147" alt="image" src="https://github.com/user-attachments/assets/870d3943-af98-4251-bf38-a4528b62381d" />
+
+**Common kubectl Commands:**
+
+<img width="737" height="362" alt="image" src="https://github.com/user-attachments/assets/ade88975-c190-498c-b143-c59d60c82e59" />
+
+**How kubectl Works:**
+
+<img width="627" height="445" alt="image" src="https://github.com/user-attachments/assets/bdd04d60-6dcf-4100-afd5-c1c2fc35f06c" />
+
+- kubectl does not talk directly to worker nodes.
+- It sends requests to the API Server.
+- The API Server validates the request and coordinates with the appropriate control plane components.
+
+**Interview Questions:**
+
+Q. What is kubectl?
+- kubectl is the official Kubernetes CLI.
+- It communicates with the Kubernetes API Server to manage cluster resources.
+
+**Q. How did you install it (Linux)?**
+
+-->curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+-->chmod +x kubectl
+
+-->sudo mv kubectl /usr/local/bin/
+
+**Q. How did you verify the installation?**
+
+-->kubectl version --client
+
+-->If you're using the same Ubuntu environment from your previous Kubernetes exercises, there's a good chance kubectl is already installed. You can confirm by running: kubectl version --client
 
 ### Task 4: Set Up Your Local Cluster
 Choose **one** of the following. Both give you a fully functional Kubernetes cluster on your machine.
