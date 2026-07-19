@@ -123,7 +123,7 @@ Notice the `command` field — BusyBox does not run a long-lived server like Ngi
 
 **Verify:** Can you see "Hello from BusyBox" in the logs?
 
-<img width="691" height="228" alt="image" src="https://github.com/user-attachments/assets/3f1a87f5-2a18-45b1-b41a-2e11fb9dd8a7" />
+<img width="1356" height="212" alt="image" src="https://github.com/user-attachments/assets/f8a682e5-fefd-4dd6-a94d-97bdba11b799" />
 
 ---
 
@@ -154,9 +154,74 @@ kubectl run test-pod --image=nginx --dry-run=client -o yaml
 
 This is a powerful trick — use it to quickly scaffold a manifest, then customize it.
 
+**Steps to follow:**
+
+This task is designed to help you understand the two ways of managing Kubernetes resources:
+
+**Imperative** → Tell Kubernetes what to do right now using commands.
+**Declarative** → Tell Kubernetes what the desired state should be using YAML files.
+
+Let's go through it step by step.
+
+Step 1: Check your cluster: kubectl cluster-info
+
+-->Check the nodes: kubectl get nodes
+
+Step 2: Create a Pod Imperatively: kubectl run redis-pod --image=redis:latest
+
+Step 3: Verify the Pod: kubectl get pods
+
+-->Get more details: kubectl describe pod redis-pod [Expected: Pod name, Image, Node, Events, IP address]
+
+Step 4: Extract the Generated YAML: kubectl get pod redis-pod -o yaml
+
+<img width="691" height="547" alt="image" src="https://github.com/user-attachments/assets/d5dcc21e-2c4c-4ed1-b545-78ea546dba89" />
+
+Step 5: Compare with Your Own Manifest: 
+
+<img width="647" height="510" alt="image" src="https://github.com/user-attachments/assets/bc3a91af-d417-4c57-a01f-b9e53115d7c7" />
+
+<img width="682" height="792" alt="image" src="https://github.com/user-attachments/assets/897bb151-418a-4189-901e-9dd123d21a64" />
+
+<img width="682" height="787" alt="image" src="https://github.com/user-attachments/assets/64583213-7d0b-4984-b965-031bc7d9f109" />
+
+Step 6: Generate YAML Without Creating Anything: kubectl run test-pod --image=nginx --dry-run=client -o yaml
+
+<img width="637" height="540" alt="image" src="https://github.com/user-attachments/assets/c80877df-96fb-4423-89b6-4d4534e24d3b" />
+
+-->Now to verify: kubectl get pods
+
+Step 7: Save the Output: kubectl run test-pod --image=nginx --dry-run=client -o yaml > test-pod.yaml
+
+<img width="671" height="331" alt="image" src="https://github.com/user-attachments/assets/19aedfbe-d27e-4e36-98eb-a713fd6aa0b7" />
+
+Step 8: Compare the Two Files: diff nginx-pod.yaml test-pod.yaml OR vimdiff nginx-pod.yaml test-pod.yaml
+
+What Fields Are the Same?:  
+
+<img width="657" height="287" alt="image" src="https://github.com/user-attachments/assets/34d7aa13-8c8d-4571-a4d8-8ef16624ceba" />
+
+What Is Different?
+
+<img width="625" height="452" alt="image" src="https://github.com/user-attachments/assets/72fcd6e3-3b87-430f-9313-3b5d4fdc2760" />
+
+Imperative vs Declarative:
+
+<img width="757" height="312" alt="image" src="https://github.com/user-attachments/assets/90349469-db20-4e96-8e4b-1f1e6221dc5e" />
+
+-->Rule of thumb: use imperative commands for quick experiments or learning, and declarative manifests (kubectl apply -f) for real-world deployments because they're version-controlled, repeatable, and easier to maintain.
+
+<img width="1746" height="970" alt="image" src="https://github.com/user-attachments/assets/f739a188-a6ba-4305-afe1-49b418909af5" />
+<img width="1615" height="977" alt="image" src="https://github.com/user-attachments/assets/35ee8ec4-a551-469e-b6bd-c96147665ad8" />
+<img width="1697" height="967" alt="image" src="https://github.com/user-attachments/assets/63efd01f-4772-49be-ba3d-9a1e309da04a" />
+<img width="1677" height="905" alt="image" src="https://github.com/user-attachments/assets/66ec30d1-5630-4b65-a1d9-968b687dfdd8" />
+
 **Verify:** Save the dry-run output to a file and compare its structure with your nginx-pod.yaml. What fields are the same? What is different?
-<img width="865" height="618" alt="image" src="https://github.com/user-attachments/assets/791f7a0e-435c-4743-ace2-26985d57e9d8" />
 -->So in dry run output we can see extra part as follow: resources: {}, dnsPolicy: ClusterFirst, restartPolicy: Always, status: {} & in nginx-pod.yml we have port part which is not available in dry run yml file.
+
+**Simple verification:**
+
+I generated a Pod manifest using kubectl run --dry-run=client -o yaml and compared it with my hand-written nginx-pod.yaml. Both manifests contain the same basic structure: apiVersion, kind, metadata, spec, and container definitions with the nginx image. The generated manifest also includes Kubernetes default fields such as creationTimestamp, dnsPolicy, restartPolicy, resources, and an empty status section. My hand-written manifest includes containerPort: 80 and a custom label (app: nginx), whereas the generated manifest uses the default label (run: test-pod) and does not include a container port because it was not specified in the command. This demonstrates that kubectl --dry-run is a convenient way to scaffold a manifest, which can then be customized before applying it to the cluster.
 
 ---
 
@@ -172,7 +237,7 @@ kubectl apply -f nginx-pod.yaml --dry-run=client
 # Validate against the cluster's API (server-side validation)
 kubectl apply -f nginx-pod.yaml --dry-run=server
 ```
-<img width="732" height="73" alt="image" src="https://github.com/user-attachments/assets/ab1cdd2d-58e3-4867-aa35-e6325276ce8a" />
+<img width="1636" height="160" alt="image" src="https://github.com/user-attachments/assets/82150db0-8135-4af6-8b53-3fdd4a08b9eb" />
 
 Now intentionally break your YAML (remove the `image` field or add an invalid field) and run dry-run again. See what error you get.
 
