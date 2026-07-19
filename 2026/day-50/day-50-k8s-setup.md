@@ -491,6 +491,67 @@ You should see pods like `etcd`, `kube-apiserver`, `kube-scheduler`, `kube-contr
 
 **Verify:** Can you match each running pod in `kube-system` to a component in your architecture diagram?
 
+**Steps to follow:**
+
+This task is one of the most important because it connects the theory (Kubernetes architecture) with the actual running cluster. By the end, you'll see that the components you drew in Task 2 are real processes running inside your cluster.
+
+**Explore Your Kubernetes Cluster:**
+
+Step 1: Check Cluster Information: kubectl cluster-info:
+
+**Q. What does this tell us?**
+- Kubernetes control plane → The API Server endpoint where kubectl sends requests.
+- CoreDNS → Provides DNS service inside the cluster.
+
+Step 2: List the Nodes: kubectl get nodes
+
+<img width="701" height="452" alt="image" src="https://github.com/user-attachments/assets/922edb1f-2768-4685-8735-e36ee83b2cfe" />
+
+Step 3: Describe a Node: 
+
+-->To get node details: kubectl get nodes
+
+-->Now run: kubectl describe node devops-cluster-control-plane
+
+<img width="617" height="732" alt="image" src="https://github.com/user-attachments/assets/911f2b87-36d5-49c7-8e69-1e6fd042f1ee" />
+<img width="657" height="165" alt="image" src="https://github.com/user-attachments/assets/e1acf3ae-4cba-4878-a173-03051ea61994" />
+
+Step 4: List Namespaces: kubectl get namespaces
+
+**Q. What is Namespace?**
+
+<img width="727" height="292" alt="image" src="https://github.com/user-attachments/assets/84474ad9-c90c-406c-b85c-e118279a8e06" />
+
+Step 5: View All Pods: kubectl get pods -A
+
+<img width="715" height="590" alt="image" src="https://github.com/user-attachments/assets/377f45d1-75b8-4596-aec4-b86ae2c305d2" />
+
+Step 6: Explore the kube-system Namespace: kubectl get pods -n kube-system
+
+<img width="602" height="375" alt="image" src="https://github.com/user-attachments/assets/7cfad7ca-dfe4-4249-ae44-a6ec63c5bfef" />
+
+**Match Each Pod to Your Architecture Diagram:**
+
+<img width="751" height="347" alt="image" src="https://github.com/user-attachments/assets/fb6ad24f-a3b8-457d-8ea8-8d02380679b5" />
+
+Relating This to Your Architecture: 
+
+<img width="665" height="736" alt="image" src="https://github.com/user-attachments/assets/a1e08aab-dd0e-4fad-9536-032183331ad5" />
+
+**Note:** In Kind, the control plane components (kube-apiserver, etcd, kube-scheduler, and kube-controller-manager) run as static Pods managed by the kubelet on the control-plane node. The kubelet itself is not a Pod—it is a system service running directly on the node.
+
+**Verify Your Understanding:** Use the table below to check whether you can identify each component in your cluster.
+
+<img width="742" height="447" alt="image" src="https://github.com/user-attachments/assets/2dde3a99-c5e8-4099-802d-446cfeb6f6b3" />
+
+**Q. What did we observe?**
+- The kube-system namespace contains the core Kubernetes components required to operate the cluster.
+- The control plane components (kube-apiserver, etcd, kube-scheduler, and kube-controller-manager) are visible as static Pods.
+- kube-proxy provides Service networking on each node.
+- CoreDNS enables DNS-based service discovery inside the cluster.
+- The CNI plugin (such as kindnet in Kind) enables pod-to-pod communication across the cluster.
+- The components from the Kubernetes architecture diagram are not just concepts—they are running workloads that you can inspect with kubectl.
+
 ---
 
 ### Task 6: Practice Cluster Lifecycle
@@ -522,6 +583,76 @@ kubectl config view
 ```
 
 Write down: What is a kubeconfig? Where is it stored on your machine?
+
+**Steps to follow:**
+
+-->This task helps you understand that Kubernetes clusters are temporary resources (especially local clusters like Kind) and teaches you how kubectl knows which cluster to communicate with.
+
+**Practice Cluster Lifecycle:**
+
+**Q. What is the Cluster Lifecycle?** 
+
+-->The lifecycle of a Kubernetes cluster includes:
+
+<img width="645" height="312" alt="image" src="https://github.com/user-attachments/assets/97af9f27-8367-45ed-a9ed-2d5096164244" />
+
+Step 1: Check Existing Clusters: Before deleting anything, see what Kind clusters exist: kind get clusters
+
+Step 2: Delete the Cluster: kind delete cluster --name devops-cluster
+
+**Q. What Happens Internally?**
+
+<img width="532" height="206" alt="image" src="https://github.com/user-attachments/assets/1ec4065c-4a9f-4ac4-8414-8b3e879e0f9a" />
+
+-->Verify it's gone:: kind get clusters [Expected: No kind clusters found.]
+
+Step 3: Recreate the Cluster: kind create cluster --name devops-cluster
+
+<img width="722" height="292" alt="image" src="https://github.com/user-attachments/assets/63784aaa-6263-4a9c-831c-6da38e791e7e" />
+
+Step 4: Verify the Cluster: kubectl get nodes
+
+Step 5: Check the Current Context: kubectl config current-context
+
+<img width="622" height="432" alt="image" src="https://github.com/user-attachments/assets/5722e5fe-5c71-4ac3-9db5-2569e1642d82" />
+
+Step 6: List All Contexts: kubectl config get-contexts
+
+<img width="687" height="420" alt="image" src="https://github.com/user-attachments/assets/4fa751d9-9cfd-4731-a6dc-6452265a2583" />
+
+Step 7: View the kubeconfig: kubectl config view
+
+<img width="681" height="462" alt="image" src="https://github.com/user-attachments/assets/0571bd2d-6ca3-4d5d-beba-8f69a13287e4" />
+
+**Understanding kubeconfig:** Think of kubeconfig as an address book for Kubernetes clusters. A kubeconfig is a configuration file used by kubectl to connect to Kubernetes clusters. It stores information about clusters, user credentials, contexts, and the currently selected context, allowing kubectl to know where to send requests and how to authenticate.
+
+<img width="617" height="192" alt="image" src="https://github.com/user-attachments/assets/aa03dde1-9ddb-4a95-97df-a891c440a7b1" />
+
+**kubeconfig Structure:**
+
+<img width="612" height="256" alt="image" src="https://github.com/user-attachments/assets/42cb8586-957f-4262-99bc-9d343fb56272" />
+
+**Q. Where is kubeconfig Stored?**
+
+<img width="672" height="565" alt="image" src="https://github.com/user-attachments/assets/95270b6c-e117-4f8a-a445-129a749deb04" />
+
+**Q. How kubectl Uses kubeconfig?**
+
+-->When we run: kubectl get pods
+
+<img width="656" height="292" alt="image" src="https://github.com/user-attachments/assets/103cefab-81f8-439e-b0cd-e12500ca5e36" />
+
+**Context Switching Example:**
+
+<img width="627" height="457" alt="image" src="https://github.com/user-attachments/assets/299f8d4e-8f4f-43f8-bb86-8e63253be7f9" />
+
+**Complete Flow:**
+
+<img width="597" height="282" alt="image" src="https://github.com/user-attachments/assets/49dc7c58-2863-44d3-adce-13db0af91fb3" />
+
+**Summary of Commands:**
+
+<img width="702" height="377" alt="image" src="https://github.com/user-attachments/assets/bfa5954a-27ed-4842-aafc-00dff6e8e514" />
 
 ---
 
