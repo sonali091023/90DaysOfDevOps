@@ -506,6 +506,8 @@ Q. Why Is EXTERNAL-IP <pending>?
 
 <img width="696" height="445" alt="image" src="https://github.com/user-attachments/assets/1e459cef-6945-4a61-a33d-55dc0670db4d" />
 
+<img width="1712" height="882" alt="image" src="https://github.com/user-attachments/assets/5cb01782-a839-4e90-a673-47991a03f38f" />
+
 Q. What Happens in Different Environments?
 
 <img width="612" height="302" alt="image" src="https://github.com/user-attachments/assets/5634b342-e7dd-43bd-80de-72502e955d43" />
