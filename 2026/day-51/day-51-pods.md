@@ -137,13 +137,11 @@ kubectl run redis-pod --image=redis:latest
 # Check it
 kubectl get pods
 ```
-<img width="662" height="192" alt="image" src="https://github.com/user-attachments/assets/99b32adf-5d66-404f-8031-d90e690e7f21" />
 
 Now extract the YAML that Kubernetes generated:
 ```bash
 kubectl get pod redis-pod -o yaml
 ```
-[Extracted-redies-pod.yml-script](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-51/extract-the-yml-task-3)
 
 Compare this output with your hand-written manifests. Notice how much extra metadata Kubernetes adds automatically (status, timestamps, uid, resource version).
 
@@ -153,6 +151,10 @@ kubectl run test-pod --image=nginx --dry-run=client -o yaml
 ```
 
 This is a powerful trick — use it to quickly scaffold a manifest, then customize it.
+
+**Verify:** Save the dry-run output to a file and compare its structure with your nginx-pod.yaml. What fields are the same? What is different?
+
+---
 
 **Steps to follow:**
 
