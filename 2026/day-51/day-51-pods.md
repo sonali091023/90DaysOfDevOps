@@ -280,13 +280,6 @@ kubectl get pods --show-labels
 kubectl label pod nginx-pod environment-
 ```
 
-<img width="967" height="732" alt="image" src="https://github.com/user-attachments/assets/1e4c00f7-d1e3-4932-a261-3e932ffff0d3" />
-
-Write a manifest for a third pod with at least 3 labels (app, environment, team). Apply it and practice filtering.
-
-<img width="977" height="237" alt="image" src="https://github.com/user-attachments/assets/1ae0b34e-b06d-4a8d-bcd9-faae99ba969f" />
-
-
 **Steps to follow:**
 
 **Pod Labels and Filtering:** Learn how Kubernetes uses labels to organize and filter resources.
@@ -303,6 +296,47 @@ Step 3: Add a label to an existing pod: Add the label environment=production to 
 
 -->kubectl get pods -l environment=production
 
+Step 4: Remove the label: kubectl label pod nginx-pod environment-
+
+-->Then verify once again: kubectl get pods --show-labels
+
+<img width="1845" height="947" alt="image" src="https://github.com/user-attachments/assets/9610f965-8164-4440-8e24-c288c80dfbda" />
+
+**Write a manifest for a third pod with at least 3 labels (app, environment, team). Apply it and practice filtering.**
+
+Step 5: Create a third pod with multiple labels: 
+
+<img width="680" height="310" alt="image" src="https://github.com/user-attachments/assets/c0863d98-84a5-4788-9cdf-4a4d3b7877a6" />
+
+-->kubectl apply -f busybox-pod.yml
+
+-->kubectl get all
+
+-->kubectl get pods --show-labels
+
+<img width="1745" height="662" alt="image" src="https://github.com/user-attachments/assets/8bbaa358-dd3e-4796-92f7-faa81b32ca05" />
+
+Step 6: Practice filtering: 
+
+-->Filter by app: kubectl get pods -l app=busybox
+
+-->Filter by environment: kubectl get pods -l environment=dev
+
+-->Filter by team: kubectl get pods -l team=backend
+
+-->Filter using multiple labels: kubectl get pods -l app=busybox,environment=dev [Expected: Only pods matching both labels will be displayed.]
+
+**Verification:**After creating busybox-pod.yaml, you should be able to:
+
+-->List all labels: kubectl get pods --show-labels
+
+<img width="1697" height="415" alt="image" src="https://github.com/user-attachments/assets/5b0c354f-42a5-494e-b3b5-23cf22c68308" />
+
+**Key takeways:**
+- Labels are key-value pairs attached to Kubernetes objects.
+- They help organize and group resources.
+- They are commonly used by Services, Deployments, and Selectors to identify and manage the correct set of Pods.
+- You can add, remove, and query labels at any time without recreating the Pod.
 
 ---
 
@@ -321,7 +355,7 @@ kubectl delete -f nginx-pod.yaml
 # Verify everything is gone
 kubectl get pods
 ```
-<img width="1011" height="373" alt="image" src="https://github.com/user-attachments/assets/817c8cb9-f979-44d5-bfbf-b082482c62e6" />
+<img width="1495" height="705" alt="image" src="https://github.com/user-attachments/assets/388f7a67-fe30-40ed-927c-b66df5005b7e" />
 
 Notice that when you delete a standalone Pod, it is gone forever. There is no controller to recreate it. This is why in production you use Deployments (coming on Day 52) instead of bare Pods.
 
