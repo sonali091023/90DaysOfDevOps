@@ -303,6 +303,8 @@ Step 6: Compare with the Service: Open another terminal (or exit the BusyBox Pod
 
 <img width="1815" height="512" alt="image" src="https://github.com/user-attachments/assets/060daae4-29c9-4cc7-a786-465713c04673" />
 
+<img width="1392" height="341" alt="t3i11" src="https://github.com/user-attachments/assets/9f0f6e59-e00d-4eb0-8074-0bf7d70b2d7b" />
+
 **DNS Name Hierarchy:** 
 
 <img width="712" height="337" alt="image" src="https://github.com/user-attachments/assets/de15784a-0ba4-40e8-8ed8-114705a45f25" />
@@ -475,6 +477,34 @@ In a real cloud cluster, the EXTERNAL-IP would be a public IP address or hostnam
 -->On a local cluster (Minikube, Kind, Docker Desktop), the EXTERNAL-IP will show `<pending>` because there is no cloud provider to create a real load balancer. This is expected, In a real cloud cluster, the EXTERNAL-IP would be a public IP address or hostname provisioned by the cloud provider.
 
 **Steps to follow:**
+
+-->Great! This task teaches the LoadBalancer Service, which is the standard way to expose applications to the internet in managed Kubernetes services like Amazon EKS, Google GKE, and Azure AKS.
+
+Q. What is a LoadBalancer Service?
+
+-->A LoadBalancer Service builds on top of a NodePort Service. In cloud environments, Kubernetes asks the cloud provider to create a real load balancer.
+
+<img width="647" height="336" alt="image" src="https://github.com/user-attachments/assets/607b3fb2-fab7-48bc-bf2a-e11e6f7efafc" />
+
+Step 1: Create the YAML: vi loadbalancer-service.yaml Here paste the above mentioned line of code in this file
+
+Step 2: Understand the YAML:
+
+<img width="655" height="802" alt="image" src="https://github.com/user-attachments/assets/efbdc7e1-7686-4f06-b9f8-ac32d921fc33" />
+
+Step 3: Apply the Service: kubectl apply -f loadbalancer-service.yaml
+
+Step 4: View the Service: kubectl get services
+
+<img width="692" height="241" alt="image" src="https://github.com/user-attachments/assets/d54794c2-e19c-4188-bf00-75059e02c41c" />
+
+Step 5: Inspect the Service: kubectl describe svc web-app-loadbalancer
+
+**Note:** On a local cluster, the LoadBalancer Ingress field is usually empty because no external load balancer has been created.
+
+
+
+
 
 
 
