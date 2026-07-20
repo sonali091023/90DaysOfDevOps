@@ -502,11 +502,25 @@ Step 5: Inspect the Service: kubectl describe svc web-app-loadbalancer
 
 **Note:** On a local cluster, the LoadBalancer Ingress field is usually empty because no external load balancer has been created.
 
+Q. Why Is EXTERNAL-IP <pending>?
 
+<img width="696" height="445" alt="image" src="https://github.com/user-attachments/assets/1e459cef-6945-4a61-a33d-55dc0670db4d" />
 
+Q. What Happens in Different Environments?
 
+<img width="612" height="302" alt="image" src="https://github.com/user-attachments/assets/5634b342-e7dd-43bd-80de-72502e955d43" />
 
+**Minikube Special Case:**
 
+<img width="687" height="536" alt="image" src="https://github.com/user-attachments/assets/da344310-ac10-4f52-9486-a491c3bd076b" />
+
+**How This Looks in AWS (EKS):**
+
+<img width="651" height="242" alt="image" src="https://github.com/user-attachments/assets/14b6fc2f-2913-4171-ba00-9c1be3e226fb" />
+
+Q: What does the EXTERNAL-IP column show? Why is it <pending> on a local cluster?
+
+-->On a local cluster like Kind, the EXTERNAL-IP column shows <pending>. This is because a LoadBalancer Service requires a cloud provider (such as AWS, GCP, or Azure) to provision an external load balancer. Local Kubernetes clusters do not have built-in cloud integration, so Kubernetes cannot create an external load balancer and leaves the EXTERNAL-IP in the pending state.
 
 ---
 
