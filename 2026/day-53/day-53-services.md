@@ -149,8 +149,6 @@ kubectl get services
 ```
 You should see `web-app-clusterip` with a CLUSTER-IP address. This IP is stable — it will not change even if Pods restart.
 
-<img width="1602" height="232" alt="image" src="https://github.com/user-attachments/assets/4d431c0e-f54f-464c-a8be-758727f93b78" />
-
 Now test it from inside the cluster:
 ```bash
 # Run a temporary pod to test connectivity
@@ -271,19 +269,53 @@ Both the short name and the full DNS name resolve to the same ClusterIP. In prac
 
 -->Excellent! This task teaches one of Kubernetes' most useful features: Service Discovery using DNS. Instead of remembering IP addresses, applications communicate using Service names.
 
+**Q. Why Do We Need Kubernetes DNS?**
 
+<img width="727" height="412" alt="image" src="https://github.com/user-attachments/assets/16954c87-27eb-4847-8ecf-155cebb0634b" />
 
+Step 1: Verify the Service Exists: Before testing DNS, confirm the Service is present: kubectl get services
 
-Step 1: Make sure your Service exists: kubectl get svc
+**Note:** the CLUSTER-IP (for example, 10.96.120.15). You'll compare it later with the DNS lookup.
 
+Step 2: Start a Temporary Test Pod: kubectl run dns-test --image=busybox:latest --rm -it --restart=Never -- sh [Expected: We will be inside container]
 
+-->Now you're running commands inside the Kubernetes cluster.
 
--->wget -qO- http://web-app-clusterip [used short dns name here]
-<img width="1918" height="820" alt="image" src="https://github.com/user-attachments/assets/db19a4f6-211e-4169-923e-b8752686cabc" />
--->wget -qO- http://web-app-clusterip.default.svc.cluster.local [used full dns name here]
-<img width="957" height="565" alt="image" src="https://github.com/user-attachments/assets/e26122b8-f8dd-4d53-b1f5-83e15fa0404a" />
--->nslookup web-app-clusterip [used short dns name here]
-<img width="832" height="512" alt="image" src="https://github.com/user-attachments/assets/148e4692-702e-4900-9a33-0009336c7547" />
+Step 3: Test the Short Service Name: Now run this command inside container: wget -qO- http://web-app-clusterip
+
+<img width="677" height="487" alt="image" src="https://github.com/user-attachments/assets/575f2388-a4c5-47f7-804e-6736e2b22295" />
+
+Step 4: Test the Full DNS Name: wget -qO- http://web-app-clusterip.default.svc.cluster.local
+
+<img width="727" height="716" alt="image" src="https://github.com/user-attachments/assets/b7c9610b-9d01-498b-a220-bce696fbc3d5" />
+
+Step 5: Perform a DNS Lookup: nslookup web-app-clusterip
+
+<img width="727" height="497" alt="image" src="https://github.com/user-attachments/assets/c0fa0034-76fd-41ef-b5ea-f5bf615ed4fd" />
+
+<img width="1855" height="957" alt="image" src="https://github.com/user-attachments/assets/ff7ab2e5-6a5c-438e-969a-73006aa757f2" />
+
+<img width="1667" height="577" alt="image" src="https://github.com/user-attachments/assets/8218bccb-f3e8-48bf-9c46-8b91301b5cda" />
+
+Step 6: Compare with the Service: Open another terminal (or exit the BusyBox Pod first) and run: kubectl get services
+
+<img width="705" height="532" alt="image" src="https://github.com/user-attachments/assets/eb531606-c48c-4296-8924-3d60191b7bc3" />
+
+<img width="1815" height="512" alt="image" src="https://github.com/user-attachments/assets/060daae4-29c9-4cc7-a786-465713c04673" />
+
+**DNS Name Hierarchy:** 
+
+<img width="712" height="337" alt="image" src="https://github.com/user-attachments/assets/de15784a-0ba4-40e8-8ed8-114705a45f25" />
+
+**Short Name vs Full Name:**
+
+<img width="752" height="362" alt="image" src="https://github.com/user-attachments/assets/4c1ad79c-6592-46fc-83b4-c47e3b8bd26b" />
+
+-->Exit the Test Pod: exit [Expected: The BusyBox Pod is automatically deleted because you started it with --rm.]
+
+Q. What IP does nslookup return? Does it match the CLUSTER-IP from kubectl get services?
+
+A: nslookup returns the ClusterIP assigned to the Service (for example, 10.96.120.15). Yes, it should match the CLUSTER-IP shown by kubectl get services, because Kubernetes DNS resolves the Service name to its stable internal IP.
 
 ---
 
@@ -342,21 +374,74 @@ curl http://localhost:30080
 
 **Verify:** Can you see the Nginx welcome page from your browser or terminal using the NodePort?
 
--->Via terminal by using nodeport i can see nginx page like below, **curl 172.19.0.2:30080**
-<img width="1918" height="702" alt="image" src="https://github.com/user-attachments/assets/4c4b0b0c-1079-4e53-bfc5-8b2ff120c95d" />
+**Steps to follow:**
 
--->But by using, http://<NodeIP>:30080 i cant see the nginx page on the browser, That is because how kind networking works, not your Service, In kind (Kubernetes in Docker) Nodes are Docker containers, So Their “NodeIP” is NOT directly accessible from your host browser due to that it Works inside cluster / terminal & Fails in browser. It works in terminal because, When you tested from inside a Pod Traffic stays inside Docker network so works fine.
+-->Excellent! This task introduces the NodePort Service, which makes your application accessible from outside the Kubernetes cluster.Since you've been using Kind in your previous Kubernetes exercises, I'll focus on the Kind workflow and also explain what to do if NodePort doesn't work immediately.
 
--->So to handle this we have best way to use Port-Forwarding like below, here we are using port-forwarding, which creates: Local port (8080) → forwarded to → Service port (80)
+Q. What is a NodePort Service?
 
-**kubectl port-forward service/web-app-nodeport 8080:80**
-<img width="1736" height="155" alt="image" src="https://github.com/user-attachments/assets/326e615c-88d4-4392-9279-625d26855cfd" />
--->So once the port forwarding is done we can run the following url in the browser, **http://localhost:8080**
-<img width="1911" height="637" alt="image" src="https://github.com/user-attachments/assets/709bb2b2-7bac-4722-b458-cfe3f7aff84d" />
+-->A NodePort Service exposes an application on a fixed port on every Kubernetes node. Unlike a ClusterIP Service, a NodePort can be reached from outside the cluster.
 
-**Note:** Here we are using port 8080 instead of 30080 that is because port 30080 = NodePort (used when accessing via Node IP). OR Use 8080 in the browser because port-forward maps your local port 8080 to the Service port 80.
+<img width="627" height="337" alt="image" src="https://github.com/user-attachments/assets/3e19e6d0-0363-45fe-bb08-348eef869caa" />
 
--->**Now Flow is:** Browser → localhost:8080 → Service (port 80) → Pod
+Step 1: Create the Service YAML: vi nodeport-service.yaml [Paste the above mentioned code here]
+
+Step 2: Understand the YAML:
+
+<img width="692" height="657" alt="image" src="https://github.com/user-attachments/assets/2b1f7936-accf-4bb1-b76a-24e0486a235f" />
+
+<img width="726" height="762" alt="image" src="https://github.com/user-attachments/assets/e914e11d-2e73-41ce-89cf-a07397f86c63" />
+
+Step 3: Create the Service: kubectl apply -f nodeport-service.yaml
+
+Step 4: Verify the Service: kubectl get services
+
+<img width="712" height="330" alt="image" src="https://github.com/user-attachments/assets/393d06bc-11b1-4c69-80ca-1ac9ff803389" />
+
+Step 5: Verify the Endpoints: kubectl describe svc web-app-nodeport
+
+<img width="697" height="282" alt="image" src="https://github.com/user-attachments/assets/69f05b52-99bf-42da-b6aa-aeb6dbc8c8e0" />
+
+Step 6: Find Your Kubernetes Node: kubectl get nodes -o wide
+
+<img width="676" height="110" alt="image" src="https://github.com/user-attachments/assets/b2ef9a46-f4a0-4110-b6d1-f5f1600e3dc4" />
+
+**Note:** If you're using Kind, you'll often see an internal Docker network IP like 172.x.x.x.
+
+Step 7: Test the NodePort: 
+
+Option 1: If you're using Docker Desktop: curl http://localhost:30080
+
+Option 2: If you're using Minikube: minikube service web-app-nodeport --url
+
+Option 3: If you're using Kind: curl http://<NODE-IP>:30080 Ex: curl http://172.18.0.2:30080 [Expected: If you receive the Nginx welcome page, the Service is working.]
+
+**Important Note About Kind:** Kind runs Kubernetes nodes as Docker containers. By default, a NodePort inside the Kind node is not automatically exposed to your host machine.
+
+<img width="750" height="281" alt="image" src="https://github.com/user-attachments/assets/302f2b0d-9816-4c58-9fcb-1f98e24c5e47" />
+
+**Check Your Kind Cluster:**
+
+-->kind get clusters
+
+-->docker ps
+
+<img width="697" height="150" alt="image" src="https://github.com/user-attachments/assets/a1edd070-f2a2-4123-af45-e34c8a77eda0" />
+
+**Alternative Test (Works Regardless of Host Port Mapping)**
+
+<img width="711" height="302" alt="image" src="https://github.com/user-attachments/assets/77838dc4-2c24-4101-8bec-a80a1113789b" />
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
