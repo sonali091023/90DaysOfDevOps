@@ -237,12 +237,25 @@ kubectl apply -f nginx-pod.yaml --dry-run=client
 # Validate against the cluster's API (server-side validation)
 kubectl apply -f nginx-pod.yaml --dry-run=server
 ```
-<img width="1636" height="160" alt="image" src="https://github.com/user-attachments/assets/82150db0-8135-4af6-8b53-3fdd4a08b9eb" />
-
 Now intentionally break your YAML (remove the `image` field or add an invalid field) and run dry-run again. See what error you get.
 
-**Verify:** What error does Kubernetes give when the image field is missing?
-<img width="823" height="101" alt="image" src="https://github.com/user-attachments/assets/f8ff6a3b-39cc-4dc4-b277-e621f2142248" />
+**Steps to follow:**
+
+Step 1: Client-side validation: Checks if the YAML syntax is valid without contacting the cluster: kubectl apply -f nginx-pod.yaml --dry-run=client
+
+Step 2: Server-side validation: Checks the manifest against the Kubernetes API server without creating the resource: kubectl apply -f nginx-pod.yaml --dry-run=server
+
+<img width="1636" height="160" alt="image" src="https://github.com/user-attachments/assets/82150db0-8135-4af6-8b53-3fdd4a08b9eb" />
+
+**Note:** This requires your Kubernetes cluster to be running.
+
+Step 3: Break the YAML: Remove the image field from your container & Verify: What error does Kubernetes give when the image field is missing?
+
+-->kubectl apply -f nginx-pod.yaml --dry-run=server [We may get the output for the client]
+
+<img width="1717" height="422" alt="image" src="https://github.com/user-attachments/assets/cbe41e01-0059-40e6-90df-8938d76d0aae" />
+
+-->This means Kubernetes requires every container to have an image field.
 
 ---
 
@@ -272,6 +285,24 @@ kubectl label pod nginx-pod environment-
 Write a manifest for a third pod with at least 3 labels (app, environment, team). Apply it and practice filtering.
 
 <img width="977" height="237" alt="image" src="https://github.com/user-attachments/assets/1ae0b34e-b06d-4a8d-bcd9-faae99ba969f" />
+
+
+**Steps to follow:**
+
+**Pod Labels and Filtering:** Learn how Kubernetes uses labels to organize and filter resources.
+
+Step 1: View labels on existing pods: kubectl get pods --show-labels
+
+Step 2: Filter pods by label: Find pods with the label app=my-app: kubectl get pods -l app=my-app
+
+-->And if there is no resource is available based on the label then we will get in response as there is "No resources found in default namespace."
+
+Step 3: Add a label to an existing pod: Add the label environment=production to nginx-pod: kubectl label pod nginx-pod environment=production
+
+-->To verify: kubectl get pods --show-labels
+
+-->kubectl get pods -l environment=production
+
 
 ---
 
