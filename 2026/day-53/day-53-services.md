@@ -67,9 +67,55 @@ Note the individual Pod IPs. These will change if pods restart — that is the p
 
 **Verify:** Are all 3 pods running? Note down their IP addresses.
 
--->All the 3 pods are running and each have different ip address as follow, 10.244.2.12, 10.244.2.13 and 10.244.1.11
+**Steps to follow:**
 
-<img width="1882" height="701" alt="image" src="https://github.com/user-attachments/assets/b1f8c3d0-2257-4cca-9199-aacb2dafda93" />
+-->Great! This task introduces one of the most important Kubernetes concepts: Deployments. A Deployment manages Pods for you, ensuring the desired number of replicas are always running.
+
+Step 1: Check Your Cluster: Before creating anything, make sure your Kubernetes cluster is running: kubectl cluster-info
+
+-->Now check existing resources: kubectl get nodes [Expected: The node should be in the Ready state.]
+
+Step 2: Create the Deployment YAML: nano app-deployment.yaml [Here in this file add above given code]
+
+Step 3: Understand the YAML: 
+
+<img width="590" height="851" alt="image" src="https://github.com/user-attachments/assets/a0f06420-aaee-4e04-b44d-98913832650f" />
+
+<img width="567" height="797" alt="image" src="https://github.com/user-attachments/assets/b630d84a-46e6-41cb-9b07-6e848cf920ca" />
+
+<img width="607" height="701" alt="image" src="https://github.com/user-attachments/assets/8e07a225-0c3c-48ea-9bbb-0fb5d53c82d6" />
+
+Step 4: Apply the Deployment: kubectl apply -f app-deployment.yaml
+
+Step 5: Check the Deployment: kubectl get deployments
+
+**Meaning:**
+- READY → 3 Pods are ready
+- UP-TO-DATE → Latest version is running
+- AVAILABLE → All Pods are available
+
+Step 6: View the ReplicaSet: Deployments create ReplicaSets, which in turn create Pods: kubectl get replicasets
+
+Step 7: View the Pods: kubectl get pods
+
+**Notice:**
+- Three different Pod names
+- Same Deployment
+- All are running
+
+Step 8: Get Pod IP Addresses: kubectl get pods -o wide
+
+-->Here imp column is The important column is: IP 
+
+**Why These IPs Are a Problem:**
+
+<img width="772" height="615" alt="image" src="https://github.com/user-attachments/assets/5617290d-a613-444c-9bde-b07003670942" />
+
+Step 9: Verify the Deployment: Check the status: kubectl get deployment web-app
+
+-->We can also list only the Pods created by this Deployment using the label selector: kubectl get pods -l app=web-app
+
+<img width="1787" height="747" alt="image" src="https://github.com/user-attachments/assets/5a2d759d-fcd2-4ddf-a420-92dc606a1939" />
 
 ---
 
@@ -117,24 +163,72 @@ exit
 
 You should see the Nginx welcome page. The Service load-balanced your request to one of the 3 Pods.
 
-<img width="1751" height="787" alt="image" src="https://github.com/user-attachments/assets/87736b1d-bf3b-438f-9b8e-189b8abf9707" />
-
-![Uploading image.png…]()
-
 **Verify:** Does the Service respond? Try running the wget command multiple times — the Service distributes traffic across all healthy Pods.
 
--->Yes — if everything is set up correctly, the Service should respond every time.
+**Steps to follow:**
 
--->What happens is when we run wget multiple times Each request goes to the Service (ClusterIP), The Service forwards traffic via kube-proxy & Requests are load balanced across all healthy Pods.
+-->Excellent! This task introduces Services, which solve the problem of changing Pod IP addresses by providing a stable network endpoint. Let's walk through it step by step.
 
-**Note:** Distribution is usually round-robin (or similar), Only READY Pods receive traffic.
+Q. What is a ClusterIP Service?
 
-<img width="1317" height="838" alt="image" src="https://github.com/user-attachments/assets/c43fa174-393c-4557-8dcd-8dbd868ae57b" />
+-->A ClusterIP Service is the default Service type in Kubernetes. So Instead of connecting directly to a Pod (whose IP may change), applications connect to the Service, which forwards requests to healthy Pods.
+<img width="606" height="277" alt="image" src="https://github.com/user-attachments/assets/635b7a2c-3169-4740-a801-407150520e05" />
 
-**Note:** As wget is not installed due to that facing some issue so replacement ot this we can use curl command: **curl 10.96.182.15** 
+Step 1: Verify the Deployment Exists: Make sure your Deployment from Task 1 is still running: kubectl get deployments
 
--->Executed in each pod by using command: **wget -qO- 10.244.0.35** [Prerequisit: need to install wget]
-<img width="717" height="948" alt="image" src="https://github.com/user-attachments/assets/b4c89c0e-23a1-4b43-baf5-9e63fa0f71d3" />
+-->Also check the pods: kubectl get pods
+
+Step 2: Create the Service YAML: vi clusterip-service.yaml [Here in this file add above mention code]
+
+Step 3: Understand the YAML: 
+
+<img width="577" height="846" alt="image" src="https://github.com/user-attachments/assets/612afe48-54ef-467b-af51-928420f2e30e" />
+
+<img width="581" height="526" alt="image" src="https://github.com/user-attachments/assets/19e5ec05-4aa9-4328-acdb-74e182bbfbc1" />
+
+<img width="617" height="390" alt="image" src="https://github.com/user-attachments/assets/f9f52cdf-d010-42f1-9ea5-21867a481e8c" />
+
+Step 4: Apply the Service: kubectl apply -f clusterip-service.yaml
+
+Step 5: Verify the Service: kubectl get services
+
+**Notice:**
+- TYPE is ClusterIP
+- CLUSTER-IP is assigned automatically
+- EXTERNAL-IP is <none>, because it's only accessible inside the cluster
+
+Step 6: Inspect the Service: kubectl describe service web-app-clusterip
+
+**Look for:**
+- Selector: app=web-app
+- Port:     80/TCP
+- Endpoints: 10.244.0.5:80,10.244.0.6:80,10.244.0.7:80
+
+-->The Endpoints show the Pod IPs behind the Service.
+
+Step 7: Test from Inside the Cluster: Since a ClusterIP isn't reachable from outside the cluster, create a temporary Pod:
+
+-->kubectl run test-client --image=busybox:latest --rm -it --restart=Never -- sh [Expected: we are inside container]
+
+Step 8: Access the Service: Inside container run command: wget -qO- http://web-app-clusterip
+
+<img width="622" height="451" alt="image" src="https://github.com/user-attachments/assets/e108df80-c9ee-46d1-a104-ae3c4928e53c" />
+
+Step 9: Verify the Endpoints: kubectl get endpoints OR kubectl get endpoints web-app-clusterip
+
+-->This confirms which Pods are currently receiving traffic.
+
+<img width="1847" height="781" alt="image" src="https://github.com/user-attachments/assets/da91a286-925d-4331-a763-526b430cb3e5" />
+
+<img width="1852" height="857" alt="image" src="https://github.com/user-attachments/assets/06954aaf-1d74-4706-a353-9b7a73d8e796" />
+
+**How Load Balancing Works:**
+
+<img width="692" height="747" alt="image" src="https://github.com/user-attachments/assets/b9df114a-1383-4c6e-b1db-757b93fe8081" />
+
+**Why You May Not Notice Load Balancing Yet**
+
+-->The default Nginx page looks identical on every Pod, so repeated wget commands all return the same HTML. That doesn't mean load balancing isn't happening—it just means every Pod serves identical content. To clearly observe load balancing, each Pod would need to return something unique.
 
 ---
 
@@ -174,6 +268,11 @@ Both the short name and the full DNS name resolve to the same ClusterIP. In prac
 **Verify:** What IP does `nslookup` return? Does it match the CLUSTER-IP from `kubectl get services`?
 
 **Steps to follow:**
+
+-->Excellent! This task teaches one of Kubernetes' most useful features: Service Discovery using DNS. Instead of remembering IP addresses, applications communicate using Service names.
+
+
+
 
 Step 1: Make sure your Service exists: kubectl get svc
 
