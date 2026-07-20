@@ -356,9 +356,6 @@ kubectl get services
 
 -->Via labels and selectors concept Service exposes Pods labeled app=web-app on port 80 and makes them accessible externally via NodeIP:30080 using NodePort.
 
-<img width="1397" height="967" alt="image" src="https://github.com/user-attachments/assets/f05a8fbf-d9de-47a9-8dfe-060f7c958e62" />  
-<img width="1543" height="298" alt="image" src="https://github.com/user-attachments/assets/e883bda2-1f86-4832-924d-846a4e0dbc35" />
-
 Access the service:
 ```bash
 # If using Minikube
@@ -416,6 +413,10 @@ Option 2: If you're using Minikube: minikube service web-app-nodeport --url
 
 Option 3: If you're using Kind: curl http://<NODE-IP>:30080 Ex: curl http://172.18.0.2:30080 [Expected: If you receive the Nginx welcome page, the Service is working.]
 
+<img width="1762" height="577" alt="image" src="https://github.com/user-attachments/assets/f5ca965b-7d0a-4c1b-a6f2-f24ab09c30dc" />
+
+<img width="1877" height="867" alt="image" src="https://github.com/user-attachments/assets/732fe850-c664-4863-a67e-c1c8adf57e63" />
+
 **Important Note About Kind:** Kind runs Kubernetes nodes as Docker containers. By default, a NodePort inside the Kind node is not automatically exposed to your host machine.
 
 <img width="750" height="281" alt="image" src="https://github.com/user-attachments/assets/302f2b0d-9816-4c58-9fcb-1f98e24c5e47" />
@@ -431,17 +432,6 @@ Option 3: If you're using Kind: curl http://<NODE-IP>:30080 Ex: curl http://172.
 **Alternative Test (Works Regardless of Host Port Mapping)**
 
 <img width="711" height="302" alt="image" src="https://github.com/user-attachments/assets/77838dc4-2c24-4101-8bec-a80a1113789b" />
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
@@ -465,17 +455,12 @@ spec:
 ```
 
 -->By using labels and selectors concept deployment object and service object connects with each other in k8s
-<img width="1462" height="857" alt="image" src="https://github.com/user-attachments/assets/6728bc65-0faf-4c73-8859-93c9d49b2626" />
-
 
 ```bash
 kubectl apply -f loadbalancer-service.yaml
 kubectl get services
 ```
-
 On a local cluster (Minikube, Kind, Docker Desktop), the EXTERNAL-IP will show `<pending>` because there is no cloud provider to create a real load balancer. This is expected.
-
-<img width="1562" height="366" alt="image" src="https://github.com/user-attachments/assets/5b8f9cc2-49e8-4232-81ca-50ee2113b9f2" />
 
 If you are using Minikube:
 ```bash
@@ -484,12 +469,14 @@ minikube tunnel
 # In another terminal, check again:
 kubectl get services
 ```
-<img width="1146" height="332" alt="image" src="https://github.com/user-attachments/assets/8cf3b47b-9cd9-446e-a453-6eebcb8f9489" />
-
 In a real cloud cluster, the EXTERNAL-IP would be a public IP address or hostname provisioned by the cloud provider.
 
 **Verify:** What does the EXTERNAL-IP column show? Why is it `<pending>` on a local cluster?
 -->On a local cluster (Minikube, Kind, Docker Desktop), the EXTERNAL-IP will show `<pending>` because there is no cloud provider to create a real load balancer. This is expected, In a real cloud cluster, the EXTERNAL-IP would be a public IP address or hostname provisioned by the cloud provider.
+
+**Steps to follow:**
+
+
 
 ---
 
