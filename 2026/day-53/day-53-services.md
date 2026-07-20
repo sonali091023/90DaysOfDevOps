@@ -532,8 +532,6 @@ Check all three services:
 ```bash
 kubectl get services -o wide
 ```
-<img width="1408" height="187" alt="image" src="https://github.com/user-attachments/assets/5be83919-d1e1-471d-83f7-e63cb9c22a94" />
-
 Compare them:
 
 | Type | Accessible From | Use Case |
@@ -550,17 +548,47 @@ Verify this:
 ```bash
 kubectl describe service web-app-loadbalancer
 ```
-
-<img width="1893" height="566" alt="image" src="https://github.com/user-attachments/assets/863e808c-7703-4ffa-9751-e3a4578137ee" />
-
 You should see all three: a ClusterIP, a NodePort, and the LoadBalancer configuration.
 
 **Verify:** Does the LoadBalancer service also have a ClusterIP and NodePort assigned?
-yes, I can see ClusterIP: 10.96.7.142, NodePort: 31813/TCP & type: LoadBalancer, So the conclusion is Loadbalancer has both ClusterIP [internal access] and NodePort [node-level access], So we can say this is expected behavious, A LoadBalancer Service automatically creates a ClusterIP + NodePort under the hood.
 
-**Note:** As we know kind cluster is the node wihch is created inside docker so in case of loadBalancer service we dont have External-IP, So kind does NOT support real cloud LoadBalancers. So in case if wanted to launch the application we need to run URL: localhiost:8080, But before that we need to perform Port-Forwarding: kubectl port-forward service/web-app-loadbalancer 8080:80, then we can launch the web application.
+**Steps to follow:**
 
--->Yes, the LoadBalancer service has both a ClusterIP and a NodePort, but in kind it won’t get an external IP.
+-->Excellent! This task ties together everything you've learned about Kubernetes Services. The important concept is that Service types build on each other rather than replace each other.
+
+Step 1: List All Services: kubectl get services -o wide
+
+<img width="1447" height="172" alt="t6i1" src="https://github.com/user-attachments/assets/ddba84ac-ec38-48da-b865-c23525a72930" />
+
+**Notice:**
+- Every Service has a ClusterIP.
+- The NodePort Service has an additional NodePort (30081).
+- The LoadBalancer Service also has a NodePort (31742) and is waiting for an external IP.
+
+Step 2: Compare the Service Types: 
+
+<img width="755" height="522" alt="image" src="https://github.com/user-attachments/assets/a9d6877f-afb6-4cd3-af40-3b9d0f48a10f" />
+
+Step 3: Verify the LoadBalancer Service: kubectl describe service web-app-loadbalancer
+
+<img width="1571" height="480" alt="image" src="https://github.com/user-attachments/assets/c6e5a402-a372-4b9b-b568-c02c00e6472a" />
+
+**What each field means:**
+<img width="746" height="705" alt="image" src="https://github.com/user-attachments/assets/f7f63ad0-8074-46c3-920f-3934faef3b73" />
+<img width="666" height="182" alt="image" src="https://github.com/user-attachments/assets/89dc8618-86cb-4eee-8d45-13841a7a2d69" />
+
+**How Requests Flow:**
+
+<img width="622" height="510" alt="image" src="https://github.com/user-attachments/assets/b21354f7-606d-4f1d-bf13-172004fc9cd6" />
+<img width="656" height="357" alt="image" src="https://github.com/user-attachments/assets/bd7207c6-b303-4e92-a8eb-1875e0e24f20" />
+
+Q: Does the LoadBalancer Service also have a ClusterIP and NodePort assigned?
+
+-->Yes. A LoadBalancer Service automatically includes both a ClusterIP and a **NodePort`.
+- The ClusterIP is used for internal communication within the cluster.
+- The NodePort exposes the Service on every Kubernetes node.
+- In cloud environments, the external load balancer forwards traffic to the NodePort.
+- On local clusters like Kind, the external load balancer cannot be created, so the EXTERNAL-IP remains <pending>, but the Service still has a valid ClusterIP and an automatically assigned NodePort.
 
 ---
 
@@ -577,7 +605,7 @@ kubectl get services
 
 Only the built-in `kubernetes` service in the default namespace should remain.
 
-<img width="1487" height="923" alt="image" src="https://github.com/user-attachments/assets/c368cc78-bef0-43a1-94c8-4a68e611a64e" />
+<img width="1541" height="352" alt="image" src="https://github.com/user-attachments/assets/5796924d-7394-4775-a53b-123ed01e81e1" />
 
 **Verify:** Is everything cleaned up?
 -->Yes, All the created services such as ClusterIP, NodePort & Loadbalancer all got deleted, And also deployment object is got deleted.
