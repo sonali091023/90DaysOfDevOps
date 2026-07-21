@@ -21,17 +21,59 @@ Your application needs configuration — database URLs, feature flags, API keys.
 
 **Verify:** Can you see all three key-value pairs?
 
--->Yes — i can see clearly see all three key-value pairs: APP_ENV=production, APP_DEBUG=false, APP_PORT=8080
+**Steps to follow:**
 
-**Steps to perform:**
+-->Perfect! This task is about learning ConfigMaps in Kubernetes. A ConfigMap stores non-sensitive configuration data as plain text. Let's go through it step by step.
 
--->kubectl create configmap app-config --from-literal=APP_ENV=production --from-literal=APP_DEBUG=false --from-literal=APP_PORT=8080
+**Create a ConfigMap from Literals:**
+
+Step 1: Check your cluster: First, make sure your Kubernetes cluster is running: kubectl cluster-info OR kubectl get nodes
+
+Step 2: Create the ConfigMap: kubectl create configmap app-config --from-literal=APP_ENV=production --from-literal=APP_DEBUG=false --from-literal=APP_PORT=8080
+
+Step 3: Verify it exists: kubectl get configmap
+
+**Notice:**
+- DATA = 3
+- because there are three key-value pairs.
+
+Step 4: Describe the ConfigMap: kubectl describe configmap app-config
+
+<img width="692" height="465" alt="image" src="https://github.com/user-attachments/assets/2a32748c-947f-4dac-99cb-2ec375b63b3b" />
+
+Notice:
+- Every key appears separately.
+- Values are readable.
+- Nothing is encoded.
+
+Step 5: View it as YAML: kubectl get configmap app-config -o yaml
+
+<img width="681" height="382" alt="image" src="https://github.com/user-attachments/assets/5a8b154b-59ff-4b4d-865d-71e093a3a679" />
+
+Step 6: Compare with Secrets: A ConfigMap stores values like this: 
+
+<img width="712" height="552" alt="image" src="https://github.com/user-attachments/assets/7e5a6afb-00c4-44b7-90af-bb48d4733e29" />
+
+**Verification:**
 
 -->kubectl describe configmap app-config
 
--->kubectl get configmap app-config -o yaml
+-->Also verify with: kubectl get configmap app-config -o yaml
 
-<img width="1900" height="971" alt="image" src="https://github.com/user-attachments/assets/fdd02ce9-82b5-42b7-9572-ca968e3a24d1" />
+<img width="637" height="517" alt="image" src="https://github.com/user-attachments/assets/9471d200-af8f-42a0-923e-046e6e0c107a" />
+
+<img width="1907" height="927" alt="image" src="https://github.com/user-attachments/assets/1cdb9a2c-4c11-4cc1-91b6-f7d7495b0b23" />
+
+<img width="1561" height="331" alt="image" src="https://github.com/user-attachments/assets/d5a8deb1-9e70-4512-9bb5-3197ce5ef85d" />
+
+**Verify:** Can you see all three key-value pairs?
+-->yes i can see, because there are three key-value pairs
+
+Q. Why are false and 8080 quoted?
+
+-->In Kubernetes, ConfigMap values are always strings. Even if you provide false or 8080, Kubernetes stores them as string values:
+
+<img width="625" height="152" alt="image" src="https://github.com/user-attachments/assets/23ccb709-1860-4b3d-bd50-c9a173360d0a" />
 
 ---
 
@@ -41,16 +83,78 @@ Your application needs configuration — database URLs, feature flags, API keys.
 3. The key name (`default.conf`) becomes the filename when mounted into a Pod
 
 **Verify:** Does `kubectl get configmap nginx-config -o yaml` show the file contents?
+
+**Steps to follow:**
+
+-->Excellent! This task teaches one of the most common real-world uses of ConfigMaps: storing configuration files (such as nginx.conf, application.properties, or config.yaml) and mounting them into Pods.
+
+**Create a ConfigMap from a File:**
+
+Step 1: Check your current directory: pwd && ls
+
+Step 2: Create an Nginx configuration file: vi default.conf & paste below code:
+```
+server {
+    listen 80;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+
+    location /health {
+        return 200 "healthy";
+        add_header Content-Type text/plain;
+    }
+}
+```
+<img width="702" height="431" alt="image" src="https://github.com/user-attachments/assets/072f7804-68cc-422d-98e8-128485d02e8c" />
+<img width="701" height="682" alt="image" src="https://github.com/user-attachments/assets/607e6d92-9aa1-45bf-962a-c11253bac55f" />
+
+Step 3: Verify the file: cat default.conf [Expected: file code should be display]
+
+Step 4: Create the ConfigMap: kubectl create configmap nginx-config --from-file=default.conf=default.conf
+
+<img width="641" height="405" alt="image" src="https://github.com/user-attachments/assets/bdf2fc30-e8fb-43c3-aecc-8ea90844f775" />
+
+Step 5: Verify the ConfigMap exists: kubectl get configmap
+
+<img width="632" height="232" alt="image" src="https://github.com/user-attachments/assets/492fc298-f528-470a-9bc2-fff529adaf01" />
+
+<img width="1917" height="262" alt="image" src="https://github.com/user-attachments/assets/d70c0dd1-3890-4352-b809-de45dd9e3a1a" />
+
+Step 6: Describe the ConfigMap: kubectl describe configmap nginx-config
+
+<img width="622" height="452" alt="image" src="https://github.com/user-attachments/assets/9feb6b14-7e05-4e65-88e2-1f713d4ff213" />
+<img width="1537" height="712" alt="image" src="https://github.com/user-attachments/assets/3c5b8189-d027-425f-b837-966e063bbf22" />
+<img width="747" height="262" alt="image" src="https://github.com/user-attachments/assets/a102acfe-ca1e-46e5-827a-e899cebbb8c5" />
+
+**Notice:**
+- The entire file is stored inside the ConfigMap.
+- The key is default.conf.
+
+Step 7: View it as YAML: kubectl get configmap nginx-config -o yaml
+
+<img width="641" height="415" alt="image" src="https://github.com/user-attachments/assets/cfe48ac3-3d63-442e-8ef4-84e00231d325" />
+
+**Notice:**
+- The key is default.conf.
+- The file contents are stored as a multi-line string using the | YAML syntax.
+
+How this works: Suppose you later mount this ConfigMap into an Nginx Pod like this:
+
+<img width="656" height="467" alt="image" src="https://github.com/user-attachments/assets/9a812174-187e-446a-8100-476b1920029d" />
+
+<img width="1591" height="342" alt="image" src="https://github.com/user-attachments/assets/0cdca488-bb74-4eb3-afcb-51a74e5fe538" />
+
+**Note:** If you see the full contents of default.conf under the data section, you've successfully completed the task.
+
+Cleanup: If you want to recreate the ConfigMap after modifying the file, first delete the old one: kubectl delete configmap nginx-config
+
+-->Then recreate it: kubectl create configmap nginx-config --from-file=default.conf=default.conf
+
+**Verify:** Does `kubectl get configmap nginx-config -o yaml` show the file contents?
 -->yes, i can see the full Nginx config content under data.default.conf.
-
-**Steps to perform:**
--->Create file vi default.conf
--->kubectl create configmap nginx-config --from-file=default.conf=default.conf   [Left side default.conf = key name & Right side default.conf = your local file]
--->To inspect the config-map: kubectl get configmap nginx-config -o yaml
-<img width="1607" height="640" alt="image" src="https://github.com/user-attachments/assets/49cec14f-cf5d-401d-bec4-c724534a0615" />
--->So here what is happening is The file content becomes the value, The key (default.conf) becomes the filename when mounted into a Pod so inside container it will appear like "/etc/nginx/conf.d/default.conf"
-
-[default.conf](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-54/k8s-mainfest-files/default.conf)
 
 ---
 
@@ -65,7 +169,15 @@ Use environment variables for simple key-value settings. Use volume mounts for f
 
 **Steps to follow:**
 
--->vi busybox-env-pod.yml  [busybox-env-pod.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-54/k8s-mainfest-files/busybox-env-pod.yaml)
+-->Excellent! This is one of the most important ConfigMap exercises because it demonstrates the two primary ways to consume a ConfigMap:
+- As environment variables (envFrom) – ideal for simple key-value configuration.
+- As a mounted file (volume) – ideal for configuration files such as nginx.conf, application.properties, or config.yaml.
+
+Part 1: Use app-config as Environment Variables: 
+
+Step 1: Verify the ConfigMap exists: kubectl get configmap
+
+Step 2: Create the Pod manifest: vi busybox-env-pod.yml  [busybox-env-pod.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-54/k8s-mainfest-files/busybox-env-pod.yaml)
 
 -->kubectl apply -f busybox-env-pod.yml
 
