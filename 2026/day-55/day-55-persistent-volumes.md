@@ -200,27 +200,62 @@ Q: How does Kubernetes decide which PV to bind to a PVC?
 
 **Steps to follow:**
 
--->Prerequisit: pv and pvc already created and bound with each other as well.
+-->Prerequisit: pv and pvc already created and bound with each other as well. This task demonstrates that data stored on a PersistentVolume survives Pod deletion.
 
--->Create pod manifest: vi pod-manifest-with-pvc.yml       [pod-manifest-with-pvc.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-55/k8s-manifest-files/pod-manifest-with-pvc.yml)
+Step 1: Create the Pod: vi pod-manifest-with-pvc.yml 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-pod
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        echo "Started at $(date)" >> /data/message.txt
+        sleep 3600
+    volumeMounts:
+    - name: storage
+      mountPath: /data
 
--->apply the kubectl: kubectl apply -f pod-manifest-with-pvc.yml
+  volumes:
+  - name: storage
+    persistentVolumeClaim:
+      claimName: my-pvc
+```
+**Note:** Make sure claimName matches the PVC you created (my-pvc).
+
+Step 2: Apply the Pod: kubectl apply -f pod-manifest-with-pvc.yml
 
 -->verify the created pod: kubectl get pods
 
 -->verfy the created pvc: kubectl get pvc
 
--->Go inside nodeand check the content of the message file: kubectl exec -it pvc-pod -- cat /data/message.txt
+Step 3: Verify the Data: kubectl exec -it pvc-pod -- cat /data/message.txt
 
--->Now delete the pod: kubectl delete pod pvc-pod
-
--->Now again go inside pod file and edit it: vi pod-manifest-with-pvc.yml     -->Edit the file and save 
+Step 4: Delete and Recreate the Pod: kubectl delete pod pvc-pod
 
 -->Apply again: kubectl apply -f pod-manifest-with-pvc.yml
 
--->Now again go inside node and check the message file content: kubectl exec -it pvc-pod -- cat /data/message.txt
+Step 5: Check the File Again: kubectl exec -it pvc-pod -- cat /data/message.txt
 
-<img width="1415" height="642" alt="image" src="https://github.com/user-attachments/assets/53d7d829-4657-4ab4-9f75-d2871bdede00" />
+<img width="1881" height="677" alt="image" src="https://github.com/user-attachments/assets/2b8a5710-430d-42d3-a2ea-e1017d048e7e" />
+
+**Verification:**
+
+Q. Does the file contain data from both the first and second Pod? & why?
+
+-->Yes, 
+- Because The Pod was deleted, but the PersistentVolume (PV) was not.
+- The PersistentVolumeClaim (PVC) remained bound to the same PV.
+- When the new Pod mounted the same PVC, it accessed the same storage, so the previous data was still there and the new Pod appended another line.
+- Key Difference
+  - emptyDir → Data is lost when the Pod is deleted.
+  - PersistentVolume + PVC → Data survives Pod deletion because it is stored outside the Pod.
 
 ---
 
@@ -237,11 +272,19 @@ Q: How does Kubernetes decide which PV to bind to a PVC?
 
 **Steps to follow:**
 
--->Step 1: List StorageClasses: kubectl get storageclass
+-->This task helps you understand dynamic provisioning, where Kubernetes automatically creates a PersistentVolume (PV) when a PersistentVolumeClaim (PVC) is created.
 
--->Step 2: Identify Default StorageClass: Look for (default) next to the name, Just like standard (default) [standard is the default StorageClass]
+Step 1: List StorageClasses: kubectl get storageclass
 
--->Step 3: Describe the StorageClass: kubectl describe storageclass standard
+**Note:** Your output may differ depending on your cluster (Kind, Minikube, EKS, etc.).
+
+<img width="677" height="157" alt="image" src="https://github.com/user-attachments/assets/8d2b4b75-2c5c-4057-8461-862d1fafddf4" />
+
+Step 2: Identify Default StorageClass: Look for (default) next to the name, Just like standard (default) [standard is the default StorageClass]
+
+-->Describe the StorageClass: kubectl describe storageclass standard
+
+<img width="1917" height="397" alt="image" src="https://github.com/user-attachments/assets/8baa3b4a-76a6-4dd1-8843-d796560c97c8" />
 
 **Now let see What Each Field Means:**
 
@@ -253,9 +296,30 @@ Q: How does Kubernetes decide which PV to bind to a PVC?
 
 -->******Volume Binding Mode**:** WaitForFirstConsumer = "When is the volume created? -->Answer is **Immediate** → created instantly **WaitForFirstConsumer** → created only, when Pod is scheduled, This avoids wrong node placement (VERY important in real clusters).
 
--->**Step 4: Dynamic Provisioning:** Earlier (static provisioning): Admin creates PV, Dev creates PVC & Now(dynamic provisioning): Dev creates PVC only, StorageClass automatically creates PV
+<img width="680" height="347" alt="image" src="https://github.com/user-attachments/assets/a18c885a-5fa0-4cf6-9bf5-76191ee2e10f" />
 
-<img width="1916" height="348" alt="image" src="https://github.com/user-attachments/assets/c6ed0c0d-e5ce-4645-929e-7b12c23bb41a" />
+-->**Step 3: Dynamic Provisioning:** Earlier (static provisioning): Admin creates PV, Dev creates PVC & Now(dynamic provisioning): Dev creates PVC only, StorageClass automatically creates PV
+
+With dynamic provisioning:
+- Developer creates only a PVC.
+- Kubernetes uses the StorageClass.
+- The StorageClass automatically creates a PV.
+- The PVC is bound to the newly created PV.
+
+<img width="557" height="250" alt="image" src="https://github.com/user-attachments/assets/d995c635-14e6-4b92-877d-81855547df80" />
+
+Verification: kubectl get storageclass
+
+-->The StorageClass marked with (default) is your cluster's default StorageClass.
+
+**Examples**
+- Kind: standard
+- Minikube: standard
+- EKS: often gp2 or gp3 (depending on cluster configuration)
+
+Q. Answer the verification question based on your output. For example, if you see: standard (default)
+
+-->then your answer is: The default StorageClass in my cluster is standard.
 
 ---
 
@@ -266,29 +330,79 @@ Q: How does Kubernetes decide which PV to bind to a PVC?
 
 **Steps to follow:**
 
+-->This task demonstrates dynamic provisioning, where you create only a PVC, and Kubernetes automatically creates the PV using the StorageClass.
+
 -->To verify the storage class details: kubectl get storageclass
 
--->Now create dynamic-provisioning-pvc yml file: vi dynamic-provisioning-pvc.yml   
-[dynamic-provisioning-pvc.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-55/k8s-manifest-files/dynamic-provisioning-pvc.yml)
+Step 1: Create the PVC: Now create dynamic-provisioning-pvc yml file: vi dynamic-provisioning-pvc.yml   
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dynamic-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard   # Use your default StorageClass
+  resources:
+    requests:
+      storage: 1Gi
+```
+Note: Replace standard if your cluster uses a different default StorageClass.
 
--->Apply the kubectl: kubectl apply -f dynamic-provisioning-pvc.yml
+Step 2: Apply the PVC: kubectl apply -f dynamic-provisioning-pvc.yml
 
--->kubectl get pvc      --->Here we can see status as pending due to following parameter VOLUMEBINDINGMODE = WaitForFirstConsumer, So to satisfied this have to created pod then status will change
+-->kubectl get pvc      
+- Here we can see status as pending due to following parameter VOLUMEBINDINGMODE = WaitForFirstConsumer, So to satisfied this have to created pod then status will change
 
--->kubectl get pv       --->Here we can see status as pending due to following parameter VOLUMEBINDINGMODE = WaitForFirstConsumer, So to satisfied this have to created pod then status will change
+-->kubectl get pv       
+- Here we can see status as pending due to following parameter VOLUMEBINDINGMODE = WaitForFirstConsumer, So to satisfied this have to created pod then status will change
 
--->Now create dynamic-provisioning-pod yml file: vi dynamic-provisioning-pod.yml 
-[dynamic-provisioning-pod.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-55/k8s-manifest-files/dynamic-provisioning-pod.yml)
+**Expected:**
+- PVC → Bound
+- A new PV is created automatically and is Bound
 
+Step 3: Create a Pod Using the PVC: Now create dynamic-provisioning-pod yml file: vi dynamic-provisioning-pod.yml 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dynamic-pod
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        echo "Hello from Dynamic PV at $(date)" >> /data/message.txt
+        sleep 3600
+    volumeMounts:
+    - name: storage
+      mountPath: /data
+
+  volumes:
+  - name: storage
+    persistentVolumeClaim:
+      claimName: dynamic-pvc
+```
 -->Apply the kubectl: kubectl apply -f dynamic-provisioning-pod.yml
 
 -->kubectl get pvc
 
 -->kubectl get pv
 
--->Then verify the data inside node: kubectl exec -it dynamic-pod -- cat /data/message.txt
+Step 4: Verify the Data: kubectl exec -it dynamic-pod -- cat /data/message.txt
 
-<img width="1722" height="763" alt="image" src="https://github.com/user-attachments/assets/529f64b9-d4ed-493a-9d4e-fa33946dd7dd" />
+You should see:
+- PVC is Bound
+- PV was created automatically by the StorageClass
+- The Pod can read/write data successfully
+
+Key Difference:
+- Static Provisioning: You create PV → PVC → Pod
+- Dynamic Provisioning: You create PVC → Kubernetes creates PV automatically → Pod
 
 **Verify:** How many PVs exist now? Which was manual, which was dynamic?
 -->Because StorageClass uses WaitForFirstConsumer, so PV is created only when a Pod uses the PVC, And there were 2 pvc's available one is **demo-pv** which is manual one & the other one is **dynamic-pvc** this one is dynamic pvc which is created after pod creation
