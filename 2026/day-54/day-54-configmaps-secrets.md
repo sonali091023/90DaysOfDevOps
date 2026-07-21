@@ -456,8 +456,6 @@ Q. Why readOnly: true?
 
 **Note:** base64 ≠ encryption (just encoding) Anyone with access to the Pod can read secrets, For real security: Use RBAC, Use external secret managers (Vault, AWS Secrets Manager) etc.
 
-<img width="1547" height="323" alt="image" src="https://github.com/user-attachments/assets/d41b3319-f65b-45a9-838a-2879f2eed445" />
-
 **Debugging Checklist:** If in case secrect is not set properly & secret not appearing in Pod
 
 -->Check if Secret exists: kubectl get secret db-credentials
