@@ -289,21 +289,54 @@ Note: **envFrom** → injects key-value pairs as environment variables & **volum
 
 **Steps to follow:**
 
--->Create the Secret: kubectl create secret generic db-credentials --from-literal=DB_USER=admin --from-literal=DB_PASSWORD=s3cureP@ssw0rd
+-->Great! Now you'll learn about Secrets, which are similar to ConfigMaps but intended for sensitive information like passwords, API keys, and tokens.
+**Important:** Kubernetes Secrets are Base64-encoded, not encrypted, by default. Base64 is just an encoding format to safely represent binary/text data—it is not a security mechanism.
 
--->Check secret exists: kubectl get secret db-credentials
+**Create a Secret:**
 
--->Inspect the Secret: kubectl get secret db-credentials -o yaml [**Note:** Values are under data, They are base64-encoded, not plaintext]
+Step 1: Check your cluster: Verify your cluster is running: kubectl get nodes
 
--->Decode a value: echo 'YWRtaW4=' | base64 --decode & echo 'czNjdXJlUEBzc3cwcmQ=' | base64 --decode
+Step 2: Create the Secret: Create the Secret: kubectl create secret generic db-credentials --from-literal=DB_USER=admin --from-literal=DB_PASSWORD=s3cureP@ssw0rd
 
-[pod-secret.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-54/k8s-mainfest-files/pod-secret.yml)
+<img width="722" height="221" alt="image" src="https://github.com/user-attachments/assets/01c3eed5-bff2-4f2b-824f-e104d99853cc" />
+
+Step 3: Verify the Secret exists: kubectl get secret OR kubectl get secret db-credentials
+
+**Notice:**
+- TYPE = Opaque → the default type for generic Secrets.
+- DATA = 2 → there are two key-value pairs.
+
+Step 4: View the Secret as YAML: kubectl get secret db-credentials -o yaml
+
+**Notice:**
+- Values are under the data: section.
+- They are Base64-encoded, not plain text.
+
+Step 5: Decode the values: echo 'YWRtaW4=' | base64 --decode OR  echo 'czNjdXJlUEBzc3cwcmQ=' | base64 --decode [Copy the encoded value from your YAML output and run:]
+
+Step 6: Verify using kubectl describe: kubectl describe secret db-credentials
+
+-->Cleanup: kubectl delete secret db-credentials
+
+<img width="1917" height="717" alt="image" src="https://github.com/user-attachments/assets/0b16f5f8-366c-431d-8529-e6e28b896f0c" />
+
+**Notice:**
+- kubectl describe does not display the actual values.
+- It only shows the size of each value.
+
+**ConfigMap vs Secret:**
+
+<img width="757" height="217" alt="image" src="https://github.com/user-attachments/assets/31edae5b-27e2-4275-963c-0a41177f3cd3" />
 
 **Note:** Kubernetes stores Secrets as base64-encoded in etcd (not encrypted by default)
 
 -->When used in Pods Env vars → automatically decoded & Volume mounts → automatically decoded 
 
--->used for Fasr decoding: kubectl get secret db-credentials -o jsonpath="{.data.DB_USER}" | base64 --decode
+-->used for Fast decoding: kubectl get secret db-credentials -o jsonpath="{.data.DB_USER}" | base64 --decode
+
+Q. Why Base64?
+
+<img width="736" height="372" alt="image" src="https://github.com/user-attachments/assets/e33fc55b-87de-4b2d-b656-d4ab74d782f7" />
 
 **base64 is encoding, not encryption.** Anyone with cluster access can decode Secrets. The real advantages are RBAC separation, tmpfs storage on nodes, and optional encryption at rest.
 
@@ -317,8 +350,6 @@ Note: **envFrom** → injects key-value pairs as environment variables & **volum
 
 -->Real security comes from: RBAC (who can read secrets), Encryption at rest (etcd), External secret managers (Vault, AWS Secrets Manager, etc.)
 
-<img width="1692" height="411" alt="image" src="https://github.com/user-attachments/assets/c1e6cdc6-f6d2-4ecc-8ee2-ca19dab7e2a0" />
-
 ---
 
 ### Task 5: Use Secrets in a Pod
@@ -326,7 +357,91 @@ Note: **envFrom** → injects key-value pairs as environment variables & **volum
 2. In the same Pod, mount the entire `db-credentials` Secret as a volume at `/etc/db-credentials` with `readOnly: true`
 3. Verify: each Secret key becomes a file, and the content is the decoded plaintext value
 
-**To verify follow the steps:**
+**Steps to follow:**
+
+-->Excellent! This task teaches the two most common ways to use Secrets in Kubernetes:
+- Inject a specific Secret key as an environment variable using secretKeyRef.
+- Mount the entire Secret as files using a volume.
+
+Step 1: Verify the Secret exists: kubectl get secret
+
+Step 2: Create the Secret (if not already created): kubectl create secret generic db-credentials --from-literal=DB_USER=admin --from-literal=DB_PASSWORD='s3cureP@ssw0rd'
+
+-->kubectl get secret [Note: Don't create the Pod until this Secret exists.]
+
+Step 3: Create the Pod manifest: vi secret-pod.yaml
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secret-demo
+spec:
+  restartPolicy: Never
+  containers:
+  - name: busybox
+    image: busybox:latest
+    command:
+      - sh
+      - -c
+      - |
+        echo "DB_USER=$DB_USER"
+        echo ""
+        echo "Mounted Secret files:"
+        ls -l /etc/db-credentials
+        echo ""
+        echo "DB_USER file:"
+        cat /etc/db-credentials/DB_USER
+        echo ""
+        echo "DB_PASSWORD file:"
+        cat /etc/db-credentials/DB_PASSWORD
+    env:
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            name: db-credentials
+            key: DB_USER
+    volumeMounts:
+      - name: db-secret-volume
+        mountPath: /etc/db-credentials
+        readOnly: true
+
+  volumes:
+    - name: db-secret-volume
+      secret:
+        secretName: db-credentials
+```
+Understanding the YAML:
+
+1. Inject a single Secret key as an environment variable:
+<img width="642" height="301" alt="image" src="https://github.com/user-attachments/assets/769b36e1-a359-4636-93aa-4e7e11ca5198" />
+
+2. Mount the Secret as files:
+<img width="655" height="172" alt="image" src="https://github.com/user-attachments/assets/bb758f86-8656-49a8-ab60-8cf88589619e" />
+
+3. Mount it inside the container:
+<img width="637" height="305" alt="image" src="https://github.com/user-attachments/assets/d4ddf7c1-d1ca-497d-9730-65bc228aa295" />
+
+Step 4: Create the Pod: kubectl apply -f secret-pod.yaml
+
+Step 5: Check the Pod: kubectl get pods [The Pod exits because it prints the values and finishes.]
+
+Step 6: View the logs: kubectl logs secret-demo
+
+<img width="697" height="427" alt="image" src="https://github.com/user-attachments/assets/c97242ed-8e74-4f5e-96d7-9bad7abbd75d" />
+
+Q. Why readOnly: true?
+<img width="630" height="162" alt="image" src="https://github.com/user-attachments/assets/78dc03f3-bab0-4406-a9b5-2e16a84741b3" />
+
+**Secret vs ConfigMap:**
+
+<img width="750" height="246" alt="image" src="https://github.com/user-attachments/assets/1045fd36-97ba-4367-8685-be15c614ca79" />
+
+**Important:** Although Secrets are stored Base64-encoded in the Kubernetes API, Kubernetes automatically decodes them when mounting them as files inside a Pod.
+
+<img width="1792" height="960" alt="image" src="https://github.com/user-attachments/assets/efeca830-427c-4356-965b-116b6db25037" />
+<img width="1691" height="971" alt="image" src="https://github.com/user-attachments/assets/c7e2164b-b97d-4627-9087-69f07b266706" />
+<img width="1770" height="387" alt="image" src="https://github.com/user-attachments/assets/8deaf1a5-b418-4b3d-a1ef-b3d9634f7c32" />
 
 -->Exec into the Pod: kubectl exec -it secret-demo-pod -- sh
 
@@ -374,28 +489,32 @@ Note: **envFrom** → injects key-value pairs as environment variables & **volum
 
 **Steps to follow:**
 
--->Create ConfigMap: kubectl create configmap live-config --from-literal=message=hello
+Excellent! This task demonstrates a very important Kubernetes concept:
+- ConfigMaps mounted as volumes update automatically (after a short delay).
+- ConfigMaps used as environment variables do not update until the Pod is restarted.
 
--->Create pod: vi pod-read-file-every-five-sec.yml  [pod-read-file-every-five-sec.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-54/k8s-mainfest-files/pod-read-file-every-five-sec.yml)
+Step 1: Create the ConfigMap: kubectl create configmap live-config --from-literal=message=hello
+
+-->verify: kubectl get configmap live-config -o yaml
+
+Step 2: Create the Pod: vi pod-read-file-every-five-sec.yml  
 
 -->kubectl apply -f pod-read-file-every-five-sec.yml.yaml
 
 -->Watch the output: kubectl logs -f configmap-live-pod
 
-<img width="1885" height="722" alt="image" src="https://github.com/user-attachments/assets/4559b5d4-4a58-4129-947e-97112d1412a7" />
-
 -->Update the ConfigMap: kubectl patch configmap live-config --type merge -p '{"data":{"message":"world"}}'
 
 -->After chnages Wait ~30–60 seconds, And then Watch the output: kubectl logs -f configmap-live-pod [Message will update automatically]
 
-<img width="1906" height="806" alt="image" src="https://github.com/user-attachments/assets/b76df592-ba8d-47d7-843c-42e09c7685d0" />
+<img width="1906" height="977" alt="image" src="https://github.com/user-attachments/assets/5601b80f-a169-456c-a384-6687ac83da23" />
+<img width="1517" height="690" alt="image" src="https://github.com/user-attachments/assets/36dd38ce-e9f4-4dd1-820c-8b6560bf0e2d" />
 
 **Verify:** Did the volume-mounted value change without a pod restart?
 
 -->yes, The file /etc/config/message gets updated automatically, No Pod restart needed.
 
 **Note:** Menthod Volume mount Updates automatically whereas Environment var does not u[date automatically & Env vars are fixed at Pod startup 
-<img width="272" height="261" alt="image" src="https://github.com/user-attachments/assets/56754190-4752-4456-850c-4aacc7ec834a" />
 
 -->So what is happening is Kubernetes updates mounted ConfigMaps using a background sync (~30 sec), It replaces the file atomically inside the container & Your app sees the new value automatically (if it rereads the file)
 
@@ -406,7 +525,7 @@ Note: **envFrom** → injects key-value pairs as environment variables & **volum
 ### Task 7: Clean Up
 Delete all pods, ConfigMaps, and Secrets you created.
 
-<img width="1330" height="962" alt="image" src="https://github.com/user-attachments/assets/a21dfc86-bc26-4ca7-9446-4555a3b670a9" />
+<img width="1912" height="562" alt="image" src="https://github.com/user-attachments/assets/7de0a657-a0dd-4f1a-8c1f-f87dcffabb52" />
 
 **What is kube-root-ca.crt?**
 
