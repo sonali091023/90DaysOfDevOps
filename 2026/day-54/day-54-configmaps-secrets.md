@@ -173,33 +173,88 @@ Use environment variables for simple key-value settings. Use volume mounts for f
 - As environment variables (envFrom) – ideal for simple key-value configuration.
 - As a mounted file (volume) – ideal for configuration files such as nginx.conf, application.properties, or config.yaml.
 
-Part 1: Use app-config as Environment Variables: 
+**Part 1: Use app-config as Environment Variables:** 
 
 Step 1: Verify the ConfigMap exists: kubectl get configmap
 
-Step 2: Create the Pod manifest: vi busybox-env-pod.yml  [busybox-env-pod.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-54/k8s-mainfest-files/busybox-env-pod.yaml)
+Step 2: Create the Pod manifest: vi busybox-env-pod.yml 
 
--->kubectl apply -f busybox-env-pod.yml
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-configmap
+spec:
+  restartPolicy: Never
+  containers:
+  - name: busybox
+    image: busybox:latest
+    command:
+      - sh
+      - -c
+      - |
+        echo "APP_ENV=$APP_ENV"
+        echo "APP_DEBUG=$APP_DEBUG"
+        echo "APP_PORT=$APP_PORT"
+    envFrom:
+      - configMapRef:
+          name: app-config
+```
 
--->kubectl get pods
+Step 3: Create the Pod: kubectl apply -f busybox-env-pod.yml
 
--->kubectl logs busybox-env
+Step 4: Check the Pod: kubectl get pods [Expected: This is expected because the container prints the values and exits.]
 
--->kubectl apply -f nginx-config-pod.yaml
+Step 5: View the logs: kubectl logs busybox-env [This confirms that all keys from app-config were injected as environment variables.]
 
--->kubectl exec -it nginx-config-pod -- sh
+<img width="1505" height="582" alt="image" src="https://github.com/user-attachments/assets/2d32213a-cb4f-410c-ac61-f8f24be198c8" />
 
--->curl -s http://localhost/health [In caseneed to install apt update && apt install -y curl] OR wget -qO- http://localhost/health
+**Part 2: Mount nginx-config into an Nginx Pod:**
 
--->If config-map not applied use command: kubectl exec nginx-config-pod -- cat /etc/nginx/conf.d/default.conf
+Step 1: Create the manifest: vi nginx-configmap-pod.yaml
 
--->If pod not running use command: kubectl get pods & to get more details use command: kubectl describe pod nginx-config-pod
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-configmap
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: nginx-config-volume
+      mountPath: /etc/nginx/conf.d
+  volumes:
+  - name: nginx-config-volume
+    configMap:
+      name: nginx-config
+```
+Step 2: Create the Pod: kubectl apply -f nginx-configmap-pod.yaml
 
-<img width="1203" height="426" alt="image" src="https://github.com/user-attachments/assets/d3c80c0c-24ad-4aca-b7c2-b315c69987ba" />
-<img width="1918" height="803" alt="image" src="https://github.com/user-attachments/assets/1d2c09ba-3dc7-4d17-8a7e-266d5809a310" />
-<img width="1520" height="365" alt="image" src="https://github.com/user-attachments/assets/ebb420f5-8a7b-4105-9db6-789fa93c035e" />
-<img width="1640" height="980" alt="image" src="https://github.com/user-attachments/assets/0c88bcc9-077c-4768-88d5-412231f8fb26" />
-<img width="1237" height="282" alt="image" src="https://github.com/user-attachments/assets/00223cab-2425-4d5e-802d-3d2e3ae8a1d5" />
+Step 3: Wait until it's running: kubectl get pods
+
+Step 4: Verify the file was mounted: kubectl exec nginx-config-pod -- ls /etc/nginx/conf.d
+
+-->Now display the file: kubectl exec nginx-configmap -- cat /etc/nginx/conf.d/default.conf [You should see the same contents that were stored in the ConfigMap.]
+
+<img width="1697" height="347" alt="image" src="https://github.com/user-attachments/assets/42773744-4afa-4f6b-bc96-f5617b8f35cc" />
+
+Part 3: Test the /health endpoint: 
+
+-->kubectl exec nginx-configmap -- curl -s http://localhost/health [Expected: healthy So it means ConfigMap is mounted correctly, Nginx loaded it, and the custom endpoint is working]
+
+<img width="1757" height="135" alt="image" src="https://github.com/user-attachments/assets/3040c9c6-2384-4cda-8f7f-5a5e87848546" />
+
+**Troubleshooting:**
+
+<img width="692" height="632" alt="image" src="https://github.com/user-attachments/assets/4544efaf-2da9-4d12-8c17-e25012fe8bfc" />
+
+Q.Why use these two methods?
+
+<img width="727" height="177" alt="image" src="https://github.com/user-attachments/assets/07c9569d-89c2-4c5b-b627-cd9602ae7a38" />
 
 Note: **envFrom** → injects key-value pairs as environment variables & **volumeMounts** → injects files into container filesystem
 
