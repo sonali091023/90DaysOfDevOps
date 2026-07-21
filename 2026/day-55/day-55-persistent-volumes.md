@@ -21,35 +21,61 @@ Containers are ephemeral — when a Pod dies, everything inside it disappears. T
 
 **Steps to follow:**
 
--->vi pod-with-emptydir.yml     [pod-with-emptydir.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-55/k8s-manifest-files/pod-with-emptydir.yml)
+-->This task demonstrates that emptyDir is temporary storage. When the Pod is deleted, all data inside the emptyDir volume is lost.
 
--->kubectl apply -f pod-with-emptydir.yml
+Step 1: Create the Pod: vi pod-with-emptydir.yml   
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-pod
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /data
+        date > /data/message.txt
+        echo "Pod started at $(cat /data/message.txt)"
+        sleep 3600
+    volumeMounts:
+    - name: data-volume
+      mountPath: /data
 
--->kubectl get pods
+  volumes:
+  - name: data-volume
+    emptyDir: {}
+```
+Step 2: Apply the Pod: kubectl apply -f pod-with-emptydir.yml
 
--->kubectl exec -it emptydir-demo -- cat /data/message.txt
+-->verify: kubectl get pods [Expected: Pod should be Running.]
 
--->kubectl delete pod pod-with-emptydir.yml
+Step 3: Check the File: kubectl exec -it emptydir-demo -- cat /data/message.txt
 
--->kubectl apply -f pod-with-emptydir.yml
+Step 4: Delete the Pod: kubectl delete pod pod-with-emptydir
 
--->kubectl get pods
+Step 5: Recreate the Pod: kubectl apply -f pod-with-emptydir.yml
+
+Wait until it's running:: kubectl get pods
+
+Step 6: Check the File Again: kubectl exec -it emptydir-pod -- cat /data/message.txt
+
+<img width="1895" height="587" alt="image" src="https://github.com/user-attachments/assets/2ce49255-a215-4bca-b673-d34704cf6710" />
 
 **Verify:** Is the timestamp the same or different after recreation?
 
 -->The timestamp is different because an emptyDir volume is tied to the Pod’s lifecycle, not the container, When the Pod is deleted: The emptyDir volume is destroyed & All data inside it is permanently lost
 
--->When a new Pod is created: A fresh emptyDir volume is created & The container runs again and writes a new timestamp to the file Therefore, the timestamp changes after Pod recreation.
-
--->So: Old timestamp gone & New timestamp freshly created.
+-->When a new Pod is created: A fresh emptyDir volume is created & The container runs again and writes a new timestamp to the file Therefore, the timestamp changes after Pod recreation. So the Old timestamp gone & New timestamp freshly created.
 
 **Note:** “data is lost when Pod is deleted”, But also remember If the container restarts inside the same Pod, the data is NOT lost.
 
 -->emptyDir is a temporary volume that is created when a Pod starts and deleted when the Pod is removed. It is commonly used for sharing data between containers in the same Pod or for storing transient data like cache or logs.
 
 -->How do you prove it's ephemeral?” -->I create a Pod that writes a timestamp to an emptyDir volume, delete the Pod, recreate it, and observe that the timestamp changes—proving data does not persist.
-
-<img width="1500" height="640" alt="image" src="https://github.com/user-attachments/assets/9844a813-9a94-45a3-96e4-fa8f5e3c513a" />
 
 ---
 
@@ -61,28 +87,48 @@ Containers are ephemeral — when a Pod dies, everything inside it disappears. T
 
 **Steps to follow:**
 
--->vi persistentvolume.yml      [persistentvolume.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-55/k8s-manifest-files/persistentvolume.yml)
+**Create a PersistentVolume (Static Provisioning):**
 
--->kubectl apply -f persistentvolume.yml
+Step 1: Create the PV Manifest: vi persistentvolume.yml      
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: static-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /tmp/k8s-pv-data
+```
+Step 2: Apply the PV: kubectl apply -f persistentvolume.yml
 
--->kubectl get pv
+Step 3: Verify: kubectl get pv
 
--->PV Lifecycle status 
-<img width="597" height="313" alt="image" src="https://github.com/user-attachments/assets/5bbcc8b8-bc29-4749-80d5-95ad318ed99a" />
+<img width="1445" height="237" alt="image" src="https://github.com/user-attachments/assets/f5b8304a-f0f0-42e7-89f9-9aa1da14c206" />
 
-So Kubernetes marks it as: Available = ready to be claimed
+**PV Lifecycle status: Q. Why is the status Available?**
 
-<img width="1283" height="122" alt="image" src="https://github.com/user-attachments/assets/07e461df-43fc-4f22-9882-7b469898004d" />
+-->The PersistentVolume (PV) has been created successfully, but no PersistentVolumeClaim (PVC) is requesting storage from it yet. Since there is no matching PVC, Kubernetes marks the PV as Available, meaning it is ready to be claimed. When a compatible PVC is created (matching storage size, access mode, and storage class if applicable), Kubernetes binds the PVC to this PV, and the PV's status changes to Bound.
 
-Access modes to know:
+-->So Kubernetes marks it as: Available = ready to be claimed
+
+**Access modes to know:**
 - `ReadWriteOnce (RWO)` — read-write by a single node
 - `ReadOnlyMany (ROX)` — read-only by many nodes
 - `ReadWriteMany (RWX)` — read-write by many nodes
 
+**PV Lifecycle:**
+
+<img width="637" height="282" alt="image" src="https://github.com/user-attachments/assets/ed73199d-96cc-497e-a18e-d8f49014852e" />
+
 `hostPath` is fine for learning, not for production.
 
 **Verify:** What is the STATUS of the PV?
--->So status of the pv is Available
+-->So status of the pv is Available, Because the PersistentVolume exists but is not yet claimed by any PersistentVolumeClaim (PVC). Once a matching PVC is created, Kubernetes binds them together, and the PV status changes from Available to Bound.
 
 ---
 
@@ -93,26 +139,54 @@ Access modes to know:
 
 **Steps to follow:**
 
--->vi persistentvolumeclaim.yml      [persistentvolumeclaim.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-55/k8s-manifest-files/persistentvolumeclaim.yml)
+-->Great! Since your PV is already Available, the next step is to create a PersistentVolumeClaim (PVC) that matches it.
 
--->kubectl apply -f persistentvolumeclaim.yml
+Step 1: Create the PVC Manifest: vi persistentvolumeclaim.yml      
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+```
+Why 500Mi?
+PV capacity: 1Gi
+PVC request: 500Mi
 
--->kubectl get pvc
+-->So A PV can satisfy a PVC request if its capacity is greater than or equal to the requested storage.
 
--->kubectl get pv
+Step 2: Apply the PVC: kubectl apply -f persistentvolumeclaim.yml
+
+Step 3: Verify the PVC: kubectl get pvc
+
+Step 4: Verify the PV: kubectl get pv
+
+<img width="675" height="257" alt="image" src="https://github.com/user-attachments/assets/1e503e97-bfb5-437e-a81f-97d38643f19a" />
+
+<img width="1742" height="317" alt="image" src="https://github.com/user-attachments/assets/7977a030-cec2-44d3-bf4e-cfd20c859c3b" />
+
+Q. Why did the PV become Bound?
+
+-->Kubernetes automatically matched the PV and PVC because:
+
+<img width="712" height="202" alt="image" src="https://github.com/user-attachments/assets/dc257389-9dda-4437-89bc-654f131102a7" />
+
+Q: How does Kubernetes decide which PV to bind to a PVC?
+
+-->Kubernetes compares the PVC's requested storage, access modes, and (if specified) storage class with the available PVs. It selects a compatible PV that satisfies the request and binds them automatically.
 
 **Verify:** What does the VOLUME column in `kubectl get pvc` show?
 -->It shows demo-pv
-<img width="1372" height="603" alt="image" src="https://github.com/user-attachments/assets/9616ae4c-8da7-4151-96c8-a612be24d63e" />
+**Note:** Issue faced: That PVC status showed pending to resolve added following line of code: **storageClassName: ""** under **spec** 
 
-**Note:**
-
--->Issue faced: That PVC status showed pending to resolve added following line of code: **storageClassName: ""** under **spec** 
-
--->Note: #If we dont dfine it bydefault it shows storageClass=standard, So due to this we cas see PVC status as pending, Due to unmatch criteria with PV, So Kubernetes cannot match them
+**Note:** #If we dont dfine it bydefault it shows storageClass=standard, So due to this we cas see PVC status as pending, Due to unmatch criteria with PV, So Kubernetes cannot match them
 
 -->And important key Rule is PVC and PV must match on StorageClass (if specified)
-<img width="490" height="296" alt="image" src="https://github.com/user-attachments/assets/ea264e29-e22d-48bf-ba6b-9376298395e7" />
 
 ---
 
