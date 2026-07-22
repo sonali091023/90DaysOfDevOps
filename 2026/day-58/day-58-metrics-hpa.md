@@ -207,13 +207,21 @@ Step 2: Verify the HPA: kubectl get hpa
 
 -->Initially, the TARGETS column may show: <unknown>/50% This is normal because the Metrics Server may not have collected metrics yet.
 
+<img width="652" height="242" alt="image" src="https://github.com/user-attachments/assets/39302757-f9d8-40c3-97ce-103e1616111f" />
+
 Step 3: Wait for Metrics: kubectl get hpa
 
--->Detailed view: kubectl describe hpa php-apache
-<img width="1917" height="765" alt="image" src="https://github.com/user-attachments/assets/09741489-de0e-4efa-b7d2-6c362a60fbd5" />
+<img width="677" height="227" alt="image" src="https://github.com/user-attachments/assets/4837996f-51e3-4fb4-9b30-e864547c299d" />
 
-This scales up when average CPU exceeds 50% of requests, and down when it drops below.
-<img width="236" height="137" alt="image" src="https://github.com/user-attachments/assets/7e3b0a15-dbc0-4b9a-8404-472c111ce669" />
+Step 4: Describe the HPA: kubectl describe hpa php-apache
+
+<img width="760" height="470" alt="image" src="https://github.com/user-attachments/assets/dec696b6-d981-45cf-bda6-a19dc841404f" />
+
+<img width="1781" height="596" alt="image" src="https://github.com/user-attachments/assets/0e0f0536-5493-4464-8877-53e793c8bf9b" />
+
+Q. Why does HPA use CPU requests?
+
+<img width="675" height="367" alt="image" src="https://github.com/user-attachments/assets/5beab5c8-93d3-42c2-b8f9-73002d39be74" />
 
 **Verify:** What does the TARGETS column show?
 -->In the target column Current cpu usage is for example 20%, And traget is set to 50%, So here usage is within limit
@@ -230,24 +238,32 @@ This scales up when average CPU exceeds 50% of requests, and down when it drops 
 
 **Steps to follow:**
 
--->Start the load generator, It Continuously sends requests to your php-apache Service: kubectl run load-generator --image=busybox:1.36 --restart=Never -- /bin/sh -c "while true; do wget -q -O- http://php-apache; done"
+Step 1: Start the load generator, It Continuously sends requests to your php-apache Service: 
 
--->Watch HPA in real time: kubectl get hpa php-apache --watch
+-->kubectl run load-generator --image=busybox:1.36 --restart=Never -- /bin/sh -c "while true; do wget -q -O- http://php-apache; done"
+
+**What this does:**
+- Creates a temporary pod named load-generator.
+- Continuously sends HTTP requests to the php-apache Service.
+- This increases the CPU usage of the php-apache pods.
+
+Step 2: Verify the Load Generator: kubectl get pods
+
+Step 3: Watch the HPA: kubectl get hpa php-apache --watch
+
+<img width="691" height="317" alt="image" src="https://github.com/user-attachments/assets/97e96da5-eb09-4f1e-9f76-7e8163ba3339" />
 
 -->Observe scaling[1 to 3 minute]: Load increases CPU usage, When CPU > 50% → HPA scales up, Replicas increase gradually (1 → 2 → 3 → …), Eventually CPU stabilizes near 50% 
 
--->Watch pods scaling: kubectl get pods -w    [You’ll see new pods being created]
+Step 4: Watch the Pods Scale: kubectl get pods -w    [You’ll see new pods being created]
 
--->Stop the load: kubectl delete pod load-generator
+Step 6: Stop the Load: kubectl delete pod load-generator
 
--->Scale-down behavior: So here Pods won’t immediately reduce, Kubernetes waits ~5 minutes (stabilization window), This avoids rapid up/down scaling (thrashing) etc.
+<img width="1917" height="712" alt="image" src="https://github.com/user-attachments/assets/3ad2c27c-852a-4da4-81be-20c22153ed72" />
 
-<img width="1900" height="977" alt="image" src="https://github.com/user-attachments/assets/62465e97-367a-4487-a500-4917e4397b14" />
-<img width="1917" height="612" alt="image" src="https://github.com/user-attachments/assets/08acedab-e061-4653-bcfb-13df1f14061c" />
+Step 7: Observe Scale-Down: kubectl get hpa [So here Pods won’t immediately reduce, Kubernetes waits ~5 minutes (stabilization window), This avoids rapid up/down scaling (thrashing) etc.]
 
-
-**Verify:** How many replicas did HPA scale to under load?
-<img width="1451" height="112" alt="image" src="https://github.com/user-attachments/assets/74f671a4-7e7a-4e4f-a628-b206d91d67d3" />
+Note: The CPU usage will drop quickly, but the number of replicas will not decrease immediately. This is expected because Kubernetes uses a scale-down stabilization window (commonly 5 minutes) to avoid rapid scaling up and down. You do not need to wait for the scale-down to complete for this task.
 
 ---
 
