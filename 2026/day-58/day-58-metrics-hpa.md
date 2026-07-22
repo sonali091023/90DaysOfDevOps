@@ -275,17 +275,64 @@ Note: The CPU usage will drop quickly, but the number of replicas will not decre
 
 **Steps to follow:**
 
--->Delete the old (imperative) HPA: kubectl delete hpa php-apache     [This ensures you don’t have conflicting configurations]
+Step 1: Delete the Existing HPA: kubectl delete hpa php-apache    [This ensures you don’t have conflicting configurations]
 
--->Create HPA YAML manifest: vi hpa.yml       [hpa.yaml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-58/k8s-manifest-file/hpa.yaml)
+-->Then verify: kubectl get hpa [Expected: No resources found in default namespace.]
 
--->kubectl apply -f hpa.yml
+Step 2: Create the HPA Manifest: vi hpa.yml   
+```
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-apache
 
--->Verify configuration: kubectl describe hpa php-apache     [Here Look for Metrics (CPU 50%) & Behavior section (scaleUp / scaleDown rules)]
+  minReplicas: 1
+  maxReplicas: 10
 
-<img width="1192" height="292" alt="image" src="https://github.com/user-attachments/assets/a69c0345-444e-4839-b81c-824c5a26b9ee" />
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
 
-`autoscaling/v2` supports multiple metrics and fine-grained scaling behavior that the imperative command cannot configure.
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      selectPolicy: Max
+
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      selectPolicy: Max
+```
+Understanding the Manifest:
+
+<img width="657" height="677" alt="image" src="https://github.com/user-attachments/assets/acb567df-2cfc-447f-945a-1481ebcb5140" />
+<img width="682" height="447" alt="image" src="https://github.com/user-attachments/assets/17805776-2dac-4abb-8007-331eaf0db66b" />
+
+Step 3: Apply the Manifest: kubectl apply -f php-apache-hpa.yaml
+
+Step 4: Verify the HPA: kubectl get hpa
+
+Step 5: Describe the HPA: kubectl describe hpa php-apache
+
+<img width="652" height="436" alt="image" src="https://github.com/user-attachments/assets/cd81db91-f2fe-4852-98d0-dd428e980952" />
+
+<img width="1737" height="922" alt="image" src="https://github.com/user-attachments/assets/7de2218a-1d19-480e-ba14-4bafa7450840" />
 
 **Verify:** What does the `behavior` section control?
 
@@ -302,8 +349,6 @@ Note: The CPU usage will drop quickly, but the number of replicas will not decre
 -->policies → limits on how many pods can be added/removed per time
 
 **Note:** Without behavior → default scaling rules & With behavior → you control speed + stability of scaling
-
-
 
 ---
 
@@ -332,6 +377,8 @@ Delete the HPA, Service, Deployment, and load-generator pod. Leave the Metrics S
 
 -->kubectl get pods -n kube-system | grep metrics-serve
 <img width="1416" height="517" alt="image" src="https://github.com/user-attachments/assets/5dcde24a-264d-4d7e-98e9-c29e0b9ca7c9" />
+
+<img width="1535" height="575" alt="image" src="https://github.com/user-attachments/assets/57a5749d-7ff1-4fab-a0ae-984876095322" />
 
 ---
 
