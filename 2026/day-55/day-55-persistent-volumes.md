@@ -395,6 +395,8 @@ spec:
 
 Step 4: Verify the Data: kubectl exec -it dynamic-pod -- cat /data/message.txt
 
+<img width="1872" height="1037" alt="image" src="https://github.com/user-attachments/assets/a4b244b0-f79f-4638-837b-bdd3f3250c81" />
+
 You should see:
 - PVC is Bound
 - PV was created automatically by the StorageClass
@@ -440,7 +442,7 @@ Key Difference:
 
 -->kubectl get pv
 
-<img width="1407" height="628" alt="image" src="https://github.com/user-attachments/assets/c93b2c24-f472-47f5-aaa3-ca8e2fb5c114" />
+<img width="1897" height="972" alt="image" src="https://github.com/user-attachments/assets/323dc7d7-bf55-4244-814d-1721f62022b4" />
 
 **Verify:** Which PV was auto-deleted and which was retained? Why?
 
