@@ -25,32 +25,38 @@ Yesterday you set resource requests and limits. Today you put that to work. Inst
 
 **Steps to follow:**
 
--->Check if Metrics Server is already running: kubectl get pods -n kube-system | grep metrics-server
+Step 1: Check if Metrics Server is already installed: kubectl get pods -n kube-system | grep metrics-server
 
--->Install Metrics Server If using Minikube: minikube addons enable metrics-server
+Step 2: Install Metrics Server If using Minikube: minikube addons enable metrics-server
 
--->If using Kind / kubeadm: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+-->If using Kind / kubeadm: kubectl kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
--->Fix TLS issue (only for local clusters): 
+-->Step 3: Add --kubelet-insecure-tls (Only for Local Clusters): Use this only for local development (Kind, Minikube, kubeadm lab). Do NOT use it in production. 
 
 **Note:** Metrics Server may fail due to TLS verification in local setups, For that we need to Edit the deployment, We need to add below line of code,
-<img width="386" height="191" alt="image" src="https://github.com/user-attachments/assets/49a4ef8d-b679-485a-8f5f-9c751996173f" />
+
+-->Edit the deployment: kubectl edit deployment metrics-server -n kube-system
 
 -->Following line of code is critical: - --kubelet-insecure-tls
 
--->Save this chnages and exit from the file & Kubernetes will automatically restart the pod.
+<img width="665" height="557" alt="image" src="https://github.com/user-attachments/assets/db5caa29-f95a-4917-81a6-99669a745646" />
 
--->Wait and check again after some time: kubectl get pods -n kube-system | grep metrics-server
+Step 4: Wait for the Pod: kubectl get pods -n kube-system
 
--->Now Verify metrics check the node usage: kubectl top nodes 
+Step 5: Verify Metrics Server: 
 
--->Now Verify metrics check the pod usage: kubectl top pods -A 
+-->Check node metrics: kubectl top nodes
 
-<img width="1907" height="862" alt="image" src="https://github.com/user-attachments/assets/81bde262-bbfb-4191-ac3f-603c4e315319" />
-<img width="1910" height="866" alt="image" src="https://github.com/user-attachments/assets/03271269-6c9b-4e10-85c8-28eeac8338fc" />
-
+-->Check pod metrics: kubectl top pods -A
 
 **Note:** Running = container started, 0/1 = readiness probe failing, Adding --kubelet-insecure-tls fixes communication → pod becomes ready 
+
+Troubleshooting:
+
+<img width="722" height="406" alt="image" src="https://github.com/user-attachments/assets/12c787d3-9458-404f-8deb-3170534f69ae" />
+
+<img width="1912" height="862" alt="image" src="https://github.com/user-attachments/assets/60cc72d0-dec6-4197-9545-4b48a5eecb79" />
+<img width="1912" height="770" alt="image" src="https://github.com/user-attachments/assets/f8a3d196-8f58-467e-941b-8fe6590aaf78" />
 
 -->First, you begin by checking whether the Metrics Server is already running in your cluster. You do this by listing the pods in the kube-system namespace and filtering for “metrics-server.” If you see a running pod, it means the service is already installed, and you can move directly to verification. If nothing appears, it simply means you need to install it.
 
@@ -62,9 +68,6 @@ Yesterday you set resource requests and limits. Today you put that to work. Inst
 
 -->Finally, you verify that everything is working by running kubectl top nodes and kubectl top pods -A. These commands display real-time CPU and memory usage for nodes and pods. If you see actual values instead of errors, it confirms that the Metrics Server is working correctly. The CPU and memory numbers shown in kubectl top nodes are the final answer to the verification part of the task.
 
-**Verify:** What is the current CPU and memory usage of your node?
-<img width="1262" height="111" alt="image" src="https://github.com/user-attachments/assets/ee244bef-e1c8-4e8c-baf3-48ff4cb11eaf" />
-
 ---
 
 ### Task 2: Explore kubectl top
@@ -74,26 +77,51 @@ Yesterday you set resource requests and limits. Today you put that to work. Inst
 
 **Steps to follow:**
 
--->First, now that your Metrics Server is working, you can start exploring how to monitor resource usage using kubectl top. You begin by running kubectl top nodes, which shows CPU and memory usage of each node in your cluster. This gives you a high-level view of how heavily your cluster is being utilized.
+Step 1: View Node Resource Usage: kubectl top nodes
 
--->Check node resource usage: kubectl top nodes  [Note: This shows CPU and memory usage of your cluster node(s)]
+**Understanding the output:**
+- CPU(cores): Current CPU usage (m = millicores; 1000m = 1 CPU)
+- CPU%: Percentage of CPU currently in use.
+- MEMORY(bytes): Current RAM usage.
+- MEMORY%: Percentage of node memory currently in use.
 
--->Next, you run kubectl top pods -A, where -A means “all namespaces.” This command shows resource usage for every pod running in the cluster. You’ll see CPU usage (in millicores like 50m) and memory usage (in Mi or Gi). This helps you understand which applications are consuming resources.
+Step 2: View Resource Usage of All Pods: kubectl top pods -A
 
--->Check all pod usage: kubectl top pods -A      [Note: This lists CPU and memory usage for all pods across all namespaces]
+Understanding the output
+- NAMESPACE: Namespace where the pod is running.
+- NAME: Pod name.
+- CPU(cores): Current CPU usage.
+- MEMORY(bytes): Current memory usage.
 
--->Then, to make analysis easier, you run kubectl top pods -A --sort-by=cpu. This sorts all pods by CPU usage, from highest to lowest. Instead of scanning manually, this immediately shows you the most CPU-consuming pod at the top of the list.
+Step 3: Sort Pods by CPU Usage: kubectl top pods -A --sort-by=cpu [Note: This helps identify which pods are consuming the most CPU.]
 
--->Find highest CPU-consuming pod: kubectl top pods -A --sort-by=cpu   [Note: This sorts pods by CPU usage (highest at top)]
+-->We can also sort by memory: kubectl top pods -A --sort-by=memory
 
--->It’s important to understand that kubectl top shows real-time usage, not what you configured in your manifests (requests and limits). Requests/limits are what you allocate, while kubectl top shows what is actually being used. The data you see comes from the Metrics Server, which collects metrics from kubelets approximately every 15 seconds, so values may slightly change each time you run the command.
+<img width="1522" height="857" alt="image" src="https://github.com/user-attachments/assets/24bcb250-ee00-49b9-8312-67ca6885db96" />
 
--->Verify the metrics server is working fine or not: kubectl get pods -n kube-system | grep metrics-server
+Important Concepts:
 
-**Verify:** Which pod is using the most CPU right now?
+1. kubectl top shows real-time usage:
+<img width="657" height="177" alt="image" src="https://github.com/user-attachments/assets/ed14c161-91d7-409c-85af-50b6aea60827" />
 
--->Following pod "kube-apiserver-devops-cluster-control-plane" is using most of the cpu.
-<img width="1707" height="707" alt="image" src="https://github.com/user-attachments/assets/4111db0a-3190-4722-969b-a33688f9477d" />
+2. It does NOT show Requests or Limits: kubectl top reports actual usage, not the resource values configured in the pod spec.
+<img width="681" height="566" alt="image" src="https://github.com/user-attachments/assets/d01b0013-9b8d-465d-8299-d85e75739c3b" />
+
+3. Where does the data come from?:
+
+-->The Metrics Server:
+- Collects CPU and memory metrics from each node's kubelet.
+- Polls the kubelets approximately every 15 seconds.
+- Provides this data to the Kubernetes Metrics API.
+- kubectl top retrieves and displays these metrics.
+<img width="641" height="332" alt="image" src="https://github.com/user-attachments/assets/3013705b-4751-4086-909f-17aa6a7b5209" />
+
+**Key Takeaways:**
+- kubectl top nodes → Shows current CPU and memory usage for each node.
+- kubectl top pods -A → Shows current CPU and memory usage for all pods across namespaces.
+- kubectl top pods -A --sort-by=cpu → Helps identify CPU-intensive pods.
+- kubectl top reports live usage, not configured requests or limits.
+- Metrics are collected by the Metrics Server, which polls kubelets roughly every 15 seconds.
 
 ---
 
@@ -104,26 +132,60 @@ Yesterday you set resource requests and limits. Today you put that to work. Inst
 
 **Steps to follow:**
 
--->Create the Deployment manifest: vi php-apache.yaml [php-apache.yaml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-58/k8s-manifest-file/php-apache.yaml)
+Step 1: Create the Deployment Manifest: vi php-apache.yaml 
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-apache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-apache
+  template:
+    metadata:
+      labels:
+        app: php-apache
+    spec:
+      containers:
+      - name: php-apache
+        image: registry.k8s.io/hpa-example
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 200m
+```
+<img width="701" height="320" alt="image" src="https://github.com/user-attachments/assets/fde8a25c-643b-4867-8927-25e2822e026f" />
 
--->Apply the Deployment: kubectl apply -f php-apache.yaml
+Step 2: Apply the Deployment: kubectl apply -f php-apache.yaml
 
 -->kubectl get pods
 
--->Expose it as a Service: kubectl expose deployment php-apache --port=80
+Step 3: Verify the Deployment: kubectl get deployment
 
--->Check the service: kubectl get svc
+Step 4: Expose the Deployment as a Service: kubectl expose deployment php-apache --port=80 [This creates a ClusterIP Service named php-apache.]
 
--->Check CPU usage: kubectl top pods
+Step 5: Verify the Service: kubectl get svc
 
--->Ensure Metrics Server is running: kubectl get pods -n kube-system | grep metrics-server
+Step 6: Verify the CPU Request: kubectl describe pod <pod-name>
 
-<img width="1702" height="632" alt="image" src="https://github.com/user-attachments/assets/5eab9bbf-15aa-495f-a2e5-b1eecfbae8ad" />
+-->Alternatively, check the deployment YAML: kubectl get deployment php-apache -o yaml
 
-Without CPU requests, HPA cannot work — this is the most common HPA setup mistake.
+<img width="1812" height="442" alt="image" src="https://github.com/user-attachments/assets/9bab903c-7467-4284-b30d-38a14df28a48" />
+<img width="1477" height="975" alt="image" src="https://github.com/user-attachments/assets/2f3825cb-d13d-4f05-86bb-9f0b31176678" />
+<img width="1915" height="971" alt="image" src="https://github.com/user-attachments/assets/bd599a8b-4022-4fc3-9bfa-bc5ce5aa59a6" />
+<img width="1890" height="402" alt="image" src="https://github.com/user-attachments/assets/4610b985-22a1-4d84-930a-c2d2041cb2ca" />
 
 **Verify:** What is the current CPU usage of the Pod?
-<img width="1235" height="71" alt="image" src="https://github.com/user-attachments/assets/84af1470-0e6f-4fe9-8b56-7559bb34d3d0" />
+<img width="1342" height="347" alt="image" src="https://github.com/user-attachments/assets/15b1c88a-df0a-4526-a048-3b452c969841" />
+
+**Here:**
+- CPU(cores): 3m means the pod is currently using 3 millicores (0.003 CPU cores).
+- MEMORY(bytes): 18Mi means the pod is currently using 18 MiB of memory.
+
+-->When the php-apache application is idle, you'll usually see a low CPU usage (for example, 1m–10m). In the next HPA task, after generating load, you'll notice the CPU usage increase, which is what the Horizontal Pod Autoscaler uses to decide when to add more replicas.
 
 ---
 
@@ -134,13 +196,18 @@ Without CPU requests, HPA cannot work — this is the most common HPA setup mist
 
 **Steps to follow:**
 
--->Create HPA: kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+Step 1: Create the Horizontal Pod Autoscaler (HPA): kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
 
--->Check HPA status: kubectl get hpa
+**What this command does:**
+- --cpu-percent=50 → Target average CPU utilization is 50% of the CPU request.
+- --min=1 → Always keep at least 1 pod running.
+- --max=10 → Scale up to a maximum of 10 pods if needed.
 
--->Wait for metrics
+Step 2: Verify the HPA: kubectl get hpa
 
--->Check HPA status again: kubectl get hpa
+-->Initially, the TARGETS column may show: <unknown>/50% This is normal because the Metrics Server may not have collected metrics yet.
+
+Step 3: Wait for Metrics: kubectl get hpa
 
 -->Detailed view: kubectl describe hpa php-apache
 <img width="1917" height="765" alt="image" src="https://github.com/user-attachments/assets/09741489-de0e-4efa-b7d2-6c362a60fbd5" />
