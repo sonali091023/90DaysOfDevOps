@@ -22,30 +22,38 @@ Your Pods are running, but Kubernetes has no idea how much CPU or memory they ne
 
 **Steps to follow:**
 
--->Create the Pod manifest: vi pod-resources.yml  [pod-resources.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-57/k8s-manifest-files/pod-resources.yml)
+Step 1: Create the Pod manifest: vi pod-resources.yml  
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "250m"
+        memory: "256Mi"
+```
+Step 2: Apply the manifest: kubectl apply -f pod-resources.yml
 
--->Apply the pod: kubectl apply -f pod-resources.yml
+-->verify the pod running: kubectl get pods
 
--->Inspect the pod details: kubectl describe pod resource-demo
+Step 3: Inspect the Pod: kubectl describe pod resource-demo
 
-<img width="1227" height="977" alt="image" src="https://github.com/user-attachments/assets/f29282af-8fdf-45d6-8eed-c616675722e3" />
+<img width="572" height="232" alt="image" src="https://github.com/user-attachments/assets/68754cdc-74f9-4801-b0e9-cf9e36f2411a" />
 
-**Request & Limit class section:**
-<img width="171" height="162" alt="image" src="https://github.com/user-attachments/assets/db802edb-ef49-4893-9387-660569bf0c9e" />
+<img width="1732" height="972" alt="image" src="https://github.com/user-attachments/assets/2c50a825-55a9-4f55-85c4-dbc36c3b46e3" />
+<img width="1885" height="467" alt="image" src="https://github.com/user-attachments/assets/8d86cc04-8920-4be5-aa84-acfdbf45ab9d" />
 
-**QoS [Quality of the service] class section:** **QoS Class: Burstable** 
+QoS Classes: Lets understand why it is burstable, So since Request is not equal to Limit thats why QoS is burstable.
 
--->Lets understand why it is burstable, So since Request is not equal to Limit thats why QoS is burstable.
-<img width="673" height="181" alt="image" src="https://github.com/user-attachments/assets/a9829864-e6c6-4d44-8ecb-d5656df0c6b5" />
-
--->**Quick QoS cheatsheet:**
-<img width="652" height="188" alt="image" src="https://github.com/user-attachments/assets/4cfa4a23-ada7-43a1-95a8-9a6f4926d4af" />
-
-CPU is in millicores: `100m` = 0.1 CPU. Memory is in mebibytes: `128Mi`.
-
-**Requests** = guaranteed minimum (scheduler uses this for placement). **Limits** = maximum allowed (kubelet enforces at runtime).
-
-**Verify:** What QoS class does your Pod have?
+<img width="621" height="161" alt="image" src="https://github.com/user-attachments/assets/39c31fa6-1c59-4da1-8ef7-fa4ce759d7cd" />
 
 -->Pods class is burstable because request and limit are not equal, This QoS class matters because it decides eviction priority during resource pressure, And we can see eviction order as below,
 
@@ -65,6 +73,11 @@ CPU is in millicores: `100m` = 0.1 CPU. Memory is in mebibytes: `128Mi`.
 
 -->Burstable Pods are allowed to use extra resources when available, but they are not fully guaranteed like Guaranteed Pods.
 
+Note:
+- equests = Minimum resources Kubernetes reserves.
+- Limits = Maximum resources the container can use.
+- Since requests and limits are different, Kubernetes assigns the Pod the Burstable QoS class.
+
 ---
 
 ### Task 2: OOMKilled — Exceeding Memory Limits
@@ -74,15 +87,42 @@ CPU is in millicores: `100m` = 0.1 CPU. Memory is in mebibytes: `128Mi`.
 
 **Steps to follow:**
 
--->vi oom-demo.yml    [oom-demo.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-57/k8s-manifest-files/oom-demo.yml)
+Step 1: Create the Pod manifest: vi oom-demo.yml    
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: oom-pod
+spec:
+  containers:
+  - name: stress
+    image: polinux/stress
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "200M", "--vm-hang", "1"]
+    resources:
+      limits:
+        memory: "100Mi"
+```
+Note: This container tries to allocate 200 MB of memory, but Kubernetes only allows 100 MiB.
 
--->kubectl apply -f oom-demo.yml
+Step 2: Apply the Pod: kubectl apply -f oom-demo.yml
 
--->kubectl get pods -w
+Step 3: Watch the Pod: kubectl get pods -w
 
--->kubectl describe pod oom-demo
-<img width="1063" height="941" alt="image" src="https://github.com/user-attachments/assets/e0eb53c0-6d64-428c-95bd-01d8cd08dc58" />
-<img width="1596" height="492" alt="image" src="https://github.com/user-attachments/assets/0dc6b477-178e-4990-8b18-3516cf2143f2" />
+<img width="682" height="210" alt="image" src="https://github.com/user-attachments/assets/79071b07-95a2-4074-b8d6-de500b3002e8" />
+
+Step 4: Verify the reason: kubectl describe pod oom-demo
+
+<img width="656" height="265" alt="image" src="https://github.com/user-attachments/assets/b860a45b-5b25-487d-abe2-66a955ed42fa" />
+
+<img width="1757" height="967" alt="image" src="https://github.com/user-attachments/assets/211bd798-5862-4e9a-8ccd-ef975a61996d" />
+
+<img width="1900" height="962" alt="image" src="https://github.com/user-attachments/assets/97547fd2-90d7-499d-a3b5-53e945636558" />
+
+Note:
+- Memory limit: 100Mi
+- Memory requested by the application: 200M
+- Result: Container is OOMKilled because it exceeded its memory limit.
 
 CPU is throttled when over limit. Memory is killed — no mercy.
 
@@ -91,18 +131,11 @@ Check `kubectl describe pod` for `Reason: OOMKilled` and `Exit Code: 137` (128 +
 **Goal:** Force a container to exceed memory → Kubernetes kills it (OOMKilled)
 
 **Verify:** What exit code does an OOMKilled container have?
--->For OOMKilled container exit code: 137
+-->For OOMKilled container exit code: 137. So here pod gets stop running & that is happend because Memory is strictly enforced, CPU → slows down (throttling), Memory → immediate kill, No warning. No gradual slowdown.
 
--->So here pod gets stop running & that is happend because Memory is strictly enforced, CPU → slows down (throttling), Memory → immediate kill, No warning. No gradual slowdown.
+**Q. Difference between CPU limit vs Memory limit?**
 
--->Exit code 137 because,
-<img width="252" height="147" alt="image" src="https://github.com/user-attachments/assets/bbe78ea3-ec18-4c13-a45d-a199f13b91bb" />
-
-**Difference between CPU limit vs Memory limit?**
-
--->**CPU** → throttled (container slows down)
-
--->**Memory** → OOMKilled (container terminated immediately)
+-->**CPU** → throttled (container slows down) & **Memory** → OOMKilled (container terminated immediately)
 
 ---
 
@@ -115,14 +148,37 @@ Check `kubectl describe pod` for `Reason: OOMKilled` and `Exit Code: 137` (128 +
 
 **Steps to follow:**
 
--->Create the pod manifest: pending-pod.yml     [pending-pod.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-57/k8s-manifest-files/pending-pod.yml)
+Step 1: Create the Pod manifest: pending-pod.yml     
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pending-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    resources:
+      requests:
+        cpu: "100"
+        memory: "128Gi"
+```
+Note: This Pod requests 100 CPU cores and 128 GiB RAM, which is much more than a typical cluster has.
 
--->kubectl apply -f pending-pod.yml
+Step 2: Apply the manifest: kubectl apply -f pending-pod.yml
 
--->kubectl get pods
+Step 3: Check the Pod status: kubectl get pods [Expected: The Pod remains Pending because Kubernetes cannot find a node with enough resources.]
 
--->kubectl describe pod pending-demo
-<img width="1911" height="967" alt="image" src="https://github.com/user-attachments/assets/22cecd2f-7bce-41ed-8fea-9d2443ad0a0f" />
+Step 4: Find the reason: kubectl describe pod pending-demo
+
+<img width="546" height="136" alt="image" src="https://github.com/user-attachments/assets/cc117dde-7978-40a9-9c06-70792f5adb4d" />
+
+<img width="1902" height="971" alt="image" src="https://github.com/user-attachments/assets/96411b2b-0e93-44ca-9750-51917ff03485" />
+
+Note:
+- The Pod requests more resources than the cluster has.
+- The scheduler cannot place the Pod on any node.
+- The Pod stays in the Pending state until enough resources become available.
 
 **Verify:** What event message does the scheduler produce?
 --> Warning  FailedScheduling  36s   default-scheduler  0/1 nodes are available: 1 Insufficient cpu, 1 Insufficient memory. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
@@ -132,21 +188,11 @@ Check `kubectl describe pod` for `Reason: OOMKilled` and `Exit Code: 137` (128 +
 **Q. Why is Pod stuck in Pending?**
 -->Because the requested resources exceed node capacity, so the scheduler cannot place the Pod. 
 
--->k8S says impossible for the following resource, 
-<img width="582" height="262" alt="image" src="https://github.com/user-attachments/assets/e813cfe5-a4c9-4b13-93f0-2479e0382490" />
-
--->**What the scheduler actually does:** The scheduler doesn’t guess or adjust — it strictly checks:, “Is there any single node that can satisfy this request fully?”
-<img width="712" height="328" alt="image" src="https://github.com/user-attachments/assets/c8213f3f-e8f3-4e87-bd87-b09062179f71" />
-
 -->**Key Rule (VERY IMPORTANT):** A Pod must fit completely on ONE node, Kubernetes does NOT do this: Split CPU across nodes & Combine memory from multiple nodes
 
 -->So what happened is, Scheduler checks Node-1 → Not enough CPU, Node-2 → Not enough memory, Node-3 → Same problem, As a Result: No node can fully satisfy the request → Pod stays Pending
 
 -->K8S is behaves this way because Requests = guaranteed resources & Kubernetes is saying “If I schedule this Pod, I must guarantee it gets 100 CPU & 128GB RAM.”, Since it can’t guarantee, it refuses to run it.
-
--->Simple example:
-<img width="350" height="337" alt="image" src="https://github.com/user-attachments/assets/5b6f4611-3b67-46e0-8bbc-113c5e1f5cce" />
-**Note:** It’s impossible because no single node has enough resources to satisfy the Pod’s requested minimum.
 
 ---
 
@@ -159,16 +205,51 @@ A liveness probe detects stuck containers. If it fails, Kubernetes restarts the 
 
 **Steps to follow:**
 
--->vi liveness-demo.yml    [liveness-demo.yml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-57/k8s-manifest-files/liveness-demo.yml)
+Step 1: Create the Pod manifest: vi liveness-demo.yml 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-pod
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        touch /tmp/healthy
+        sleep 30
+        rm -f /tmp/healthy
+        while true; do sleep 5; done
+    livenessProbe:
+      exec:
+        command:
+          - cat
+          - /tmp/healthy
+      periodSeconds: 5
+      failureThreshold: 3
+```
+Step 2: Apply the manifest: kubectl apply -f liveness-demo.yml
 
--->kubectl apply -f liveness-demo.yml
+Step 3: Watch the Pod: kubectl get pods -w
+
+<img width="647" height="367" alt="image" src="https://github.com/user-attachments/assets/97b9ebe7-fba3-41c2-bab4-051b6498cac8" />
 
 -->kubectl get pods
 
--->kubectl get pods -w
-<img width="1120" height="715" alt="image" src="https://github.com/user-attachments/assets/fb41f24d-6652-4481-95b9-b1adbf33b5cc" />
-<img width="1357" height="970" alt="image" src="https://github.com/user-attachments/assets/f06a1a9b-6a74-403b-919a-3254ddc206f8" />
-<img width="1343" height="223" alt="image" src="https://github.com/user-attachments/assets/f6320844-08d0-4a57-ba11-0988715fd6ed" />
+<img width="1461" height="477" alt="image" src="https://github.com/user-attachments/assets/da70b47c-7c7a-4f58-9bfa-2b996c8e2f5d" />
+
+Step 4: Verify the restart: kubectl describe pod liveness-pod
+
+<img width="1712" height="962" alt="image" src="https://github.com/user-attachments/assets/9259549e-2ef2-4604-a472-e62be416c51f" />
+<img width="1895" height="447" alt="image" src="https://github.com/user-attachments/assets/8cee73e6-25f0-4862-ba4a-f829a8c163e4" />
+
+Note: 
+- Liveness Probe checks whether the container is still healthy.
+- If the probe fails 3 consecutive times (failureThreshold: 3), Kubernetes restarts the container automatically.
+- This is useful for recovering applications that become stuck or unresponsive.
 
 **Note:** Restart count will keep increasing (1, 2, 3...) every time the probe fails again after restart. 
 -->Liveness probe = “Is container alive?”, If failed → Kubernetes restarts container
@@ -177,7 +258,6 @@ A liveness probe detects stuck containers. If it fails, Kubernetes restarts the 
 -->container restarted for 3 times
 
 Q. When do we use liveness probe?
-
 -->To detect stuck or dead containers and automatically restart them.
 
 ---
@@ -193,25 +273,60 @@ A readiness probe controls traffic. Failure removes the Pod from Service endpoin
 
 **Steps to follow:**
 
--->Create the pod manifest: vi readiness-pod.yaml   [nginx-readiness.yaml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-57/k8s-manifest-files/nginx-readiness.yaml)
-
--->create the pod: kubectl apply -f nginx-readniss.yml
+Step 1: Create the Pod manifest: vi readiness-pod.yaml   
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      periodSeconds: 5
+      failureThreshold: 3
+```
+Step 2: Apply the manifest: kubectl apply -f nginx-readiness.yml
 
 -->Check the pods: kubectl get pods
 
--->Expose the Pod as a Service: kubectl expose pod nginx-readiness --port=80 --name=readiness-svc
-
--->Check the service: kubectl get svc
+Step 3: Expose the Pod as a Service: kubectl expose pod nginx-readiness --port=80 --name=readiness-svc
 
 -->Verify the Endpoint Exists: kubectl get endpoints readiness-svc
 
+-->Check the service: kubectl get svc
+
 **Note:** Important: here we can see the Pod IP is present That means the readiness probe is passing, Kubernetes considers the Pod ready to receive traffic
 
--->Break the Readiness Probe by Deleting the nginx homepage file: kubectl exec nginx-readniess -- rm /usr/share/nginx/html/index.html
+Step 4: Break the Readiness Probe by Deleting the nginx homepage file: kubectl exec nginx-readiness -- rm /usr/share/nginx/html/index.html
+
+Step 5: Wait about 15 seconds: kubectl get pods
+
+-->Check the endpoints again: kubectl get endpoints readiness-svc
+
+-->verify: kubectl describe pod readiness-pod
 
 **Note:** Why this works: nginx serves /usr/share/nginx/html/index.html, Your readiness probe checks /, Once the file is deleted, nginx returns 404 Readiness probe fails
-<img width="221" height="202" alt="image" src="https://github.com/user-attachments/assets/efb69434-f727-44db-bc23-6988b4654b30" />
 -->Kubernetes periodically sends an HTTP request to: http://<pod-ip>:80/ & If nginx responds successfully, the Pod is considered Ready.
+
+<img width="1752" height="971" alt="image" src="https://github.com/user-attachments/assets/339e3b09-43cf-48bc-8c95-d941160fdc94" />
+<img width="1672" height="967" alt="image" src="https://github.com/user-attachments/assets/0550f89b-3ed8-46db-b7a4-439c2fcf4b11" />
+<img width="1907" height="221" alt="image" src="https://github.com/user-attachments/assets/66499834-9df7-43d8-9aab-5e13a3244e02" />
+
+Note: 
+- The Pod is still Running.
+- The READY column changes to 0/1.
+- The Service has no endpoints, so it won't send traffic to the Pod.
+- RESTARTS remains 0 because a readiness probe does not restart the container.
+
+Note: 
+- Readiness Probe determines whether a Pod is ready to receive traffic.
+- On failure, the Pod is removed from the Service endpoints.
+- The container continues running and is not restarted.
 
 **Step-by-Step Internal Flow:**
 
@@ -235,18 +350,12 @@ Possibility B — Directory Handling
 
 -->What Happens Internally After Failure is, Kubernetes does NOT kill the container, Instead It only changes routing state
 Before failure
-<img width="325" height="353" alt="image" src="https://github.com/user-attachments/assets/65fa4f6c-07f2-4b5e-8584-86cee5c5422a" />
 
 -->Container Is NOT Restarted, Because readiness probes are NOT health-repair mechanisms, Their job is only: "Should this Pod receive traffic?" NOT: "Should this container be restarted?" That restart behavior belongs to: livenessProbe
-<img width="547" height="170" alt="image" src="https://github.com/user-attachments/assets/e0fa8e6e-0c1c-411f-822f-967e7b682e15" />
 
 -->Wait About 15 Seconds & then continuously watch the pod: kubectl get pods -w
 
 -->Verify Endpoints Are Removed: kubectl get endpoints readiness-svc
-
-<img width="1648" height="852" alt="image" src="https://github.com/user-attachments/assets/216c17a6-3487-4e29-986f-2e0777e2f37a" />
-<img width="1512" height="967" alt="image" src="https://github.com/user-attachments/assets/01c3c5d2-9823-4f51-93ea-2f8a3b5ae043" />
-<img width="1907" height="482" alt="image" src="https://github.com/user-attachments/assets/b371faa5-fd37-47af-96f2-d8d5cc66dd76" />
 
 **Verify:** When readiness failed, was the container restarted?
 -->No, Container not restarted when readniess failed.
@@ -259,44 +368,74 @@ Before failure
 
 **Note:** Readiness probes control traffic flow to Pods. When a readiness probe fails, Kubernetes removes the Pod from Service endpoints but does not restart the container. Liveness probes are responsible for restarting unhealthy containers.
 
-<img width="370" height="367" alt="image" src="https://github.com/user-attachments/assets/c1bd7169-2d02-4c0c-806f-d14b13728771" />
-
 ---
 
 ### Task 6: Startup Probe
 A startup probe gives slow-starting containers extra time. While it runs, liveness and readiness probes are disabled.
 
-1. Write a Pod manifest where the container takes 20 seconds to start (e.g., `sleep 20 && touch /tmp/started`)
-2. Add a `startupProbe` checking for `/tmp/started` with `periodSeconds: 5` and `failureThreshold: 12` (60 second budget)
-3. Add a `livenessProbe` that checks the same file — it only kicks in after startup succeeds
-
-**Goal of This Exercise:** You will learn: why startup probes exist, how they protect slow-starting containers, how startup probes interact with liveness probes, why improper probe timing causes restart loops etc.
-<img width="461" height="251" alt="image" src="https://github.com/user-attachments/assets/56c08115-ede4-4441-a0c8-e48e8e60b410" />
--->Scenario: Your container will sleep for 20 seconds then create a file: /tmp/started, The startup probe checks for this file.
+Write a Pod manifest where the container takes 20 seconds to start (e.g., sleep 20 && touch /tmp/started)
+Add a startupProbe checking for /tmp/started with periodSeconds: 5 and failureThreshold: 12 (60 second budget)
+Add a livenessProbe that checks the same file — it only kicks in after startup succeeds
+Verify: What would happen if failureThreshold were 2 instead of 12?
 
 **Steps to follow:**
 
--->Create the Pod Manifest: vi startup-probe.yaml  [startup-probe.yaml](https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-57/k8s-manifest-files/startup-probe.yaml)
+Step 1: Create the Pod manifest: vi startup-probe.yaml  
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: startup-probe-pod
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        sleep 20
+        touch /tmp/started
+        while true; do sleep 5; done
+
+    startupProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/started
+      periodSeconds: 5
+      failureThreshold: 12
+
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/started
+      periodSeconds: 5
+      failureThreshold: 3
+```
 
 -->Understand the Container Command
-<img width="345" height="530" alt="image" src="https://github.com/user-attachments/assets/f8a85bfd-07ae-4a6a-b1ad-b470585c5866" />
+- Application Becomes Ready: touch /tmp/started Now the file exists, This represents: Application finished startup
+- Keep Container Running: sleep 3600 [Otherwise container would exit immediately.]
 
--->Application Becomes Ready: touch /tmp/started Now the file exists, This represents: Application finished startup
+Step 2: Apply the manifest: kubectl apply -f startup-probe.yaml
 
--->Keep Container Running: sleep 3600 [Otherwise container would exit immediately.]
+Step 3: Watch the Pod: kubectl get pods -w
 
--->Understand the Startup Probe
-<img width="253" height="392" alt="image" src="https://github.com/user-attachments/assets/c1f105b8-f79d-400f-89a0-9918478fbefc" />
-
--->Calculate the Startup Budget: 
-<img width="386" height="391" alt="image" src="https://github.com/user-attachments/assets/b8a8469e-428a-4d4d-8e75-5e2e3368735c" />
-
--->Apply the Manifest: kubectl apply -f startup-probe.yaml
-
--->Watch the Pod: kubectl get pods -w
+<img width="640" height="240" alt="image" src="https://github.com/user-attachments/assets/bc3ed769-3efe-4da3-99b0-0dd1b2653164" />
+<img width="1305" height="402" alt="image" src="https://github.com/user-attachments/assets/8d3a414f-4b28-4a8c-9592-f9ff330ef4e4" />
+  
+Note:
+- Startup Probe gives slow-starting applications extra time.
+- Liveness and Readiness probes are disabled until the startup probe succeeds.
+- In this task:
+  - failureThreshold: 12 with periodSeconds: 5 gives a 60-second startup window (12 × 5 = 60), so a 20-second startup succeeds.
+  - failureThreshold: 2 gives only a 10-second startup window, causing repeated restarts and a CrashLoopBackOff.
 
 -->Wait ~20 Seconds: /tmp/started the startup probe succeeds, Now Kubernetes says: Startup complete, At this moment: startup probe stops running, liveness probe becomes active, readiness probe would become active (if present) & Pod becomes: 1/1 Running
-<img width="526" height="530" alt="image" src="https://github.com/user-attachments/assets/7071678c-8a54-428b-a78a-25958e1733ea" />
+
+Step 4: Verify: kubectl describe pod startup-probe-pod [You'll see the Startup Probe succeeds first. Only after that does the Liveness Probe begin running.]
 
 --> Verify Startup Probe Events: kubectl describe pod startup-demo [So here Look at Events section Initially you may see: Startup probe failed for the first few checks. That is expected because: /tmp/started does not exist yet. After 20 seconds: probe succeeds. Container is NOT restarted because failures stayed within the allowed budget.
 
@@ -306,15 +445,18 @@ Startup probes prevent this.
 **Note:** A startup probe is used for slow-starting applications. While the startup probe is running, Kubernetes disables liveness and readiness probes. If the startup probe succeeds, normal probes begin. If failureThreshold is too low, Kubernetes may restart the container before startup completes, causing restart loops or CrashLoopBackOff.
 
 **Verify:** What would happen if `failureThreshold` were 2 instead of 12?
+
 -->If failureThreshold were 2 instead of 12, Kubernetes would give the container only 10 seconds to start because the startup probe runs every 5 seconds. However, the application needs 20 seconds to finish startup and create the /tmp/started file. Since the file would still not exist after 10 seconds, the startup probe would fail twice, Kubernetes would think the container failed to start, and it would restart the container. After restarting, the 20-second startup process begins again from the beginning, causing the container to restart repeatedly and eventually enter CrashLoopBackOff.
 
-<img width="1260" height="407" alt="image" src="https://github.com/user-attachments/assets/6a72c960-10d2-486c-bddc-12e280cc399f" />
+<img width="652" height="527" alt="image" src="https://github.com/user-attachments/assets/03fcedea-1de3-45da-ac00-e15f51c39d76" />
   
 ---
 
 ### Task 7: Clean Up
 Delete all pods and services you created.
-<img width="1067" height="477" alt="image" src="https://github.com/user-attachments/assets/5a9a2ec2-2671-4282-9037-3d2cc8b44dc9" />
+
+<img width="1500" height="822" alt="image" src="https://github.com/user-attachments/assets/986adc7c-0581-4f9c-b334-305df84c8458" />
+<img width="1541" height="557" alt="image" src="https://github.com/user-attachments/assets/4034cb43-f7ab-43e1-8275-205568c09c4e" />
 
 ---
 
