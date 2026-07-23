@@ -340,28 +340,69 @@ Verify: After installing, 3 replicas? After upgrading, 5?
 
 Create Your Own Chart:
 
-Step 1: Create a New Helm Chart: helm create my-app 
--->ls
--->cd my-app
--->ls
--->Explore Structure: 
-<img width="551" height="147" alt="image" src="https://github.com/user-attachments/assets/e8e44582-4fb9-4804-a68e-a4c6165f347c" />
--->Understand Templates:
-<img width="531" height="267" alt="image" src="https://github.com/user-attachments/assets/90d1be69-d6c3-4b72-841b-36a57d23ee55" />
--->Edit values.yaml file, Add beow line of code:
-<img width="177" height="127" alt="image" src="https://github.com/user-attachments/assets/ebf455ea-9ff1-456f-8cb2-1a67cdd7b6cb" />
--->Validate Chart: helm lint my-app
--->Preview (Dry Run): helm template my-release ./my-app            [This shows generated Kubernetes YAML without deploying]
--->Install Chart: helm install my-release ./my-app
--->Upgrade Release: helm upgrade my-release ./my-app --set replicaCount=5
--->After Install (should be 3 replicas): kubectl get pods           [You should see 3 Pods]
--->After Upgrade (should be 5 replicas): kubectl get pods           [Now you should see 5 Pods]
+Step 1: Create a New Helm Chart: helm create my-app  [Expected: This generates a complete Helm chart structure.]
 
-<img width="942" height="965" alt="image" src="https://github.com/user-attachments/assets/50852fa0-312a-44d4-b028-c4416edf8baf" />
-<img width="1247" height="977" alt="image" src="https://github.com/user-attachments/assets/9f0c4e2e-9b9a-4487-b41a-4d956b40e735" />
-<img width="1217" height="417" alt="image" src="https://github.com/user-attachments/assets/a9473203-112d-4120-8b76-662188174fc6" />
+Step 2: Explore the Chart Directory: tree my-app
 
--->So here You created your own Helm chart, customized it using values, previewed it safely, deployed it, and then updated it — all using Helm instead of writing raw YAML.
+Step 3: Understand the Important Files: 
+
+1. chart.yml: cat my-app/Chart.yaml
+
+<img width="692" height="511" alt="image" src="https://github.com/user-attachments/assets/6e9bb934-9281-4d36-8421-ce140512e7db" />
+
+2. valuse.yml: cat my-app/values.yaml
+
+<img width="701" height="386" alt="image" src="https://github.com/user-attachments/assets/9d34cbbe-9493-47c5-9bcf-f3ef91bb67df" />
+
+deployment.yml: cat my-app/templates/deployment.yaml
+
+<img width="657" height="382" alt="image" src="https://github.com/user-attachments/assets/f0b47be2-d7cb-438c-a10b-35b7186fc44a" />
+
+Step 4: Understand Go Template Syntax: Some common Helm template expressions:
+
+<img width="630" height="700" alt="image" src="https://github.com/user-attachments/assets/ca56bb2b-1e40-4e59-be7a-552400a4ad08" />
+<img width="642" height="231" alt="image" src="https://github.com/user-attachments/assets/42d64bce-0882-4fab-93c1-8af62749bc43" />
+
+Step 5: Edit values.yaml: nano my-app/values.yaml edit it:
+```
+replicaCount: 3
+
+image:
+  repository: nginx
+  tag: "1.25"
+  pullPolicy: IfNotPresent
+```
+Step 6: Validate the Chart: helm lint my-app [Expected: This checks for template errors.]
+
+Step 7: Preview the Generated YAML: Before installing, render the manifests: helm template my-release ./my-app
+
+-->Nothing is created in the cluster yet—this is just a preview.
+
+Step 8: Install the Chart: helm install my-release ./my-app
+
+Step 9: Verify the Installation: kubectl get pods
+
+-->check deployment: kubectl get deployment
+
+Step 10: Upgrade the Chart: Increase the replicas to 5 without editing the file: helm upgrade my-release ./my-app --set replicaCount=5
+
+Step 11: Verify the Upgrade: Check the Deployment: kubectl get deployment
+
+-->Check the pods: kubectl get pods
+
+Check the Applied Values: helm get values my-release [Expected: This confirms the override from --set.]
+
+Chart Workflow: 
+
+<img width="447" height="517" alt="image" src="https://github.com/user-attachments/assets/e71d3044-e5ed-409c-bb0d-a922bc30a138" />
+
+Verification:
+
+-->After installing: kubectl get deployment
+
+-->After upgrading: kubectl get deployment
+
+-->kubectl get pods
 
 **Verify:** After installing, 3 replicas? After upgrading, 5?
 -->After installing 3 replicas, 3pods will display & After upgrading to 5 replicas we can see 5 pods
