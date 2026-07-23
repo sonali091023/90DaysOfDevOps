@@ -392,17 +392,14 @@ Step 11: Verify the Upgrade: Check the Deployment: kubectl get deployment
 
 Check the Applied Values: helm get values my-release [Expected: This confirms the override from --set.]
 
+<img width="1312" height="977" alt="image" src="https://github.com/user-attachments/assets/822c86d5-4263-4c67-b97d-e6f749e00e4f" />
+<img width="1122" height="972" alt="image" src="https://github.com/user-attachments/assets/cc19087b-3b09-4d08-9eb4-f6b0d3088858" />
+<img width="1702" height="792" alt="image" src="https://github.com/user-attachments/assets/ee17ce95-0f08-48ea-90fd-a86d004b3072" />
+<img width="1372" height="270" alt="image" src="https://github.com/user-attachments/assets/f70f085a-9e0d-4e4e-8a77-57b88bf7b925" />
+
 Chart Workflow: 
 
 <img width="447" height="517" alt="image" src="https://github.com/user-attachments/assets/e71d3044-e5ed-409c-bb0d-a922bc30a138" />
-
-Verification:
-
--->After installing: kubectl get deployment
-
--->After upgrading: kubectl get deployment
-
--->kubectl get pods
 
 **Verify:** After installing, 3 replicas? After upgrading, 5?
 -->After installing 3 replicas, 3pods will display & After upgrading to 5 replicas we can see 5 pods
@@ -414,18 +411,38 @@ Verification:
 2. Remove chart directory and values file
 3. Use `--keep-history` if you want to retain release history for auditing
 
-**Steps to follow:**
--->Uninstall All Helm Releases: helm list
--->Then uninstall all following,
-helm uninstall my-release && helm uninstall my-nginx && helm uninstall nginx-set && helm uninstall nginx-file
--->If you want to keep history (for auditing): helm uninstall my-release --keep-history
--->Remove Chart Files: rm -rf my-app && rm -f custom-values.yaml
--->Verify Cleanup: helm list OR helm list -A
+Verify: Does helm list show zero releases?
 
-<img width="977" height="311" alt="image" src="https://github.com/user-attachments/assets/f29ff9d6-2887-4b43-a403-1e2e569289aa" />
+**Steps to follow:**
+
+-->Great! This is the final Helm task. The goal is to remove all Helm releases and clean up your local files.
+
+Step 1: List All Helm Releases: Before uninstalling, see what releases exist: helm list
+
+Step 2: Uninstall Each Release: 
+- helm uninstall my-nginx     [Note: To Keep Release History run command: helm uninstall my-nginx --keep-history]
+- helm uninstall nginx-set
+- helm uninstall nginx-values
+- helm uninstall my-release
+
+Note: Only uninstall the releases that actually exist in your cluster. You can get their names from helm list.
+
+Step 3: Verify Kubernetes Resources Are Removed: Check that the resources created by Helm have been deleted: kubectl get all
+
+Step 4: Remove the Local Chart Directory: rm -rf my-app 
+
+-->to verify: ls
+
+Step 5: Remove the Custom Values File: rm -f custom-values.yaml
+
+-->to verify: ls
+
+Step 6: Verify All Releases Are Gone: helm list
 
 **Verify:** Does `helm list` show zero releases?
 -->Yes
+
+<img width="1347" height="417" alt="image" src="https://github.com/user-attachments/assets/d06d732b-9d19-483c-9316-36b57fae08b9" />
 
 ---
 
