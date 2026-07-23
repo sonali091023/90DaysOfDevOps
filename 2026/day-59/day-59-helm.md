@@ -19,30 +19,63 @@ Over the past eight days you have written Deployments, Services, ConfigMaps, Sec
 1. Install Helm (brew, curl script, or chocolatey depending on your OS)
 2. Verify with `helm version` and `helm env`
 
+Three core concepts:
+
+Chart — a package of Kubernetes manifest templates
+Release — a specific installation of a chart in your cluster
+Repository — a collection of charts (like a package repo)
+Verify: What version of Helm is installed?
+
 **Steps to follow:**
 
-**1. Install Helm On Linux:**
--->curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+Step 1: Install Helm:
 
-**2. Install Helm On macOS:** 
--->brew install helm
+-->Install Helm On Linux: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-**3. Install Helm On Windows:**
--->choco install kubernetes-helm
+-->Install Helm On macOS: brew install helm
 
--->Verify the installed Helm: helm version
+-->Install Helm On Windows: choco install kubernetes-helm
+
+Step 2: Verify the Installation: helm version
 
 -->Now check Helm environment: helm env
-<img width="1512" height="687" alt="image" src="https://github.com/user-attachments/assets/f9c1e7a9-410a-4ed7-8c7c-d7be5bfbc37a" />
 
-Three core concepts:
-- **Chart** — a package of Kubernetes manifest templates
-- **Release** — a specific installation of a chart in your cluster
-- **Repository** — a collection of charts (like a package repo)
+Step 3: Understand the Three Core Concepts: 
 
-**Verify:** What version of Helm is installed?
--->v3.20.2
-<img width="1356" height="46" alt="image" src="https://github.com/user-attachments/assets/46d1d02c-0375-4c78-83f6-c359a729bfa8" />
+1. Chart: A Chart is a package containing Kubernetes resource templates.
+
+<img width="661" height="557" alt="image" src="https://github.com/user-attachments/assets/0039ca44-70e1-451c-86c2-ff79f611b6cf" />
+
+2. Release: A Release is a running instance of a chart inside your Kubernetes cluster.
+
+<img width="677" height="642" alt="image" src="https://github.com/user-attachments/assets/5055ac40-fd68-40c0-af9a-c068a8684e79" />
+
+3. Repository: A Repository is a collection of Helm charts, similar to:
+- apt repositories for Ubuntu
+- npm registry for Node.js
+- Docker Hub for Docker images
+
+**Popular Helm repositories:**
+- Bitnami
+- Prometheus Community
+- Grafana
+- Jetstack
+
+-->Add the Bitnami repository: helm repo add bitnami https://charts.bitnami.com/bitnami
+
+-->Update repository: helm repo update
+
+-->Search available charts: helm search repo nginx
+
+Verify: What version of Helm is installed?
+
+-->Helm version v3.18.4 is installed.
+
+Quick Revision Table: 
+
+<img width="717" height="170" alt="image" src="https://github.com/user-attachments/assets/431538c9-d9ad-495c-8c86-0b7020a75580" />
+
+<img width="1847" height="897" alt="image" src="https://github.com/user-attachments/assets/a1bff161-15b2-45b8-bf38-27bbe71e8226" />
 
 ---
 
@@ -51,23 +84,30 @@ Three core concepts:
 2. Update: `helm repo update`
 3. Search: `helm search repo nginx` and `helm search repo bitnami`
 
+Verify: How many charts does Bitnami have?
+
 **Steps to follow:**
 
--->Add Bitnami Repository: helm repo add bitnami https://charts.bitnami.com/bitnami
+-->Great! This task helps you understand how to use Helm repositories and search for available charts.
 
--->Update Repositories: helm repo update      [This fetches the latest list of charts from all repos]
+Step 1: Add the Bitnami Repository: helm repo add bitnami https://charts.bitnami.com/bitnami [Expected: "bitnami" has been added to your repositories]
 
--->Search Chart for the nginx: helm search repo nginx
+Step 2: Update the Repository: helm repo update      [This fetches the latest list of charts from all repos]
 
--->Search all botnami charts: helm search repo bitnami     [This will print a long list of available charts]
+Step 3: Search for the NGINX Chart: helm search repo nginx
 
--->Let see how many charts does have bitnami: helm search repo bitnami | wc -l     [This counts the number of lines] 
+Step 4: Search All Bitnami Charts: helm search repo bitnami     [This will print a long list of available charts]
+
+Step 5: Count the Number of Charts: helm search repo bitnami | wc -l     [This counts the number of lines] 
+
+-->Verify the Repository: helm repo list
 
 **Verify:** How many charts does Bitnami have?
--->145
-<img width="1211" height="972" alt="image" src="https://github.com/user-attachments/assets/977f7709-f2b1-479b-888a-5da3d23c4902" />
-<img width="1210" height="972" alt="image" src="https://github.com/user-attachments/assets/a5f434dd-7a05-484b-a1d4-52a7b682425c" />
-<img width="1192" height="867" alt="image" src="https://github.com/user-attachments/assets/4ca3c2d6-0bbd-4755-8d4a-f1946f5014e7" />
+-->Subtract 1 for the header line. The remaining number is the current number of Bitnami charts available in your local Helm repository index: 145
+
+<img width="1907" height="972" alt="image" src="https://github.com/user-attachments/assets/25fcb691-63a2-4497-87cd-4948e58a5244" />
+
+<img width="1902" height="967" alt="image" src="https://github.com/user-attachments/assets/7c8c5738-7a34-49bf-b6de-6b916fa96885" />
 
 ---
 
@@ -76,29 +116,70 @@ Three core concepts:
 2. Check what was created: `kubectl get all`
 3. Inspect the release: `helm list`, `helm status my-nginx`, `helm get manifest my-nginx`
 
+One command replaced writing a Deployment, Service, and ConfigMap by hand.
+
+Verify: How many Pods are running? What Service type was created?
+
 **Steps to follow:**
 
--->Install NGINX Chart: helm install my-nginx bitnami/nginx      [This creates a Release named my-nginx from the Bitnami chart]
+-->Excellent! This task demonstrates one of Helm's biggest advantages: deploying an application with a single command instead of manually creating multiple Kubernetes manifests.
 
--->Check What Was Created: kubectl get all   [We can see after installation Pods, Service, Deployment (or ReplicaSet) & Possibly ConfigMap/Secret all this objects got installed]
+Step 1: Install the NGINX Chart: helm install my-nginx bitnami/nginx      [This creates a Release named my-nginx from the Bitnami chart]
 
--->Inspect the Helm Release List releases: helm list
+**What this command means:**
+- helm install → Install a Helm chart.
+- my-nginx → Name of the Helm release.
+- bitnami/nginx → Chart to install.
 
--->Inspect the Helm Release Detailed releases: helm status my-nginx
+Step 2: Verify the Resources Created: kubectl get all   
 
--->Inspect the Helm Full generated YAML: helm get manifest my-nginx     [This shows all Kubernetes resources Helm created (like Deployment, Service, etc.)]
+**Notice that one Helm command created:**
+- Deployment
+- Pod
+- Service
+- ReplicaSet
+
+**Depending on the chart version, it may also create:**
+- ServiceAccount
+- ConfigMap
+- Secret
+- NetworkPolicy
+
+Step 3: List Installed Releases: helm list     [This confirms the release is installed.]
+
+Step 4: Check the Release Status: helm status my-nginx   [This provides information about the release, its status, and deployment history.]
+
+Step 5: View the Generated Kubernetes Manifests: helm get manifest my-nginx     [This is the YAML that Helm generated from the chart templates.]
+
+Q. Why Helm Is Powerful?
+
+-->**Without Helm**, you would need to create several files manually:
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+- serviceaccount.yaml
+- secret.yaml
+- networkpolicy.yaml
+
+-->**With helm**: helm install my-nginx bitnami/nginx [Expected: A single command generates and applies all the required Kubernetes resources.]
+
+**Verify:** How many Pods are running? What Service type was created?
 
 -->Verification How many Pods are running?: kubectl get pods            [1 Pod (default replica count in Bitnami nginx chart)]
 
 -->What Service type was created?: kubectl get svc                      [Most likely: ClusterIP gets create]
 
-<img width="1902" height="970" alt="image" src="https://github.com/user-attachments/assets/68f25365-6e5e-4f06-8471-1e65bbd4d32b" />
+**Note:** Note: Some versions of the Bitnami NGINX chart may default to LoadBalancer instead of ClusterIP, depending on the chart version and its default values. Always verify by running kubectl get svc in your cluster.
 
-**Note:** Helm just did this in one command: Created Deployment, Created Service, Applied labels, Managed configs, Instead of writing multiple YAML files manually.
+<img width="1901" height="827" alt="image" src="https://github.com/user-attachments/assets/ca9d1b47-a678-4332-89c2-8fc1d5b0c423" />
 
-One command replaced writing a Deployment, Service, and ConfigMap by hand.
+<img width="1797" height="966" alt="image" src="https://github.com/user-attachments/assets/f9bbc1af-70b6-4199-b3f0-1f99d68c5a25" />
 
-**Verify:** How many Pods are running? What Service type was created?
+<img width="1852" height="977" alt="image" src="https://github.com/user-attachments/assets/2c202e28-db30-46fd-8f6d-992ed02d7204" />
+
+<img width="1912" height="972" alt="image" src="https://github.com/user-attachments/assets/5b34c416-5fde-4c27-bfaa-2f3b50b03c36" />
+
+<img width="1817" height="972" alt="image" src="https://github.com/user-attachments/assets/72f33d64-f219-4ebf-870b-ca3651615afc" />
 
 ---
 
@@ -109,7 +190,11 @@ One command replaced writing a Deployment, Service, and ConfigMap by hand.
 4. Install another release using `-f custom-values.yaml`
 5. Check overrides: `helm get values <release-name>`
 
+Verify: Does the values file release have the correct replicas and service type?
+
 **Steps to follow:**
+
+-->Excellent! This task teaches one of Helm's most important features: customizing a chart without editing its templates.
 
 -->View Default Values: helm show values bitnami/nginx                   [This shows all configurable options like: replicaCount, service.type, resources]
 
