@@ -181,6 +181,10 @@ Q. Why Helm Is Powerful?
 
 <img width="1817" height="972" alt="image" src="https://github.com/user-attachments/assets/72f33d64-f219-4ebf-870b-ca3651615afc" />
 
+<img width="1887" height="982" alt="image" src="https://github.com/user-attachments/assets/6fdafa16-d2ad-4c00-9020-c3b6f20adcaa" />
+
+<img width="1887" height="982" alt="image" src="https://github.com/user-attachments/assets/7316698f-45d8-4b6b-b9d9-f370111bc554" />
+
 ---
 
 ### Task 4: Customize with Values
@@ -211,9 +215,20 @@ Step 2: Install a Release Using --set: Instead of accepting the defaults, overri
 -->verify the service creation: kubectl get svc  [Expected: The Service type should be NodePort.]
 
 Step 3: Create a custom-values.yaml File: vi custom-values.yaml
+```
+replicaCount: 2
 
-<img width="666" height="415" alt="image" src="https://github.com/user-attachments/assets/4ad4534f-7ca5-49ec-8939-3d3ec451b478" />
+service:
+  type: NodePort
 
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+```
 Step 4: Install Another Release Using the Values File: helm install nginx-file bitnami/nginx -f custom-values.yaml       [This creates another release: nginx-file]
 
 Step 5: Verify the Values Used: helm get values nginx-file [Expected: This confirms Helm applied the custom values.]
@@ -228,6 +243,12 @@ Step 5: Verify the Values Used: helm get values nginx-file [Expected: This confi
 
 -->Check Resource Limits: kubectl describe pod <pod-name>
 
+<img width="1915" height="977" alt="image" src="https://github.com/user-attachments/assets/789d9c5f-1879-4c85-b12a-e26e68071b7d" />
+<img width="1907" height="882" alt="image" src="https://github.com/user-attachments/assets/355d528b-4986-476f-af8f-d962338d68b0" />
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/2d3f773d-100b-4ac5-a5d5-f7b6bcac8128" />
+<img width="1800" height="962" alt="image" src="https://github.com/user-attachments/assets/9da48089-0805-4d9f-b0b6-cf6950ea8678" />
+<img width="1912" height="967" alt="image" src="https://github.com/user-attachments/assets/b2c3616d-4dc8-4be6-91c1-629510dfd5ef" />
+
 **Verify:** Does the values file release have the correct replicas and service type?
 -->run command: kubectl get deployment nginx-values
 -->Yes, The READY column should show 2/2, matching replicaCount: 2.
@@ -235,6 +256,7 @@ Step 5: Verify the Values Used: helm get values nginx-file [Expected: This confi
 -->The TYPE column should show NodePort.
 
 What You Learned:
+
 <img width="737" height="247" alt="image" src="https://github.com/user-attachments/assets/4431a0dc-4285-4c10-aef5-9c6cb978ac23" />
 
 ---
@@ -245,25 +267,56 @@ What You Learned:
 3. Rollback: `helm rollback my-nginx 1`
 4. Check history again — rollback creates a new revision (3), not overwriting revision 2
 
-**Steps to follow:**
-
--->Upgrade the Release: helm upgrade my-nginx bitnami/nginx --set replicaCount=5        [This creates a new revision (2) Now your app should have 5 Pods]
-
--->Check History: helm history my-nginx
-
--->Rollback to Revision 1: helm rollback my-nginx 1
-
--->Check History Again: helm history my-nginx
-
-<img width="412" height="137" alt="image" src="https://github.com/user-attachments/assets/0cb75695-2e35-43f3-9c1d-9d5f2b8aebab" />
-
-**Note:** Helm behaves like version control, Here Every change = new revision, Rollback = new revision (not delete history) & You can move forward and backward safely.
-
 Same concept as Deployment rollouts from Day 52, but at the full stack level.
 
-**Verify:** How many revisions after the rollback?
-<img width="1777" height="845" alt="image" src="https://github.com/user-attachments/assets/8f055802-b90e-4e10-b7c7-6ce959675500" />
+Verify: How many revisions after the rollback?
 
+**Steps to follow:**
+
+-->Excellent! This task teaches Helm release versioning, which is similar to Kubernetes Deployment rollouts but works for the entire application stack (Deployment, Service, ConfigMap, Secrets, etc.).
+
+Upgrade and Rollback: 
+
+  Step 1: Check the Current Release: helm list  [Expected: Release: nginx & Revision: 1]
+
+Step 2: Upgrade the Release: Increase the number of replicase by 1 to 5: helm upgrade my-nginx bitnami/nginx --set replicaCount=5 [Expected: Release: nginx & Revision: 2]
+
+Step 3: Verify the Upgrade: kubectl get deployment
+
+-->check pods: kubectl get pods
+
+Step 4: View Release History: helm history my-nginx
+**Explanation:**
+- Revision 1 = Original installation
+- Revision 2 = Upgrade with 5 replicas
+
+Step 5: Roll Back to Revision 1: helm rollback my-nginx 1 [Expected: Helm restores the configuration from Revision 1.]
+
+Step 6: Verify the Rollback: kubectl get pods
+
+Step 7: Check History Again: helm history my-nginx
+**Notice:**
+- Revision 1 still exists.
+- Revision 2 still exists.
+- Helm creates Revision 3 for the rollback.
+
+-->Helm never overwrites history.
+
+<img width="1901" height="977" alt="image" src="https://github.com/user-attachments/assets/2e98da16-4d58-4f3b-96f8-06685bb4a660" />
+<img width="1682" height="755" alt="image" src="https://github.com/user-attachments/assets/e05ec444-ef49-49ec-babd-cf0f3eec0934" />
+
+Visual Timeline: Even though Revision 3 contains the same configuration as Revision 1, it is stored as a new revision.
+
+<img width="672" height="240" alt="image" src="https://github.com/user-attachments/assets/e20e092f-e5cd-4b32-b8b0-65b0355f8dce" />
+
+Q: How many revisions are there after the rollback?
+
+Answer: 3 revisions.
+- Revision 1 → Initial installation
+- Revision 2 → Upgrade
+- Revision 3 → Rollback to Revision 1 (created as a new revision)
+
+This preserves a complete history of changes, making it easy to audit or roll back again if needed.
 **Note:** So here basically learned how Helm manages application changes like version control. First, you upgraded your existing release (my-nginx) by changing the replica count to 5. Helm didn’t replace the old setup—it created a new revision (version 2) with the updated configuration. Then, you checked the history to see all versions of your release. After that, you performed a rollback to go back to the original version (revision 1). Instead of deleting anything, Helm created another new revision (version 3) that represents the rollback state.
 So in short: You changed your app (upgrade), viewed its version history, and safely reverted it (rollback), while Helm kept a full record of every change.
 
@@ -279,8 +332,15 @@ So in short: You changed your app (upgrade), viewed its version history, and saf
 7. Install: `helm install my-release ./my-app`
 8. Upgrade: `helm upgrade my-release ./my-app --set replicaCount=5`
 
+Verify: After installing, 3 replicas? After upgrading, 5?
+
 **Steps to follow:**
--->Scaffold a Chart: helm create my-app
+
+-->Excellent! This task teaches you how to create your own Helm chart instead of using one from a repository.
+
+Create Your Own Chart:
+
+Step 1: Create a New Helm Chart: helm create my-app 
 -->ls
 -->cd my-app
 -->ls
