@@ -40,6 +40,8 @@ Follow these rules while creating your practice note:
 - Use **`tee`** once to write and display at the same time
 - Keep it short (8–12 lines total in the file)
 
+<img width="1682" height="977" alt="image" src="https://github.com/user-attachments/assets/a0007b65-c89b-41a8-b921-f054c9beb19b" />
+
 Suggested command flow:
 1. `touch notes.txt`
 2. `echo "Line 1" > notes.txt`
@@ -48,6 +50,8 @@ Suggested command flow:
 5. `cat notes.txt`
 6. `head -n 2 notes.txt`
 7. `tail -n 2 notes.txt`
+8. `head notes.txt`
+9. `tail notes.txt`
 
 ---
 
