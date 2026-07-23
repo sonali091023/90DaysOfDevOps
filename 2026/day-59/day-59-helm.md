@@ -196,28 +196,46 @@ Verify: Does the values file release have the correct replicas and service type?
 
 -->Excellent! This task teaches one of Helm's most important features: customizing a chart without editing its templates.
 
--->View Default Values: helm show values bitnami/nginx                   [This shows all configurable options like: replicaCount, service.type, resources]
+**Customize with Values:** 
+
+Step 1: View the Default Values: helm show values bitnami/nginx  [Expected: Every Helm chart comes with a values.yaml file containing default settings.]
+
+<img width="662" height="427" alt="image" src="https://github.com/user-attachments/assets/cfe19370-c41c-4c68-8366-745d338e5b37" />  
+
+Step 2: Install a Release Using --set: Instead of accepting the defaults, override them from the command line.
 
 -->Install with --set Overrides: helm install nginx-set bitnami/nginx --set replicaCount=3 --set service.type=NodePort     [This creates a release named nginx-set with: 3 Pods & NodePort service]
 
--->Create vi custom-values.yaml
+-->verify the pod creation: kubectl get pods
 
--->Install Using Values File: helm install nginx-file bitnami/nginx -f custom-values.yaml          [This creates another release: nginx-file]
+-->verify the service creation: kubectl get svc  [Expected: The Service type should be NodePort.]
 
--->Check Applied Values: helm get values nginx-file                                                [You should see your custom values reflected]
+Step 3: Create a custom-values.yaml File: vi custom-values.yaml
 
--->Check number of replicas: kubectl get pods
+<img width="666" height="415" alt="image" src="https://github.com/user-attachments/assets/4ad4534f-7ca5-49ec-8939-3d3ec451b478" />
+
+Step 4: Install Another Release Using the Values File: helm install nginx-file bitnami/nginx -f custom-values.yaml       [This creates another release: nginx-file]
+
+Step 5: Verify the Values Used: helm get values nginx-file [Expected: This confirms Helm applied the custom values.]
+
+**Verify the Deployment:** 
+
+-->Check the pods: kubectl get pods
 
 -->Check Service type: kubectl get svc
 
-<img width="1917" height="961" alt="image" src="https://github.com/user-attachments/assets/ddad847a-7ff3-492d-8255-b03f033d671a" />
-<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/be675d7c-3a3a-4e3e-8218-0e0c4f772fe0" />
-<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/c46dae53-353d-426f-af57-9f7e00218b0d" />
+-->Check the deployment: kubectl get deployment
+
+-->Check Resource Limits: kubectl describe pod <pod-name>
 
 **Verify:** Does the values file release have the correct replicas and service type?
--->Yes, if Pods count = 2 & Service type = NodePort
+-->run command: kubectl get deployment nginx-values
+-->Yes, The READY column should show 2/2, matching replicaCount: 2.
+-->Run command: kubectl get svc nginx-values
+-->The TYPE column should show NodePort.
 
-**Note:** --set → quick changes (good for testing) & values.yaml → best for real projects (clean + reusable)
+What You Learned:
+<img width="737" height="247" alt="image" src="https://github.com/user-attachments/assets/4431a0dc-4285-4c10-aef5-9c6cb978ac23" />
 
 ---
 
