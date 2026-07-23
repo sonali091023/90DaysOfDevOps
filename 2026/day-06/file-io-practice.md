@@ -1,91 +1,93 @@
-# Day 05 – Linux Troubleshooting Drill: CPU, Memory, and Logs** 
+# Day 06 – Linux Fundamentals: Read and Write Text Files
 
-**Tagret service: Nginx**
+## Task
+This is a **continuation of Day 05**, but much simpler.
 
-**1. Environment Basics**
+Today’s goal is to **practice basic file read/write** using only fundamental commands.
 
-uname -a
+You will create a small text file and practice:
+- Creating a file
+- Writing text to a file
+- Appending new lines
+- Reading the file back
 
-cat /etc/os-release
+Keep it basic and repeatable.
 
-**Observation:** Confirmed Linux kernel version and Ubuntu distribution Ensured OS compatibility for systemd and nginx Environment Basics
+---
 
-<img width="1127" height="717" alt="img1" src="https://github.com/user-attachments/assets/4db95416-6ce8-442a-b4ca-98dbf5b230f3" />
+## Expected Output
+By the end of today, you should have:
 
+- the new created files
+- A markdown file named:  
+  `file-io-practice.md`
 
-**2. Process & CPU / Memory Snapshot**
+or
 
-pgrep -l nginx
+- A hand written practice note (Recommended)
 
-ps -o pid,pcpu,pmem,comm -p <pids>
+Your note should include the commands you ran and what they did.
 
-free -h
+---
 
-df -h
+## Guidelines
+Follow these rules while creating your practice note:
 
-vmstat 1 5
+- Create a file named `notes.txt`
+- Write 3 lines into the file using **redirection** (`>` and `>>`)
+- Use **`cat`** to read the full file
+- Use **`head`** and **`tail`** to read parts of the file
+- Use **`tee`** once to write and display at the same time
+- Keep it short (8–12 lines total in the file)
 
-**Observation:** nginx master and worker processes running CPU usage stable, no abnormal spikes Memory utilization within safe limits Process
+Suggested command flow:
+1. `touch notes.txt`
+2. `echo "Line 1" > notes.txt`
+3. `echo "Line 2" >> notes.txt`
+4. `echo "Line 3" | tee -a notes.txt`
+5. `cat notes.txt`
+6. `head -n 2 notes.txt`
+7. `tail -n 2 notes.txt`
 
-<img width="981" height="648" alt="img2" src="https://github.com/user-attachments/assets/e1649179-1b5d-43e7-b5c9-e5348a49f012" />
+---
 
+## Resources
+Use these docs to understand the commands:
 
-**3. Disks & I/O checks**
+- `touch` (create an empty file) 
+- `cat` (read full file) 
+- `head` and `tail` (read parts of a file) 
+- `tee` (write and display at the same time)
 
-df -h
+---
 
-du -sh /var/log/nginx
+## Why This Matters for DevOps
+Reading and writing files is a daily task in DevOps.
 
-iostat
+Logs, configs, and scripts are all text files.  
+If you can handle files quickly, you can debug and automate faster.
 
-**Observation:** Root filesystem has sufficient free space Log directory size under control Disk I/O
+---
 
-**4. Network**
+## Submission
+1. Fork this `90DaysOfDevOps` repository  
+2. Navigate to the `2026/day-06/` folder  
+3. Add your `file-io-practice.md` file  
+4. Commit and push your changes to your fork  
 
-ss -tulpn | grep nginx
+---
 
-ss -tulpn
+## Learn in Public
+Share your Day 06 progress on LinkedIn:
 
-curl -I http://publicip:80
+- Post 2–3 lines on what you learned about file read/write
+- Share one command you will use often
+- Optional: screenshot of your notes
 
-**Observation:** nginx listening on port 80 HTTP 200 response confirms service availability 
+Use hashtags:  
+#90DaysOfDevOps  
+#DevOpsKaJosh  
+#TrainWithShubham
 
-<img width="1791" height="972" alt="im3" src="https://github.com/user-attachments/assets/2542d8b5-2592-445e-a0a7-23f56f323591" />
-
-
-sstulpn
-
-curl
-
-**5. Log Inspection**
-
-tail -n 50 /var/log/nginx/access.log
-
-journalctl -u nginx
-
-**Observation:** No recent errors or warnings Service started cleanly without crashes tail
-
-<img width="1912" height="963" alt="img4" src="https://github.com/user-attachments/assets/e43de07d-126a-4039-96d7-571a1d760012" />
-
-
-**Key Findings**
-
---> nginx was healthy and responding correctly
-
---> No resource exhaustion detected
-
---> Logs were clean, confirming normal operation 
-
-**If this worsens (next steps)**
-
-**Test nginx configuration** sudo nginx -t
-
-**Restart the service**
-
-sudo systemctl restart
-
---> **Increase log verbosity for deeper inspection**  
-
---> **Capture metrics using htop, vmstat, or monitoring tools**
-
---> **Enable alerts for CPU, memory, and disk thresholds**
+Happy Learning  
+**TrainWithShubham**
