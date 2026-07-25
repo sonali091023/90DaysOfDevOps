@@ -116,73 +116,221 @@ Explanation:
 Submission Template:
 <img width="960" height="561" alt="image" src="https://github.com/user-attachments/assets/4fbc43dc-bcfc-4888-b9d2-203147d070af" />
 
-**Part 2: Scenario-Based Practice
+# Part 2: Scenario-Based Practice
 
-Important: Focus on understanding the troubleshooting flow, not memorizing commands. Use the hints!**
+**Important:** Focus on understanding the troubleshooting flow, not memorizing commands. Use the hints!
 
-**Scenario 1: Service Not Starting**
+---
 
-**Problem: myapp failed to start after reboot.**
+# SOLVED EXAMPLE: Understanding How to Approach Scenarios
 
-**Step 1 systemctl status myapp**
+### Example Scenario: Check if a service is running
 
-Why: Checks whether the service is active, failed, or stopped.
+**Question:** How do you check if the `nginx` service is running?
 
-**Step 2 journalctl -u myapp -n 50**
+### Step 1:
 
-Why: Views recent logs to understand failure reason.
+```bash
+systemctl status nginx
+```
 
-**Step 3 systemctl is-enabled myapp**
+**Why:** Checks whether the service is **active**, **failed**, or **stopped**.
 
-Why: Checks if the service starts automatically on boot.
+### Step 2:
 
-**Step 4 systemctl list-units --type=service | grep myapp**
+```bash
+systemctl list-units --type=service
+```
 
-Why: Confirms if the service exists on the system.
+**Why:** Lists all running services to confirm whether the service exists.
 
-**Scenario 2: High CPU Usage--> Problem: Server is slow.**
+### Step 3:
 
-**Step 1 top**
+```bash
+systemctl is-enabled nginx
+```
 
-Why: Live view of CPU and memory usage.
+**Why:** Checks whether the service is configured to start automatically during system boot.
 
-**Step 2 ps aux --sort=-%cpu | head -10**
+### Step 4:
 
-Why: Lists top CPU-consuming processes.
+```bash
+journalctl -u nginx -n 50
+```
 
-**Step 3 ps -p <PID> -o pid,pcpu,pmem,cmd**
+**Why:** Displays the last 50 log entries for the service to identify startup or runtime issues.
 
-Why: Inspect the exact process causing load.
+### What I Learned
 
-**Scenario 3: Finding Service Logs (Docker)**
+* Always start by checking the service status.
+* If the service has failed, inspect the logs.
+* Verify whether the service is enabled at boot.
+* Follow a logical troubleshooting flow instead of guessing commands.
 
-**Step 1 systemctl status docker**
+---
 
-Why: Confirms service state and log hints.
+# Scenario 1: Service Not Starting
 
-**Step 2 journalctl -u docker -n 50**
+**Problem:** `myapp` failed to start after a reboot.
 
-Why: View recent logs.
+### Step 1:
 
-**Step 3 journalctl -u docker -f**
+```bash
+systemctl status myapp
+```
 
-Why: Follow logs in real time during debugging.
+**Why:** Checks whether the service is active, failed, or stopped.
 
-Scenario 4: File Permission Issue-->Problem: backup.sh gives “Permission denied”.
+### Step 2:
 
-**Step 1 ls -l /home/user/backup.sh**
+```bash
+journalctl -u myapp -n 50
+```
 
-Why: Check existing permissions.
+**Why:** Displays the latest logs to identify the reason for the failure.
 
-**Step 2 chmod +x /home/user/backup.sh**
-Why: Add execute permission.
+### Step 3:
 
-**Step 3 ls -l /home/user/backup.sh**
+```bash
+systemctl is-enabled myapp
+```
 
-Why: Verify executable flag.
+**Why:** Verifies whether the service is configured to start automatically during boot.
 
-**Step 4 ./backup.sh**
+### Step 4:
 
-Why: Confirm script execution.
+```bash
+systemctl list-units --type=service | grep myapp
+```
+
+**Why:** Confirms that the service exists and is recognised by systemd.
+
+---
+
+# Scenario 2: High CPU Usage
+
+**Problem:** The application server is running slowly.
+
+### Step 1:
+
+```bash
+top
+```
+
+**Why:** Shows live CPU and memory usage and identifies high CPU-consuming processes.
+
+### Step 2:
+
+```bash
+ps aux --sort=-%cpu | head -10
+```
+
+**Why:** Lists the top 10 processes sorted by CPU usage.
+
+### Step 3:
+
+```bash
+ps -p <PID> -o pid,pcpu,pmem,cmd
+```
+
+**Why:** Displays detailed information about the specific process consuming high CPU.
+
+---
+
+# Scenario 3: Finding Service Logs (Docker)
+
+**Problem:** A developer wants to see the logs for the Docker service.
+
+### Step 1:
+
+```bash
+systemctl status docker
+```
+
+**Why:** Confirms the current status of the Docker service and provides recent log hints.
+
+### Step 2:
+
+```bash
+journalctl -u docker -n 50
+```
+
+**Why:** Displays the last 50 log entries for Docker.
+
+### Step 3:
+
+```bash
+journalctl -u docker -f
+```
+
+**Why:** Follows the logs in real time while troubleshooting.
+
+---
+
+# Scenario 4: File Permission Issue
+
+**Problem:** `/home/user/backup.sh` returns **"Permission denied"**.
+
+### Step 1:
+
+```bash
+ls -l /home/user/backup.sh
+```
+
+**Why:** Checks the current file permissions.
+
+### Step 2:
+
+```bash
+chmod +x /home/user/backup.sh
+```
+
+**Why:** Grants execute permission to the script.
+
+### Step 3:
+
+```bash
+ls -l /home/user/backup.sh
+```
+
+**Why:** Verifies that the executable permission has been added.
+
+### Step 4:
+
+```bash
+./backup.sh
+```
+
+**Why:** Runs the script to confirm that the permission issue has been resolved.
+
+---
+
+## Key Troubleshooting Flow
+
+### Service Issues
+
+1. Check service status.
+2. Read service logs.
+3. Verify boot configuration.
+4. Confirm the service exists.
+
+### Performance Issues
+
+1. Monitor live resource usage.
+2. Identify the top resource-consuming process.
+3. Investigate the specific process using its PID.
+
+### Log Investigation
+
+1. Check service status.
+2. View recent logs.
+3. Follow logs in real time while reproducing the issue.
+
+### Permission Problems
+
+1. Check file permissions.
+2. Grant the required permissions.
+3. Verify the changes.
+4. Test again.
 
 
