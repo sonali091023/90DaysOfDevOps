@@ -1,26 +1,68 @@
-# Day 09 – Linux User & Group Management Challenge**
+# Day 09 – Linux User & Group Management Challenge
 
-**Task 1**
+## Task
+Today's goal is to **practice user and group management** by completing hands-on challenges.
 
-**useradd:** --> A system command used to create users, It does not ask questions, You must manually set options like home directory and password, We can check the created user under /home directory
+Figure out how to:
+- Create users and set passwords
+- Create groups and assign users
+- Set up shared directories with group permissions
 
---> Create user:--> sudo useradd sonali
+Use what you learned from Days 1-7 to find the right commands!
 
---> Set password manually:--> sudo passwd sonali
+---
 
---> Create user with home directory:--> sudo useradd -m sonali
+## Expected Output
+- A markdown file: `day-09-user-management.md`
+- Screenshots of command outputs
+- List of commands used
 
-**adduser:** --> A user-friendly script that uses useradd internally, It asks for details interactively.
+---
 
--->It will ask for the password, Full name, Room number, Phone number, It also automatically Creates home directory, Sets password and Adds user to basic groups.
+## Challenge Tasks
 
---> Create user:--> sudo adduser sonali--> adduser does everything in one step.
+### Task 1: Create Users (20 minutes)
 
-**userdel:** --> To delete the created user, We can check the user details in the home directory.
+Create three users with home directories and passwords:
+- `tokyo`
+- `berlin`
+- `professor`
 
---> sudo userdel tokyo OR sudo userdel -r tokyo [Delete the user with home directory]
+**Verify:** Check `/etc/passwd` and `/home/` directory
 
-<img width="646" height="973" alt="user added" src="https://github.com/user-attachments/assets/6c92fc7e-de12-4b28-99e8-64911080cfea" />
+---
+
+Steps to follow:
+
+**useradd:** --> A system command used to create users, It does not ask questions, You must manually set options like home directory and password, We can check the created user under /home directory. 
+
+-->Eg: sudo useradd tokyo
+
+-->Eg: Create user with home directory: sudo useradd -m sonali
+
+-->Eg: Set password manually: sudo passwd sonali
+
+**1. Create 3 users:** Enter a password for each user, Press Enter to skip optional details (Full Name, Room Number, etc.).
+
+**adduser:** A user-friendly script that uses useradd internally, It asks for details interactively. It will ask for the password, Full name, Room number, Phone number, It also automatically Creates home directory, Sets password and Adds user to basic groups.
+
+-->sudo adduser tokyo
+
+-->sudo adduser berlin
+
+-->sudo adduser professor
+
+**2. Verify users in /etc/passwd:** grep -E "tokyo|berlin|professor" /etc/passwd 
+
+**userdel:** --> To delete the created user, We can check the user details in the home directory. Eg: sudo userdel tokyo OR sudo userdel -r tokyo [Delete the user with home directory]
+
+**3. Verify home directories:** ls -l /home
+
+4. Verify each user exists: [Expected: If these commands return user details, the users were created successfully.]
+
+
+
+
 
 
 **Task 2**
