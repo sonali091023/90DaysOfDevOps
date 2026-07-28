@@ -64,7 +64,17 @@ Steps to follow:
 
 <img width="1466" height="477" alt="image" src="https://github.com/user-attachments/assets/bdefdc51-d63f-49f4-aeca-3893e1be5b64" />
 
-**Task 2**
+---
+
+### Task 2: Create Groups (10 minutes)
+
+Create two groups:
+- `developers`
+- `admins`
+
+**Verify:** Check `/etc/group`
+
+**Steps to follow:**
 
 **groupadd:** --> To create a group in Linux, you use the groupadd command, And we can check the group under /etc/group directory
 
@@ -82,7 +92,18 @@ Step 3: Verify the groups: grep -E "developers|admins" /etc/group
 
 <img width="1575" height="956" alt="image" src="https://github.com/user-attachments/assets/4d59a2d6-467a-4591-9f50-f79d6b95eb9c" />
 
-**Task 3**
+---
+
+### Task 3: Assign to Groups (15 minutes)
+
+Assign users:
+- `tokyo` → `developers`
+- `berlin` → `developers` + `admins` (both groups)
+- `professor` → `admins`
+
+**Verify:** Use appropriate command to check group membership
+
+**Steps to follow:**
 
 Step 1: Add tokyo to developers: sudo usermod -aG developers tokyo
 
@@ -103,7 +124,18 @@ Expected output:
 
 <img width="1637" height="316" alt="image" src="https://github.com/user-attachments/assets/45f87209-8415-49ab-a0a5-e7db479f3f11" />
 
-**task 4**
+---
+
+### Task 4: Shared Directory (20 minutes)
+
+1. Create directory: `/opt/dev-project`
+2. Set group owner to `developers`
+3. Set permissions to `775` (rwxrwxr-x)
+4. Test by creating files as `tokyo` and `berlin`
+
+**Verify:** Check permissions and test file creation
+
+**Steps to follow:**
 
 Step 1: Create the directory: sudo mkdir /opt/dev-project 
 
@@ -127,28 +159,52 @@ Step 7: Verify the files: ls -l /opt/dev-project
 - ls -ld /opt/dev-project shows drwxrwxr-x and group developers.
 - Both tokyo and berlin can create files in /opt/dev-project successfully.
 
-**Task 5**
-1. Create user nairobi with home directory
+---
 
-2. Create group project-team
+### Task 5: Team Workspace (20 minutes)
 
-<img width="612" height="721" alt="image" src="https://github.com/user-attachments/assets/49d36357-4e72-4917-9bac-ec0e902dca30" />
+1. Create user `nairobi` with home directory
+2. Create group `project-team`
+3. Add `nairobi` and `tokyo` to `project-team`
+4. Create `/opt/team-workspace` directory
+5. Set group to `project-team`, permissions to `775`
+6. Test by creating file as `nairobi`
 
-3. Add nairobi and tokyo to project-team
+**Steps to follow:**
 
-<img width="618" height="163" alt="image" src="https://github.com/user-attachments/assets/7f6e3846-418b-4923-bcff-ef8ab38b0e48" />
+Step 1: Create user nairobi with a home directory: 
 
-4. Create /opt/team-workspace directory
+-->sudo useradd -m nairobi
 
-5. Set group to project-team, permissions to 775
+-->sudo passwd nairobi
 
-<img width="647" height="37" alt="image" src="https://github.com/user-attachments/assets/9fe958c6-fe9c-4183-ad02-74cebc0c7300" />
+Step 2: Create the project-team group: sudo groupadd project-team
 
-<img width="687" height="293" alt="image" src="https://github.com/user-attachments/assets/b8374b75-020b-4fd5-b31c-c7afc498ecf7" />
+Step 3: Add nairobi and tokyo to the group: 
 
-6. Test by creating file as nairobi
+-->sudo usermod -aG project-team nairobi
 
-<img width="800" height="505" alt="image" src="https://github.com/user-attachments/assets/eeff0be8-6ada-4330-9eb4-925c09d3b20a" />
+-->sudo usermod -aG project-team tokyo
+
+Step 4: Create the team workspace: sudo mkdir -p /opt/team-workspace
+
+Step 5: Set the group owner: sudo chown :project-team /opt/team-workspace
+
+Step 6: Set permissions to 775: sudo chmod 775 /opt/team-workspace
+
+Step 7: Test by creating a file as nairobi: sudo -u nairobi touch /opt/team-workspace/nairobi.txt
+
+Step 8: Verify: 
+
+-->Check the directory permissions: ls -ld /opt/team-workspace
+
+-->Check the file: ls -l /opt/team-workspace
+
+-->Check group membership: groups nairobi && groups tokyo [Expected: If the directory has group project-team, permissions 775, and nairobi can create a file inside it, the task is complete.]
+
+<img width="1616" height="527" alt="image" src="https://github.com/user-attachments/assets/81f63741-103d-4017-8867-2fbc5745db8c" />
+
+---
 
 **Conclusion:**
 
@@ -193,6 +249,8 @@ project-team: nairobi, tokyo
 directory: /opt/team-workspace , permission: 775 , owner: project-team
 
 directory: /opt/dev-project , permission: 775 , owner: developers
+
+---
 
 **Commands Used**
 
