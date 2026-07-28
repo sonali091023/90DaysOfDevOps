@@ -1,32 +1,92 @@
 # Day 10 – File Permissions & File Operations Challenge**
 
-**Task 1: Create Files (10 minutes)**
+## Task
+Master file permissions and basic file operations in Linux.
 
-1.	Create empty file devops.txt using touch  touch devops.txt
+- Create and read files using `touch`, `cat`, `vim`
+- Understand and modify permissions using `chmod`
 
-2.	Create notes.txt with some content using cat or echo  cat > notes.txt and then add the content and to save it click ctrl + d and see the content again cat notest.txt
+---
 
-3.	Create script.sh using vim with content: echo "Hello DevOps"
+## Expected Output
+- A markdown file: `day-10-file-permissions.md`
+- Screenshots showing permission changes
 
-Verify: ls -l to see permissions
+---
 
-<img width="891" height="408" alt="image" src="https://github.com/user-attachments/assets/7d2f2386-074f-422f-b870-59a1d814d673" />
+## Challenge Tasks
 
-**Task 2: Read Files (10 minutes)**
+### Task 1: Create Files (10 minutes)
 
-1.  Read notes.txt using cat  cat notes.txt
+1. Create empty file `devops.txt` using `touch`
+2. Create `notes.txt` with some content using `cat` or `echo`
+3. Create `script.sh` using `vim` with content: `echo "Hello DevOps"`
 
-2.	View script.sh in vim read-only mode  vi script.sh
+**Verify:** `ls -l` to see permissions
 
-3.	Display first 5 lines of /etc/passwd using head  sudo cat /etc/passwd | head -5
+**Steps to follow:**
 
-4.	Display last 5 lines of /etc/passwd using tail  sudo cat /etc/passwd | tail -5
+Step 1: Create an empty file: touch devops.txt
 
-<img width="521" height="285" alt="image" src="https://github.com/user-attachments/assets/331d7183-b601-429d-8950-6d28bfbc1f2b" />
+Step 2: Create notes.txt with content: echo "These are my DevOps notes." > notes.txt OR Use cat command: cat > notes.txt & then type the content 
 
-<img width="896" height="490" alt="image" src="https://github.com/user-attachments/assets/2f427ed7-b019-4182-a4fa-68d9043cdcc5" />
+Step 3: Create script.sh using vim: vim script.sh [Note: Press i to enter Insert mode, then type]
 
-**Task 3: Understand Permissions (10 minutes)**
+Step 4: Verify: ls -l
+
+**Note:** script.sh is just a text file at this point. If you want to make it executable later, run: chmod +x script.sh
+
+<img width="1772" height="690" alt="image" src="https://github.com/user-attachments/assets/6e83833e-b110-4c29-ba12-0121d9aa7cad" />
+
+---
+
+### Task 2: Read Files (10 minutes)
+
+1. Read `notes.txt` using `cat`
+2. View `script.sh` in vim read-only mode
+3. Display first 5 lines of `/etc/passwd` using `head`
+4. Display last 5 lines of `/etc/passwd` using `tail`
+
+**Steps to follow:**
+
+Step 1: Read notes.txt using cat: cat notes.txt
+
+Step 2: View script.sh in Vim read-only mode: vi -R script.sh [Expected: -R opens the file in read-only mode.]
+
+Step 3: Display the first 5 lines of /etc/passwd: head -n 5 /etc/passwd OR sudo cat /etc/passwd | head -5
+
+Step 4: Display the last 5 lines of /etc/passwd: tail -n 5 /etc/passwd OR sudo cat /etc/passwd | tail -5
+
+Verify: You should see:
+- The contents of notes.txt.
+- script.sh opened in Vim without allowing edits.
+- The first 5 lines of /etc/passwd.
+- The last 5 lines of /etc/passwd.
+
+<img width="1670" height="631" alt="image" src="https://github.com/user-attachments/assets/84a2f28c-9ccc-4ac2-9eeb-7f55cd5a985e" />
+
+<img width="1502" height="977" alt="image" src="https://github.com/user-attachments/assets/92b462f1-46d9-448e-bc6d-d120d9ffdcb0" />
+
+---
+
+### Task 3: Understand Permissions (10 minutes)
+
+Format: `rwxrwxrwx` (owner-group-others)
+- `r` = read (4), `w` = write (2), `x` = execute (1)
+
+Check your files: `ls -l devops.txt notes.txt script.sh`
+
+Answer: What are current permissions? Who can read/write/execute?
+
+Steps to follow:
+
+-->ls -l devops.txt notes.txt script.sh
+
+<img width="1600" height="145" alt="image" src="https://github.com/user-attachments/assets/e27b3551-baa3-4785-8ae9-e0acb9f2a69f" />
+
+<img width="750" height="767" alt="image" src="https://github.com/user-attachments/assets/c1a6f735-86a0-4cfe-b095-80c20c9e8ae5" />
+
+<img width="887" height="480" alt="image" src="https://github.com/user-attachments/assets/11129086-73f7-44a1-a513-1afba853f82a" />
 
 Format: rwxrwxrwx (owner-group-others)
 
@@ -36,11 +96,18 @@ Check your files: ls -l devops.txt notes.txt script.sh
 
 Answer: What are current permissions? Who can read/write/execute?
 
-So the answer is for all the three files such as devops.txt, notes.txt and script.sh,  The owner can read and write but cant execute the same file, Then group can also read and write to the file but cant execute the file, But others can only read the file.
- 
-<img width="823" height="246" alt="image" src="https://github.com/user-attachments/assets/85ca4acd-abc4-4014-932c-6d75361c2873" />
+-->So the answer is for all the three files such as devops.txt, notes.txt and script.sh,  The owner can read and write but cant execute the same file, Then group can also read and write to the file but cant execute the file, But others can only read the file.
 
-**Task 4: Modify Permissions (20 minutes)**
+### Task 4: Modify Permissions (20 minutes)
+
+1. Make `script.sh` executable → run it with `./script.sh`
+2. Set `devops.txt` to read-only (remove write for all)
+3. Set `notes.txt` to `640` (owner: rw, group: r, others: none)
+4. Create directory `project/` with permissions `755`
+
+**Verify:** `ls -l` after each change
+
+**Steps to follow:**
 
 1.	Make script.sh executable → run it with ./script.sh
 
