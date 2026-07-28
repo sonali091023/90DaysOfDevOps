@@ -338,3 +338,76 @@ Create workspace directory for team
 
 Switch between users in Linux
 
+## Hints
+
+**Stuck? Try these commands:**
+- User: `useradd`, `passwd`, `usermod`
+- Group: `groupadd`, `groups`
+- Permissions: `chgrp`, `chmod`
+- Test: `sudo -u username command`
+
+**Tip:** Use `-m` flag with useradd for home directory, `-aG` for adding to groups
+
+---
+
+## Documentation
+
+Create `day-09-user-management.md`:
+
+```markdown
+# Day 09 Challenge
+
+## Users & Groups Created
+- Users: tokyo, berlin, professor, nairobi
+- Groups: developers, admins, project-team
+
+## Group Assignments
+[List who is in which groups]
+
+## Directories Created
+[List directories with permissions]
+
+## Commands Used
+[Your commands here]
+
+## What I Learned
+[3 key points]
+```
+
+---
+
+
+## Troubleshooting
+
+**Permission denied?** Use `sudo`
+
+**User can't access directory?**
+- Check group: `groups username`
+- Check permissions: `ls -ld /path`
+
+---
+
+## Submission
+1. Fork this `90DaysOfDevOps` repository
+2. Navigate to `2026/day-09/` folder
+3. Add your `day-09-user-management.md` with screenshots
+4. Commit and push
+
+---
+
+## Learn in Public
+Share your Day 09 progress on LinkedIn:
+
+- Post about completing the user management challenge
+- Share one thing you figured out
+- Mention real-world DevOps use
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
+Happy Learning
+**TrainWithShubham**
