@@ -109,45 +109,62 @@ Answer: What are current permissions? Who can read/write/execute?
 
 **Steps to follow:**
 
-1.	Make script.sh executable → run it with ./script.sh
+Step 1. Make script.sh executable: chmod +x script.sh
 
--->	sudo chmod 774 script.sh 
+-->Run the script:	sudo ./script.sh
 
--->	sudo ./script.sh
+-->verify: ls -l script.sh
 
-2.	Set devops.txt to read-only (remove write for all)
+Step 2. Make devops.txt read-only (remove write for everyone): sudo chmod 444 devops.txt OR chmod a-w devops.txt
 
--->	sudo chmod 444 devops.txt
+-->verify: ls -l devops.txt
 
--->	ls -l devops.txt
+Step 3. Set notes.txt permissions to 640: sudo chmod 640 notes.txt
 
-3.	Set notes.txt to 640 (owner: rw, group: r, others: none)
+-->verify: ls -l notes.txt
 
--->	sudo chmod 640 notes.txt
+**Meaning:**
+- Owner: Read, Write
+- Group: Read
+- Others: No permissions
 
--->	ls -l notes.txt
+Step 4. Create project/ directory with 755 permissions: mkdir project 
 
-4.	Create directory project/ with permissions 755
+-->ls -ld project
 
--->	mkdir project 
+-->chmod 755 project: sudo chmod 755 project
 
--->	ls -l 
+-->ls -ld project
 
--->	sudo chmod 755 project
+<img width="826" height="262" alt="image" src="https://github.com/user-attachments/assets/8a6dc895-5a79-4e50-ac9e-3d60793a6543" />
 
--->	ls -l
+<img width="1340" height="567" alt="image" src="https://github.com/user-attachments/assets/8e1a7f13-c221-4a10-a6a3-cfa89d45dfea" />
 
-Verify: ls -l after each change
+---
  
-**Task 5: Test Permissions (10 minutes)**
+Task 5: Test Permissions (10 minutes)
 
-1.	Try writing to a read-only file - what happens?
+1. Try writing to a read-only file - what happens?
+2. Try executing a file without execute permission
+3. Document the error messages
 
-2.	Try executing a file without execute permission
+**Steps to follow:**
 
-3.	Document the error messages
+Step 1. Try writing to the read-only file: If devops.txt has permission 444, run: echo "New content" >> devops.txt [Expected: Permission denied]
 
-<img width="715" height="869" alt="image" src="https://github.com/user-attachments/assets/647b567a-5ae2-4610-b613-4d5bffcf2306" />
+Step 2. Try executing a file without execute permission: Remove execute permission from notes.txt (if it doesn't already lack it): chmod 644 notes.txt Now try to execute the file: ./notes.txt [expected: permission denied]
+
+Step 3. Document the error messages: 
+
+<img width="955" height="206" alt="image" src="https://github.com/user-attachments/assets/4ba13a40-5ba9-4fa4-96dc-a3b6565294bf" />
+
+<img width="1330" height="150" alt="image" src="https://github.com/user-attachments/assets/67b7eb13-d48f-4148-b081-667cce4ed800" />
+
+**Explanation:**
+- Write denied: The file does not have the write (w) permission.
+- Execute denied: The file does not have the execute (x) permission, so the shell refuses to run it.
+
+---
 
 **Files Created**
 
@@ -226,4 +243,53 @@ Permissions control access at a very granular level
 Execute permission is mandatory to run scripts
 
 Numeric permissions (755, 640) are faster and cleaner
+
+## Hints
+
+- Create: `touch`, `cat > file`, `vim file`
+- Read: `cat`, `head -n`, `tail -n`
+- Permissions: `chmod +x`, `chmod -w`, `chmod 755`
+
+---
+
+## Documentation
+
+Create `day-10-file-permissions.md`:
+
+```markdown
+# Day 10 Challenge
+
+## Files Created
+[list files]
+
+## Permission Changes
+[before/after for each file]
+
+## Commands Used
+[your commands]
+
+## What I Learned
+[3 key points]
+```
+
+---
+
+## Submission
+1. Navigate to `2026/day-10/` folder
+2. Add `day-10-file-permissions.md` with screenshots
+3. Commit and push
+
+---
+
+## Learn in Public
+
+Share on LinkedIn about mastering file permissions.
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
+
 
