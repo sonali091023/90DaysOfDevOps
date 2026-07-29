@@ -1,45 +1,120 @@
-# Day 11 – File Ownership Challenge (chown & chgrp)**
+# Day 11 – File Ownership Challenge (chown & chgrp)
 
-**Task 1: Understanding Ownership (10 minutes)**
+## Task
+Master file and directory ownership in Linux.
 
-1. Run ls -l in your home directory
+- Understand file ownership (user and group)
+- Change file owner using `chown`
+- Change file group using `chgrp`
+- Apply ownership changes recursively
 
-2. Identify the owner and group columns
+---
 
+## Expected Output
+- A markdown file: `day-11-file-ownership.md`
+- Screenshots showing ownership changes
+
+---
+
+## Challenge Tasks
+
+### Task 1: Understanding Ownership (10 minutes)
+
+1. Run `ls -l` in your home directory
+2. Identify the **owner** and **group** columns
 3. Check who owns your files
 
-Format: -rw-r--r-- 1 owner group size date filename
+**Format:** `-rw-r--r-- 1 owner group size date filename`
 
-Document: What's the difference between owner and group?
+**Document:** What's the difference between owner and group?
 
--->So the difference is Owner can Read, Write and execute the file whereas group can only read and execute the file.
+**Steps to follow:**
 
-<img width="757" height="401" alt="img1" src="https://github.com/user-attachments/assets/ab9ef51d-b7f7-42c7-a134-6d41915c9762" />
+Step 1: Open the terminal: Navigate to your home directory: cd ~
 
+-->Verify your current directory: pwd [Expected: /home/your-username]
 
-**Task 2: Basic chown Operations (20 minutes)**
+Step 2: List files with detailed information: ls -l
 
-1. Create file devops-file.txt -->touch devops-file.txt
+Step 3: Understand each column: 
 
-2. Check current owner: ls -l devops-file.txt -->and the do ls -l
+<img width="772" height="677" alt="image" src="https://github.com/user-attachments/assets/503bd1ab-3f7a-485a-ae65-22d169900f4b" />
 
-3. Change owner to tokyo (create user if needed) 
+Step 4: Identify the owner and group: 
 
--->As tokyo user was not created by using adduser command created it first and then run the command: sudo chown tokyo docker-file.txt and then do ls -l 
+<img width="747" height="327" alt="image" src="https://github.com/user-attachments/assets/0a39158f-1619-440d-a7d0-5c9b0e2d096d" />
 
-4. Change owner to berlin
+Step 5: Check who owns your files: whoami
 
--->As berlin user was not created by using adduser command created it first and then run the command: sudo chown berlin docker-file.txt and then do ls -l
+<img width="772" height="681" alt="image" src="https://github.com/user-attachments/assets/1c4a75a0-8aab-4846-926a-41cf8f098c3d" />
 
-5. Verify the changes by running command: ls -l
+Q. What is the difference between Owner and Group?
 
-<img width="872" height="923" alt="img2" src="https://github.com/user-attachments/assets/7c0fecce-ec00-4865-ba17-1b3983066c51" />
+**Owner:**
+- The owner is the user who created the file or has ownership of it.
+- The owner has their own set of permissions (read, write, execute).
 
-<img width="757" height="401" alt="home-file-permissions" src="https://github.com/user-attachments/assets/bc96163b-45d6-43ad-903a-650ccf5c27d0" />
+**Group:**
+- A group is a collection of users.
+- Users who belong to the file's group receive the permissions assigned to the group.
+- This makes it easy to share files among multiple users without changing ownership.
+
+<img width="820" height="335" alt="image" src="https://github.com/user-attachments/assets/bcbd4e50-939c-45e6-ab80-61cf804e3a12" />
+
+<img width="1457" height="927" alt="image" src="https://github.com/user-attachments/assets/d3f1e73e-ed8c-4461-9be0-40be1f9ccf87" />
+
+### Task 2: Basic chown Operations (20 minutes)
+
+1. Create file `devops-file.txt`
+2. Check current owner: `ls -l devops-file.txt`
+3. Change owner to `tokyo` (create user if needed)
+4. Change owner to `berlin`
+5. Verify the changes
 
 **Try:**
-
+```bash
 sudo chown tokyo devops-file.txt
+```
+
+**Steps to follow:**
+
+Step 1: Create the file: touch devops-file.txt
+
+-->ls
+
+Step 2: Check the current owner: ls -l devops-file.txt  [Here: Owner → sona, Group → sona]
+
+Step 3: Check whether user tokyo exists: id tokyo & if not exist then create new user
+
+-->Create the user: sudo useradd -m tokyo
+
+-->verify created user: id tokyo
+
+Step 4: Change the owner to tokyo: sudo chown tokyo devops-file.txt
+
+-->And then to verify use commands: ls -l devops-file.txt
+
+**Notice:**
+- Owner changed to tokyo
+- Group is still sona (because only the owner was changed)
+
+Step 5: Check whether user berlin exists: id berlin And create if not exists: sudo useradd -m berlin
+
+-->Then verify: id berlin
+
+Step 6: Change the owner to berlin: sudo chown berlin devops-file.txt
+
+-->verify: ls -l devops-file.txt [Expected: The owner is now berlin.]
+
+Optional: Change both owner and group: sudo chown berlin:berlin devops-file.txt
+
+then verify: ls -l devops-file.txt
+
+Now:
+- Owner → berlin
+- Group → berlin
+
+-->Verify the changes: ls -l devops-file.txt
 
 **Task 3: Basic chgrp Operations (15 minutes)**
 
