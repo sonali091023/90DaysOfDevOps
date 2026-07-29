@@ -1,4 +1,29 @@
-# Day 14 – Networking Fundamentals & Hands-on Checks**
+# Day 14 – Networking Fundamentals & Hands-on Checks
+
+## Task
+Get comfortable with core networking concepts and the commands you’ll actually run during troubleshooting.
+
+You will:
+- Map the **OSI vs TCP/IP models** in your own words
+- Run essential connectivity commands
+- Capture a mini network check for a target host/service
+
+Keep it short, real, and repeatable.
+
+---
+
+## Expected Output
+- A markdown file: `day-14-networking.md`
+- Screenshots (optional) of key command outputs
+
+---
+
+## Quick Concepts (write 1–2 bullets each)
+- OSI layers (L1–L7) vs TCP/IP stack (Link, Internet, Transport, Application)
+- Where **IP**, **TCP/UDP**, **HTTP/HTTPS**, **DNS** sit in the stack
+- One real example: “`curl https://example.com` = App layer over TCP over IP”
+
+**Steps to follow:**
 
 **OSI Model:** The OSI Model is a 7-layer conceptual framework used to understand how data travels through a network. It helps engineers troubleshoot network problems by separating communication into layers.
 
@@ -13,6 +38,7 @@
 | Physical     | Network Access | Cables, hardware, signals                | Hardware signals, cables                    |
 
 **TCP/IP Model Layers:** The TCP/IP Model is a networking framework that explains how data moves across the internet. It is the practical model used in real-world networking, unlike the theoretical OSI Model.
+Note: The OSI Session, Presentation, and Application layers are combined into the TCP/IP Application layer.
 
 | Layer          | Purpose                                | Examples                                                    |
 | -------------- | -------------------------------------- | ------------------------------------------------------------|
@@ -35,26 +61,60 @@ Network issue → IP routing
 
 Link issue → NIC or cables
 
+Where Common Protocols Fit:
+
+-->IP (Internet Protocol): Network layer (OSI L3) / Internet layer (TCP/IP) – Handles addressing and routing of packets between networks.
+
+-->TCP / UDP: Transport layer (OSI L4) / Transport layer (TCP/IP) – Provides end-to-end communication. TCP is reliable; UDP is faster with no delivery guarantee.
+
+-->HTTP / HTTPS: Application layer (OSI L7) / Application layer (TCP/IP) – Used for communication between web browsers and web servers. HTTPS is HTTP secured with TLS.
+
+-->DNS (Domain Name System): Application layer (OSI L7) / Application layer (TCP/IP) – Translates domain names (e.g., example.com) into IP addresses.
 
 One real example: “curl -I https://google.com = App layer over TCP over IP”
 
---> Application layer [HTTP] --> TCP --> IP --> Link
+How it works:
 
-<img width="1915" height="622" alt="image" src="https://github.com/user-attachments/assets/48476d96-f2d2-4fc2-8e89-5bd31647b518" />
+-->Application Layer: curl sends an HTTPS request.
 
-**Hands-on Checklist**
+-->Transport Layer: HTTPS uses TCP (typically port 443) for reliable communication.
+
+-->Internet Layer: IP routes packets between your computer and the server.
+
+-->Link Layer: Ethernet or Wi-Fi transmits the data over the local network.
+
+Simple flow: curl --> HTTPS (Application) --> TCP (Transport) --> IP (Internet/Network) --> Ethernet / Wi-Fi (Link)
+
+---
+
+## Hands-on Checklist (run these; add 1–2 line observations)
+- **Identity:** `hostname -I` (or `ip addr show`) — note your IP.
+- **Reachability:** `ping <target>` — mention latency and packet loss.
+- **Path:** `traceroute <target>` (or `tracepath`) — note any long hops/timeouts.
+- **Ports:** `ss -tulpn` (or `netstat -tulpn`) — list one listening service and its port.
+- **Name resolution:** `dig <domain>` or `nslookup <domain>` — record the resolved IP.
+- **HTTP check:** `curl -I <http/https-url>` — note the HTTP status code.
+- **Connections snapshot:** `netstat -an | head` — count ESTABLISHED vs LISTEN (rough).
+
+Pick one target service/host (e.g., `google.com`, your lab server, or a local service) and stick to it for ping/traceroute/curl where possible.
+
+**Steps to follow:**
+
+-->You can use the following template to complete the hands-on checklist. Replace the sample outputs with the results from your own system.
 
 **1. Identity: hostname -I OR ip add show --> note your IP** 
 
-**Observation:** Displays private IP address of this machine - 172.31.47.105  
+**Observation:** Displays private IP address of this machine - 172.31.47.105 So This is the IP assigned to my machine on the local network.
 
-<img width="1168" height="353" alt="image" src="https://github.com/user-attachments/assets/a50e0849-91e9-40c8-8f5a-37c562e2e714" />
+<img width="1691" height="836" alt="image" src="https://github.com/user-attachments/assets/4360ab1b-51d4-4c82-9f4b-6f5e0aafe402" />
 
 **2. Reachability: ping google.com --> mention latency and packet loss.**
 
-**Observation:** --> Packets received successfully, Latency observed ~1.68–1.78 ms, No packet loss.
+**Observation:** --> Packets received successfully, Latency observed ~1.68–1.78 ms, No packet loss. The host is reachable and the network connection is stable.
 
-<img width="961" height="687" alt="image" src="https://github.com/user-attachments/assets/8cc0bf00-a9e6-475b-8143-313d16c917e2" />
+<img width="1410" height="582" alt="image" src="https://github.com/user-attachments/assets/f905850e-3301-4bb7-a132-9eb35ea9edbb" />
+
+
 
 **3. traceroute google.com OR tracepath google.com --> note any long hops/timeouts.**
 
