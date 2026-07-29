@@ -336,7 +336,6 @@ Before vs After:
 
 **Verify:** `ls -l bank-heist/`
 
-
 **Steps to follow:**
 
 -->Create users and groups, create files, assign different owners and groups, and verify the changes.
@@ -351,9 +350,41 @@ Step 1: Create the users:
 
 Step 2: Create the groups: 
 
+-->Check whether the groups exist: getent group vault-team && getent group tech-team
 
+-->If they don't exist, create them: sudo groupadd vault-team && sudo groupadd tech-team
 
+-->verify: getent group vault-team && getent group tech-team
 
+Step 3: Create the directory: mkdir bank-heist
+
+-->verify: ls
+
+Step 4: Create the files: 
+
+-->touch bank-heist/access-codes.txt
+
+-->touch bank-heist/blueprints.pdf
+
+-->touch bank-heist/escape-plan.txt
+
+-->verify: ls bank-heist
+
+Step 5: Check current ownership: ls -l bank-heist
+
+Step 6: Change ownership: 
+
+-->File 1: Change access-codes.txt: sudo chown tokyo:vault-team bank-heist/access-codes.txt
+
+-->File 2: Change blueprints.pdf: sudo chown berlin:tech-team bank-heist/blueprints.pdf
+
+-->File 3: Change escape-plan.txt: sudo chown nairobi:vault-team bank-heist/escape-plan.txt
+
+Step 7: Verify: ls -l bank-heist
+
+<img width="812" height="267" alt="image" src="https://github.com/user-attachments/assets/2f2b01bf-0490-4749-8109-a54d2bef8cb0" />
+
+Common Errors:
 
 
 
