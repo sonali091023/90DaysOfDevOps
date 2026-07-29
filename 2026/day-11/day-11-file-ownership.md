@@ -204,7 +204,7 @@ Using `chown` you can change both owner and group together:
 
 Step 1: Create the file: touch project-config.yml
 
--->verify: ls -l project-config.yaml
+-->verify: ls -l project-config.yml
 
 **Current:**
 - Owner → sona
@@ -218,9 +218,9 @@ Step 2: Check if the user professor exists: id professor
 
 Step 3: Check if the group heist-team exists: getent group heist-team & if not output appears then create: sudo groupadd heist-team
 
-Step 4: Change both owner and group (one command): sudo chown professor:heist-team project-config.yaml
+Step 4: Change both owner and group (one command): sudo chown professor:heist-team project-config.yml
 
--->verify: ls -l project-config.yaml
+-->verify: ls -l project-config.yml
 
 Now:
 - Owner → professor
@@ -240,65 +240,124 @@ Now:
 - Owner → berlin
 - Group → heist-team
 
-**Task 5: Recursive Ownership (20 minutes)**
+<img width="1681" height="657" alt="image" src="https://github.com/user-attachments/assets/c601b802-1fdb-4e4f-8c72-cd0980c87363" />
 
-Create directory structure:
+---
 
-1. mkdir -p heist-project/vault
+### Task 5: Recursive Ownership (20 minutes)
 
-2. mkdir -p heist-project/plans
+1. Create directory structure:
+   ```
+   mkdir -p heist-project/vault
+   mkdir -p heist-project/plans
+   touch heist-project/vault/gold.txt
+   touch heist-project/plans/strategy.conf
+   ```
 
-3. touch heist-project/vault/gold.txt
+2. Create group `planners`: `sudo groupadd planners`
 
-4. touch heist-project/plans/strategy.conf
+3. Change ownership of entire `heist-project/` directory:
+   - Owner: `professor`
+   - Group: `planners`
+   - Use recursive flag (`-R`)
 
-5. Create group planners: sudo groupadd planners
+4. Verify all files and subdirectories changed: `ls -lR heist-project/`
 
-6. Change ownership of entire heist-project/ directory:
+**Steps to follow:**
 
-Owner: professor
+-->Learn how to change the ownership of a directory and everything inside it using the -R (recursive) option.
 
-Group: planners
+Step 1: Create the directory structure:
 
-Use recursive flag (-R)
+-->mkdir -p heist-project/vault
 
-7. Verify all files and subdirectories changed: ls -lR heist-project/
+-->mkdir -p heist-project/plans
 
-<img width="728" height="692" alt="task 5-1" src="https://github.com/user-attachments/assets/a1ba1e81-8960-4bfe-935b-077aa38598dc" />
+-->touch heist-project/vault/gold.txt
 
-<img width="730" height="307" alt="task 5-2" src="https://github.com/user-attachments/assets/6622c044-90a6-465e-9299-2319c43ff4ed" />
+-->touch heist-project/plans/strategy.conf
 
-<img width="795" height="585" alt="task 5-3" src="https://github.com/user-attachments/assets/dfd0a919-d7a9-46aa-b8ae-a3734023dbc3" />
+-->verify the structure: tree heist-project & if tree is not installed: ls -R heist-project
 
-**Task 6: Practice Challenge (20 minutes)**
+Step 2: Check the current ownership: ls -lR heist-project [Note: At this point, everything is owned by sona.]
 
-1. Create users: tokyo, berlin, nairobi (if not already created)
+Step 3: Create the planners group: First check whether it already exists: getent group planners
 
-2. Create groups: vault-team, tech-team
+-->If nothing is returned, create it: sudo groupadd planners
 
-3. Create directory: bank-heist/
+-->verify: getent group planners
 
+Step 4: Ensure the professor user exists: id professor
+
+-->if it does not exists create it: sudo useradd -m professor
+
+Step 5: Change ownership recursively: Use the -R option to apply the change to the directory, all subdirectories, and all files: sudo chown -R professor:planners heist-project
+
+**Breakdown:**
+- sudo → Run with administrator privileges.
+- chown → Change owner.
+- -R → Apply recursively.
+- professor → New owner.
+- planners → New group.
+- heist-project → Target directory.
+
+Step 6: Verify the changes: ls -lR heist-project
+
+Notice that every file and directory now has:
+- Owner: professor
+- Group: planners
+
+Before vs After: 
+
+<img width="762" height="405" alt="image" src="https://github.com/user-attachments/assets/ccef79a5-9b3a-43e4-a7ca-a84bb8dd60d5" />
+
+<img width="1737" height="792" alt="image" src="https://github.com/user-attachments/assets/1de44d2f-37a5-41a0-9b02-40395e9e8342" />
+
+<img width="1705" height="751" alt="image" src="https://github.com/user-attachments/assets/5300f7cd-2d8a-4d5b-ad97-c0a3e01a59b0" />
+
+---
+
+### Task 6: Practice Challenge (20 minutes)
+
+1. Create users: `tokyo`, `berlin`, `nairobi` (if not already created)
+2. Create groups: `vault-team`, `tech-team`
+3. Create directory: `bank-heist/`
 4. Create 3 files inside:
+   ```
+   touch bank-heist/access-codes.txt
+   touch bank-heist/blueprints.pdf
+   touch bank-heist/escape-plan.txt
+   ```
 
-touch bank-heist/access-codes.txt
+5. Set different ownership:
+   - `access-codes.txt` → owner: `tokyo`, group: `vault-team`
+   - `blueprints.pdf` → owner: `berlin`, group: `tech-team`
+   - `escape-plan.txt` → owner: `nairobi`, group: `vault-team`
 
-touch bank-heist/blueprints.pdf
+**Verify:** `ls -l bank-heist/`
 
-touch bank-heist/escape-plan.txt
 
-**Set different ownership:**
+**Steps to follow:**
 
-5. access-codes.txt → owner: tokyo, group: vault-team --> sudo chown tokyo:vault-team bank-heist/access-codes.txt
+-->Create users and groups, create files, assign different owners and groups, and verify the changes.
 
-6. blueprints.pdf → owner: berlin, group: tech-team --> sudo chown berlin:tech-team bank-heist/blueprints.pdf
+Step 1: Create the users: 
 
-7. escape-plan.txt → owner: nairobi, group: vault-team --> sudo chown nairobi:vault-team bank-heist/escape-plan.txt
+-->First, check if each user already exists: id tokyo & if not exists create: sudo useradd -m tokyo
 
-8. Verify: ls -l bank-heist/
+-->check if each user already exists: id berlin & if not exists create: sudo useradd -m berlin
 
-<img width="862" height="972" alt="task 6-1" src="https://github.com/user-attachments/assets/1baa60c5-ed8f-4c74-acd8-563420eb5f52" />
+-->check if each user already exists: id nairobi & if not exists create: sudo useradd -m nairobi
 
-<img width="728" height="162" alt="task 6-2" src="https://github.com/user-attachments/assets/206330cb-8db3-4e94-b3d6-02b95118d4b6" />
+Step 2: Create the groups: 
+
+
+
+
+
+
+
+
 
 **Key Commands Reference**
 
