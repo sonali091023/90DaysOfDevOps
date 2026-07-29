@@ -384,11 +384,23 @@ Step 7: Verify: ls -l bank-heist
 
 <img width="812" height="267" alt="image" src="https://github.com/user-attachments/assets/2f2b01bf-0490-4749-8109-a54d2bef8cb0" />
 
+<img width="1820" height="860" alt="image" src="https://github.com/user-attachments/assets/ca0e2da4-1a94-4b7f-bbe6-d242a3316ecc" />
+
 Common Errors:
 
+-->Error: User does not exist: sudo useradd -m nairobi
 
+<img width="607" height="232" alt="image" src="https://github.com/user-attachments/assets/888c308e-738a-4899-9544-0b575d8038d1" />
 
+-->Error: Group does not exist: sudo groupadd vault-team
 
+<img width="735" height="235" alt="image" src="https://github.com/user-attachments/assets/bec5e71f-6daf-40c2-9cb5-e0aee3ca5333" />
+
+Error: No such file: ls -l bank-heist
+
+<img width="755" height="262" alt="image" src="https://github.com/user-attachments/assets/82805119-47f8-440e-9f13-f5390b1b690e" />
+
+---
 
 **Key Commands Reference**
 
@@ -442,3 +454,103 @@ CI/CD pipeline artifacts
 
 Log file management
 
+## Key Commands Reference
+
+```bash
+# View ownership
+ls -l filename
+
+# Change owner only
+sudo chown newowner filename
+
+# Change group only
+sudo chgrp newgroup filename
+
+# Change both owner and group
+sudo chown owner:group filename
+
+# Recursive change (directories)
+sudo chown -R owner:group directory/
+
+# Change only group with chown
+sudo chown :groupname filename
+```
+---
+
+## Hints
+
+- Most `chown`/`chgrp` operations need `sudo`
+- Use `-R` flag for recursive directory changes
+- Always verify with `ls -l` after changes
+- User must exist before using in `chown`
+- Group must exist before using in `chgrp`/`chown`
+
+---
+
+## Documentation
+
+Create `day-11-file-ownership.md`:
+
+```markdown
+# Day 11 Challenge
+
+## Files & Directories Created
+[list all files/directories]
+
+## Ownership Changes
+[before/after for each file]
+
+Example:
+- devops-file.txt: user:user → tokyo:heist-team
+
+## Commands Used
+[your commands here]
+
+## What I Learned
+[3 key points about file ownership]
+```
+
+---
+
+## Troubleshooting
+
+**Permission denied?**
+- Use `sudo` for chown/chgrp operations
+
+**Group doesn't exist?**
+- Create it first: `sudo groupadd groupname`
+
+**User doesn't exist?**
+- Create it first: `sudo useradd username`
+
+---
+
+## Why This Matters for DevOps
+
+In real DevOps scenarios, you need proper file ownership for:
+
+- Application deployments
+- Shared team directories
+- Container file permissions
+- CI/CD pipeline artifacts
+- Log file management
+
+---
+
+## Submission
+1. Navigate to `2026/day-11/` folder
+2. Add `day-11-file-ownership.md` with screenshots
+3. Commit and push to your fork
+
+---
+
+## Learn in Public
+
+Share on LinkedIn about mastering file ownership.
+
+Use hashtags:
+```
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+```
