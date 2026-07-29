@@ -135,11 +135,44 @@ Overall Summary: Your system is using a normal filesystem, not LVM.
 
 <img width="812" height="306" alt="image" src="https://github.com/user-attachments/assets/8f72140e-cda6-4eeb-bd7d-2903dfe440a3" />
 
+---
+
 ### Task 2: Create Physical Volume
 ```bash
 pvcreate /dev/sdb   # or your loop device
 pvs
 ```
+**Steps to follow:**
+
+-->Note: Do NOT run pvcreate /dev/sdb on your machine.
+
+<img width="671" height="300" alt="image" src="https://github.com/user-attachments/assets/ab6008c2-b256-4792-91aa-d0c40f673115" />
+
+Q. What is pvcreate?
+-->pvcreate initializes a storage device so that LVM can manage it.
+<img width="712" height="405" alt="image" src="https://github.com/user-attachments/assets/2fb569d4-d569-4e1a-84d3-8880aa947d0f" />
+
+Q. What is a Physical Volume (PV)?
+-->A Physical Volume is the first building block of LVM.
+<img width="707" height="407" alt="image" src="https://github.com/user-attachments/assets/4516de8c-5745-45a3-baaa-00528c96e25d" />
+
+**Example:**
+
+<img width="700" height="621" alt="image" src="https://github.com/user-attachments/assets/d2d6c107-771f-4230-83c0-ca787a4128e4" />
+
+Q. What does pvs do?
+
+-->After creating the PV: pvc
+
+<img width="707" height="415" alt="image" src="https://github.com/user-attachments/assets/ca488248-7c3f-44ce-bb99-8e735004aea7" />
+
+Q. Why is it called a "Physical Volume"?
+
+<img width="721" height="362" alt="image" src="https://github.com/user-attachments/assets/5362633f-00be-4363-b28d-befa91e8844c" />
+
+Your current situation: That's completely normal because you haven't created an LVM disk yet.
+
+<img width="692" height="407" alt="image" src="https://github.com/user-attachments/assets/26b45e28-3a52-4e10-ab93-e195b9ecacdc" />
 
 ### Task 3: Create Volume Group
 ```bash
