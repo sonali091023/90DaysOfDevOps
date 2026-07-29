@@ -63,6 +63,8 @@ Q. What is the difference between Owner and Group?
 
 <img width="1457" height="927" alt="image" src="https://github.com/user-attachments/assets/d3f1e73e-ed8c-4461-9be0-40be1f9ccf87" />
 
+---
+
 ### Task 2: Basic chown Operations (20 minutes)
 
 1. Create file `devops-file.txt`
@@ -116,43 +118,127 @@ Now:
 
 -->Verify the changes: ls -l devops-file.txt
 
-**Task 3: Basic chgrp Operations (15 minutes)**
+<img width="1695" height="496" alt="image" src="https://github.com/user-attachments/assets/fc77e275-8f20-44b6-ad85-3b906779f545" />
 
-1. Create file team-notes.txt --> To create file run command: touch team-notes.txt
+---
 
-2. Check current group: ls -l team-notes.txt --> then run command: ls -l
+### Task 3: Basic chgrp Operations (15 minutes)
 
-3. Create group: sudo groupadd heist-team and then check the group at cat /etc/group
+1. Create file `team-notes.txt`
+2. Check current group: `ls -l team-notes.txt`
+3. Create group: `sudo groupadd heist-team`
+4. Change file group to `heist-team`
+5. Verify the change
 
-4. Change file group to heist-team --> sudo chgrp meist-team devops-file.txt
+**Steps to follow:**
 
-5. Verify the change -->Now to verify this chnage run command: ls -l
+-->Learn how to change the group ownership of a file using the chgrp command.
 
-<img width="687" height="322" alt="task 3-1" src="https://github.com/user-attachments/assets/fa40de83-8bae-44fa-87db-d394b05e1141" />
+Step 1: Create the file: touch team-notes.txt
 
-<img width="493" height="907" alt="task 3-2" src="https://github.com/user-attachments/assets/5b52a775-a966-4be1-be0b-5f0aff14f723" />
+-->To verify: ls
 
-<img width="771" height="302" alt="task 3-3" src="https://github.com/user-attachments/assets/df537464-ce32-413e-affa-121e76c979cf" />
+Step 2: Check the current group: ls -l team-notes.txt
 
-**Task 4: Combined Owner & Group Change (15 minutes)**
+**Breakdown:**
+- Owner → sona
+- Group → sona
+The 4th column is the current group.
 
-Using chown you can change both owner and group together:
+Step 3: Create a new group: 
 
-1. Create file project-config.yaml -->touch project-config.yml
+-->First, check if the group already exists: getent group heist-team
 
-2. Change owner to professor AND group to heist-team (one command) 
+-->If no output appears, create the group: sudo groupadd heist-team
 
--->First create user professor if not created and then run the following command: sudo chown professor:heist-team project-config.yml
+-->Verify it was created: getent group heist-team
 
-3. Create directory app-logs/ --> sudo mkdir app-logs and then run command ls -l to verify
+Step 4: Change the file's group: sudo chgrp heist-team devops-file.txt
 
-4. Change its owner to berlin and group to heist-team -->sudo chown berlin:heist-team app-logs
+-->Alternatively, you can use chown to change only the group: sudo chown :heist-team team-notes.txt [Note: Both commands achieve the same result for changing the group.]
 
-**Syntax:** sudo chown owner:group filename
+Step 5: Verify the change: ls -l team-notes.txt
 
-<img width="1148" height="967" alt="task 4-1" src="https://github.com/user-attachments/assets/45995eac-12f6-42eb-8c41-0a74b5b9d3b9" />
+**Notice:**
+- Owner remains sona
+- Group has changed to heist-team
 
-<img width="780" height="626" alt="task 4-2" src="https://github.com/user-attachments/assets/20266f52-7f33-47e7-a61e-54b23e9a062a" />
+**Understanding what changed:**
+
+<img width="725" height="257" alt="image" src="https://github.com/user-attachments/assets/32b2f010-847c-46f8-968e-46057e03e0da" />
+
+<img width="1605" height="445" alt="image" src="https://github.com/user-attachments/assets/f84c3eff-6d24-488a-9d3f-8aa6f4b37f5d" />
+
+**Common Errors:**
+
+Error 1: Group already exists: sudo chgrp heist-team team-notes.txt
+
+<img width="685" height="221" alt="image" src="https://github.com/user-attachments/assets/80042352-a9ff-4203-aa31-1fede1d88f7c" />
+
+Error 2: Invalid group: getent group heist-team
+
+-->sudo groupadd heist-team
+
+<img width="717" height="362" alt="image" src="https://github.com/user-attachments/assets/7cf00ef1-2c1e-434d-8f8f-65b051616e59" />
+
+Error 3: Operation not permitted: sudo chgrp heist-team team-notes.txt
+
+<img width="697" height="246" alt="image" src="https://github.com/user-attachments/assets/27dbce4e-f0c3-4e8b-af9d-af0f58b37c95" />
+
+---
+
+### Task 4: Combined Owner & Group Change (15 minutes)
+
+Using `chown` you can change both owner and group together:
+
+1. Create file `project-config.yaml`
+2. Change owner to `professor` AND group to `heist-team` (one command)
+3. Create directory `app-logs/`
+4. Change its owner to `berlin` and group to `heist-team`
+
+**Syntax:** `sudo chown owner:group filename`
+
+**Steps to follow:**
+
+-->Learn how to change both the owner and group in a single command using chown. Syntax: sudo chown owner:group filename
+
+Step 1: Create the file: touch project-config.yml
+
+-->verify: ls -l project-config.yaml
+
+**Current:**
+- Owner → sona
+- Group → sona
+
+Step 2: Check if the user professor exists: id professor
+
+-->If not exists then create: sudo useradd -m professor
+
+-->then verify: id professor
+
+Step 3: Check if the group heist-team exists: getent group heist-team & if not output appears then create: sudo groupadd heist-team
+
+Step 4: Change both owner and group (one command): sudo chown professor:heist-team project-config.yaml
+
+-->verify: ls -l project-config.yaml
+
+Now:
+- Owner → professor
+- Group → heist-team
+
+Step 5: Create the directory: mkdir app-logs
+
+-->verify: ls -ld app-logs
+
+Step 6: Check if user berlin exists: id berlin & if not exists create first: sudo useradd -m berlin
+
+Step 7: Change the directory owner and group: sudo chown berlin:heist-team app-logs
+
+-->verify: ls -ld app-logs
+
+Now:
+- Owner → berlin
+- Group → heist-team
 
 **Task 5: Recursive Ownership (20 minutes)**
 
