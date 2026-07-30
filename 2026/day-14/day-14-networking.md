@@ -114,31 +114,48 @@ Pick one target service/host (e.g., `google.com`, your lab server, or a local se
 
 <img width="1410" height="582" alt="image" src="https://github.com/user-attachments/assets/f905850e-3301-4bb7-a132-9eb35ea9edbb" />
 
+**3. Path: traceroute google.com OR tracepath google.com --> note any long hops/timeouts.**
+
+**Observation:** Traffic passed through multiple routers before reaching the destination. One or two hops may show * * *, which is normal because some routers block ICMP responses.
+
+Note: This traceroute & tracepath is bydefault is not available so we have to install it separately:
+- sudo apt install inetutils-traceroute -y
+- sudo apt install traceroute -y
+- sudo apt install iputils-tracepath -y
+
+<img width="1806" height="962" alt="image" src="https://github.com/user-attachments/assets/9e8dda11-f474-4bad-b3f4-044e038d827c" />
+
+<img width="1832" height="562" alt="image" src="https://github.com/user-attachments/assets/4cad7901-ed7d-43c2-ab01-274c68269688" />
+
+<img width="1892" height="842" alt="image" src="https://github.com/user-attachments/assets/e06f19fe-0bd0-4b44-9bf2-5149235837a4" />
+
+<img width="1312" height="537" alt="image" src="https://github.com/user-attachments/assets/ca33c596-f3d7-42b4-baab-ea697ddbbf7b" />
+
+**4. Listening Ports:  ss -tulpn OR netstat -tulpn --> list one listening service and its port**
+
+**Observation:** ssh listening on TCP port 22, This indicates the SSH service is ready to accept incoming connections, & systemd-resolved on port 53, Shows which services are actively listening.
+
+<img width="1891" height="532" alt="image" src="https://github.com/user-attachments/assets/cd005e02-d4b6-4f94-b39e-5ab6c15c3939" />
+
+<img width="1807" height="605" alt="image" src="https://github.com/user-attachments/assets/320605c9-98e1-4364-89de-15fbde32d624" />
+
+**5. Name Resolution: dig google.com OR nslookup google.com --> record the resolved IP**
+
+**Observation:** The Domain Resolved to one or more public IP's successfully, DNS response received successfully.
+
+<img width="1605" height="702" alt="image" src="https://github.com/user-attachments/assets/90523f3d-b586-40b7-8b93-7f916b2e9c5a" />
 
 
-**3. traceroute google.com OR tracepath google.com --> note any long hops/timeouts.**
 
-**Observation:** Multiple hops shown, Some hops may show * * * (ICMP blocked), Final destination reachable.
 
-<img width="1470" height="172" alt="image" src="https://github.com/user-attachments/assets/9f932289-28ce-4e2b-bbb4-3dbcda7b63a4" />
+**6. HTTP Check: Our target is Target: https://google.com & we have to run command curl -I https://google.com --> note the HTTP status code**
 
-**4. ss -tulpn OR netstat -tulpn --> list one listening service and its port**
+**Observation:** HTTP/1.1 200 OK (or 301 Moved Permanently, depending on the site)., Shows headers only, Confirms application layer OR we can say Web server is working.
 
-**Observation:** ssh listening on port 22, systemd-resolved on port 53, Shows which services are actively listening.
+<img width="1900" height="355" alt="image" src="https://github.com/user-attachments/assets/7f12ebf3-125a-4eb7-a15e-918d76f9896e" />
 
-<img width="1767" height="537" alt="image" src="https://github.com/user-attachments/assets/bf6393b3-6065-441d-a5e9-772125fef8a3" />
 
-**5. dig google.com OR nslookup google.com --> record the resolved IP**
 
-**Observation:** Resolved to public IP 142.250.76.206, DNS response received successfully.
-
-<img width="725" height="587" alt="image" src="https://github.com/user-attachments/assets/96358954-467e-4171-bf7e-46b333db7546" />
-
-**6. curl -I https://google.com --> note the HTTP status code**
-
-**Observation:** HTTP/1.1 200 OK, Shows headers only, Confirms application layer working.
-
-<img width="1918" height="318" alt="image" src="https://github.com/user-attachments/assets/3473308c-4308-472c-85df-9931864f37a4" />
 
 **7. netstat -an | head --> count ESTABLISHED vs LISTEN (rough)**
 
@@ -147,6 +164,9 @@ Observation: LISTEN – services waiting for connection, ESTABLISHED – active 
 <img width="807" height="217" alt="image" src="https://github.com/user-attachments/assets/72ab71b0-cea8-476d-8dc9-5a26bb9f443f" />
 
 Pick one target service/host (e.g., google.com, your lab server, or a local service) and stick to it for ping/traceroute/curl where possible.
+
+
+
 
 **Mini Task: Port Probe & Interpret**
 
