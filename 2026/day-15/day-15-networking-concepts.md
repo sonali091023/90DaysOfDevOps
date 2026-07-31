@@ -1,4 +1,4 @@
-Day 15 – Networking Concepts: DNS, IP, Subnets & Ports
+# Day 15 – Networking Concepts: DNS, IP, Subnets & Ports
 Task
 Build on Day 14 by understanding the building blocks of networking every DevOps engineer must know.
 
@@ -167,18 +167,18 @@ Q. 1. What is an IPv4 address?
 
 -->An IPv4 address is a 32-bit numerical address used to identify a device on a network. It consists of four octets separated by dots, with each octet ranging from 0 to 255. Example: 192.168.1.10.
 
-Q. 2. Public vs Private IP
+Q. 2. Public vs Private IP?
 
 -->Public IP: Used on the Internet and globally reachable. Example: 8.8.8.8.
 
 -->Private IP: Used within local networks and not directly accessible from the Internet. Example: 192.168.1.10.
 
-Q. 3. Private IP Ranges
+Q. 3. Private IP Ranges?
 - 10.0.0.0 – 10.255.255.255
 - 172.16.0.0 – 172.31.255.255
 - 192.168.0.0 – 192.168.255.255
 
-4. Identify Your Private IP
+4. Identify Your Private IP?
 
 -->Run: ip addr show [Note: Look for the line beginning with inet. If the IP starts with 10., 172.16–31., or 192.168., it is a private IP.]
 
@@ -304,6 +304,8 @@ Subnet 3 → 100 devices
 
 1. You run curl http://myapp.com:8080 — what networking concepts from today are involved?
 
+-->curl first resolves myapp.com to an IP address using DNS. It then connects to port 8080 using TCP, sends an HTTP request, and receives the server's response if the network path and service are reachable. OR we can say,
+
 --> DNS resolves myapp.com
 
    TCP connects to port 8080
@@ -312,17 +314,9 @@ Subnet 3 → 100 devices
 
    IP routes packets to destination
 
-**3. Your app can't reach a database at 10.0.1.50:3306 — what would you check first?**
+**2. Your app can't reach a database at 10.0.1.50:3306 — what would you check first?**
 
---> Checks:
-
-    Is DB service running?
-
-    Is port 3306 open?
-
-    Security group / firewall rules?
-
-    Network route between app and DB?
+-->First, verify that the database service is running and listening on port 3306. Then check network connectivity, firewall/security rules, and confirm that the IP address 10.0.1.50 is reachable from the application server.
 
 **What I Learned (Key Points)**
 
@@ -331,5 +325,33 @@ Subnet 3 → 100 devices
     CIDR helps efficiently divide networks and control traffic.
 
     Ports allow multiple services to operate on a single IP.
+
+## Documentation
+
+Create `day-15-networking-concepts.md` with:
+- Your answers to each task
+- Command outputs from `dig` and `ss`
+- The filled CIDR table
+- What you learned (3 key points)
+
+---
+
+## Submission
+1. Add `day-15-networking-concepts.md` to `2026/day-15/`
+2. Commit and push to your fork
+
+---
+
+## Learn in Public
+
+Share what you learned about DNS, subnets, or ports on LinkedIn.
+
+```
+#90DaysOfDevOps #DevOpsKaJosh #TrainWithShubham
+```
+
+Happy Learning!
+**TrainWithShubham**
+
 
 
