@@ -159,15 +159,32 @@ Observation: Example: 2 ESTABLISHED connections and 5 LISTEN sockets were observ
 
 Pick one target service/host (e.g., google.com, your lab server, or a local service) and stick to it for ping/traceroute/curl where possible.
 
+
+
+
 **Mini Task: Port Probe & Interpret**
 
-**1. Identify one listening port from ss -tulpn (e.g., SSH on 22 or a local web app).**
+1. Identify a Listening Port: ss -tulpn (e.g., Here, SSH is listening on port 22. OR a local web app)
 
-<img width="1788" height="253" alt="image" src="https://github.com/user-attachments/assets/f7bfd1b2-5b8a-43dc-97a3-57386685081d" />
+<img width="1865" height="577" alt="image" src="https://github.com/user-attachments/assets/6414fe18-ab19-406f-b105-2be972d2a96a" />
 
-**2. From the same machine, test it: nc -zv localhost 22 (or curl -I http://localhost:22).**
+2. Test the Port: nc -zv localhost 22 (OR curl -I http://localhost:22)
 
-<img width="671" height="107" alt="image" src="https://github.com/user-attachments/assets/099e0792-4788-42d7-a2fa-b1256e2980aa" />
+<img width="1567" height="117" alt="image" src="https://github.com/user-attachments/assets/6750caa9-8cca-4f97-9052-902306820bfa" />
+
+Note: Results indicate that nothing is accepting connections on port 22.
+
+**Interpretation:**
+- Connection refused means your machine is reachable, but no service is listening on port 22.
+- This is different from a timeout. A timeout often suggests a firewall or network issue, while "connection refused" usually means the service isn't running or isn't listening on that port.
+
+-->Verify if SSH is Listening:
+
+Run: ss -tulpn | grep :22 OR sudo ss -tulpn | grep :22
+If nothing is returned: SSH is not listening on port 22.
+If you see an sshd entry: SSH is running, and we can investigate why the connection failed.
+
+
 
 **3. Write one line: is it reachable? If not, what’s the next check? (e.g., service status, firewall).**
 
