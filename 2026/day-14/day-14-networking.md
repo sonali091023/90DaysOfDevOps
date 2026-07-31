@@ -145,28 +145,19 @@ Note: This traceroute & tracepath is bydefault is not available so we have to in
 
 <img width="1605" height="702" alt="image" src="https://github.com/user-attachments/assets/90523f3d-b586-40b7-8b93-7f916b2e9c5a" />
 
-
-
-
 **6. HTTP Check: Our target is Target: https://google.com & we have to run command curl -I https://google.com --> note the HTTP status code**
 
 **Observation:** HTTP/1.1 200 OK (or 301 Moved Permanently, depending on the site)., Shows headers only, Confirms application layer OR we can say Web server is working.
 
 <img width="1900" height="355" alt="image" src="https://github.com/user-attachments/assets/7f12ebf3-125a-4eb7-a15e-918d76f9896e" />
 
+**7. Connections Snapshot: netstat -an | head **
 
+Observation: Example: 2 ESTABLISHED connections and 5 LISTEN sockets were observed. LISTEN sockets are waiting for incoming connections, while ESTABLISHED indicates active communication.
 
-
-**7. netstat -an | head --> count ESTABLISHED vs LISTEN (rough)**
-
-Observation: LISTEN – services waiting for connection, ESTABLISHED – active connections, Quick view of connection state.
-
-<img width="807" height="217" alt="image" src="https://github.com/user-attachments/assets/72ab71b0-cea8-476d-8dc9-5a26bb9f443f" />
+<img width="1596" height="262" alt="image" src="https://github.com/user-attachments/assets/cacc2fa8-b30e-4261-aed7-48e2b9be9e24" />
 
 Pick one target service/host (e.g., google.com, your lab server, or a local service) and stick to it for ping/traceroute/curl where possible.
-
-
-
 
 **Mini Task: Port Probe & Interpret**
 
