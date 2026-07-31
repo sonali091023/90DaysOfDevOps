@@ -159,10 +159,11 @@ Observation: Example: 2 ESTABLISHED connections and 5 LISTEN sockets were observ
 
 Pick one target service/host (e.g., google.com, your lab server, or a local service) and stick to it for ping/traceroute/curl where possible.
 
-
-
+**3. Write one line: is it reachable? If not, what’s the next check? (e.g., service status, firewall).**
 
 **Mini Task: Port Probe & Interpret**
+
+-->The port is not reachable (Connection refused). Next, I would check whether the service is running (systemctl status ssh), verify it is listening on port 22 (ss -tulpn | grep :22), and then check the firewall if needed.
 
 1. Identify a Listening Port: ss -tulpn (e.g., Here, SSH is listening on port 22. OR a local web app)
 
@@ -184,45 +185,47 @@ Run: ss -tulpn | grep :22 OR sudo ss -tulpn | grep :22
 If nothing is returned: SSH is not listening on port 22.
 If you see an sshd entry: SSH is running, and we can investigate why the connection failed.
 
+To resolve Check SSH Service: sudo systemctl status ssh & If it says the service is not found, check: sudo systemctl status sshd
 
+Note: If ssh is not installed we have to install by using following commands:
+- sudo apt update
+- sudo apt install openssh-server
+- sudo systemctl enable --now ssh
 
-**3. Write one line: is it reachable? If not, what’s the next check? (e.g., service status, firewall).**
+Note: If ss -tulpn showed another listening port (for example, Docker on 2375, a web server on 80 or 8080, or PostgreSQL on 5432), use that port instead of 22. The task says to pick any listening port, not specifically SSH.
 
-Result: Connection successful, If not reachable:
+-->For example, if you have Nginx on port 80: curl -I http://localhost:80
 
-Next checks: systemctl status ssh
+-->or if you have a web app on port 8080: curl -I http://localhost:8080
 
-**Reflection (add to your markdown)**
+-->or test any listening TCP port with: nc -zv localhost <port>
+
+Reflection (add to your markdown):
 
 **1. Which command gives you the fastest signal when something is broken?**
 
---> ping command or curl -I it will quickly tells you If the host is reachable, If there is packet loss, network latency OR whether the network layer is working etc, 
-
---> Ping command gives instance connectivity check. And if ping command fails then problem may be in Network connectivity, Routing, DNS [If hostname cant resolve].
+--> ping command or curl -I it will quickly tells you If the host is reachable, If there is packet loss, network latency OR whether the network layer is working etc, Ping command gives instance connectivity check. And if ping command fails then problem may be in Network connectivity, Routing, DNS [If hostname cant resolve]. OR we can say `ping` is the fastest command to verify basic network connectivity.
+- For web applications, `curl -I <URL>` quickly confirms whether the server is reachable and shows the HTTP status code.
 
 **2. What layer (OSI/TCP-IP) would you inspect next if DNS fails? If HTTP 500 shows up?**
 
 -->DNS (Domain Name System) is an application-layer protocol that translates a domain name into an IP address. If DNS fails, the issue is usually related to:
-
-   DNS server not responding
-
-   Incorrect DNS records
-
-   Misconfigured /etc/resolv.conf
-
-   Network firewall blocking DNS (port 53)
+- DNS server not responding
+- Incorrect DNS records
+- Misconfigured /etc/resolv.conf
+- Network firewall blocking DNS (port 53)
 
 --> Check Application layer first (DNS service). Then verify UDP/TCP 53 at Transport layer.
     
     HTTP 500: Application layer issue.
-    
     Next checks:
-    
     Service logs
-   
     Application logs
    
    Backend service health
+
+-->- **DNS failure:** Inspect the **Application Layer** (OSI Layer 7 / TCP-IP Application Layer) because DNS is an application-layer protocol. Then verify the configured DNS server and name resolution using `dig` or `nslookup`.
+- **HTTP 500 error:** Inspect the **Application Layer** first because the server received the request but encountered an internal error. Check the application logs, web server logs, and backend service.
 
 **3. Two follow-up checks during a real incident**
 
@@ -232,4 +235,16 @@ Next checks: systemctl status ssh
 
 -->Checks the security rules, Inspect service logs[journalctl or app logs] 
 
+Submission
+Add day-14-networking.md to 2026/day-14/
+Commit and push to your fork
+Learn in Public
+Post 2–3 lines on the commands you practiced and one interesting traceroute/curl finding.
 
+Use hashtags:
+#90DaysOfDevOps
+#DevOpsKaJosh
+#TrainWithShubham
+
+Happy Learning
+TrainWithShubham
