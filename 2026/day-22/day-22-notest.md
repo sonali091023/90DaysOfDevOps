@@ -105,9 +105,11 @@ refs/	Stores -->       references to branches and tags.
 branches/ -->	        Legacy directory for branch references (often empty in modern Git).
 ```
 
+Step 6: View the Current Branch Reference: cat HEAD
 
+Example output: ref: refs/heads/main [Note: This means HEAD points to the main branch.]
 
-
+Step 7: Return to Your Project Directory: cd .. && pwd
 
 ---
 
@@ -120,8 +122,20 @@ branches/ -->	        Legacy directory for branch references (often empty in mod
 3. For each command, write:
    - What it does (1 line)
    - An example of how to use it
+
+**Steps to follow:**
   
 **git-command.md URL:** https://github.com/sonali091023/90DaysOfDevOps/blob/main/2026/day-22/git-commands.md
+
+Step 1: Make Sure You're Inside Your Repository: cd ~/devops-git-practice
+
+-->verify: pwd
+
+Step 2: Create the Markdown File: Create a new file named git-commands.md: touch git-commands.md
+
+-->then to verify: ls
+
+Step 3: Open the File: vi git-commands.md & add the content into it.
 
 ---
 
