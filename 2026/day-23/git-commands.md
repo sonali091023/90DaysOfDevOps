@@ -1,137 +1,204 @@
-# Git Commands Used:
+# Git Commands Reference
 
+## Setup & Config
+
+### git --version
+
+**What it does:**
+Displays the installed Git version.
+
+**Example:**
+```bash
+git --version
+```
+
+---
+
+### git config --global user.name "Your Name"
+
+**What it does:**
+Sets your Git username for all repositories.
+
+**Example:**
+```bash
+git config --global user.name "Sonali"
+```
+
+---
+
+### git config --global user.email "your-email@example.com"
+
+**What it does:**
+Sets your Git email address for all repositories.
+
+**Example:**
+```bash
+git config --global user.email "sonali@example.com"
+```
+
+---
+
+### git config --global --list
+
+**What it does:**
+Displays all global Git configuration settings.
+
+**Example:**
+```bash
+git config --global --list
+```
+
+---
+
+## Basic Workflow
+
+### git init
+
+**What it does:**
+Creates a new Git repository in the current directory.
+
+**Example:**
+```bash
 git init
+```
 
+---
+
+### git status
+
+**What it does:**
+Shows the current state of the repository, including tracked and untracked files.
+
+**Example:**
+```bash
 git status
+```
 
-git config --global user.name "Mention name"
+---
 
-git config --global user.email "mention email"
+## Viewing Changes
 
-**Note:** If we remove --global from the above command we can set the configuration locally as well **Eg:** git config user.name "sonali"
+### ls -la
 
-**To verify the Configuratopn details used command:**
+**What it does:**
+Lists all files, including hidden files like `.git`.
 
-git config --global user.name
+**Example:**
+```bash
+ls -la
+```
 
-git config --global user.email OR git config --list
+---
 
-**Note:** **Global config is stored in: ~/.gitconfig** And **Local config is stored in: .git/config inside your repo**
+### cd .git
 
-Git Commands organized by category:
-- **Setup & Config**
+**What it does:**
+Moves into the hidden Git metadata directory.
 
-1. git config: Sets username, email, and other Git configurations.
+**Example:**
+```bash
+cd .git
+```
 
-2. git init: Initializes a new Git repository
+---
 
-3. git clone: Copies an existing repository from remote to local
+### cat HEAD
 
-- **Basic Workflow**
+**What it does:**
+Shows which branch `HEAD` is currently pointing to.
 
-1. **git status:** Shows current state of files (staged, unstaged, untracked)
+**Example:**
+```bash
+cat HEAD
+```
 
-2. **git add:** Adds files to staging area Eg: git add . [To add all the files and directories etc] Also we can mention specif file name to add
+---
 
-3. **git commit:** Saves staged changes with a message
+### pwd
 
-4. **git push:** Uploads local commits to remote repository
+**What it does:**
+Displays the current working directory.
 
-5. **git pull:** Fetches and merges changes from remote repo
+**Example:**
+```bash
+pwd
+```
 
-- **Viewing Changes**
+## Viewing Changes
 
-6. **git log:** Shows commit history
+### git diff
 
-7. **git diff:** Shows differences between file versions
+**What it does:**
+Shows the changes that have not yet been staged.
 
-8. **git show:** Displays details of a specific commit
+**Example:**
 
-10. **git branch:** Lists or creates branches
+```bash
+git diff
+```
 
-11. **git checkout:** Switches between branches
+---
 
-**To push the code to the new repository for the first time/New repository use below commands:**
+### git diff --staged
 
-1. git init
+**What it does:**
+Shows changes that have been staged but not yet committed.
 
-2. git add README.md
+**Example:**
 
-3. git commit -m "first commit"
+```bash
+git diff --staged
+```
 
-4. git branch -M main
+### git log
 
-5. git remote add origin https://github.com/sonali091023/gitcommands.git
+**What it does:**
+Displays the commit history.
 
-6. git push -u origin main
+**Example:**
 
-**To push the code to existing repository use commands:**
+```bash
+git log
+```
 
-1. git remote add origin https://github.com/sonali091023/gitcommands.git
+---
 
-2. git branch -M main
+### git log --oneline
 
-3. git push -u origin main
+**What it does:**
+Shows commit history in a compact one-line format.
 
-**Viewing Changes/To Check the commit logs use commands:**
+**Example:**
 
-1. **git log:** View History in detail
+```bash
+git log --oneline
+```
 
-2. **git log --oneline:** view history in oneline
+## Branch Management
 
-3. **git status:** Check file status
+### git branch
 
-4. **git diff:** Se changes
+**What it does:**
+Lists all local branches.
 
-**Branching git commands:**
+**Example:**
 
-1. **git branch:** List branches	
+```bash
+git branch
+```
 
-2. **git branch feature:** Create branch	
+---
 
-3. **git checkout feature:** Switch branch	
+### git branch feature-login
 
-4. **git checkout -b feature:** Create + switch	
+**What it does:**
+Creates a new branch.
 
-5. **git merge feature:** Merge branch
+**Example:**
 
-**To Undo Changes**
-
-1. **git restore file.txt:** Discard changes
-
-2. **git reset file.txt:** Unstage file
-
-3. **git reset --hard:** Reset everything
-
-**Remote Repository**
-
-1. **git remote -v:** Show remotes
-
-2. **git remote add origin:** Add remote
-
-3. **git push -u origin main**: First push
-
-**Git stash and Git stash pop:**
-
-**git stash:** git stash is used to temporarily save uncommitted changes without committing them, allowing you to work on something else.
-
-**git stash pop:** git stash pop restores the most recent stashed changes and removes them from the stash list.
-
-**git stash list:** To show all the stashes
-
-**git stash apply:** Restores stash without deleting it
-
-**git stash drop:** Deletes a stash manually
-
-**To remove an unwanted branch in Git**
-
-1. **Delete a local branch:** git branch -d branch-name [Deletes the branch safely only if its already merged]
-
-2. **Force delete the branch:** git branch -D branch-name [Use carefully — this permanently deletes the branch]
-
-3. **Delete a remote branch:** git push origin --delete branch-name
-
-**Note:** You cannot delete the branch you're currently on.
+```bash
+git branch feature-login
+```
 
 
 
