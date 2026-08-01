@@ -20,32 +20,94 @@ You will:
 
 ## Challenge Tasks
 
-### Task 1: Install and Configure Git
-
-1. Verify Git is installed on your machine--> In case git is not installed  then if we run comand git --status then we see following output,
-
-<img width="967" height="165" alt="image" src="https://github.com/user-attachments/assets/49e1bdb3-8aec-4d8e-9efd-71698b6df3aa" />
-
+Task 1: Install and Configure Git
+1. Verify Git is installed on your machine
 2. Set up your Git identity — name and email
-
 3. Verify your configuration
 
-<img width="1075" height="472" alt="image" src="https://github.com/user-attachments/assets/04de5a7a-8db2-401d-b19d-e2feaa754880" />
+**Steps to follow:**
+
+Step 1: Verify Git is Installed: git --version
+
+Note: If you see a version number, Git is already installed. & if it not install we will get git: command not found, then to install git run command: sudo apt update && sudo apt install git -y
+
+-->Then verify the version again: git --version
+
+Step 2: Configure Your Git Identity: Git stores your name and email in every commit.
+
+-->Set your name: git config --global user.name "Your Name" Example: git config --global user.name "Sonali"
+
+-->Set your email: git config --global user.email "your-email@example.com" Example: git config --global user.email "sonali@example.com"
+
+Note: Replace the example email with the email associated with your GitHub account if you want your commits to be linked to your GitHub profile.
+
+Step 3: Verify Your Configuration: Display your configured name: git config --global user.name
+
+-->Display your configured email: git config --global user.email
+
+-->You can also view all global Git settings: git config --global --list
+
+Optional: Check Where the Configuration Is Stored: 
+
+-->To see the file containing your global Git configuration: git config --global --edit
+
+-->Or print the path: git config --global --show-origin --list
 
 ---
 
-### Task 2: Create Your Git Project
-1. Create a new folder called `devops-git-practice`
-
+Task 2: Create Your Git Project
+1. Create a new folder called devops-git-practice
 2. Initialize it as a Git repository
-
-<img width="1022" height="352" alt="image" src="https://github.com/user-attachments/assets/b3bf115c-9481-4801-a6a9-dd8a815dfede" />
-
 3. Check the status — read and understand what Git is telling you
+4. Explore the hidden .git/ directory — look at what's inside
 
-4. Explore the hidden `.git/` directory — look at what's inside
+**Steps to follow:**
 
-<img width="808" height="322" alt="image" src="https://github.com/user-attachments/assets/6d8b0d43-6434-4936-98bd-4022b94b1daf" />
+Step 1: Create a New Project Folder: mkdir devops-git-practice && cd devops-git-practice
+
+-->Verify Your Location: pwd
+
+-->Step 2: Initialize the Git Repository: git init [Note: This creates a hidden .git directory that Git uses to track your project's history.]
+
+Step 3: Check the Repository Status: git status
+```
+Expected Output:
+On branch main
+No commits yet
+nothing to commit (create/copy files and use "git add" to track)
+
+Understanding the Output:
+On branch main →                              You're currently on the main branch.
+No commits yet →                              The repository is new and has no commit history.
+Nothing to commit →                           There are no files to track yet.
+Create/copy files and use git add →           Git is telling you the next step.
+```
+
+Step 4: View Hidden Files: By default, .git is hidden, List all files, including hidden ones: ls -la
+
+Step 5: Explore the .git Directory: Move inside the Git metadata directory: 
+
+-->Move inside the Git metadata directory: cd .git
+
+-->List its contents: ls -la
+
+What Each Item Does: 
+
+```
+Item	                        Purpose
+HEAD -->	              Points to the current branch.
+config -->	           Repository-specific Git configuration.
+description	-->        Used mainly by Git web interfaces.
+hooks/ -->	           Stores Git hook scripts that run before or after Git actions.
+info/	Contains -->     repository information such as exclude rules.
+objects/ -->	        Stores commits, files (blobs), and other Git objects.
+refs/	Stores -->       references to branches and tags.
+branches/ -->	        Legacy directory for branch references (often empty in modern Git).
+```
+
+
+
+
 
 ---
 
