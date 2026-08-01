@@ -137,6 +137,10 @@ Step 2: Create the Markdown File: Create a new file named git-commands.md: touch
 
 Step 3: Open the File: vi git-commands.md & add the content into it.
 
+[git-commands.md](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-22/git-commands.md)
+
+Step 6: View the File: cat git-commands.md OR less git-commands.md
+
 ---
 
 ### Task 4: Stage and Commit
@@ -145,13 +149,114 @@ Step 3: Open the File: vi git-commands.md & add the content into it.
 3. Commit with a meaningful message
 4. View your commit history
 
-<img width="1036" height="250" alt="image" src="https://github.com/user-attachments/assets/3eb8ae84-0cfc-49df-ba41-147272186763" />
+Step 1: Make Sure You're Inside the Repository: cd ~/devops-git-practice
 
-<img width="942" height="465" alt="image" src="https://github.com/user-attachments/assets/0797693d-0915-4cd4-8866-3676c6f5dbe3" />
+-->verify: pwd
 
-<img width="717" height="162" alt="image" src="https://github.com/user-attachments/assets/b89ce7c5-c6e2-401e-8734-8602c17f8d7b" />
+Step 2: Check the Current Status: git status
+```
+Expected Output:
+On branch main
+No commits yet
 
-<img width="1460" height="308" alt="image" src="https://github.com/user-attachments/assets/3c5dfea4-292a-4528-9d83-5d8da79faa4b" />
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+  git-commands.md
+  nothing added to commit but untracked files present
+
+What It Means:
+git-commands.md exists but Git is not tracking it yet.
+The file must be staged before it can be committed.
+```
+
+Step 3: Stage the File: Stage your Markdown file: git add git-commands.md
+
+-->To stage all files in the current directory, you could also use: git add .
+
+Step 4: Verify What's Staged: git status
+```
+Expected Output:
+On branch main
+No commits yet
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+    new file:   git-commands.md
+
+What It Means:
+The file is now in the staging area.
+It is ready to be committed.
+```
+
+Step 5: Create Your First Commit: Commit the staged file with a meaningful message: git commit -m "Add Git commands reference documentation"
+```
+Expected Output
+[main (root-commit) abc1234] Add Git commands reference documentation
+ 1 file changed, 80 insertions(+)
+ create mode 100644 git-commands.md
+
+The commit ID (abc1234) will be different on your system.
+```
+
+Step 6: Verify the Working Tree: git status
+```
+Expected Output
+On branch main
+nothing to commit, working tree clean
+
+What It Means:
+All changes have been committed.
+Your repository is clean.
+```
+
+Step 7: View Commit History: Show the commit history: git log
+```
+Example Output
+commit a1b2c3d4e5f678901234567890abcdef12345678
+Author: Sonali <sonali@example.com>
+Date:   Sat Aug 1 12:45:00 2026 +0530
+
+    Add Git commands reference documentation
+
+Press Q to exit the log viewer.
+```
+
+-->View a Shorter Commit History: A compact view: git log --oneline
+
+Git Workflow Summary:
+```
+Create/Edit File
+        │
+        ▼
+git status
+        │
+        ▼
+git add git-commands.md
+        │
+        ▼
+git status
+        │
+        ▼
+git commit -m "Add Git commands reference documentation"
+        │
+        ▼
+git log
+```
+
+Expected Deliverables: By the end of this task, you should have:
+- Staged git-commands.md using git add
+- Verified the staged file with git status
+- Created your first commit with a meaningful message
+- Confirmed the repository is clean using git status
+- Viewed your commit history using git log and git log --oneline
+
+Key Concepts Learned:
+
+Command	                                           Purpose
+git status -->                                Shows the current state of your repository
+git add -->	                                  Moves changes to the staging area
+git commit -m "message" -->      	          Saves staged changes as a snapshot
+git log -->	                                  Displays detailed commit history
+git log -->                                   oneline	Shows a concise commit history
 
 ---
 
@@ -162,13 +267,101 @@ Step 3: Open the File: vi git-commands.md & add the content into it.
 4. Repeat this process at least **3 times** so you have multiple commits in your history
 5. View the full history in a compact format
 
-<img width="926" height="551" alt="image" src="https://github.com/user-attachments/assets/0bee4de7-5325-4899-a028-262fafe839af" />
+**Steps to follow:**
 
-<img width="823" height="120" alt="image" src="https://github.com/user-attachments/assets/e0e3fb23-697d-4bf8-a65d-55bc701aff22" />
+-->The goal of this task is to understand that Git records your project's history as a series of commits. Each commit should represent one logical change with a clear commit message.
 
+Step 1: Go to Your Repository: cd ~/devops-git-practice
+
+-->then to verify: pwd
+
+Step 2: Edit git-commands.md: vi git-commands.md & add new commands into it
+
+[git-commands.md](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-22/git-commands.md)
+
+Step 3: Check What Changed:
+
+-->verify: git status
+
+-->Now see the actual changes: git diff
+
+Note: This command displays every line you've added, removed, or modified since the last commit.
+
+Step 4: Stage the Changes: git add git-commands.md
+
+-->Verify the staged changes: git status
+
+-->Optionally, view the staged differences: git diff --staged
+
+Step 6: Make Another Update: Open the file again: vi git-commands.md After addition save then chnages
+
+[git-commands.md](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-22/git-commands.md)
+
+-->verify: git status
+
+-->Now see the actual changes: git diff
+
+-->git add git-commands.md
+
+-->Verify the staged changes: git status
+
+-->git commit -m "Document Git log commands"
+
+Step 7: Make a Third Update: Open the file again: vi git-commands.md After addition save then changes
+
+-->view the changes: git diff
+
+-->stage the chnages: git add git-commands.md
+
+-->commit the chnages: git commit -m "Add basic branch management commands"
+
+Step 8: View Your Complete History: Compact history: git log --oneline
+```
+Example:
+
+d82f9f1 Add basic branch management commands
+8c3f721 Document Git log commands
+7b21f4c Add Git diff commands to reference
+5a8d2c0 Add Git commands reference documentation
+
+Newest commit appears at the top.
+```
+
+Optional: View History as a Graph: git log --oneline --graph
+```
+Example:
+
+* d82f9f1 Add basic branch management commands
+* 8c3f721 Document Git log commands
+* 7b21f4c Add Git diff commands to reference
+* 5a8d2c0 Add Git commands reference documentation
+```
+
+Expected Repository Progress:
+```
+devops-git-practice/
+├── .git/
+└── git-commands.md
+
+Commit history:
+
+Commit 4 → Add basic branch management commands
+Commit 3 → Document Git log commands
+Commit 2 → Add Git diff commands to reference
+Commit 1 → Add Git commands reference documentation
+```
 ---
 
-### Task 6: Understand the Git Workflow
+Task 6: Understand the Git Workflow
+Answer these questions in your own words (add them to a day-22-notes.md file):
+
+1. What is the difference between git add and git commit?
+2. What does the staging area do? Why doesn't Git just commit directly?
+3. What information does git log show you?
+4. What is the .git/ folder and what happens if you delete it?
+5. What is the difference between a working directory, staging area, and repository?
+
+**Steps to follow:**
 
 Answer these questions in your own words (add them to a `day-22-notes.md` file):
 
@@ -178,29 +371,29 @@ Answer these questions in your own words (add them to a `day-22-notes.md` file):
 
 -->**git commit:** is used to save those staged changes into the local repository as a snapshot, To send changes to a remote repository like GitHub.
 
+-->OR simply we can say, `git add` moves new or modified files to the staging area, preparing them to be included in the next commit. `git commit` saves the staged changes as a permanent snapshot in the Git repository with a commit message.
+
+
 2. What does the **staging area** do? Why doesn't Git just commit directly?
 
--->**staging area**: The staging area in Git allows to review and select specific changes before committing them. It acts as an intermediate step between the 
-   
-   working directory and the repository, enabling clean, organized, and meaningful commits instead of committing everything at once.
+-->**staging area**: The staging area in Git allows to review and select specific changes before committing them. It acts as an intermediate step between the working directory and the repository, enabling clean, organized, and meaningful commits instead of committing everything at once. OR we can say The staging area lets you review and choose exactly which changes should be included in the next commit. This gives you control to organize related changes into meaningful commits instead of committing everything at once.
 
-5. What information does `git log` show you?
 
--->shows the commit history of a repository, including details like commit ID, author, date, and commit message. It helps track changes and understand the 
+3. What information does `git log` show you?
 
-   project history. 
+-->shows the commit history of a repository, including details like commit ID, author, date, and commit message. It helps track changes and understand the project history. 
 
-7. What is the `.git/` folder and what happens if you delete it?
+4. What is the `.git/` folder and what happens if you delete it?
 
---> The .git/ folder is the internal directory where Git stores all repository data, including commit history, branches, and configuration. If it is deleted,
+--> The .git/ folder is the internal directory where Git stores all repository data, including commit history, branches, and configuration. If it is deleted, the project loses version control completely and becomes a normal directory, with no way to track previous changes.
 
-    the project loses version control completely and becomes a normal directory, with no way to track previous changes.
+5. What is the difference between a **working directory**, **staging area**, and **repository**?
 
-9. What is the difference between a **working directory**, **staging area**, and **repository**?
+- **Working Directory:** The files and folders you are currently editing.
 
--->The working directory is where files are created and modified. The staging area is an intermediate space where changes are prepared before committing. 
+- **Staging Area (Index):** A temporary area where changes are prepared before being committed.
 
-The repository is where Git permanently stores committed changes as version history. Together, they form the workflow of how changes move in Git.
+- **Repository:** The Git database that permanently stores all commits, branches, and project history.
 
 **Flow Diagram**:
 
