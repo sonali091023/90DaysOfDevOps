@@ -232,6 +232,9 @@ Press Q to exit the log viewer.
 
 -->View a Shorter Commit History: A compact view: git log --oneline
 
+<img width="1577" height="971" alt="image" src="https://github.com/user-attachments/assets/02e14eab-fb84-4a85-9123-4dc8e52eb3e5" />
+<img width="1696" height="290" alt="image" src="https://github.com/user-attachments/assets/65f0f8a1-066d-43af-bf1e-c65c00e55c6d" />
+
 Git Workflow Summary:
 ```
 Create/Edit File
