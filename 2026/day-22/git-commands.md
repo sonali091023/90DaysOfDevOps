@@ -174,4 +174,32 @@ Shows commit history in a compact one-line format.
 git log --oneline
 ```
 
+## Branch Management
+
+### git branch
+
+**What it does:**
+Lists all local branches.
+
+**Example:**
+
+```bash
+git branch
+```
+
+---
+
+### git branch feature-login
+
+**What it does:**
+Creates a new branch.
+
+**Example:**
+
+```bash
+git branch feature-login
+```
+
+
+
 
