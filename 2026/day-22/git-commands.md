@@ -149,3 +149,29 @@ Shows changes that have been staged but not yet committed.
 ```bash
 git diff --staged
 ```
+
+### git log
+
+**What it does:**
+Displays the commit history.
+
+**Example:**
+
+```bash
+git log
+```
+
+---
+
+### git log --oneline
+
+**What it does:**
+Shows commit history in a compact one-line format.
+
+**Example:**
+
+```bash
+git log --oneline
+```
+
+
