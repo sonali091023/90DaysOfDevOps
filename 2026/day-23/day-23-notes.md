@@ -15,30 +15,31 @@ Now that you know how to create repos, stage, and commit — it's time to learn 
 
 ## Challenge Tasks
 
-### Task 1: Understanding Branches
-Answer these in your `day-23-notes.md`:
+Task 1: Understanding Branches
+Answer these in your day-23-notes.md:
+
+1. What is a branch in Git?
+2. Why do we use branches instead of committing everything to main?
+3. What is HEAD in Git?
+4. What happens to your files when you switch branches?
+
+**Steps to follow:**
+
 1. What is a branch in Git?
 
--->When you create a new branch, you make a copy of the current code, that allows us to work on features or fixes independently without affecting the main codebase.
-
-   Once the changes are complete, the branch can be merged back into the main branch. Bydefault main Master branch is available in the github we can rename it to main.
-   
-   **Eg:** git branch feature-login -->To create new branch
-      
-           git checkout feature-login -->To switch to that created branch
+-->A branch is an independent line of development in a Git repository. It allows you to work on new features, bug fixes, or experiments without affecting the main branch.
 
 2. Why do we use branches instead of committing everything to `main`?
 
--->By using branches we can Work in teams without conflicts, Keep project history clean, Fix bugs without breaking main code, Develop features independently etc
+-->Branches let developers work on different tasks safely without breaking the stable code in the `main` branch. Once the changes are tested and complete, they can be merged into `main`.
 
 3. What is `HEAD` in Git?
--->in Git is a pointer that refers to the current commit or the latest commit on the active branch. It represents the current working position in the repository.
+ 
+-->`HEAD` is a pointer that indicates your current location in the repository. It usually points to the latest commit on the branch you are currently working on.
 
 4. What happens to your files when you switch branches?
 
--->When switching branches in Git, the working directory is updated to reflect the files and commits of the target branch. Files may be added, removed, or
-
-   modified based on the branch. If there are uncommitted changes that conflict, Git prevents the switch to avoid data loss.
+-->When you switch branches, Git updates your working directory to match the files stored in the selected branch. Files that are different between branches are updated automatically, while uncommitted changes may prevent switching if they would be overwritten.
 
 ---
 
