@@ -123,3 +123,29 @@ Displays the current working directory.
 ```bash
 pwd
 ```
+
+## Viewing Changes
+
+### git diff
+
+**What it does:**
+Shows the changes that have not yet been staged.
+
+**Example:**
+
+```bash
+git diff
+```
+
+---
+
+### git diff --staged
+
+**What it does:**
+Shows changes that have been staged but not yet committed.
+
+**Example:**
+
+```bash
+git diff --staged
+```
