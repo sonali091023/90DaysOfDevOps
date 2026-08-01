@@ -53,6 +53,10 @@ Optional: Check Where the Configuration Is Stored:
 
 -->Or print the path: git config --global --show-origin --list
 
+<img width="1892" height="962" alt="image" src="https://github.com/user-attachments/assets/7642bec9-b7af-4dbf-8829-ddaf2cab8fc4" />
+
+<img width="1830" height="660" alt="image" src="https://github.com/user-attachments/assets/e93097c0-b23d-4bde-8fd4-44e62c01bf75" />
+
 ---
 
 Task 2: Create Your Git Project
@@ -111,6 +115,10 @@ Example output: ref: refs/heads/main [Note: This means HEAD points to the main b
 
 Step 7: Return to Your Project Directory: cd .. && pwd
 
+<img width="1772" height="720" alt="image" src="https://github.com/user-attachments/assets/81a12642-de09-4d77-9dd6-267ed33dc9fe" />
+
+<img width="1686" height="411" alt="image" src="https://github.com/user-attachments/assets/0382fff1-9740-4482-b6e6-79ca52702659" />
+
 ---
 
 ### Task 3: Create Your Git Commands Reference
@@ -168,6 +176,8 @@ What It Means:
 git-commands.md exists but Git is not tracking it yet.
 The file must be staged before it can be committed.
 ```
+
+<img width="1576" height="550" alt="image" src="https://github.com/user-attachments/assets/ad30a8fb-6bf8-4630-9276-87fd4a5ade56" />
 
 Step 3: Stage the File: Stage your Markdown file: git add git-commands.md
 
