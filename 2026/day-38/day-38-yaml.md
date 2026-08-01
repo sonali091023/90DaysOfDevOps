@@ -19,6 +19,7 @@ You will:
 ## Challenge Tasks
 
 ### Task 1: Key-Value Pairs
+
 Create `person.yaml` that describes yourself with:
 - `name`
 - `role`
@@ -27,8 +28,42 @@ Create `person.yaml` that describes yourself with:
 
 **Verify:** Run `cat person.yaml` — does it look clean? No tabs?
 
-<img width="1010" height="256" alt="image" src="https://github.com/user-attachments/assets/075fe51c-4490-4d00-8006-cd1b190d8007" />
+**Steps to follow:**
 
+-->This task is about creating a simple YAML file using key-value pairs.
+
+Step 1: Create person.yaml: vi person.yml
+
+-->Add the following content (replace the values with your own information):
+```
+name: Sonali
+role: DevOps Learner
+experience_years: 1
+learning: true
+
+Explanation: 
+- name → Your name (string)
+- role → Your current role or goal
+- experience_years → Number (no quotes)
+- learning → Boolean (true or false, lowercase)
+
+Important YAML Rules:
+- Use spaces, never tabs.
+- Keep one space after each colon (:).
+- Booleans should be true or false (lowercase).
+```
+
+Step 2: Save the file
+
+Step 3: Verify the file: cat person.yml
+```
+Expected output:
+
+name: Sonali
+role: DevOps Learner
+experience_years: 1
+learning: true
+```
 ---
 
 ### Task 2: Lists
@@ -38,22 +73,75 @@ Add to `person.yaml`:
 
 Write in your notes: What are the two ways to write a list in YAML?
 
--->There are two ways to write a list in YAML:
+**Steps to follow:**
 
-**1. Block format (multi-line)**
+Step 1: Update person.yaml: vi person.yml
+```
+name: Sonali
+role: DevOps Learner
+experience_years: 1
+learning: true
 
 tools:
-
+  - Git
   - Docker
-  
   - Kubernetes
-  
-  - Jenkins
+  - Terraform
+  - Ansible
 
-**2. Inline format (single-line): hobbies: [reading, coding]**
+hobbies: [Learning DevOps, Reading, Listening to music]
 
-<img width="1028" height="280" alt="image" src="https://github.com/user-attachments/assets/79d808ae-6e09-41cd-891c-42e36a90f073" />
+Explanation:
+- tools uses the block list format (each item starts with -).
+- hobbies uses the inline list format (items inside square brackets []).
+```
 
+Step 2: Verify: cat person.yaml
+```
+Expected output:
+
+name: Sonali
+role: DevOps Learner
+experience_years: 1
+learning: true
+
+tools:
+  - Git
+  - Docker
+  - Kubernetes
+  - Terraform
+  - Ansible
+
+hobbies: [Learning DevOps, Reading, Listening to music]
+```
+Q. Write in your notes: What are the two ways to write a list in YAML?
+
+-->There are two ways to write a list in YAML:
+
+1. **Block List**
+   - Each item starts with a hyphen (`-`).
+   - Example:
+     ```yaml
+     tools:
+       - Git
+       - Docker
+       - Kubernetes
+     ```
+
+2. **Inline List**
+   - All items are written inside square brackets (`[]`) separated by commas.
+   - Example:
+     ```yaml
+     hobbies: [Reading, Gaming, Music]
+     ```
+Key Difference:
+```
+Block List	                                    Inline List
+One item per line	-->                        All items on one line
+Easier to read for long lists	-->            Good for short lists
+Uses - before each item -->	                 Uses [] and commas
+
+```
 ---
 
 ### Task 3: Nested Objects
@@ -63,15 +151,75 @@ Create `server.yaml` that describes a server:
 
 **Verify:** Try adding a tab instead of spaces — what happens when you validate it?
 
--->If we add a tab instead of spaces, YAML will break for example:
+**Steps yo follow:**
 
+Step 1: Create server.yaml: vi server.yml: Add the following content:
+```
 server:
+  name: web-server
+  ip: 192.168.1.10
+  port: 8080
 
-    name: my-server
+database:
+  host: db.example.com
+  name: app_db
+  credentials:
+    user: admin
+    password: secret123
+```
+Structure:
+```
+server
+├── name
+├── ip
+└── port
+
+database
+├── host
+├── name
+└── credentials
+    ├── user
+    └── password
+
+Notice that:
+- server is a nested object (mapping).
+- database is another nested object.
+- credentials is nested inside database.
+```
+
+Step 2: Verify the file: cat server.yaml
+```
+Expected output:
+server:
+  name: web-server
+  ip: 192.168.1.10
+  port: 8080
+
+database:
+  host: db.example.com
+  name: app_db
+  credentials:
+    user: admin
+    password: secret123
+```
+
+Step 3: Validate the YAML: 
+
+-->If you have Python and PyYAML installed: python3 -c "import yaml; yaml.safe_load(open('server.yaml')); print('Valid YAML')"
+
+-->Or, if you have yamllint installed: yamllint server.yaml
+
+Q. Step 4: What happens if you use a tab?
+
+-->For example, if you write: 
+```
+server:
+	name: web-server   [Note: (where name is indented with a tab instead of spaces)]
+```
+Expected Result: 
+<img width="717" height="466" alt="image" src="https://github.com/user-attachments/assets/575d05cf-15d9-4103-b978-6383f3f2c572" />
 
 -->Instead Always use 2 spaces (common convention), YAML only allows spaces for indentation
-
-<img width="1012" height="333" alt="image" src="https://github.com/user-attachments/assets/e060cd0e-4587-40a3-b404-c4fc5b52fe38" />
 
 ---
 
