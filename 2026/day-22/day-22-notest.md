@@ -363,6 +363,16 @@ Commit 3 → Document Git log commands
 Commit 2 → Add Git diff commands to reference
 Commit 1 → Add Git commands reference documentation
 ```
+
+<img width="1675" height="957" alt="image" src="https://github.com/user-attachments/assets/556db822-1159-402d-9c4e-48aee3a45a7a" />
+<img width="1565" height="977" alt="image" src="https://github.com/user-attachments/assets/b4eb2718-4536-48f6-9a34-b15a826cd541" />
+<img width="1456" height="965" alt="image" src="https://github.com/user-attachments/assets/6414a314-7e9e-452b-a1b2-5878a66fb107" />
+<img width="1492" height="971" alt="image" src="https://github.com/user-attachments/assets/27bf72f1-0639-4f0f-9cb2-7c4888cf0bf9" />
+<img width="1661" height="982" alt="image" src="https://github.com/user-attachments/assets/02358d81-3fed-4fd7-a597-41ae382a5bb5" />
+<img width="1551" height="967" alt="image" src="https://github.com/user-attachments/assets/71b55a5b-a346-4d9f-8ce6-47bfb4db245c" />
+<img width="1501" height="971" alt="image" src="https://github.com/user-attachments/assets/c0517475-3ab9-4edc-a36e-f25b4dc0061f" />
+<img width="1557" height="85" alt="image" src="https://github.com/user-attachments/assets/70c12382-041b-469b-bd14-7990a8a7aab6" />
+
 ---
 
 Task 6: Understand the Git Workflow
