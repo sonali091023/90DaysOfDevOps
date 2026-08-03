@@ -1,0 +1,14 @@
+## Task 4: Multi-line Strings
+
+### Literal Block Style (|)
+- Preserves all line breaks exactly as written.
+- Best for scripts, configuration files, certificates, or logs.
+
+### Folded Block Style (>)
+- Converts line breaks into spaces.
+- Best for long descriptions, documentation, or paragraphs.
+
+### When to use `|` vs `>`?
+
+- Use `|` when formatting and line breaks must remain unchanged (e.g., Bash scripts, SQL queries, configuration snippets).
+- Use `>` when you want to write readable multi-line text in the YAML file but have it treated as a single paragraph when parsed.
