@@ -12,3 +12,21 @@
 
 - Use `|` when formatting and line breaks must remain unchanged (e.g., Bash scripts, SQL queries, configuration snippets).
 - Use `>` when you want to write readable multi-line text in the YAML file but have it treated as a single paragraph when parsed.
+
+
+### Commands Summary
+
+```bash
+sudo apt update
+sudo apt install yamllint -y
+
+yamllint --version
+
+yamllint person.yaml
+yamllint server.yaml
+
+# Break indentation and validate
+yamllint server.yaml
+
+# Fix indentation and validate again
+yamllint server.yaml
