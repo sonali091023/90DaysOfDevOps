@@ -138,12 +138,17 @@ process without any human manually pressing "run." Without a trigger, a pipeline
 
 **tag created** → triggers on version tags like v1.0.0
 
-<img width="647" height="193" alt="image" src="https://github.com/user-attachments/assets/29fa2042-595a-4926-9ce7-1d8afad5e9fc" />
+Common examples: 
+- Pushing code to GitHub
+- Creating a Pull Request (PR)
+- Running the pipeline manually
+- A scheduled (cron) run
+
+Eg: I push code to the main branch → Pipeline starts automatically.
 
 2. **Stage** — a logical phase (build, test, deploy)
 
--->A stage is a named, logical grouping of related jobs that represents one phase of the software delivery process. Stages run sequentially — 
-Stage 2 only starts if Stage 1 passes. This acts as a quality gate: broken code never advances to the next phase.
+-->A stage is a named, logical grouping of related jobs that represents one phase of the software delivery process. Stages run sequentially, Stage 2 only starts if Stage 1 passes. This acts as a quality gate: broken code never advances to the next phase. Stages usually run one after another.
 
 **stages:**
   
@@ -159,21 +164,21 @@ Stage 2 only starts if Stage 1 passes. This acts as a quality gate: broken code 
 
  --> **Note:** If test stage fails → deploy-staging never runs. Production is always protected.
 
-3. **Job** — a unit of work inside a stage
+3. **Job** — a unit of work inside a stage OR we can say A step is a single command or action inside a job. 
 
---> A job is a specific, self-contained task that lives inside a stage. Multiple jobs in the same stage can run in parallel, speeding up the pipeline 
-significantly. Each job runs in its own isolated environment and has a clear pass/fail outcome that determines if the pipeline proceeds.
-
-<img width="456" height="193" alt="image" src="https://github.com/user-attachments/assets/7f8d2434-c3ba-419a-9b99-67e5dbe97a7c" />
+--> A job is a specific, self-contained task that lives inside a stage. Multiple jobs in the same stage can run in parallel, speeding up the pipeline significantly. Each job runs in its own isolated environment and has a clear pass/fail outcome that determines if the pipeline proceeds. A stage can contain one or more jobs.
 
 -->All 4 must pass → Stage is GREEN, Any 1 fails → Stage is RED → pipeline stops
 
-- **Step** — a single command or action inside a job
+4. **Step** — a single command or action inside a job
 
--->  A step is the smallest atomic unit of a pipeline — one command, one script, or one pre-built action that does exactly one thing. Steps inside a job run 
-strictly in order, one after another. If any step fails, the entire job stops immediately and is marked as failed.
+-->  A step is the smallest atomic unit of a pipeline — one command, one script, or one pre-built action that does exactly one thing. Steps inside a job run strictly in order, one after another. If any step fails, the entire job stops immediately and is marked as failed. OR we can say A step is a single command or action inside a job.
 
-<img width="721" height="221" alt="image" src="https://github.com/user-attachments/assets/dc1cfa11-0fde-4550-a7d0-01ce2e62e968" />
+<img width="616" height="227" alt="image" src="https://github.com/user-attachments/assets/5907a3b5-6359-4790-bc9d-9ce842d76b30" />
+
+
+
+
 
 -->Step 3 fails (bad package) → Steps 4 & 5 never run
 
