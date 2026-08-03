@@ -139,7 +139,7 @@ Key Difference:
 Block List	                                    Inline List
 One item per line	-->                        All items on one line
 Easier to read for long lists	-->            Good for short lists
-Uses - before each item -->	                 Uses [] and commas
+Uses - before each item -->	                   Uses [] and commas
 
 ```
 ---
@@ -209,7 +209,7 @@ Step 3: Validate the YAML:
 
 -->Or, if you have yamllint installed: yamllint server.yaml
 
-Q. Step 4: What happens if you use a tab?
+Step 4: What happens if you use a tab?
 
 -->For example, if you write: 
 ```
@@ -217,6 +217,7 @@ server:
 	name: web-server   [Note: (where name is indented with a tab instead of spaces)]
 ```
 Expected Result: 
+
 <img width="717" height="466" alt="image" src="https://github.com/user-attachments/assets/575d05cf-15d9-4103-b978-6383f3f2c572" />
 
 -->Instead Always use 2 spaces (common convention), YAML only allows spaces for indentation
@@ -225,39 +226,140 @@ Expected Result:
 
 ### Task 4: Multi-line Strings
 In `server.yaml`, add a `startup_script` field using:
-1. The `|` block style (preserves newlines)
-2. The `>` fold style (folds into one line)
+- 1. The `|` block style (preserves newlines)
+- 2. The `>` fold style (folds into one line)
 
 Write in your notes: When would you use `|` vs `>`?
 
---> **| (literal block style)** → preserves line breaks exactly
+**Steps to follow:**
 
---> **> (folded style)** → converts newlines into spaces 
+Step 1: Open server.yaml: vi server.yml
 
--->**Use | when:** Writing scripts (bash, shell commands), Formatting must stay exactly the same, Multi-line configs or logs
+Step 2: Add a multi-line string using | (Literal Block Style): 
+- The | symbol preserves line breaks exactly as written.
 
--->**Use > when:** Writing long text (descriptions, messages), You want cleaner YAML but don’t care about line breaks, Lines should behave as a single paragraph
+-->Now update the server.yml file
+```
+server:
+  name: web-server
+  ip: 192.168.1.10
+  port: 8080
 
-<img width="1012" height="530" alt="image" src="https://github.com/user-attachments/assets/38b88200-6019-4c23-90ad-70c09b12d927" />
+  startup_script: |
+    #!/bin/bash
+    echo "Starting application..."
+    systemctl start nginx
+    echo "Application started"
+
+database:
+  host: db.example.com
+  name: app_db
+  credentials:
+    user: admin
+    password: secret123
+
+Output when parsed:
+
+#!/bin/bash
+echo "Starting application..."
+systemctl start nginx
+echo "Application started"
+
+Notice every newline is preserved.
+```
+
+Step 3: Add a multi-line string using > (Folded Block Style):
+```
+
+server:
+  name: web-server
+  ip: 192.168.1.10
+  port: 8080
+
+  startup_script: |
+    #!/bin/bash
+    echo "Starting application..."
+    systemctl start nginx
+    echo "Application started"
+
+  description: >
+    This is a sample web server
+    used for learning YAML.
+    The folded style converts
+    line breaks into spaces.
+
+database:
+  host: db.example.com
+  name: app_db
+  credentials:
+    user: admin
+    password: secret123
+
+Output when parsed: This is a sample web server used for learning YAML. The folded style converts line breaks into spaces.
+```
+
+-->Notice the multiple lines become one sentence.
+
+Step 4: Verify the file: cat server.yml
+```
+server:
+  name: web-server
+  ip: 192.168.1.10
+  port: 8080
+
+  startup_script: |
+    #!/bin/bash
+    echo "Starting application..."
+    systemctl start nginx
+    echo "Application started"
+
+  description: >
+    This is a sample web server
+    used for learning YAML.
+    The folded style converts
+    line breaks into spaces.
+
+database:
+  host: db.example.com
+  name: app_db
+  credentials:
+    user: admin
+
+    password: secret123
+```
+
+Step 5: Validate the YAML: 
+
+<img width="712" height="386" alt="image" src="https://github.com/user-attachments/assets/1cc74cb5-3336-4325-a443-61ca1244d574" />
+
+Step 6: Add to your notes: 
+
+[mynotest.md](https://github.com/sonali091023/90DaysOfDevOps/blob/master/2026/day-38/notest.md')
 
 ### Task 5: Validate Your YAML
 1. Install `yamllint` or use an online validator
 
--->sudo apt update
 
--->sudo apt install yamllint -y
 
-2. Validate both your YAML files
 
-<img width="1067" height="302" alt="image" src="https://github.com/user-attachments/assets/097720a4-09cd-4d95-97d6-9e795c8d724e" />
+**Steos to follow:**
+-
 
-3. Intentionally break the indentation — what error do you get?
+Step 1: Install yamllint: sudo apt update && sudo apt install yamllint -y
 
-<img width="1067" height="302" alt="image" src="https://github.com/user-attachments/assets/46fe02e0-f3e5-4de5-9632-78e3dbcd0801" />
+-->verify installed yml lint version: yamllint --version
 
-5. Fix it and validate again
+Step 2: Validate your YAML files: yamllint person.yaml && yamllint server.yaml
 
-<img width="1067" height="302" alt="image" src="https://github.com/user-attachments/assets/306d4512-fe9d-4780-a9c0-9c74cc39c0c6" />
+-->Or validate both at once: yamllint person.yaml server.yaml  [Expected output (if both files are valid): No output means your YAML files are valid.]
+
+Step 3: Intentionally break the indentation: 
+
+<img width="740" height="735" alt="image" src="https://github.com/user-attachments/assets/71b0ed06-8887-4bfe-9d04-5a9346ba5f93" />
+
+Step 4: Fix the indentation: 
+
+<img width="687" height="521" alt="image" src="https://github.com/user-attachments/assets/6bc3e719-35f3-4f6b-81d7-365942a44e92" />
 
 ---
 
@@ -291,6 +393,31 @@ tools:
   - docker
   - kubernetes
 ---
+
+**Steps to follow:**
+
+<img width="712" height="657" alt="image" src="https://github.com/user-attachments/assets/37576fd5-c3fc-43a9-8ec1-85f411621331" />
+<img width="687" height="197" alt="image" src="https://github.com/user-attachments/assets/f781b832-15b7-4064-b68d-537134b9aece" />
+
+Q. Spot the Difference?
+
+-->The second YAML block has incorrect indentation.
+
+- The first list item (`- docker`) is not indented under the `tools` key.
+- The second list item (`- kubernetes`) is indented differently from the first.
+- In YAML, all items in a list must have the same indentation level under their parent key.
+
+Correct version:
+
+```yaml
+name: devops
+tools:
+  - docker
+  - kubernetes
+```
+
+-->Note: **Key takeaway:** YAML relies on **consistent spaces for indentation**. Even small indentation mistakes can make the file invalid or change its meaning.
+
 
 ## Hints
 - YAML uses **spaces only** — never tabs
