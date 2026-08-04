@@ -24,7 +24,9 @@ Your pipeline runs on push. Today you learn **every way to trigger a workflow** 
 
 **Steps to follow:**
 
-Step 1: Go to your repository: github-actions-practice
+Step 1: Go to your repository : github-actions-practice
+
+Step 2: Make sure you're on the main branch: git checkout main && git pull origin main
 
 Step 2: Create the workflow file: Create the following file: .github/workflows/pr-check.yml 
 
@@ -40,7 +42,8 @@ github-actions-demo/
 └── README.md
 ```
 
-Step 3: Add the workflow: Copy this YAML into pr-check.yml: [pr-lifecycle.yml](https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/pr-lifecycle.yml)
+Step 4: Add the workflow: Copy this YAML into pr-check.yml: [pr-lifecycle.yml]([https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/pr-lifecycle.yml](https://github.com/sonali091023/github-actions-practice/blob/9cfa7440163548ca2f08689a811eba1fe8395030/.github/workflows/pr-pull-request-chk.yml))
+
 ```
 name: Pull Request Check
 
@@ -60,6 +63,143 @@ jobs:
       - name: Print PR branch
         run: echo "PR check running for branch: ${{ github.head_ref }}"
 ```
+
+**Understanding the workflow:** 
+
+Workflow name: The name shown in the GitHub Actions page
+```name: Pull Request Check```
+
+Trigger: Runs only for Pull Requests.
+```
+on:
+  pull_request:
+```
+
+Target branch:
+```
+branches:
+  - main
+```
+This means: PR into main
+Examples:
+- feature/login  ---> main   ✅ runs
+- bugfix/api ---> main       ✅ runs
+- feature ---> develop       ❌ doesn't run
+
+Event types:
+```
+types:
+  - opened
+  - synchronize
+```
+Meaning:
+- opened → workflow runs when a PR is created.
+- synchronize → workflow runs whenever new commits are pushed to that PR.
+
+Example: Create PR --> Workflow runs --> Push another commit --> Workflow runs again
+
+Runner: GitHub creates a temporary Ubuntu VM.
+```runs-on: ubuntu-latest```
+
+Step: 
+```run: echo "PR check running for branch: ${{ github.head_ref }}"```
+
+github.head_ref is the source branch of the pull request.
+
+Example: If your PR is feature-login --> main & then output is Output: PR check running for branch: feature-login
+
+Step 4: Commit the workflow to main: 
+
+-->git add .
+
+-->git commit -m "Add PR workflow"
+
+-->git push origin main
+
+Note: The workflow must exist on the target branch (main) before GitHub can run it for future PRs. OR we can say, The workflow must already exist on the main branch before GitHub can use it for pull requests targeting main.
+
+Step 5: Create a new branch: ```git checkout -b feature-pr-test```
+
+-->Verify: 
+```
+git branch
+output is: * feature-pr-test
+             main
+```
+
+Step 6: Make any change: ```echo "Testing PR workflow" >> README.md```
+
+Step 7: Commit: 
+
+-->git add README.md
+
+-->git commit -m "Test PR workflow"
+
+Step 8: Push the branch: git push -u origin feature-pr-test [Here -u is not mandatory]
+
+Step 9: Create the Pull Request: On GitHub:
+- Click Compare & pull request.
+- Ensure:
+  - Base branch: main
+  - Compare branch: feature-pr-test
+- Click Create pull request.
+
+Step 10: Watch the workflow: Immediately after creating the PR:
+- Open the Actions tab.
+- You should see: Pull Request Check Click it.
+
+Step 10: View the logs: 
+
+<img width="635" height="265" alt="image" src="https://github.com/user-attachments/assets/69b7af19-6c5a-4425-be24-e3ded3fe58d3" />
+
+Step 11: Verify it appears on the PR page: 
+
+<img width="710" height="282" alt="image" src="https://github.com/user-attachments/assets/71b01c77-fadd-46a7-96a2-94ed1bb71c8c" />
+
+Step 12: Trigger the workflow again: Since the workflow includes:
+```
+types:
+  - opened
+  - synchronize
+```
+Push another commit to the same branch:
+
+-->echo "Another change" >> README.md
+
+-->git add README.md
+
+-->git commit -m "Update PR"
+
+-->git push
+
+-->The workflow will automatically run again because the PR was updated (synchronize event).
+
+What you should observe:
+
+<img width="742" height="352" alt="image" src="https://github.com/user-attachments/assets/a7ea40ac-5eff-4bac-bb4f-e1fe0b7c7a7f" />
+<img width="1665" height="961" alt="image" src="https://github.com/user-attachments/assets/1f02b31b-d1d5-4d34-a4e5-cfdf80468df3" />
+<img width="1781" height="532" alt="image" src="https://github.com/user-attachments/assets/a5ce51c0-5ad1-4a8a-a14f-7e9472cfd1a5" />
+<img width="1867" height="821" alt="image" src="https://github.com/user-attachments/assets/c6a602cb-6c8b-4e42-a2c0-e0c4cb3d59ca" />
+<img width="1897" height="951" alt="image" src="https://github.com/user-attachments/assets/dc863169-e6eb-45b7-a992-c89a4f2520c1" />
+<img width="1910" height="847" alt="image" src="https://github.com/user-attachments/assets/e145e9b4-fdb2-463d-96b9-664bbda17eae" />
+<img width="1912" height="880" alt="image" src="https://github.com/user-attachments/assets/5bc1572f-7b93-429b-93ca-77e92ba2fac6" />
+<img width="1901" height="947" alt="image" src="https://github.com/user-attachments/assets/f276c781-4bd8-44cc-93bc-75c5e271440b" />
+<img width="1911" height="715" alt="image" src="https://github.com/user-attachments/assets/aa937247-d14f-4988-9a88-a9877e9dace7" />
+<img width="1911" height="417" alt="image" src="https://github.com/user-attachments/assets/7d3cd3d6-552c-4f2b-a5ed-cde5338d1807" />
+<img width="1901" height="582" alt="image" src="https://github.com/user-attachments/assets/cd3ca32c-cce2-40e6-a55f-8b0a46f30d55" />
+<img width="1916" height="937" alt="image" src="https://github.com/user-attachments/assets/8521c63c-3142-41ff-8b27-93ec628b0a82" />
+
+Q. Does it show up on the PR page?
+Yes. GitHub displays the workflow as a status check on the pull request. If the workflow succeeds, you'll see a green check mark. If it fails, you'll see a red cross with a link to inspect the logs.
+
+
+
+
+
+
+
+
+
 
 -->**Create new repository for the github-actions practice:** https://github.com/sonali091023/github-actions-practice/tree/main/.github/workflows
 
