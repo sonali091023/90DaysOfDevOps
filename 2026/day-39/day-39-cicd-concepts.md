@@ -270,7 +270,14 @@ Developer Pushes Code
 
 ### Task 4: Draw a Pipeline
 Draw a CI/CD pipeline for this scenario:
---> A developer pushes code to GitHub. The app is tested, built into a Docker image, and deployed to a staging server.
+
+- A developer pushes code to GitHub. The app is tested, built into a Docker image, and deployed to a staging server.
+
+Include at least 3 stages. Hand-drawn and photographed is perfectly fine.
+
+**Steps to follow:**
+
+Draw a CI/CD pipeline for this scenario: A developer pushes code to GitHub. The app is tested, built into a Docker image, and deployed to a staging server.
 
 **Pipeline Diagram:**
 ```
@@ -373,36 +380,53 @@ Application Running
    - How many jobs does it have?
    - What does it do? (best guess)
 
-.github/workflows/pull-kubernetes-e2e-gce.yaml
+**Steps to follow:**
 
-<img width="1023" height="551" alt="image" src="https://github.com/user-attachments/assets/e15b8511-1324-4dba-a341-3437eb192d05" />
+Step 1: Open a GitHub Repository: Open the FastAPI GitHub repository: https://github.com/fastapi/fastapi
 
-**Trigger**
+Step 2: Open the .github/workflows Folder: Navigate to: 
+```
+.github/
+└── workflows/
+```
+You'll see several workflow files such as:
+- docs.yml
+- test.yml
+- publish.yml etc.
 
--->Runs on push to main branch
+Step 3: Open a Workflow File: https://github.com/fastapi/fastapi/blob/master/.github/workflows/build-docs.yml
 
--->Runs on pull_request targeting main
+Q. What triggers it?
 
--->Runs on schedule (every 12 hours)
+-->The workflow is triggered when:
+- Code is pushed to the repository (push)
+- A Pull Request is created or updated (pull_request)
 
--->Also runs on updates to the PR (new commits)
+-->This means GitHub automatically starts the workflow whenever new code is pushed or someone opens/updates a pull request.
 
-**Jobs**
+-->The workflow runs when code is pushed to the repository or when a pull request is created or updated.
 
--->Multiple jobs (build, test, e2e)
+Q. How many jobs does it have?
 
-**What it does**
+-->It contains multiple jobs (the exact number may change over time). Each job usually tests FastAPI with different:
+- Python versions
+- Operating systems
+- Configurations
 
--->Builds the application code
+-->It has multiple jobs that test the project in different environments and Python versions.
 
--->Runs unit and integration tests
+3. What does it do?
 
--->Creates a test Kubernetes cluster (on cloud)
+-->The workflow automatically:
+- Checks out the source code
+- Installs Python and project dependencies
+- Runs formatting and linting checks
+- Runs automated tests
+- Ensures FastAPI works correctly before code is merged
 
--->Runs end-to-end (E2E) tests
+-->Its main goal is to verify that new code does not break the project.
 
--->Validates that the PR does not break the system
-
+-->The workflow checks out the code, installs dependencies, runs automated tests, and verifies that the application works correctly before changes are merged.
 
 ---
 
