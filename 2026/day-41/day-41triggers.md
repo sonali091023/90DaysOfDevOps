@@ -192,59 +192,70 @@ What you should observe:
 Q. Does it show up on the PR page?
 Yes. GitHub displays the workflow as a status check on the pull request. If the workflow succeeds, you'll see a green check mark. If it fails, you'll see a red cross with a link to inspect the logs.
 
-
-
-
-
-
-
-
-
-
--->**Create new repository for the github-actions practice:** https://github.com/sonali091023/github-actions-practice/tree/main/.github/workflows
-
--->Yes, it shows up on the PR page, And the workflow is visible and runs automatically on the PR page when configured correctly
-
-**Steps to perform:**
-
--->Create Repo-->github-actions-practice-->And now add new file like README.md file and commit the same being in main branch
-
--->Now create new branch-->for that click branch dropdwon and enter the name-->then we can see create branch option click on it and new branch will get create
-
--->Now create new workflow in new branch-->Click on Add file-->new file-->.github/workflows/pr-check.yml and add yml file content in the pr-check.yml file and Commit directly to feature/pr-test
-
-**Verify:** Does it show up on the PR page?
-
-<img width="1881" height="901" alt="image" src="https://github.com/user-attachments/assets/0a1f2afb-1199-44e9-a41e-91023a6da59d" />
-
-<img width="1336" height="582" alt="image" src="https://github.com/user-attachments/assets/108148e2-6494-4577-bbf1-216a0bc58371" />
-
-<img width="1815" height="642" alt="image" src="https://github.com/user-attachments/assets/9ccad23b-7c09-470d-992d-60bfd025c514" />
-
-<img width="1903" height="745" alt="image" src="https://github.com/user-attachments/assets/fe26ef65-13fc-457f-9999-ba6984987dc5" />
-
-<img width="1877" height="775" alt="image" src="https://github.com/user-attachments/assets/5522e227-9d8e-41d0-a864-d255eed2ef05" />
-
 ---
 
 ### Task 2: Scheduled Trigger
 1. Add a `schedule:` trigger to any workflow using cron syntax
 2. Set it to run every day at midnight UTC
-
-<img width="455" height="242" alt="image" src="https://github.com/user-attachments/assets/435fc829-d5c4-4196-8ed6-6148dbeac4a7" />
-
 3. Write in your notes: What is the cron expression for every Monday at 9 AM?
--->Cron expression for every monday at 9 am is **0 9 * * 1**, So here meaning of
 
-0 → minute (00), 
+**Steps to follow:**
 
-9 → hour (9 AM), 
+-->This task teaches you how to run a GitHub Actions workflow automatically on a schedule using a cron expression.
 
-(astric*) → every day of month,
+Step 1: Choose a workflow: Create file schedule.yml
 
-(astric*) → every month,
+Step 2: Add the scheduled trigger: Create or update the workflow with the following content:
+```
+name: Daily Scheduled Workflow
 
-1 → Monday etc.
+on:
+  schedule:
+    - cron: '0 0 * * *'   # Every day at 00:00 UTC
+  workflow_dispatch:       # Optional: lets you run it manually
+
+jobs:
+  scheduled-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: echo "This workflow runs every day at midnight UTC."
+```
+
+Q. Why add workflow_dispatch?
+
+-->Since the schedule only runs at 00:00 UTC, you may not want to wait until then to verify your workflow. Adding:
+```workflow_dispatch:```
+-->When we add this workflow_dispatch in the code in that case, lets you run it manually from the Actions tab for testing.
+
+Step 3: Understand the cron expression: The expression used is: 0 0 * * *
+
+-->So Cron has five fields:
+<img width="720" height="471" alt="image" src="https://github.com/user-attachments/assets/43401b3e-98f1-4ad1-a8c7-b0a661035238" />
+
+Step 4: Commit and push: 
+
+-->git add .github/workflows/scheduled.yml
+
+-->git commit -m "Add scheduled workflow"
+
+-->git push origin main
+
+Q1. Cron expression to run every day at midnight UTC?
+
+-->0 0 * * *
+
+Q2. What is the cron expression for every Monday at 9 AM?
+
+-->0 9 * * 1
+
+Explanation:
+- 0 → minute 0
+- 9 → 9 AM
+- * → every day of the month
+- * → every month
+- 1 → Monday
 
 ---
 
