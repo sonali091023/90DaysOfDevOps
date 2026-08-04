@@ -22,6 +22,45 @@ Your pipeline runs on push. Today you learn **every way to trigger a workflow** 
 
 **Verify:** Does it show up on the PR page?
 
+**Steps to follow:**
+
+Step 1: Go to your repository: github-actions-practice
+
+Step 2: Create the workflow file: Create the following file: .github/workflows/pr-check.yml 
+
+-->Your project should look like:
+```
+github-actions-demo/
+│
+├── .github/
+│   └── workflows/
+│       ├── hello.yml
+│       └── pr-check.yml
+│
+└── README.md
+```
+
+Step 3: Add the workflow: Copy this YAML into pr-check.yml: [pr-lifecycle.yml](https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/pr-lifecycle.yml)
+```
+name: Pull Request Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  pr-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print PR branch
+        run: echo "PR check running for branch: ${{ github.head_ref }}"
+```
+
 -->**Create new repository for the github-actions practice:** https://github.com/sonali091023/github-actions-practice/tree/main/.github/workflows
 
 -->Yes, it shows up on the PR page, And the workflow is visible and runs automatically on the PR page when configured correctly
