@@ -654,6 +654,7 @@ Note:
 fail-fast: false:
 - All matrix jobs continue running even if one or more jobs fail.
 - Useful for seeing the results of every configuration in a single workflow run.
+
 fail-fast: true (default):
 - When one matrix job fails, GitHub cancels the remaining in-progress or queued matrix jobs.
 - Saves runner time but may hide additional failures in other configurations.
