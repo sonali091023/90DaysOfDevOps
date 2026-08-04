@@ -80,7 +80,7 @@ CI/CD deployment:
 
 ---
 
-Task 2: CI vs CD
+### Task 2: CI vs CD
 Research and write short definitions (2-3 lines each):
 
 1. Continuous Integration — what happens, how often, what it catches
@@ -94,148 +94,177 @@ Write one real-world example for each.
 
 -->CI Definition: Continuous Integration (CI) is the practice of regularly merging code changes into a shared repository, usually several times a day. Every change automatically triggers a build and tests to ensure the new code works correctly with the existing code. It helps catch problems early before they reach production.
 
-What happens?
+Q. What happens?
 - Developers frequently push code to a shared repository.
 - The CI pipeline automatically builds the application and runs tests.
 - If any test fails, developers are notified immediately.
 
-How often?
-
+Q. How often?
 - Multiple times a day, whenever code is pushed.
 
-What does it catch?
+Q. What does it catch?
 - Build failures
 - Syntax errors
 - Failed unit/integration tests
 - Merge conflicts
 - Some security or code quality issues
 
-Real-world example: A developer pushes code to GitHub. GitHub Actions automatically builds the project and runs all tests. If a test fails, the developer fixes the issue before merging the code.
-
-
-
-
+**Real-world example:** A developer pushes code to GitHub. GitHub Actions automatically builds the project and runs all tests. If a test fails, the developer fixes the issue before merging the code.
 
 2. **Continuous Delivery** — how it's different from CI, what "delivery" means
 
--->**Continuous Delivery picks up where CI ends:** after code passes all automated tests, it is automatically packaged and pushed to a staging/pre-production 
-environment, making it ready to deploy to production at any time. The key distinction from CI: CI validates code quality, Delivery ensures the software is always
-in a releasable state. The final push to production still requires a human approval click.
+-->CD Definition: Continuous Delivery extends Continuous Integration by automatically preparing the application for release after all tests pass. The application is always in a deployable state, but a person decides when to deploy it to production.
 
--->**Real-World Example:** At Netflix, after CI passes, the build is automatically deployed to a staging environment where smoke tests, performance tests, 
-and canary checks run. The release manager sees a green dashboard and clicks "Deploy to Production" — the code ships in 2 minutes. The human decides when, 
-not how.
+Q. How is it different from CI?
+- CI focuses on building and testing code. Continuous Delivery also packages and prepares the application for deployment after successful tests.
+
+Q. What does "delivery" mean?
+- The application is automatically made ready for deployment.
+- Deployment to production requires manual approval.
+
+**Real-world example:** After GitHub Actions completes the build and tests, the application is automatically deployed to a staging environment. A release manager reviews it and manually approves deployment to production.
 
 3. **Continuous Deployment** — how it differs from Delivery, when teams use it
 
--->**Continuous Deployment is the most advanced stage:** every code change that passes all automated tests is deployed to production automatically, with 
-zero human intervention. It differs from Continuous Delivery in one critical way: there is no manual approval gate. Teams use it when they have extremely high 
-confidence in their test coverage, strong monitoring, and fast rollback capability.
+-->CD Definition: Continuous Deployment goes one step further than Continuous Delivery. After the application passes all automated tests, it is automatically deployed to production without any manual approval. Every successful change can reach users immediately.
 
--->**Real-World Example:** Amazon's engineering teams push thousands of deployments daily. A developer merges a one-line bug fix → CI runs → all tests pass → code 
-is live in production within minutes, automatically. If error rates spike, automated rollback triggers instantly — no human needed at any step.
+Q. How is it different from Continuous Delivery?
+- Continuous Delivery: Manual approval is required before production deployment.
+- Continuous Deployment: Deployment to production happens automatically after all checks pass.
 
-Write one real-world example for each.
+Q. When do teams use it?
+- Teams with strong automated testing and monitoring.
+- Applications that release updates frequently, such as SaaS platforms and web applications.
 
--->**CI = "Does it work?" → Delivery = "Is it ready?" → Deployment = "It's already live."**
+**Real-world example:** A developer pushes code to GitHub. The CI/CD pipeline builds the application, runs all tests, and if everything passes, it is automatically deployed to production without any human intervention.
+
+**Quick Comparison: **
+<img width="905" height="312" alt="image" src="https://github.com/user-attachments/assets/f29c5112-7524-4569-a5f4-2befad69ff87" />
 
 ---
 
 ### Task 3: Pipeline Anatomy
 A pipeline has these parts — write what each one does:
+- Trigger — what starts the pipeline
+- Stage — a logical phase (build, test, deploy)
+- Job — a unit of work inside a stage
+- Step — a single command or action inside a job
+- Runner — the machine that executes the job
+- Artifact — output produced by a job
 
-1. **Trigger** — what starts the pipeline
+**Steps to follow:**
 
--->A trigger is the event that fires the pipeline automatically. It listens for specific actions in your repository or system and kicks off the entire CI/CD
-process without any human manually pressing "run." Without a trigger, a pipeline is just a sleeping script.
+1. **Trigger: ** A Trigger is the event that starts the CI/CD pipeline automatically. It tells the pipeline when to begin running.
 
 **Common Trigger Types:**
-
-**git push** → runs on every code push
-
-**pull_request** → runs when a PR is opened/updated
-
-**merge to main** → runs only when code lands in main branch
-
-**schedule (cron)** → runs at fixed times ("every night at 2 AM")
-
-**manual** → a human clicks "Run Pipeline"
-
-**webhook** → an external system sends an HTTP signal
-
-**tag created** → triggers on version tags like v1.0.0
+- **git push** → runs on every code push
+- **pull_request** → runs when a PR is opened/updated
+- **merge to main** → runs only when code lands in main branch
+- **schedule (cron)** → runs at fixed times ("every night at 2 AM")
+- **manual** → a human clicks "Run Pipeline"
+- **webhook** → an external system sends an HTTP signal
+- **tag created** → triggers on version tags like v1.0.0
 
 Common examples: 
-- Pushing code to GitHub
-- Creating a Pull Request (PR)
-- Running the pipeline manually
-- A scheduled (cron) run
+- A developer pushes code to GitHub.
+- A pull request is created or merged.
+- A scheduled time (Cron job: daily/nightly build).
+- A manual button click.
 
-Eg: I push code to the main branch → Pipeline starts automatically.
+Eg: A developer pushes new code to the main branch, and the pipeline starts automatically.
 
-2. **Stage** — a logical phase (build, test, deploy)
+2. **Stage: ** A Stage is a logical phase in the pipeline that groups related jobs together. Stages help organize the pipeline into separate parts such as building, testing, and deploying the application.
 
--->A stage is a named, logical grouping of related jobs that represents one phase of the software delivery process. Stages run sequentially, Stage 2 only starts if Stage 1 passes. This acts as a quality gate: broken code never advances to the next phase. Stages usually run one after another.
+**Common stages:**
+- **build** --> Compiles the code
+- **test** --> validates the quality
+- **security-scan** 
+- **deploy-staging** -->Pre-prod smkoe test
+- **deploy-production** --> Live!
 
-**stages:**
-  
-  - **build** --> Compiles the code
-  
-  - **test** --> validates the quality
-  
-  - **security-scan** 
-  
-  - **deploy-staging** -->Pre-prod smkoe test
-  
-  - **deploy-production** --> Live!
+Eg: The pipeline first runs the Build stage, then the Test stage, and finally the Deploy stage.
 
- --> **Note:** If test stage fails → deploy-staging never runs. Production is always protected.
+**Note:** If test stage fails → deploy-staging never runs. Production is always protected.
 
-3. **Job** — a unit of work inside a stage OR we can say A step is a single command or action inside a job. 
+3. **Job:** A Job is a specific unit of work inside a stage. Each stage can contain one or more jobs, and each job performs a particular task. 
 
---> A job is a specific, self-contained task that lives inside a stage. Multiple jobs in the same stage can run in parallel, speeding up the pipeline significantly. Each job runs in its own isolated environment and has a clear pass/fail outcome that determines if the pipeline proceeds. A stage can contain one or more jobs.
+Examples:
+- Compile the application
+- Run unit tests
+- Build a Docker image
+- Deploy the application
 
--->All 4 must pass → Stage is GREEN, Any 1 fails → Stage is RED → pipeline stops
+Eg: In the Test stage, one job runs unit tests while another job runs integration tests.
 
-4. **Step** — a single command or action inside a job
+4. **Step:** A Step is a single command or action inside a job. Multiple steps are executed one after another to complete the job.
 
--->  A step is the smallest atomic unit of a pipeline — one command, one script, or one pre-built action that does exactly one thing. Steps inside a job run strictly in order, one after another. If any step fails, the entire job stops immediately and is marked as failed. OR we can say A step is a single command or action inside a job.
+Examples:
+- Check out the source code
+- Install dependencies
+- Run npm install
+- Execute npm test
+- Build the application
 
-<img width="616" height="227" alt="image" src="https://github.com/user-attachments/assets/5907a3b5-6359-4790-bc9d-9ce842d76b30" />
+Example: A build job may contain these steps:
+1. Checkout the code.
+2. Install dependencies.
+3. Build the application.
 
+5. **Runner:** A Runner is the machine or environment that executes the pipeline jobs. It can be a physical machine, virtual machine, container, or cloud-hosted server.
 
+Types of runners:
+- GitHub-hosted runner
+- Self-hosted runner
 
+Eg: GitHub Actions uses an Ubuntu virtual machine (ubuntu-latest) to execute pipeline jobs.
 
+6. **Artifact:** An Artifact is a file or output produced by a job that can be saved and used by later stages or downloaded after the pipeline finishes.
 
--->Step 3 fails (bad package) → Steps 4 & 5 never run
+Examples:
+- Compiled application files
+- Docker image
+- Test reports
+- Log files
+- ZIP packages
 
-<img width="337" height="257" alt="image" src="https://github.com/user-attachments/assets/67c78d20-370f-4b76-98c1-8807c2d655ae" />
+Eg: The Build stage creates a .jar file, which is saved as an artifact and later used by the Deploy stage.
 
-4. **Runner** — the machine that executes the job
+**Pipeline Flow:**
 
--->A runner is the physical or virtual machine (or container) that actually runs your job's steps. It's the execution engine of the pipeline. Each job is
-assigned to a runner, which pulls the job instructions, sets up the environment, executes every step, and reports the result back to the CI/CD platform.
+```
+Developer Pushes Code
+          │
+          ▼
+       Trigger
+          │
+          ▼
+   ┌─────────────┐
+   │ Build Stage │
+   │  └─ Job     │
+   │      └─ Steps│
+   └─────────────┘
+          │
+          ▼
+   ┌─────────────┐
+   │ Test Stage  │
+   │  └─ Job     │
+   │      └─ Steps│
+   └─────────────┘
+          │
+          ▼
+   ┌─────────────┐
+   │Deploy Stage │
+   │  └─ Job     │
+   │      └─ Steps│
+   └─────────────┘
+          │
+          ▼
+      Artifact
+```
 
-Runner types
-<img width="655" height="332" alt="image" src="https://github.com/user-attachments/assets/79e3ea30-52c2-469e-98b3-f8a258fc59db" />
+**Quick Summary:**
 
-<img width="628" height="218" alt="image" src="https://github.com/user-attachments/assets/926029ca-654f-4b2b-9090-166f3d54256e" />
-
-5. **Artifact** — output produced by a job
-
--->An artifact is any file, folder, or package produced by a job that needs to be stored or passed to a later stage. Artifacts are the "handoff" mechanism 
-between stages — the build stage compiles your code into an artifact, and the deploy stage picks up that exact artifact to ship to production. This guarantees 
-what was tested is exactly what gets deployed.
-
-Common Artifact Types:
-<img width="732" height="172" alt="image" src="https://github.com/user-attachments/assets/987cbc7d-9d9b-4a2c-afef-0ff2bdfb84e5" />
-
-<img width="808" height="307" alt="image" src="https://github.com/user-attachments/assets/21b7c27c-3b28-42df-b31d-cc272fc74303" />
-
-<img width="437" height="365" alt="image" src="https://github.com/user-attachments/assets/590f0da6-7ff8-4b89-a255-cc1d4d002bab" />
-
-
--->Code enters as a trigger, flows through stages → jobs → steps, executes on a runner, and produces artifacts that carry the verified build all the way to production. 
+<img width="751" height="310" alt="image" src="https://github.com/user-attachments/assets/af372623-dc46-4d46-a4db-5326162981b4" />
 
 ---
 
@@ -243,26 +272,95 @@ Common Artifact Types:
 Draw a CI/CD pipeline for this scenario:
 --> A developer pushes code to GitHub. The app is tested, built into a Docker image, and deployed to a staging server.
 
-Include at least 3 stages. Hand-drawn and photographed is perfectly fine.
+**Pipeline Diagram:**
+```
+                 Developer
+                     │
+                     │ Push Code
+                     ▼
+                GitHub Repository
+                     │
+                     │ Trigger Pipeline
+                     ▼
+         ┌─────────────────────────┐
+         │      Stage 1: Test      │
+         ├─────────────────────────┤
+         │ • Checkout Code         │
+         │ • Install Dependencies  │
+         │ • Run Unit Tests        │
+         └─────────────────────────┘
+                     │
+             Tests Passed?
+                     │
+                     ▼
+         ┌─────────────────────────┐
+         │     Stage 2: Build      │
+         ├─────────────────────────┤
+         │ • Build Application     │
+         │ • Create Docker Image   │
+         │ • Save Build Artifact   │
+         └─────────────────────────┘
+                     │
+                     ▼
+         ┌─────────────────────────┐
+         │    Stage 3: Deploy      │
+         ├─────────────────────────┤
+         │ • Push Docker Image     │
+         │ • Deploy to Staging     │
+         │ • Verify Deployment     │
+         └─────────────────────────┘
+                     │
+                     ▼
+            Staging Server Ready
+```
+Simpler Version:
+```
+Developer
+    │
+    ▼
+Push Code to GitHub [Trigger the code]
+    │
+    ▼
+CI/CD Pipeline      
+    │
+    ├──────────────┐
+    ▼              ▼
+[Test Stage]   Run Tests
+    │
+    ▼
+[Build Stage]       
+Build App
+Create Docker Image
+    │
+    ▼
+[Deploy Stage] 
+Deploy to Staging Server
+    │
+    ▼
+Application Running
+```
 
-<img width="1280" height="960" alt="developer to staging scenario" src="https://github.com/user-attachments/assets/fbb7b37c-e03a-49c4-94a4-c57156fa20e4" />
+**What to Label in Your Drawing: Make sure your diagram includes:**
+- Trigger: Push code to GitHub
+- Stage 1: Test
+- Stage 2: Build
+- Stage 3: Deploy
+- Runner: (Optional) GitHub Actions Runner
+- Artifact: Docker Image
+- Deployment Target: Staging Server
 
+**Explanation of the Flow:** 
+- A developer pushes code to the GitHub repository.
+- This triggers the CI/CD pipeline.
+- The Test stage checks out the code, installs dependencies, and runs automated tests.
+- If all tests pass, the Build stage compiles the application and creates a Docker image (the artifact).
+- Finally, the Deploy stage deploys the Docker image to the staging server, where the application can be tested before production.
 
-**Pipeline Walkthrough — Stage by Stage**
-
-The trigger fires the moment a developer runs git push. GitHub detects the push via a webhook and instantly hands control to the CI/CD runner. No human needs to press anything.
-
-**Stage 1** — Test runs three jobs simultaneously on separate runners — lint, unit tests, and security scanning — all in parallel. This is where the pipeline earns its keep: bad code is caught in minutes, not days. If even one job fails, the pipeline stops dead and nothing proceeds to build.
-
-<img width="480" height="632" alt="image" src="https://github.com/user-attachments/assets/3a60ee91-b33a-4df7-bdc2-ea1335cb4b0e" />
-
-**Stage 2** — Build only starts after all three test jobs go green. The runner executes a docker build, tags the image with the exact Git commit SHA (e.g. myapp:sha-a3f9b2) for full traceability, and pushes it to Docker Hub. The image is now the artifact — the verified, immutable package that carries the code all the way to production.
-
-<img width="640" height="251" alt="image" src="https://github.com/user-attachments/assets/20b782bb-81a2-4b8b-87d1-605b233f9d76" />
-
-**Stage 3** — Deploy to Staging pulls that exact image from the registry, SSH's into the staging server, runs docker run, and immediately fires a smoke test job in parallel — hitting the /health endpoint, checking database connectivity, and running critical E2E paths. If the health check fails, the pipeline alerts the team and the broken version never goes further.
-
-<img width="657" height="290" alt="image" src="https://github.com/user-attachments/assets/4b608e84-76f5-4d97-ba9f-5864ac1fa721" />
+**This diagram satisfies the task requirements by including:**
+- Trigger: GitHub push
+- 3 Stages: Test → Build → Deploy
+- Artifact: Docker image
+- Deployment Target: Staging server
 
 ---
 
