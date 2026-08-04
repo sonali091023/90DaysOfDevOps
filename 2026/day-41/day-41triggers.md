@@ -242,6 +242,11 @@ Step 4: Commit and push:
 
 -->git push origin main
 
+<img width="1902" height="890" alt="image" src="https://github.com/user-attachments/assets/bf478c91-9461-4dbb-b46d-a29c5bc9792a" />
+<img width="1897" height="942" alt="image" src="https://github.com/user-attachments/assets/c2f98cbc-4674-4ff4-a0a2-3e3b0be5a591" />
+<img width="1907" height="891" alt="image" src="https://github.com/user-attachments/assets/e7068052-f6c7-42ef-8903-7164fc7613ca" />
+<img width="1892" height="962" alt="image" src="https://github.com/user-attachments/assets/adba273d-748c-4bc5-b80e-13c491f1b079" />
+
 Q1. Cron expression to run every day at midnight UTC?
 
 -->0 0 * * *
@@ -267,9 +272,104 @@ Explanation:
 
 **Verify:** Can you trigger it manually and see your input printed?
 
-<img width="1886" height="757" alt="image" src="https://github.com/user-attachments/assets/74d4f2aa-9c62-44dd-a1e1-e73eb31d5667" />
+**Steps to follow:**
 
-<img width="1906" height="821" alt="image" src="https://github.com/user-attachments/assets/f06fa576-e570-4085-b761-b2c5ab3741e0" />
+-->This task teaches you how to create a manually triggered GitHub Actions workflow that accepts user input.
+
+Step 1: Go to your repository: Make sure you're on the main branch: git checkout main
+
+-->git pull origin main
+
+Step 2: Create the workflow file: vi manual.yml
+
+Step 3: Add the workflow: 
+```
+name: Manual Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Choose the deployment environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  manual-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print selected environment
+        run: echo "Selected environment: ${{ inputs.environment }}"
+```
+
+Step 4: Understand the workflow:
+```
+Workflow name
+name: Manual Deployment
+
+This is the name you'll see in the Actions tab.
+
+Manual trigger
+on:
+  workflow_dispatch:
+
+This tells GitHub:
+
+Do not run automatically. Only run when someone clicks "Run workflow".
+
+Input field
+inputs:
+  environment:
+
+This creates a dropdown on GitHub.
+
+Available choices:
+
+staging
+production
+Print the input
+run: echo "Selected environment: ${{ inputs.environment }}"
+
+If you select production, the log will show:
+
+Selected environment: production
+```
+
+Step 5: Commit the workflow: 
+
+-->git add .github/workflows/manual.yml
+
+-->git commit -m "Add manual workflow"
+
+-->git push origin main
+
+Step 6: Open the Actions tab: 
+- Go to your GitHub repository.
+- Click the Actions tab.
+- In the left sidebar, click Manual Deployment.
+
+-->You should see something like: Manual Deployment
+
+Step 7: Run the workflow: 
+
+<img width="702" height="547" alt="image" src="https://github.com/user-attachments/assets/761fc1c4-60d9-4405-82f2-f8692a92de74" />
+
+Step 8: Check the logs
+
+<img width="671" height="392" alt="image" src="https://github.com/user-attachments/assets/0161932d-c9ff-4d57-851b-984b11abeadd" />
+
+Step 10: Verify the task
+
+Q. Can you trigger it manually and see your input printed?
+
+-->Yes. The workflow can be started manually from the Actions tab using the Run workflow button. After selecting an environment (staging or production), the workflow runs and prints the selected value in the job logs.
+
+<img width="675" height="501" alt="image" src="https://github.com/user-attachments/assets/87ac2b30-51bb-4495-8330-910cfa47041f" />
 
 ---
 
