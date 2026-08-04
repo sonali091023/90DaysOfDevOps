@@ -19,6 +19,13 @@ Today is a research and diagram day — no pipelines yet. Get the concepts right
 Think about a team of 5 developers all pushing code to the same repo manually deploying to production.
 
 Write in your notes:
+
+1. What can go wrong?
+2. What does "it works on my machine" mean and why is it a real problem?
+3. How many times a day can a team safely deploy manually?
+
+**Steps to follow:**
+
 1. What can go wrong?
 
 -->When multiple developers manually deploy code to the same production environment, several problems can occur:
@@ -73,15 +80,41 @@ CI/CD deployment:
 
 ---
 
-### Task 2: CI vs CD
+Task 2: CI vs CD
 Research and write short definitions (2-3 lines each):
+
+1. Continuous Integration — what happens, how often, what it catches
+2. Continuous Delivery — how it's different from CI, what "delivery" means
+3. Continuous Deployment — how it differs from Delivery, when teams use it
+Write one real-world example for each.
+
+**Steps to follow:**
+
 1. **Continuous Integration** — what happens, how often, what it catches
 
--->**Continuous Integration (CI):** CI is the practice where every developer merges their code into a shared repository multiple times a day, triggering 
-an automated pipeline that builds the code, runs tests, and checks for errors immediately. It catches bugs, merge conflicts, broken builds, and failing tests at the moment they're introduced — not days later.
+-->CI Definition: Continuous Integration (CI) is the practice of regularly merging code changes into a shared repository, usually several times a day. Every change automatically triggers a build and tests to ensure the new code works correctly with the existing code. It helps catch problems early before they reach production.
 
--->**Real-World Example:** A developer at Spotify pushes a new feature branch. Within minutes, GitHub Actions automatically runs 800 unit tests, checks 
-code formatting, scans for security vulnerabilities, and reports back — before any human reviews the PR. The broken test is caught in 4 minutes, not 4 days.
+What happens?
+- Developers frequently push code to a shared repository.
+- The CI pipeline automatically builds the application and runs tests.
+- If any test fails, developers are notified immediately.
+
+How often?
+
+- Multiple times a day, whenever code is pushed.
+
+What does it catch?
+- Build failures
+- Syntax errors
+- Failed unit/integration tests
+- Merge conflicts
+- Some security or code quality issues
+
+Real-world example: A developer pushes code to GitHub. GitHub Actions automatically builds the project and runs all tests. If a test fails, the developer fixes the issue before merging the code.
+
+
+
+
 
 2. **Continuous Delivery** — how it's different from CI, what "delivery" means
 
