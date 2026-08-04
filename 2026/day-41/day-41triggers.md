@@ -28,7 +28,7 @@ Step 1: Go to your repository : github-actions-practice
 
 Step 2: Make sure you're on the main branch: git checkout main && git pull origin main
 
-Step 2: Create the workflow file: Create the following file: .github/workflows/pr-check.yml 
+Step 3: Create the workflow file: Create the following file: .github/workflows/pr-check.yml 
 
 -->Your project should look like:
 ```
@@ -42,7 +42,7 @@ github-actions-demo/
 └── README.md
 ```
 
-Step 4: Add the workflow: Copy this YAML into pr-check.yml: [pr-lifecycle.yml]([https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/pr-lifecycle.yml](https://github.com/sonali091023/github-actions-practice/blob/9cfa7440163548ca2f08689a811eba1fe8395030/.github/workflows/pr-pull-request-chk.yml))
+Step 4: Add the workflow: Copy this YAML into pr-pull-request-chk.yml: [pr-pull-request-chk.yml](https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/pr-pull-request-chk.yml)
 
 ```
 name: Pull Request Check
@@ -66,25 +66,25 @@ jobs:
 
 **Understanding the workflow:** 
 
-Workflow name: The name shown in the GitHub Actions page
+- Workflow name: The name shown in the GitHub Actions page
 ```name: Pull Request Check```
 
-Trigger: Runs only for Pull Requests.
+- Trigger: Runs only for Pull Requests.
 ```
 on:
   pull_request:
 ```
 
-Target branch:
+- Target branch:
 ```
 branches:
   - main
 ```
-This means: PR into main
-Examples:
-- feature/login  ---> main   ✅ runs
-- bugfix/api ---> main       ✅ runs
-- feature ---> develop       ❌ doesn't run
+-->This means: PR into main
+- Examples:
+  - feature/login  ---> main   ✅ runs
+  - bugfix/api ---> main       ✅ runs
+  - feature ---> develop       ❌ doesn't run
 
 Event types:
 ```
@@ -98,17 +98,17 @@ Meaning:
 
 Example: Create PR --> Workflow runs --> Push another commit --> Workflow runs again
 
-Runner: GitHub creates a temporary Ubuntu VM.
+- Runner: GitHub creates a temporary Ubuntu VM.
 ```runs-on: ubuntu-latest```
 
-Step: 
+- Step: 
 ```run: echo "PR check running for branch: ${{ github.head_ref }}"```
 
 github.head_ref is the source branch of the pull request.
 
 Example: If your PR is feature-login --> main & then output is Output: PR check running for branch: feature-login
 
-Step 4: Commit the workflow to main: 
+Step 5: Commit the workflow to main: 
 
 -->git add .
 
@@ -118,7 +118,7 @@ Step 4: Commit the workflow to main:
 
 Note: The workflow must exist on the target branch (main) before GitHub can run it for future PRs. OR we can say, The workflow must already exist on the main branch before GitHub can use it for pull requests targeting main.
 
-Step 5: Create a new branch: ```git checkout -b feature-pr-test```
+Step 6: Create a new branch: ```git checkout -b feature-pr-test```
 
 -->Verify: 
 ```
@@ -127,36 +127,36 @@ output is: * feature-pr-test
              main
 ```
 
-Step 6: Make any change: ```echo "Testing PR workflow" >> README.md```
+Step 7: Make any change: ```echo "Testing PR workflow" >> README.md```
 
-Step 7: Commit: 
+Step 8: Commit: 
 
 -->git add README.md
 
 -->git commit -m "Test PR workflow"
 
-Step 8: Push the branch: git push -u origin feature-pr-test [Here -u is not mandatory]
+Step 9: Push the branch: git push -u origin feature-pr-test [Here -u is not mandatory]
 
-Step 9: Create the Pull Request: On GitHub:
+Step 10: Create the Pull Request: On GitHub:
 - Click Compare & pull request.
 - Ensure:
   - Base branch: main
   - Compare branch: feature-pr-test
 - Click Create pull request.
 
-Step 10: Watch the workflow: Immediately after creating the PR:
+Step 11: Watch the workflow: Immediately after creating the PR:
 - Open the Actions tab.
 - You should see: Pull Request Check Click it.
 
-Step 10: View the logs: 
+Step 12: View the logs: 
 
 <img width="635" height="265" alt="image" src="https://github.com/user-attachments/assets/69b7af19-6c5a-4425-be24-e3ded3fe58d3" />
 
-Step 11: Verify it appears on the PR page: 
+Step 13: Verify it appears on the PR page: 
 
 <img width="710" height="282" alt="image" src="https://github.com/user-attachments/assets/71b01c77-fadd-46a7-96a2-94ed1bb71c8c" />
 
-Step 12: Trigger the workflow again: Since the workflow includes:
+Step 14: Trigger the workflow again: Since the workflow includes:
 ```
 types:
   - opened
