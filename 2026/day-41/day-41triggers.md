@@ -280,7 +280,7 @@ Step 1: Go to your repository: Make sure you're on the main branch: git checkout
 
 -->git pull origin main
 
-Step 2: Create the workflow file: vi manual.yml
+Step 2: Create the workflow file: vi manual.yml [manual.yml](https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/manual.yml)
 
 Step 3: Add the workflow: 
 ```
@@ -353,6 +353,8 @@ Step 6: Open the Actions tab:
 - Click the Actions tab.
 - In the left sidebar, click Manual Deployment.
 
+<img width="1880" height="950" alt="image" src="https://github.com/user-attachments/assets/e24469e2-41de-46cf-a00e-1cbeb066abc6" />
+
 -->You should see something like: Manual Deployment
 
 Step 7: Run the workflow: 
@@ -380,38 +382,281 @@ Create `.github/workflows/matrix.yml` that:
 2. Each job installs Python and prints the version
 3. Watch all 3 run in parallel
 
-<img width="1897" height="778" alt="image" src="https://github.com/user-attachments/assets/5a74638e-f3d8-4297-8304-35d1a0a196d5" />
-
 Then extend the matrix to also include 2 operating systems — how many total jobs run now?
 
--->Total 6 jobs executed, Matrix creates combinations (Cartesian product), not separate groups.
+**Steps to follow:**
 
-<img width="1886" height="837" alt="image" src="https://github.com/user-attachments/assets/80ad3f92-23ae-4698-8df0-8b737c2a9ea8" />
+-->This task introduces Matrix Builds, one of the most useful features in GitHub Actions. A matrix strategy lets you run the same job multiple times with different configurations (such as Python versions, operating systems, or Node.js versions) in parallel.
+
+Create a workflow that:
+- Runs on Python 3.10
+- Runs on Python 3.11
+- Runs on Python 3.12
+- Prints the Python version
+- All jobs run in parallel
+- Then extend it to run on 2 operating systems
+
+ Step 1: Create the workflow file: vi matrix.yml [vi exclude-and-fail-fast.yml](https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/exclude-and-fail-fast.yml)
+
+Step 2: Add the workflow:
+```
+name: Matrix Build Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  python-matrix:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Print Python Version
+        run: python --version
+```
+
+Step 3: Understand the workflow: 
+```
+Manual trigger
+on:
+  workflow_dispatch:
+
+You'll start this workflow manually from the Actions tab.
+
+Matrix strategy
+strategy:
+  matrix:
+    python-version: ["3.10", "3.11", "3.12"]
+
+GitHub creates one job for each Python version.
+
+Equivalent to:
+
+Job 1 → Python 3.10
+Job 2 → Python 3.11
+Job 3 → Python 3.12
+
+These jobs run at the same time (parallel), if runners are available.
+
+Setup Python
+uses: actions/setup-python@v5
+
+This action installs the requested Python version.
+
+The version comes from:
+
+${{ matrix.python-version }}
+
+For each job, GitHub replaces it with:
+
+3.10
+3.11
+3.12
+Print the version
+run: python --version
+
+Example output:
+
+Python 3.10.x
+
+Another job:
+
+Python 3.11.x
+
+Another:
+
+Python 3.12.x
+```
+
+Step 4: Commit and push: 
+
+-->git add .github/workflows/matrix.yml
+
+-->git commit -m "Add matrix workflow"
+
+-->git push origin main
+
+Step 5: Run the workflow: 
+- Go to your GitHub repository.
+- Click Actions.
+- Select Matrix Build Demo.
+- Click Run workflow.
+- Select the main branch.
+- Click Run workflow.
+
+<img width="1912" height="846" alt="image" src="https://github.com/user-attachments/assets/2db0379c-5b05-47de-8e88-60ddfdd77f7a" />
+<img width="1896" height="866" alt="image" src="https://github.com/user-attachments/assets/622d7c42-e2b1-465e-b01a-79efbb3733c6" />
+<img width="1875" height="965" alt="image" src="https://github.com/user-attachments/assets/85406767-8d81-4fbf-99ae-1b95b7b3b6a5" />
+
+Step 6: Observe the workflow: 
+<img width="701" height="492" alt="image" src="https://github.com/user-attachments/assets/e2bbef79-94cd-4919-b030-d566f1aa738b" />
+
+Step 7: Extend the matrix with Operating Systems: 
+```
+name: Matrix Build Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  python-matrix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Print Python Version
+        run: python --version
+```
+-->Notice that: runs-on: ${{ matrix.os }} [Uses the operating system from the matrix.]
+
+Step 8: How many jobs run?: 
+<img width="717" height="747" alt="image" src="https://github.com/user-attachments/assets/ff8bff64-b277-42d6-8cd2-8d9e033fc005" />
 
 ---
 
 ### Task 5: Exclude & Fail-Fast
-1. In your matrix, **exclude** one specific combination (e.g., Python 3.10 on Windows)
+1. In your matrix, exclude one specific combination (e.g., Python 3.10 on Windows)
+2. Set fail-fast: false — trigger a failure in one job and observe what happens to the rest
+3. Write in your notes: What does fail-fast: true (the default) do vs false?
 
--->As we have excluded python-version: 3.10 for windows-latest os we can see 5 jobs running as below,
+**Steps to follow:**
+This task teaches two important matrix features:
+- exclude – Skip specific matrix combinations.
+- fail-fast – Control what happens when one matrix job fails.
 
-<img width="1883" height="852" alt="image" src="https://github.com/user-attachments/assets/0b1da0aa-0d54-4ed3-931f-ae2f4dfbb33e" />
+Step 1: Open your existing matrix workflow: vi matrix.yml [matrix.yml](https://github.com/sonali091023/github-actions-practice/blob/main/.github/workflows/matrix.yml)
 
-2. Set `fail-fast: false` — trigger a failure in one job and observe what happens to the rest
+Step 2: Update the workflow: Replace the previous matrix with the following:
+```
+name: Matrix Build Demo
 
--->For Python version 3.11 job gets failed because of exit code 1 in both os ubuntu-latest & windows-latest as you can see below,
+on:
+  workflow_dispatch:
 
-<img width="1918" height="907" alt="image" src="https://github.com/user-attachments/assets/13264baa-38d2-4607-bae0-6ec2650f351e" />
+jobs:
+  python-matrix:
+    strategy:
+      fail-fast: false
 
-3. Write in your notes: What does `fail-fast: true` (the default) do vs `false`?
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
 
--->**fail-fast: true (default):** As soon as one job fails, GitHub cancels all other running/pending jobs
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
 
--->This fail-fast: true condition is kind of Faster feedback which saves resources, **Simple way to remember is stop everything on first failure**
+        exclude:
+          - os: windows-latest
+            python-version: "3.10"
 
--->**fail-fast: false:** Even if one job fails, All other jobs continue running
+    runs-on: ${{ matrix.os }}
 
--->This fail-fast false is useful when you want to test all environments 7 You need full results not partial result, **Simple way to remember is let all jobs finish no matter what**
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Print Python Version
+        run: python --version
+```
+-->Commit and push to github:
+
+-->git add .
+
+-->git commit -m "Update matrix with exclude"
+
+-->git push origin main
+
+<img width="1917" height="936" alt="image" src="https://github.com/user-attachments/assets/22ff93dd-eba2-4f47-9fa3-7a78eedb1a20" />
+<img width="1897" height="930" alt="image" src="https://github.com/user-attachments/assets/9b691708-653c-4ced-99b7-36c027671e9e" />
+<img width="1781" height="957" alt="image" src="https://github.com/user-attachments/assets/8f7da8bc-489b-4434-9c3e-0ea243ea2f5a" />
+
+
+Step 3: Understand exclude: 
+
+<img width="677" height="447" alt="image" src="https://github.com/user-attachments/assets/c02f5be7-0810-4acb-9c2c-5a73ce4170db" />
+<img width="697" height="647" alt="image" src="https://github.com/user-attachments/assets/ddc5bf63-08db-48cf-948c-5c1f0f3477f0" />
+
+Step 4: Trigger a failure: Add following line of code at last:
+```
+- name: Force Failure on Python 3.11
+        if: matrix.python-version == '3.11'
+        run: exit 1
+```
+
+-->This causes both Python 3.11 jobs (Ubuntu and Windows) to fail.
+
+Note: exit 1 works on Ubuntu runners. On Windows runners, the default shell is PowerShell, where exit 1 also exits with a failure status.
+
+Step 5: Commit and push:
+
+-->git add .github/workflows/matrix.yml
+
+-->git commit -m "Test fail-fast false"
+
+-->git push origin main
+
+<img width="1885" height="966" alt="image" src="https://github.com/user-attachments/assets/81c31b61-7490-4d9c-aab6-2caa0d09d004" />
+
+Step 6: Run the workflow: GitHub Repository --> Actions --> Matrix Build Demo --> Run workflow
+
+Step 7: Observe the results: 
+<img width="695" height="421" alt="image" src="https://github.com/user-attachments/assets/957daff0-94c9-43ed-a120-e4527887c816" />
+
+Step 8: Try the default behavior:
+
+<img width="715" height="300" alt="image" src="https://github.com/user-attachments/assets/71bacaca-792e-42a1-85d2-9d74f8156fb5" />
+
+-->Commit and push again:
+
+-->git add .github/workflows/matrix.yml
+
+-->git commit -m "Test fail-fast true"
+
+-->git push origin main
+
+Run the workflow again, This time, once a matrix job fails, GitHub cancels any other matrix jobs that are still queued or running.
+
+<img width="1901" height="967" alt="image" src="https://github.com/user-attachments/assets/8ae5c9b9-8147-4bea-93db-bf0fbfd9ebc2" />
+
+<img width="742" height="326" alt="image" src="https://github.com/user-attachments/assets/7e835dfb-8d49-4174-8b6e-37e3626bd54b" />
+
+Note:
+
+fail-fast: false:
+- All matrix jobs continue running even if one or more jobs fail.
+- Useful for seeing the results of every configuration in a single workflow run.
+fail-fast: true (default):
+- When one matrix job fails, GitHub cancels the remaining in-progress or queued matrix jobs.
+- Saves runner time but may hide additional failures in other configurations.
 
 ---
 
