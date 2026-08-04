@@ -117,6 +117,8 @@ Step 5: Watch the workflow run:
 - You should see Hello Workflow.
 - Click the latest workflow run.
 
+<img width="1891" height="961" alt="image" src="https://github.com/user-attachments/assets/4cb4cdf6-f040-4a20-a73b-578714e7fc8d" />
+
 Step 6: Verify each step: 
 ```
 Click the greet job.
@@ -132,6 +134,8 @@ Open Print greeting and you should find:
 
 Hello from GitHub Actions!
 ```
+<img width="1882" height="931" alt="image" src="https://github.com/user-attachments/assets/74dd46d5-9881-4cac-8d13-e2c2d7d31070" />
+<img width="1910" height="957" alt="image" src="https://github.com/user-attachments/assets/b62ecf87-91ab-426c-818e-b449132c0ef6" />
 
 Step 7: Is it green?: 
 ```
@@ -350,6 +354,10 @@ You should see something like:
 ✓ Complete job
 ```
 
+<img width="1905" height="492" alt="image" src="https://github.com/user-attachments/assets/268352d3-d4b6-43c4-8fe4-bde86c412ee9" />
+<img width="1887" height="950" alt="image" src="https://github.com/user-attachments/assets/09affdd0-5c30-46b8-95a6-c0b0144b2179" />
+<img width="1877" height="972" alt="image" src="https://github.com/user-attachments/assets/82030281-2322-4810-b684-7386bd64a467" />
+
 Step 5: Verify the outputs: Open each step and confirm you can see:
 <img width="702" height="261" alt="image" src="https://github.com/user-attachments/assets/e3f6a302-23ef-4404-9517-6a7e7f27145e" />
 
@@ -419,6 +427,10 @@ Run exit 1
 Error: Process completed with exit code 1.
 ```
 
+<img width="1877" height="947" alt="image" src="https://github.com/user-attachments/assets/e7c334e7-bb0c-474e-83e4-fbf6a9f0ce54" />
+<img width="1877" height="932" alt="image" src="https://github.com/user-attachments/assets/67788c39-1460-4327-a71a-1fd0621d7a26" />
+
+
 Step 4: How to read the error: 
 When a workflow fails:
 - The failed step is marked with a red X.
@@ -460,6 +472,9 @@ Step 6: Commit and push again:
 -->git push origin main
 
 -->Go back to the Actions tab and verify the latest run is green.
+
+<img width="1880" height="575" alt="image" src="https://github.com/user-attachments/assets/ba12028f-8276-4069-a9b1-348706fbec2c" />
+<img width="1877" height="972" alt="image" src="https://github.com/user-attachments/assets/67eb935c-caa4-46f6-975f-53ba4a59b842" />
 
 ---
 
