@@ -31,7 +31,7 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: 65.2.47.228.nip.io
+      hostname: 65.2.47.228.nip.io              #From LB whatever IP Address we will get that we have to update here
       tls:
         mode: Terminate
         certificateRefs:
